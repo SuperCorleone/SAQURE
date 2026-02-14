@@ -9,10 +9,10 @@ This package contains the raw data as well as scripts used to replicate the resu
 
 The package contains software (`Java` sources) and data (logs analyzable with `python` scripts). The package has the following structure.
 * `prism/`: `PRISM` models of SEFA and TeaStore, and properties used to calculate the long-term risk;
-* 'Metric-FF/': ;
-* 'attack_goals/': ;
-* 'plan/': ;
-* 'domain/': ; 
+* `Metric-FF/`: ;
+* `AEDI/`: ;
+* `AP_domain/`: ;
+* `AED/`: ; 
 * `ramses-planner-simulator/`: `Gradle` project of the extended version of `RAMSES` including the implementation of the method `SAQURE` with MAPE-K modules;
 * `experiments/`: 'bash' and `python` scripts that quickly run the different sub-experiments and generate the plots presented in the paper.
 
@@ -26,12 +26,12 @@ gradle clean build
 
 To replicate the results of all the experiments in the paper you can run seperately (which might take few minutes):
 
-'''
+```
 ./experiments/run_experiments/run_all_rq1.sh
 ./experiments/run_experiments/run_all_rq2.sh
 ./experiments/run_experiments/run_all_rq3.sh
 ./experiments/run_experiments/run_all_rq4.sh
-'''
+```
 
 To generate all plots from the data you need [Python 3](https://www.python.org/). You can run:
 
