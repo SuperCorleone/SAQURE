@@ -11,10 +11,10 @@ The package contains software (`Java` sources) and data (logs analyzable with `p
 * `prism/`: `PRISM` models of SEFA and TeaStore, and properties used to calculate the long-term risk;
 * `Metric-FF/`: ;
 * `AEDI/`: ;
-* `AP_domain/`: ;
+* `AP/`: ;
 * `AED/`: ; 
 * `ramses-planner-simulator/`: `Gradle` project of the extended version of `RAMSES` including the implementation of the method `SAQURE` with MAPE-K modules;
-* `experiments/`: 'bash' and `python` scripts that quickly run the different sub-experiments and generate the plots presented in the paper.
+* `experiments/`: `bash` and `python` scripts that quickly run the different sub-experiments and generate the plots presented in the paper.
 
 ### Instructions
 
