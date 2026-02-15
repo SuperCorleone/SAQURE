@@ -15,11 +15,12 @@ This replication package contains the implementation of `SAQURE` (Java sources),
   - `Planner-simulator/`: Simulation of the Planner module.
     - `prism/`: `PRISM` models of `SEFA` and `TeaStore`, as well as corresponding properties used by the Planner module to compute long-term cumulative costs for adaptation option selection.
   - `experiments/`: Bash and Python scripts for reproducing the sub-experiments (RQ1, RQ2, RQ3, RQ4) presented in the paper.
+    - Configuration? include configuration table? lookup file? AED AEDIs? (where to put this part?)
 - `plots/`: Bash and Python scripts that generate the plots for RQ1–RQ4 from the produced logs/results.
 - `AED/`:
   1. An extensible generic Adversarial Environment Domain `AED.pddl` with ~300 atomic action specifications, covering attacker, application, user, and infrastructure behaviors.
   2. Exemplar `AEDIs/` (e.g., SEFA instances).
-- `Additional Experimental Configuration.pdf`: Supplementary configuration tables for RQ2 and RQ3.
+- `Supplementary Experimental Configuration for RQ1, RQ2, and RQ3.pdf`: Supplementary configuration tables for RQ1, RQ2 and RQ3.
 
 ### Instructions
 
