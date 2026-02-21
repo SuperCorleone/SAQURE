@@ -1,6 +1,6 @@
 # Generating the Test Attack Path with Metric-FF
 
-This section describes how to generate a test plan using **Metric-FF 2.0** from the provided AED domain and AEDI problem instances.
+This section describes how to generate a test Attack Path using Metric-FF 2.0 from the provided AED domain and AEDI problem instances.
 
 ------
 
