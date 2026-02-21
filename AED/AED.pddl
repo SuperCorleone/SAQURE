@@ -1,4 +1,4 @@
-(define (domain attack-path-planner)
+(define (domain AED)
   (:requirements 
     :equality 
     :strips
