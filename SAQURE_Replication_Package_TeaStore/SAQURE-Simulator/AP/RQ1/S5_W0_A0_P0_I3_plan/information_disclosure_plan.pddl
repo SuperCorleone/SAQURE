@@ -1,0 +1,59 @@
+
+ff: parsing domain file
+domain 'ATTACK-PATH-PLANNER' defined
+ ... done.
+ff: parsing problem file
+problem 'ELEVATE-PRIVILEGE-PROBLEM' defined
+ ... done.
+
+
+warning: operator APPLICATION-TOMCAT-JSP-ENGINE-PROCESSES-WEB-SHELL parameter ?HTTPGETREQUEST overwrites previous declaration
+
+
+warning: operator USER-CLICKS-MALICIOUS-REDIRECT-URL-IN-MESSAGE parameter ?BROWSER overwrites previous declaration
+
+
+warning: operator ATTACKER-CRAFTS-MALICIOUS-REDIRECT-URL-POINT-TO-PHISHINGSITE parameter ?APPLICATION overwrites previous declaration
+
+
+translating negated cond for predicate SCRIPT-EXECUTION-PROMPT-ENABLED
+
+ff: search configuration is A*epsilon with weight 1.
+Metric is ((1.00*[RF0](TOTAL-COST)) - () + 0.00)
+COST MINIMIZATION DONE (WITH cost-minimizing relaxed plans).
+
+Advancing to goal distance:   13
+                              11
+                               9
+                               8
+                               7
+                               6
+                               5
+                               4
+                               3
+                               2
+                               1
+                               0
+
+ff: found legal plan as follows
+step    0: APPLICATION-EXPOSES-ATTACK-SURFACE-TO-ATTACKERS-CVE-2024-38816 TEASTORE SPRING-FRAMEWORK1 ROUTER-FUNCTION_TEASTORE RESOURCE-HANDLER_TEASTORE FILESYSTEM-RESOURCE_TEASTORE CVE_2023_2976
+        1: ATTACKER-CRAFTS-MALICIOUS-PATH-TRAVERSAL-URL PATH-TRAVERSAL-URL1 PATH-TRAVERSAL-PAYLOAD1 SENSITIVE-FILE1_TEASTORE TEASTORE CVE_2024_38816
+        2: ATTACKER-CLICKS-MALICIOUS-URL-INCLUDES-PATH-TRAVERSAL-PYLOAD BROWSER-CHROME PATH-TRAVERSAL-URL1
+        3: ATTACKER-BROWSER-SENDS-MALICIOUS-HTTP-GET-REQUEST-WITH-PATH-TRAVERSAL-PAYLOAD BROWSER-CHROME HTTP-GET-REQUEST1 PATH-TRAVERSAL-URL1 PATH-TRAVERSAL-PAYLOAD1
+        4: APPLICATION-RECEIVES-HTTP-GET-REQUEST HTTP-GET-REQUEST1 TEASTORE
+        5: APPLICATION-MATCHES-REQUEST-TO-RESOURCE-HANDLER HTTP-GET-REQUEST1 PATH-TRAVERSAL-URL1 PATH-TRAVERSAL-PAYLOAD1 TEASTORE ROUTER-FUNCTION_TEASTORE RESOURCE-HANDLER_TEASTORE
+        6: APPLICATION-ROUTES-REQUEST-TO-RESOURCE-HANDLER PATH-TRAVERSAL-URL1 RESOURCE-HANDLER_TEASTORE ROUTER-FUNCTION_TEASTORE
+        7: APPLICATION-RESOURCE-HANDLER-CONCATENATES-PATH-WITHOUT-NORMALIZATION PATH-TRAVERSAL-URL1 RESOURCE-HANDLER_TEASTORE PATH-TRAVERSAL-PAYLOAD1 FILESYSTEM-PATH_TEASTORE TEASTORE
+        8: APPLICATION-READS-CONTENT-FROM-CONCATENATED-PATH FILESYSTEM-PATH_TEASTORE PATH-TRAVERSAL-PAYLOAD1 SENSITIVE-FILE1_TEASTORE SENSITIVE-FILE-CONTENT1 TEASTORE
+        9: APPLICATION-SERVER-RETURNS-SENSITIVE-INFORMATION HTTP-GET-REQUEST1 SENSITIVE-FILE-CONTENT1 TEASTORE
+       10: ATTACKER-RECEIVES-SENSITIVE-INFORMATION TEASTORE SENSITIVE-FILE-CONTENT1 CVE_2024_38816
+plan cost: 39.000000
+
+time spent:    0.04 seconds instantiating 4458 easy, 14 hard action templates
+               0.00 seconds reachability analysis, yielding 321 facts and 523 actions
+               0.00 seconds creating final representation with 318 relevant facts, 1 relevant fluents
+               0.00 seconds computing LNF
+               0.00 seconds building connectivity graph
+               0.00 seconds searching, evaluating 178 states, to a max depth of 0
+               0.04 seconds total time
+

@@ -1,0 +1,54 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.17)
+
+2025-11-27 15:18:16.913  INFO 89110 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Starting RamsesPlannerSimulatorApplication using Java 21 on Mac.fritz.box with PID 89110 (/Users/adukopun/Documents/CuiCui/AQUA/ICSOC2024_package_TVS/ramses-planner-simulator/build/libs/ramses-planner-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/AQUA/ICSOC2024_package_TVS/ramses-planner-simulator)
+2025-11-27 15:18:16.914  INFO 89110 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : No active profile set, falling back to 1 default profile: "default"
+2025-11-27 15:18:17.181  INFO 89110 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Started RamsesPlannerSimulatorApplication in 0.443 seconds (JVM running for 0.625)
+
+ spoofing_plan: 7.4
+ tampering_plan: 7.5
+repudiation_plan:0.0
+ information_disclosure_plan: 8.1
+ denial_of_service:6.5
+ elevation_of_privilege_plan:7.4
+2025-11-27 15:18:18.131  INFO 89110 --- [           main] saqure.utils.SimulationsUtils  : Risk of authentication-1-service: 36.9
+
+ spoofing_plan: 7.4
+ tampering_plan: 7.5
+repudiation_plan:0.0
+ information_disclosure_plan: 7.4
+ denial_of_service:6.5
+ elevation_of_privilege_plan:7.4
+2025-11-27 15:18:18.760  INFO 89110 --- [           main] saqure.utils.SimulationsUtils  : Risk of authentication-2-service: 36.2
+
+ spoofing_plan: 7.4
+ tampering_plan: 7.5
+repudiation_plan:0.0
+ information_disclosure_plan: 7.4
+ denial_of_service:0.0
+ elevation_of_privilege_plan:7.4
+2025-11-27 15:18:19.385  INFO 89110 --- [           main] saqure.utils.SimulationsUtils  : Risk of authentication-3-service: 29.700000000000003
+2025-11-27 15:18:19.388  INFO 89110 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Runtime risk assessment time: 2205ms
+2025-11-27 15:18:19.389  INFO 89110 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Current graph: {"IMAGE-SERVICE":{"currentImplementationId":"image-service","values":{"Availability":0.1,"AverageResponseTime":0.9,"Vulnerability":0.9}},"WEBUI-SERVICE":{"currentImplementationId":"webui-service","values":{"Availability":0.9,"AverageResponseTime":0.1,"Vulnerability":0.9}},"PERSISTENCE-SERVICE":{"currentImplementationId":"persistence-service","values":{"Availability":0.6333333333333335,"AverageResponseTime":0.6333333333333333,"Vulnerability":0.9}},"AUTHENTICATION-SERVICE":{"currentImplementationId":"authentication-1-service","values":{"Availability":0.6333333333333335,"AverageResponseTime":0.3666666666666667,"Vulnerability":0.9}},"RECOMMENDER-SERVICE":{"currentImplementationId":"recommender-service","values":{"Availability":0.1,"AverageResponseTime":0.6333333333333333,"Vulnerability":0.9}},"weights":{"Availability":0.3,"AverageResponseTime":0.3,"Vulnerability":0.4}}
+2025-11-27 15:18:19.398  INFO 89110 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 8.406ms
+2025-11-27 15:18:35.226  INFO 89110 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 605147.8832747657
+2025-11-27 15:18:35.226  INFO 89110 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 15827ms
+2025-11-27 15:18:35.228  INFO 89110 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Time to generate the graph: 0.141ms
+2025-11-27 15:18:35.229  INFO 89110 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Graph for option  - Change AUTHENTICATION-SERVICE implementation from authentication-1-service to authentication-3-service. null: {"WEBUI-SERVICE":{"currentImplementationId":"webui-service","values":{"Availability":0.9,"AverageResponseTime":0.1,"Vulnerability":0.9}},"IMAGE-SERVICE":{"currentImplementationId":"image-service","values":{"Availability":0.1,"AverageResponseTime":0.9,"Vulnerability":0.9}},"PERSISTENCE-SERVICE":{"currentImplementationId":"persistence-service","values":{"Availability":0.6333333333333335,"AverageResponseTime":0.6333333333333333,"Vulnerability":0.9}},"AUTHENTICATION-SERVICE":{"currentImplementationId":"authentication-3-service","values":{"Availability":0.6333333333333335,"AverageResponseTime":0.3666666666666667,"Vulnerability":0.10000000000000042}},"RECOMMENDER-SERVICE":{"currentImplementationId":"recommender-service","values":{"Availability":0.1,"AverageResponseTime":0.6333333333333333,"Vulnerability":0.9}},"weights":{"Availability":0.3,"AverageResponseTime":0.3,"Vulnerability":0.4}}
+2025-11-27 15:18:35.233  INFO 89110 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 3.131ms
+2025-11-27 15:18:51.079  INFO 89110 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 488603.1833039123
+2025-11-27 15:18:51.079  INFO 89110 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 15846ms
+2025-11-27 15:18:51.079  INFO 89110 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Time to generate the graph: 0.215ms
+2025-11-27 15:18:51.079  INFO 89110 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Graph for option  - Change AUTHENTICATION-SERVICE implementation from authentication-1-service to authentication-2-service. null: {"WEBUI-SERVICE":{"currentImplementationId":"webui-service","values":{"Availability":0.9,"AverageResponseTime":0.1,"Vulnerability":0.9}},"IMAGE-SERVICE":{"currentImplementationId":"image-service","values":{"Availability":0.1,"AverageResponseTime":0.9,"Vulnerability":0.9}},"PERSISTENCE-SERVICE":{"currentImplementationId":"persistence-service","values":{"Availability":0.6333333333333335,"AverageResponseTime":0.6333333333333333,"Vulnerability":0.9}},"AUTHENTICATION-SERVICE":{"currentImplementationId":"authentication-2-service","values":{"Availability":0.6333333333333335,"AverageResponseTime":0.3666666666666667,"Vulnerability":0.8222222222222227}},"RECOMMENDER-SERVICE":{"currentImplementationId":"recommender-service","values":{"Availability":0.1,"AverageResponseTime":0.6333333333333333,"Vulnerability":0.9}},"weights":{"Availability":0.3,"AverageResponseTime":0.3,"Vulnerability":0.4}}
+2025-11-27 15:18:51.081  INFO 89110 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 1.995ms
+2025-11-27 15:19:07.137  INFO 89110 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 593817.1485572746
+2025-11-27 15:19:07.138  INFO 89110 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 16056ms
+2025-11-27 15:19:07.138  INFO 89110 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Best option:  - Change AUTHENTICATION-SERVICE implementation from authentication-1-service to authentication-3-service. null
+2025-11-27 15:19:07.138  INFO 89110 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Best cost value: 488603.1833039123
+2025-11-27 15:19:07.138  INFO 89110 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Time to extract best option RamsesV3: 47749ms

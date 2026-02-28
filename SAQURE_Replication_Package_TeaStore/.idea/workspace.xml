@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9d3c8153-fb3f-4f9e-a175-f3573bc38d51" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/8.5/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/8.5/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/8.5/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/8.5/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/8.5/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/8.5/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/8.5/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/8.5/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/8.5/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/8.5/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/bootJarMainClassName" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/bootJarMainClassName" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/Planner/PlannerCommandComputing$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/Planner/PlannerCommandComputing$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/Planner/PlannerCommandComputing$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/Planner/PlannerCommandComputing$ActionResult.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/Planner/PlannerCommandComputing$ComputationMode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/Planner/PlannerCommandComputing$ParallelComputation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/Planner/PlannerCommandComputing$ScenarioComputation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/Planner/PlannerCommandComputing$SequentialComputation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/Planner/PlannerCommandComputing$outputPath.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/Planner/PlannerCommandComputing.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/SqureSimulatorApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/adaptation/options/AdaptationOption.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/adaptation/options/AddInstanceOption.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/adaptation/options/ChangeImplementationOption.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/adaptation/options/ChangeLoadBalancerWeightsOption.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/adaptation/options/ShutdownInstanceOption.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/adaptation/specifications/Availability.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/adaptation/specifications/AverageResponseTime.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/adaptation/specifications/QoSSpecification.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/adaptation/specifications/Vulnerability.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/adaptation/values/QoSCollection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/adaptation/values/QoSHistory$Value.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/adaptation/values/QoSHistory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/architecture/Instance.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/architecture/InstanceStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/architecture/Service.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/architecture/ServiceConfiguration$CircuitBreakerConfiguration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/architecture/ServiceConfiguration$CompositeKey.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/architecture/ServiceConfiguration$LoadBalancerType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/architecture/ServiceConfiguration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/domain/architecture/ServiceImplementation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/ExcelToJsonConverter$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/ExcelToJsonConverter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/PPDLUpdateManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/PathConstants.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/PrismModelChecker$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/PrismModelChecker$1Helper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/PrismModelChecker$1JosnModifier.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/PrismModelChecker$ExternalChanges.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/PrismModelChecker.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/RunAllExperiments$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/RunAllExperiments$Command.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/RunAllExperiments$RQ1_part1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/RunAllExperiments$RQ2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/RunAllExperiments$RQ3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/RunAllExperiments.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/ServiceGraphUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/SimulationsUtils$DynamicNormalize.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/main/saqure/utils/SimulationsUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/classes/java/test/saqure/RamsesPlannerSimulatorApplicationTests.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT-plain.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT-plain.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/reports/tests/test/css/base-style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/reports/tests/test/css/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/reports/tests/test/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/reports/tests/test/js/report.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/test-results/test/binary/output.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/test-results/test/binary/output.bin.idx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/test-results/test/binary/results.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/bootJar/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/bootJar/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PPDLUpdateManager.class.uniqueId16" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PathConstants.class.uniqueId7" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PlannerCommandComputing$1.class.uniqueId2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PlannerCommandComputing$2.class.uniqueId0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PlannerCommandComputing$3.class.uniqueId10" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PlannerCommandComputing$ActionResult.class.uniqueId5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PlannerCommandComputing$ComputationMode.class.uniqueId8" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PlannerCommandComputing$ParallelComputation.class.uniqueId15" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PlannerCommandComputing$ScenarioComputation.class.uniqueId13" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PlannerCommandComputing$SequentialComputation.class.uniqueId18" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PlannerCommandComputing$outputPath.class.uniqueId1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PlannerCommandComputing.class.uniqueId12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PrismModelChecker$1.class.uniqueId4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PrismModelChecker$1Helper.class.uniqueId3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PrismModelChecker$1JosnModifier.class.uniqueId14" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PrismModelChecker$ExternalChanges.class.uniqueId6" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/PrismModelChecker.class.uniqueId9" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/SimulationsUtils$DynamicNormalize.class.uniqueId17" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/compileTransaction/stash-dir/SimulationsUtils.class.uniqueId11" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/tmp/compileTestJava/previous-compilation-data.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SAQURE-Simulator/Metric-FF/ff.h" beforeDir="false" afterPath="$PROJECT_DIR$/SAQURE-Simulator/Metric-FF/ff.h" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/SAQURE-Simulator">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/ramses-planner-simulator">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/ramses-planner-simulator">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="SAQURE-simulator" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="SEFA" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2xjDr6VFsZQnD5yr0pZofbRsxLV" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.RamsesPlannerSimulatorApplication.executor": "Run",
+    "Gradle.SAQURE-Simulator [:it.polimi.ramses.RamsesPlannerSimulatorApplication.main()].executor": "Run",
+    "Gradle.SAQURE-Simulator [:saqure.RamsesPlannerSimulatorApplication.main()].executor": "Run",
+    "Gradle.SAQURE-Simulator [:saqure.SaqureSimulatorApplication.main()].executor": "Run",
+    "Gradle.ramses-planner-simulator [:it.polimi.ramses.RamsesPlannerSimulatorApplication.main()].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "SEFA",
+    "last_opened_file_path": "/Users/adukopun/Documents/CuiCui/SAQURE_Replication_Package_TeaStore",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.31034482",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="SaqureSimulatorApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="saqure.SaqureSimulatorApplication" />
+      <module name="SAQURE-simulator.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="saqure.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="ICSOC2024_package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="ICSOC2024_package" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="ICSOC2024_package" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="ICSOC2024_package" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Autodetect">
+      <module name="ICSOC2024_package" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <module name="ICSOC2024_package" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.SaqureSimulatorApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9d3c8153-fb3f-4f9e-a175-f3573bc38d51" name="Changes" comment="" />
+      <created>1748442784938</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1748442784938</updated>
+    </task>
+    <servers />
+  </component>
+</project>
