@@ -1,0 +1,31 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.17)
+
+2025-11-04 17:25:45.680  INFO 45820 --- [           main] i.polimi.ramses.utils.RunAllExperiments  : Starting RunAllExperiments using Java 21 on adus-MacBook-Pro.local with PID 45820 (/Users/adukopun/Documents/CuiCui/AQUA/ICSOC2024_package/ramses-planner-simulator/build/libs/ramses-planner-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/AQUA/ICSOC2024_package/ramses-planner-simulator)
+2025-11-04 17:25:45.681  INFO 45820 --- [           main] i.polimi.ramses.utils.RunAllExperiments  : No active profile set, falling back to 1 default profile: "default"
+2025-11-04 17:25:45.945  INFO 45820 --- [           main] i.polimi.ramses.utils.RunAllExperiments  : Started RunAllExperiments in 0.437 seconds (JVM running for 0.641)
+2025-11-04 17:25:45.946  INFO 45820 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Start: RQ3
+2025-11-04 17:25:45.947  INFO 45820 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : running experiment of: RQ3_1_2_AQUA
+2025-11-04 17:25:45.951  INFO 45820 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Current graph: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"AverageResponseTime":0.9,"Availability":0.1,"Vulnerability":0.84699121}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.1,"Availability":0.633333333,"Vulnerability":0.864841109}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"AverageResponseTime":0.592307692,"Availability":0.9,"Vulnerability":0.864841109}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.715384615,"Availability":0.366666667,"Vulnerability":0.864841109}},"weights":{"AverageResponseTime":0.3,"Availability":0.3,"Vulnerability":0.4}}
+2025-11-04 17:25:45.959  INFO 45820 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 7.875ms
+2025-11-04 17:26:04.278  INFO 45820 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 634764.9292323658
+2025-11-04 17:26:04.279  INFO 45820 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 18319ms
+2025-11-04 17:26:04.280  INFO 45820 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Time to generate the graph: 0.069ms
+2025-11-04 17:26:04.282  INFO 45820 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Graph for option  - Change RESTAURANT-SERVICE implementation from restaurant-1-service to restaurant-3-service. null: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-3-service","values":{"AverageResponseTime":0.9,"Availability":0.1,"Vulnerability":0.864841109}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.1,"Availability":0.633333333,"Vulnerability":0.864841109}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"AverageResponseTime":0.592307692,"Availability":0.9,"Vulnerability":0.864841109}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.715384615,"Availability":0.366666667,"Vulnerability":0.864841109}},"weights":{"AverageResponseTime":0.3,"Availability":0.3,"Vulnerability":0.4}}
+2025-11-04 17:26:04.283  INFO 45820 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 1.574ms
+2025-11-04 17:26:22.572  INFO 45820 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 635787.2289369814
+2025-11-04 17:26:22.573  INFO 45820 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 18289ms
+2025-11-04 17:26:22.574  INFO 45820 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Time to generate the graph: 0.227ms
+2025-11-04 17:26:22.574  INFO 45820 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Graph for option  - Change RESTAURANT-SERVICE implementation from restaurant-1-service to restaurant-2-service. null: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-2-service","values":{"AverageResponseTime":0.9,"Availability":0.1,"Vulnerability":0.864841109}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.1,"Availability":0.633333333,"Vulnerability":0.864841109}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"AverageResponseTime":0.592307692,"Availability":0.9,"Vulnerability":0.864841109}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.715384615,"Availability":0.366666667,"Vulnerability":0.864841109}},"weights":{"AverageResponseTime":0.3,"Availability":0.3,"Vulnerability":0.4}}
+2025-11-04 17:26:22.579  INFO 45820 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 4.65ms
+2025-11-04 17:26:40.877  INFO 45820 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 635787.2289369814
+2025-11-04 17:26:40.877  INFO 45820 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 18297ms
+2025-11-04 17:26:40.877  INFO 45820 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : No better option found
+2025-11-04 17:26:40.877  INFO 45820 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Time to extract best option RamsesV3: 54926ms
+2025-11-04 17:26:40.877  INFO 45820 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Experiment RQ3 completed successfully
