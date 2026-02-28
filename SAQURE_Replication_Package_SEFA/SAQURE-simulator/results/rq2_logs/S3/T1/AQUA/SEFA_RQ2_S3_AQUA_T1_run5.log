@@ -1,0 +1,30 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.17)
+
+2026-01-11 20:26:15.219  INFO 3659 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Starting RamsesPlannerSimulatorApplication using Java 21 on Mac.fritz.box with PID 3659 (/Users/adukopun/Documents/CuiCui/AQUA/ICSOC2024_package/ramses-planner-simulator/build/libs/ramses-planner-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/AQUA/ICSOC2024_package/ramses-planner-simulator)
+2026-01-11 20:26:15.220  INFO 3659 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : No active profile set, falling back to 1 default profile: "default"
+2026-01-11 20:26:15.484  INFO 3659 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Started RamsesPlannerSimulatorApplication in 0.424 seconds (JVM running for 0.609)
+2026-01-11 20:26:15.487  INFO 3659 --- [           main] saqure.utils.SimulationsUtils  : Risk of ordering-1-service: 39.8; Risk of ordering-2-service: 24.8; Risk of ordering-3-service: 24.7
+2026-01-11 20:26:15.490  INFO 3659 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Current graph: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"AverageResponseTime":0.5,"Vulnerability":0.1,"Availability":0.8999999999999999}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.1,"Vulnerability":0.16066350710900484,"Availability":0.5000000000000004}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-1-service","values":{"AverageResponseTime":0.5,"Vulnerability":0.9,"Availability":0.1}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.9,"Vulnerability":0.16066350710900484,"Availability":0.5000000000000004}},"weights":{"AverageResponseTime":0.3,"Vulnerability":0.4,"Availability":0.3}}
+2026-01-11 20:26:15.499  INFO 3659 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 7.927ms
+2026-01-11 20:26:32.873  INFO 3659 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 367122.8507124564
+2026-01-11 20:26:32.873  INFO 3659 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 17373ms
+2026-01-11 20:26:32.876  INFO 3659 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Time to generate the graph: 0.15ms
+2026-01-11 20:26:32.879  INFO 3659 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Graph for option  - Change ORDERING-SERVICE implementation from ordering-1-service to ordering-2-service. null: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"AverageResponseTime":0.5,"Vulnerability":0.1,"Availability":0.8999999999999999}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.1,"Vulnerability":0.16066350710900484,"Availability":0.5000000000000004}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-2-service","values":{"AverageResponseTime":0.5,"Vulnerability":0.3312796208530807,"Availability":0.1}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.9,"Vulnerability":0.16066350710900484,"Availability":0.5000000000000004}},"weights":{"AverageResponseTime":0.3,"Vulnerability":0.4,"Availability":0.3}}
+2026-01-11 20:26:32.883  INFO 3659 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 3.824ms
+2026-01-11 20:26:50.079  INFO 3659 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 272319.57358868595
+2026-01-11 20:26:50.080  INFO 3659 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 17196ms
+2026-01-11 20:26:50.080  INFO 3659 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Time to generate the graph: 0.166ms
+2026-01-11 20:26:50.080  INFO 3659 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Graph for option  - Change ORDERING-SERVICE implementation from ordering-1-service to ordering-3-service. null: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"AverageResponseTime":0.5,"Vulnerability":0.1,"Availability":0.8999999999999999}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.1,"Vulnerability":0.16066350710900484,"Availability":0.5000000000000004}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-3-service","values":{"AverageResponseTime":0.5,"Vulnerability":0.3274881516587679,"Availability":0.1}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.9,"Vulnerability":0.16066350710900484,"Availability":0.5000000000000004}},"weights":{"AverageResponseTime":0.3,"Vulnerability":0.4,"Availability":0.3}}
+2026-01-11 20:26:50.083  INFO 3659 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 3.012ms
+2026-01-11 20:27:07.319  INFO 3659 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 271687.5517396822
+2026-01-11 20:27:07.320  INFO 3659 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 17236ms
+2026-01-11 20:27:07.320  INFO 3659 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Best option:  - Change ORDERING-SERVICE implementation from ordering-1-service to ordering-3-service. null
+2026-01-11 20:27:07.320  INFO 3659 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Best cost value: 271687.5517396822
+2026-01-11 20:27:07.320  INFO 3659 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Time to extract best option RamsesV3: 51829ms
