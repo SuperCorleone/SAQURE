@@ -2,43 +2,43 @@ dtmc
 
 // availabilities
 const double w_a = 0.3;
-const double old_a_recommender = 0.5000000000000004;
+const double old_a_recommender = 0.9;
 const double old_a_image = 0.1;
-const double old_a_authentication = 0.8999999999999999;
-const double old_a_persistence = 0.8999999999999999;
-const double old_a_webui = 0.5000000000000004;
-const double a_recommender = 0.5000000000000004;
+const double old_a_authentication = 0.6333333333333331;
+const double old_a_persistence = 0.1;
+const double old_a_webui = 0.6333333333333331;
+const double a_recommender = 0.9;
 const double a_image = 0.1;
-const double a_authentication = 0.8999999999999999;
-const double a_persistence = 0.8999999999999999;
-const double a_webui = 0.5000000000000004;
+const double a_authentication = 0.9;
+const double a_persistence = 0.1;
+const double a_webui = 0.6333333333333331;
 
 // response times
 const double w_rt = 0.3;
-const double old_rt_recommender = 0.6714285714285715;
-const double old_rt_image = 0.9;
-const double old_rt_authentication = 0.1;
-const double old_rt_persistence = 0.6714285714285715;
-const double old_rt_webui = 0.32857142857142857;
-const double rt_recommender = 0.6714285714285715;
-const double rt_image = 0.9;
-const double rt_authentication = 0.1;
-const double rt_persistence = 0.6714285714285715;
-const double rt_webui = 0.32857142857142857;
+const double old_rt_recommender = 0.9;
+const double old_rt_image = 0.58;
+const double old_rt_authentication = 0.7399999999999999;
+const double old_rt_persistence = 0.7399999999999999;
+const double old_rt_webui = 0.1;
+const double rt_recommender = 0.9;
+const double rt_image = 0.58;
+const double rt_authentication = 0.7399999999999999;
+const double rt_persistence = 0.7399999999999999;
+const double rt_webui = 0.1;
 
 // vulnerabilities
 const double w_v = 0.4;
-const double old_v_recommender = 0.1;
-const double old_v_image = 0.1;
-const double old_v_authentication = 0.1;
-const double old_v_persistence = 0.1;
-const double old_v_webui = 0.1;
-const double v_recommender = 0.1;
-const double v_image = 0.1;
+const double old_v_recommender = 0.5;
+const double old_v_image = 0.5;
+const double old_v_authentication = 0.5;
+const double old_v_persistence = 0.5;
+const double old_v_webui = 0.5;
+const double v_recommender = 0.5;
+const double v_image = 0.5;
 
-const double v_authentication = 0.1;
-const double v_persistence = 0.1;
-const double v_webui = 0.1;
+const double v_authentication = 0.5;
+const double v_persistence = 0.5;
+const double v_webui = 0.5;
 
 rewards
 s=1 : (w_a * (1 - a_webui) + w_rt * rt_webui + w_v * v_webui) / (w_a * (1 - old_a_webui) + w_rt * old_rt_webui + w_v * old_v_webui);

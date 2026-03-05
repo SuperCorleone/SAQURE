@@ -1,12 +1,10 @@
-(define (problem elevate-privilege-problem)
-  (:domain attack-path-planner)
+(define (problem AEDI-spoofing)
+(:domain AED)
   
   (:objects
     CVE_2023_2976 - cve-identifier
     attacker1 - attacker
     
-    ;;;(1).=================================Application Configuration====================;;;
-    ;;; Entity declaration ;;;
     
     TeaStore - application ;application
     logback_TeaStore - logback
@@ -21,18 +19,13 @@
     logback-env-var1 - env-var
 
 
-   ;; === Added for CVE-2024-38286==
     tomcat_TeaStore - tomcat
     tls-connector_TeaStore - tls-connector
 
-   ;; ==== Added for CVE-2024-38820 ====;;
    databinder_TeaStore - data-binder
-   ;; Locale Configuration
    locale-config_TeaStore - locale-config
-   ;; Security Patterns
    admin-field-pattern - disallowed-pattern
   
-  ;; ==== Added for CVE-2022-1471 =====
   snakeyaml-library_TeaStore - snakeyaml-library
   java_TeaStore - software
   yaml-endpoint_TeaStore - yaml-endpoint
@@ -40,29 +33,21 @@
   yaml-constructor_TeaStore - yaml-constructor
 
 
-    ;;;(2).================================USER================================;;;
     user1 - user
 
 
-   ;;;(3).=============================Attacker Capability==========================;;;
    malicious-msg - message
    malicious-logback-config - logback-config
-   ;;==== Added for CVE-2024-12798 AP 1.2 =====
    malicious-server1 - controlled-server
    malicious-file-url1 - file-url
-   ;;==== Added for CVE-2024-12798 AP 1.3 =====
    malicious-forged-website1 - website
    forged-website1-url - website-url
-   ;;==== Added for CVE-2024-12798 AP 2.1 =====
    malicious-logback-env-var-set-script1 - script
-   ;; ==== Added for CVE-2024-12798 AP 2.2 ===
    script-url1 - script-url
-   ;; === Added for CVE-2024-38286==
    tomcat-tls-flood-script1 - script
     ; ==== Added for AP 2 =====
    tomcat-tls-initial-handshake-request-script1 - script 
    tomcat-tls-renegotiation-script1 -script
-   ;; ==== Added for CVE-2024-22243 ====;;
    phishing-url1 - phishing-url     ;https://evil.com
    redirect-url1 - redirect-url     ;https://teastore.com/redirect?url=https://teastore.com:80@evil.com
    valiation-pass-pyload1 - payload-string      ;https://teastore.com:80@evil.com
@@ -74,7 +59,6 @@
    internal-resource-address1 - internal-address ;http://localhost:8080/internal-data
    sensitive-file-name1 - sensitive-information
    
-   ;; ==== Added for CVE-2024-38820 ====;;
    spring-framework1 - spring-framework
    web-controller_TeaStore - web-controller
    attacker-account_TeaStore - account
@@ -87,11 +71,9 @@
 
    i̇sadmin - parameter-name
 
-  ;; ==== Added for CVE-2023-34055 ====;;
    springboot_TeaStore - spring-boot
    http-flood-script1 - script
 
-  ;; ==== Added for CVE-2024-34447 ====;;
   bouncy-castle-lib_TeaStore - bouncy-castle
   bcjsse-component_TeaStore - bcjsse
   vulnerable-dns-server1 - dns-server
@@ -103,7 +85,6 @@
   socket_TeaStore - ssl-socket
   TeaStore-microservice - legitimate-service
   
- ;; ==== Added for CVE-2022-40150 ====;;
   jettison-library_TeaStore - java-library
   malicious-jettison-payload1 - json-payload
   API-endpoint_TeaStore - api-endpoint
@@ -112,7 +93,6 @@
   malicious-xml-payload1 - xml-payload
 
 
-;; ==== Added for CVE-2023-6378====;;
   logbacklib_TeaStore - java-library
   logback-receiver_TeaStore - logback-receiver
   tcp-endpoint_TeaStore - tcp-endpoint
@@ -120,7 +100,6 @@
   tcp-connection_TeaStore - tcp-connection
   tcp-server_TeaStore - tcp-server
 
-;; ==== Added for CVE-2023-44487====;;
   http2-server_TeaStore - http2-server
   http2-library_TeaStore - http2-library
   http2-connection_TeaStore - http2-connection
@@ -134,7 +113,6 @@
   stream-batch1 - stream-batch
   server-resource_TeaStore - server-resource 
 
-;; ==== Added for CVE-2025-22228====;;
   spring-security_TeaStore - spring-security
   password_encoder_TeaStore - password-encoder
   online-brute-force-script1 - script
@@ -142,7 +120,6 @@
   login-request1_TeaStore - login-request 
   password-encoder_TeaStore - password-encoder
 
-;; ==== Added for CVE_2024_38816====;;
   router-function_TeaStore - router-function
   resource-handler_TeaStore - resource-handler
   filesystem-resource_TeaStore - filesystem-resource
@@ -153,7 +130,6 @@
   sensitive-file-content1 - sensitive-information
 
 
-;; ==== Added for CVE-2022-1471 =====
   command-execution-logic1 - command-execution-logic
   rmi-service1 - rmi-service 
   ldap-service1 - ldap-service
@@ -161,7 +137,6 @@
   malicious-java-class1 - java-class
   jndi-endpoint1 - jndi-endpoint
 
-;; ==== Added for CVE-2025-24813 =====
   default-servlet_TeaStore - default-servlet
   public-directory_TeaStore - public-directory
   sensitive-directory_TeaStore - sensitive-directory
@@ -176,7 +151,6 @@
   web-shell-script1 - web-shell-script
   tomcat-process_TeaStore - tomcat-process
 
-;; ====== added for CVE-2023-2976 ======
   guava-library_TeaStore - java-library
   temporary-directory_TeaStore - temporary-directory
   host-os_TeaStore - host-os
@@ -186,17 +160,14 @@
   symbolic-link1 - symbolic-link
   controlled-file1 - controlled-file
 
-;; ====== added for CVE-2024-38809 ======
   http-endpoint_TeaStore - http-endpoint
   etag-handler_TeaStore - etag-handler
   etag-value_TeaStore - etag-value
 
-;; ==== Added for CVE-2024-47072 =====
   XStreamLibrary_TeaStore - java-library REMOVED - VULNERABILITY PATCHED
   binary-stream-driver_TeaStore - binary-stream-driver REMOVED - VULNERABILITY PATCHED
   binary-payload1 - binary-payload  REMOVED - VULNERABILITY PATCHED
 
-;; ====== added for CVE-2023-33202 ======
   BCLibrary_TeaStore - java-library
   pem-endpoint_TeaStore - pem-endpoint 
   pem-payload1 - pem-payload
@@ -204,7 +175,6 @@
   pem-file1 - pem-file
 
 
-;; ====== added for CVE-2023-46589 ======
   reverse-proxy_TeaStore - reverse-proxy
   trailer-header1 - trailer-header 
   user-session1 - user-session
@@ -228,9 +198,6 @@
 
 
    
-    ;;;(1).=================================Application Configuration====================;;;
-    ;; === for CVE-20224-12798 ===
-    ;; entry points: system state
     (has-logback TeaStore logback_TeaStore)
      
     (= (version logback_TeaStore) 1004000002)
@@ -257,7 +224,6 @@
      
     (script-execution-prompt-enabled TeaStore)  ;; one key for controlling branches
 
-   ;; ==== Added for CVE-2024-38286 AP 1&2 =====
     (has-tomcat TeaStore tomcat_TeaStore)
     (tomcat-has-tls-connector TeaStore tomcat_TeaStore tls-connector_TeaStore)
     (= (version tomcat_TeaStore) 11000000001)
@@ -270,7 +236,6 @@
     ;not (IPS-monitoring TeaStore)
     ;not (WAF-monitoring TeaStore) 
 
-    ;; ==== Added for CVE_2024_22243 AP 1&2 =====
     (has-dependency-on-spring-framework TeaStore)
     (=(version spring-framework1) 6001000001)
     (has-dependency-on-vulnerable-paser TeaStore  UriComponentsBuilder)
@@ -295,7 +260,6 @@
     (data-saved-in-internal-address sensitive-file-name1 internal-resource-address1)
 
 
-  ;; ==== Added for CVE_2024_38820 AP 1&2 =====
    (has-vulnerable-databinder TeaStore databinder_TeaStore)
    (databinder-parameter-binding-enabled TeaStore databinder_TeaStore)
 
@@ -323,7 +287,6 @@
    ;not (has-WAF-case-manipulation-rules TeaStore)
    ;not (has-input-filter-case-bypass-detection TeaStore)
 
-   ;; ==== Added for CVE_2023_34055 AP 1&2 =====
    ;1. Application runs vulnerable Spring Boot versions (2.7.0-2.7.17, 3.0.0-3.0.12, or 3.1.0-3.1.5)
   (has-spring-boot TeaStore springboot_TeaStore)
    (= (version springboot_TeaStore) 2007010001) 
@@ -363,8 +326,6 @@
   ;no (request-size-limits TeaStore) 
 
 
-  ;; ==== Added for CVE_2023_34055 AP 1&2 =====
-  ;; Application and Bouncy Castle setup
     (has-bouncy-castle TeaStore bouncy-castle-lib_TeaStore)
     (bcjsse-enabled TeaStore bouncy-castle-lib_TeaStore bcjsse-component_TeaStore)
     (endpoint-identification-enabled TeaStore bcjsse-component_TeaStore)
@@ -372,29 +333,23 @@
     (https-connections-trigger-dns-resolution TeaStore)
     (dns-traffic-interception-allowed TeaStore)
     
-    ;; Bouncy Castle version (before 1.78 - vulnerable)
     (= (version bouncy-castle-lib_TeaStore) 1077000000) ; version 1.77
     
-    ;; Absence of security measures (using NOT in preconditions)
     ; Note: These are checked as (not ...) in preconditions
     ; (not (additional-certificate-validation TeaStore))
     
-    ;; Legitimate server setup
     (legitimate-server-ip-address legit-server1_TeaStore legit-server-address1)
 
-    ;; DNS Server vulnerabilities
     (dns-predictable-source-ports vulnerable-dns-server1)
     (outdated-dns-software vulnerable-dns-server1)
     (dns-attacker-network-reach vulnerable-dns-server1)
     (dns-insufficient-rate-limiting vulnerable-dns-server1)
     (dns-predictable-transaction-ids vulnerable-dns-server1)
-    ;; Absence of security measures (using NOT in preconditions)
     ; Note: These are checked as (not ...) in preconditions
     ; (not (dnssec-enabledvulnerable-dns-server1))
     ; (not (doh-enabled vulnerable-dns-server1))
     ; (not (dot-enabled vulnerable-dns-server1))
 
-     ;; ==== Added for CVE_2022_40150 AP 1&2 =====
       
       (has-library TeaStore jettison-library_TeaStore)
       (jettison-library jettison-library_TeaStore)
@@ -419,17 +374,14 @@
       ;not (has-waf-protection TeaStore)
       ;not (has-waf-json-payload-detection TeaStore)
     
-      ;;==== for AP 2===
       (has-receive-endpoint TeaStore SOAP-endpoint_TeaStore)
       (has-soap-endpoint TeaStore SOAP-endpoint_TeaStore)
 
-      ;; ==== Added for CVE_2022_40149 AP 1&2 =====
       ;not (has-stack-memory-consumption-limits TeaStore )
       ;not (has-stack-memory-monitoring TeaStore)
       ;not (has-stack-memory-isolation TeaStore)
       ;not (has-stack-memory-quotas TeaStore)
 
-      ;; ==== Added for CVE-2023-6378 =====
       (has-library TeaStore logbacklib_TeaStore)
       (logback-library logbacklib_TeaStore)
       (= (version logbacklib_TeaStore) 1004011000) 
@@ -455,7 +407,6 @@
       (server-listens-on-port tcp-server_TeaStore)
        
 
-      ;; ==== Added for CVE-2023-44487 =====
       (has-server TeaStore http2-server_TeaStore)
       (has-http2-implementation TeaStore http2-server_TeaStore http2-library_TeaStore)
       (http2-stream-multiplexing-enabled TeaStore http2-server_TeaStore)
@@ -519,7 +470,6 @@
 
     
     
-     ;; ==== Added for CVE-2023-44487 =====
      ; 1. Application uses vulnerable versions of Spring Security
      (has-dependency-on-spring-security TeaStore spring-security_TeaStore)
      (= (version spring-security_TeaStore) 6003000003)
@@ -542,7 +492,6 @@
     ;(not (sha256-pre-hash-enabled TeaStore))
 
 
-    ;; ==== Added for CVE-2023-44487 =====
     ; 2. Application uses functional web frameworks WebMvc.fn or WebFlux.fn for serving static resources
     ;(or 
     (uses-WebMvc-web-framework TeaStore)
@@ -574,7 +523,6 @@
 
 
 
-    ;; ==== Added for CVE-2022-1471 =====
     ; 1. Application uses vulnerable SnakeYAML version (prior to 2.0, specifically 1.30-1.33)
     (has-dependency-on-snakeyaml TeaStore snakeyaml-library_TeaStore)
     (= (version  snakeyaml-library_TeaStore) 1030003) ; versions 1.30+ to < 2.0
@@ -603,40 +551,23 @@
     (has-receive-endpoint TeaStore yaml-endpoint_TeaStore)
 
     
-    ;; ==== Added for CVE-2025-24813 =====
-    ;; 2. Tomcat Server's Default servlet has write permissions enabled - writes enabled for the default servlet (disabled by default)
     (tomcat-has-default-servlet TeaStore default-servlet_TeaStore)
     (tomcat-default-servlet-write-enabled TeaStore default-servlet_TeaStore)
-    ;; 3. Partial PUT request support is enabled (enabled by default) - support for partial PUT (enabled by default) 
     (partial-put-request-enabled TeaStore)
-    ;; 4. Attacker has knowledge of public upload directories
     (has-public-directory TeaStore public-directory_TeaStore)
     (public-directory-exposed TeaStore public-directory_TeaStore)
 
-    ;; distinguished preconditions for information disclosure and elevation of priviledge (RCE)
-    ;; (or 
-    ;;      (and ;;for information disclosure
-    ;; 5. Security sensitive directories are sub-directories of public directories - a target URL for security sensitive uploads that was a sub-directory of a target URL for public uploads  
     (public-directory-has-sensitive-subdirectory public-directory_TeaStore sensitive-directory_TeaStore)
     (located-at sensitive-file2_TeaStore sensitive-directory_TeaStore)
-    ;; 6. Attacker has knowledge of sensitive filenames - attacker knowledge of the names of security sensitive files being uploaded 
     (sensitive-filename-exposed TeaStore sensitive-file2_TeaStore)
-    ;; 7. security sensitive files are uploaded via partial PUT requests - the security sensitive files also being uploaded via partial put
     (sensitive-file-partial-put-uploaded-enabled TeaStore sensitive-file2_TeaStore)
-    ;;)
-    ;; (and ;;for code excution
-    ;; 8. For remote code execution: application uses Tomcat's file-based session persistence with default storage location -  application was using Tomcat's file based session persistence with the default storage location 
     (tomcat-file-based-session-persistence-enabled TeaStore tomcat_TeaStore) 
     (tomcat-default-session-storage-location TeaStore tomcat_TeaStore)
-    ;;  ) )
-    ;; 10. HTTP PUT method accessible to unauthenticated users
     (http-put-method-accessible TeaStore)
         
-    ;; 11. No WAF or security controls blocking malicious PUT requests
     ; (not (WAF-malicious-request-block TeaStore))
     ; (not (security-controls-path-manipulation TeaStore))
         
-    ;; 12. Application processes filenames with internal dots without proper normalization
     ; (not (has-proper-path-normalization-for-filename TeaStore))
     ; (not (has-proper-path-equivalence-validation-for-filename TeaStore))
 
@@ -649,7 +580,6 @@
 
      (has-tomcat-process TeaStore tomcat-process_TeaStore)
 
-    ;; ==== Added for CVE-2023-2976 =====
  
      (guava-library guava-library_TeaStore)
      (has-library TeaStore guava-library_TeaStore)
@@ -670,53 +600,41 @@
      (temp-directory-under-surveillance temporary-directory_TeaStore)
 
 
-    ;; ==== Added for CVE-2024-38809 =====
-     ;; 1. Application uses vulnerable Spring Framework spring-web module
      (has-framework TeaStore spring-framework1)
      (spring-web-module spring-framework1)
     
-     ;; 2. Application processes ETags from If-Match or If-None-Match headers
      (has-http-endpoint TeaStore  http-endpoint_TeaStore)
      (has-etag-handler TeaStore etag-handler_TeaStore)
      (processes-if-match-headers TeaStore etag-handler_TeaStore)
      (processes-if-none-match-headers TeaStore etag-handler_TeaStore)
      
-     ;; 3. ETag parsing logic lacks proper validation
      ;not (has-etag-validation TeaStore etag-handler_TeaStore)
      ;not (has-etag-size-limits TeaStore etag-handler_TeaStore)
      ;not (has-etag-complexity-limits TeaStore etag-handler_TeaStore)
      
-     ;; 4. Application exposes HTTP endpoints to untrusted users
      (publicly-accessible http-endpoint_TeaStore)
      ;not (has-restrictive-access-controls http-endpoint_TeaStore)
      
-     ;; 5. No size limits on If-Match or If-None-Match headers
      ;not (has-header-size-limits TeaStore http-endpoint_TeaStore)
      ;not (has-framework-header-limits pring-framework1)
      ;not (has-servlet-container-limits TeaStore)
      
-     ;; 6. No rate limiting or request throttling
      ;not (has-http-rate-limiting TeaStore http-endpoint_TeaStore)
      ;not (has-request-throttling TeaStore http-endpoint_TeaStore)
      
-     ;; 7. No custom input validation filters
      ;not (has-input-validation-filters TeaStore)
      ;not (has-etag-validation-middleware TeaStore)
      
-     ;; 8. No WAF/IPS protection
      ;not (has-waf-protection TeaStore)
      ;not (has-ips-protection TeaStore)
      ;not (has-etag-header-detection-rules TeaStore)
      
-     ;; 9. Shared server resources without isolation
      (has-shared-resources TeaStore)
      ;not (has-resource-isolation TeaStore)
      
-     ;; 10. Shared thread pool across endpoints
      (has-shared-thread-pool TeaStore)
      ;not (has-endpoint-isolation TeaStore)
 
-;; ==== Added for CVE-2024-47072 =====
      ;1. Application uses vulnerable XStream version
      (has-library TeaStore XStreamLibrary_TeaStore)
      (xstream-library XStreamLibrary_TeaStore)
@@ -754,7 +672,6 @@
      ;not (has-deserialization-whitelist TeaStore)
      ;not (has-waf-binary-filtering TeaStore)
 
-    ;; ==== Added for CVE-2023-33202 =====
     ; 1. vulnerable Bouncy Castle present: version < 1.73.0
     (has-library TeaStore BCLibrary_TeaStore)
     (bouncycastle-library BCLibrary_TeaStore)
@@ -802,7 +719,6 @@
     ;not (has-waf-protection TeaStore)
     ;not (has-upload-policy-scanner TeaStore pem-endpoint_TeaStore)
 
-    ;; ==== Added for CVE-2023-46589 =====
      (has-reverse-proxy TeaStore reverse-proxy_TeaStore)
      (forwards-requests reverse-proxy_TeaStore tomcat_TeaStore)
      
@@ -842,55 +758,39 @@
      (has-application-cache TeaStore cache1_TeaStore)
 
 
-    ;;;(1).====================================END===================================;;;
   
 
 
 
-    ;;;(2).================================USER STATE================================;;;
-    ;; === for CVE-20224-12798 ===
     (user-visits-site user1 email-site)
-    ;;(use-browser browser-chrome)
      
-    ;;==== Added for CVE_2024_22243 AP 1&2 =====
     (user-has-valid-credentials-application user1 user1-password_TeaStore TeaStore)
     (is-default-browser browser-chrome)
 
-    ;; ==== Added for CVE-2023-44487 =====
     (user-needs-to-use-application user1 TeaStore)
 
-    ;; ==== Added for CVE-2023-33202 =====
     (has-account user1 TeaStore)
     
-    ;; ==== Added for CVE-2023-46589 =====
     (user-http-request user-http-request1)
-    ;;;(2).====================================END===================================;;;
 
 
 
 
-    ;;;(3).=============================Attacker Capability==========================;;;
-     ;; === for CVE-20224-12798 ===
     ; (malicious-file malicious-logback-config)
     (env-var-logback-set-script malicious-logback-env-var-set-script1)    
     
-    ;; ==== Added for CVE-2024-38286 AP 1&2 =====
     (tls-flood-script tomcat-tls-flood-script1)
     (tomcat-tls-flood-script tomcat-tls-flood-script1)
     (tls-initial-handshake-request-script tomcat-tls-initial-handshake-request-script1)
     (tls-renegotiation-script tomcat-tls-renegotiation-script1)
 
-    ;; ==== Added for CVE_2023_34055 AP 1&2 =====
     (http-flood-script http-flood-script1)
 
 
-    ;; ==== Added for CVE-2024-34447 AP 1&2 =====
     (controlled-server-ip-address  malicious-server1 malicious-server-address1)
 
-    ;; ==== Added for CVE-2025-22223 AP2 =====
     (online-brute-force-script online-brute-force-script1)
 
-     ;; ==== Added for CVE-2023-46589 AP2 =====
     (smuggling-trigger-http-request smuggling-trigger-request1)
     (smuggling-http-request-http  smuggling-request-cache-poisoning1)
     (smuggling-http-request-http  smuggling-request-hijack1)
@@ -898,7 +798,6 @@
     (smuggling-http-request-hijack smuggling-request-hijack1)
 
    
-    ;;;(3).=====================================END================================;;;
   )
  
   (:goal (and 

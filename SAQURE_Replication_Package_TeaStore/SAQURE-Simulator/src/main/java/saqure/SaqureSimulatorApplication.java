@@ -34,10 +34,10 @@ public class SaqureSimulatorApplication {
 //        update_AED_AEDI(PrismModelChecker.ExternalChanges.AEDI_CHANGE_VERSION_PERSISTENCE);
 
         // Experiment Configuration
-        Map<String, Service> servicesMap = RQ2_s3_SAQURE_nodyPa_ExpConfig();
+        Map<String, Service> servicesMap = RQ1_SAQURE_s3_ExpConfig();
         Instant planSimulationEnd = Instant.now();
         log.info("Runtime risk assessment time: {}ms", Duration.between(planSimulationStart, planSimulationEnd).toMillis());
-        Service serviceToAdapt = servicesMap.get("PERSISTENCE-SERVICE");// WEBUI AUTHENTICATION PERSISTENCE IMAGE
+        Service serviceToAdapt = servicesMap.get("AUTHENTICATION-SERVICE");// WEBUI AUTHENTICATION PERSISTENCE IMAGE
 
         Map<String, List<AdaptationOption>> proposedAdaptationOptions = new HashMap<>();
         proposedAdaptationOptions.put(serviceToAdapt.getServiceId(), List.of(

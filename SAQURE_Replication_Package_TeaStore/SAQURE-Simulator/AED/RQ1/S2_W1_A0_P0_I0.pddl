@@ -1,4 +1,4 @@
-(define (domain attack-path-planner)
+(define (domain AED)
   (:requirements 
     :equality 
     :strips
@@ -10,7 +10,7 @@
 
   
   (:functions
-    (total-cost) ;; the accumulation of actions' risk
+    (total-cost) 
     (version ?Software) ;;（major*1e9 + minor*1e6 + patch*1e3 + milestone-seq*1）
     (port ?Port) ;; extract the opened port number
    )
@@ -23,6 +23,7 @@
     infrastructure 
      
     cve-identifier
+    exploit-technique - technique
 
 
     mailer browser logback comchannel tomcat - software
@@ -39,12 +40,8 @@
     file-url website-url script-url redirect-url locale-bypass-url - url 
     phishing-url - website-url
     java-library - library
-
-    ;;====== added for CVE-2024-38286 ======
     controller
     tls-connector - controller
-
-    ;;====== added for CVE_2024_22243 ======
     utility-class - class
     payload-string - string
     url-parser - parser
@@ -54,8 +51,6 @@
     credential - sensitive-information
     internal-address - address
     endpoint
-
-    ;;====== added for CVE_2024_38820 ====
     account
     session-cookie  
     locale-config
@@ -66,11 +61,7 @@
     parameter-name - string
     web-controller - controller
     spring-framework - framework
-
-   ;;====== added for CVE_2024_34055 ====
     spring-boot - software
-   
-   ;; ===== added for CVE_2024_34447
     bouncy-castle
     bcjsse
     dns-server legitimate-server - server
@@ -80,24 +71,16 @@
     legitimate-ip-address malicious-ip-address - ip-address
     ssl-socket
     legitimate-service malicious-service - service
-
-   ;; ===== added for CVE_2022_40150/40149
     receive-endpoint - endpoint
     api-endpoint soap-endpoint - receive-endpoint
     http-request - request
     http-post-request - http-request
     json-payload xml-payload - payload
-   
-   ;; ===== added for CVE_2023_6378
-
     tcp-endpoint - endpoint
     tcp-server - server
     logback-receiver - receiver-component
     serialized-payload - payload
     tcp-connection - network-connection
-
-
-   ;;====== added for CVE-2023-44487 ======
     http2-server - tcp-server
     http2-library - library
     tls-endpoint - endpoint
@@ -107,16 +90,11 @@
     stream-limit
     stream-batch
     server-resource - resource
-
-   ;; ====== added for CVE_2025_22228 ======
     spring-security - securit-module ;spring-product
     password - credential
     password-hash - password
     login-request 
     password-encoder -  encoder
-
-
-   ;; ====== added for CVE_2024_38816 ======
     router-function
     resource-handler - handler 
     filesystem-resource - resource
@@ -124,8 +102,6 @@
     path-traversal-payload - payload 
     sensitive-file - file
     filesystem-path - path
-
-   ;; ====== added for CVE-2022-1471 ======
     snakeyaml-library - java-library
     yaml-endpoint - receive-endpoint
     command-execution-logic 
@@ -135,8 +111,6 @@
     java-gadget-class - java-class 
     yaml-payload - payload
     yaml-constructor - constructor
-
-   ;; ====== added for CVE-2025-24813 ======
     default-servlet - servlet
     public-directory sensitive-directory - directory
     http-get-request http-put-request - http-request
@@ -147,8 +121,6 @@
     web-shell-script - script
     jsp-engine - engine
     tomcat-process - process
-
-   ;; ====== added for CVE-2023-2976 ======
     temporary-directory - directory
     host-os - operating-system
     filename-pattern - pattern
@@ -156,31 +128,22 @@
     temporary-file - file
     symbolic-link - link
     controlled-file - file
-
-   ;; ====== added for CVE-2024-38809 ======
     http-endpoint - endpoint
     etag-handler
     etag-value
-
-   ;; ====== added for CVE-2024-47072 ======
     driver
     binary-stream-driver - driver
     binary-payload - payload
-
-   ;; ====== added for CVE-2023-33202 ======  
     pem-endpoint - receive-endpoint  
     pem-payload - payload
     asn1-structure - data-structure
     pem-file - file
-
-   ;; ====== added for CVE-2023-46589 ====== 
     proxy
     reverse-proxy - proxy 
     trailer-header - request-header 
     session
     user-session - session
     cache-entry
-
     cache-poison-payload - payload    
     cached-resource - resource       
     application-cache        
@@ -204,13 +167,45 @@
    CVE_2024_38816 - cve-identifier
    CVE_2022_1471 - cve-identifier
    CVE_2025_24813 - cve-identifier
+   CVE_2023_2976 - cve-identifier
    CVE_2024_22259 - cve-identifier
    CVE_2024_22262 - cve-identifier
-   CVE_2023_2976 - cve-identifier
    CVE_2024_38809 - cve-identifier
    CVE_2024_47072 - cve-identifier
    CVE_2023_33202 - cve-identifier
-   CVE_2023_46589 - cve-identifier  
+   CVE_2023_46589 - cve-identifier
+
+
+   change-to-malicious-logback-config - exploit-technique
+   abuse-tls-handshake - exploit-technique
+   crafts-redirect-url - exploit-technique
+   build-phishingsite - exploit-technique
+   crafts-redirect-url-to-phishing-site - exploit-technique
+   bypass-locale-specific-capitalization - exploit-technique
+   acquire-user-account - exploit-technique
+   craft-http-flood-script - exploit-technique
+   perform-dns-poisoning - exploit-technique 
+   sets-up-malicious-server - exploit-technique  
+   craft-malicious-xml-payload - exploit-technique
+   craft-malicious-json-payload - exploit-technique
+   craft-malicious-serialized-payload - exploit-technique
+   reset-http2-streams - exploit-technique
+   online-brute-force - exploit-technique
+   path-traversal - exploit-technique
+   craft-malicious-java-class - exploit-technique
+   yaml-deserialization - exploit-technique
+   jndi-injection - exploit-technique
+   internal-dot-path-manipulation - exploit-technique
+   craft-partial-put-request - exploit-technique
+   craft-malicious-web-shell - exploit-technique
+   temp-file-prediction - exploit-technique
+   temp-file-access - exploit-technique
+   craft-malicious-etag-header - exploit-technique
+   craft-malicious-binary-payload - exploit-technique
+   craft-malicious-pem-payload - exploit-technique
+   craft-malicious-pem-file - exploit-technique
+   http-request-smuggling - exploit-technique
+   
    
   )
 
@@ -227,71 +222,31 @@
 
     ;; ============ application exposes attack surface =================
     (exposed-attack-surface ?Application - application ?CVEID - cve-identifier)
-    ;; ====================vulnerability exploit TTP====================
-    ;; CVE-2024-12798
-    (exploit-by-malicious-logback ?CVEID - cve-identifier)
-    (exploit-by-inject-malicious-env-var ?CVEID - cve-identifier)
-    
-    ;; CVE-2024-38820
-    (exploit-by-locale-specific-capitalization-bypass ?CVEID - cve-identifier)
+
+    ;; ====================vulnerability exploit technique====================
+    (exploit-by ?CVEID - cve-identifier ?exploitTechnique - exploit-technique)
+
     (exploit-needs-user-account ?CVEID - cve-identifier) 
-
-    ;; CVE-2023-34055
-    (exploit-by-flood-script ?CVEID - cve-identifier)
     (vulnerable-spring-boot ?SpringBoot - spring-boot)
-    
-    ;; CVE-2024-22243
-    (exploit-by-crafts-redirect-url ?CVEID - cve-identifier)  
-    (exploit-by-build-phishingsite ?CVEID - cve-identifier)
-    (exploit-by-crafts-redirect-url-to-phishing-site ?CVEID - cve-identifier)
-
-    ;;CVE_2023_40150/40149
-    (exploit-by-craft-malicious-xml-payload ?CVEID - cve-identifier)
-    (exploit-by-craft-malicious-json-payload  ?CVEID - cve-identifier)
-
-    ;;CVE_2023_6378 
-    (exploit-by-build-server-connection ?CVEID - cve-identifier)  
-
-    ;; CVE_2025_22228
-    (exploit-by-gain-password ?CVEID - cve-identifier)
-    (exploit-by-online-brute-force ?CVEID - cve-identifier)
-
-    ;; CVE_2024_38816
-    (exploit-by-craft-path-traversal-url ?CVEID - cve-identifier) 
-
-    ;; CVE_2022_1471
-    (exploit-by-malicious-java-class ?CVEID - cve-identifier)
-    (exploit-by-yaml-deserialization ?CVEID - cve-identifier)
-    (exploit-by-jndi-injection ?CVEID - cve-identifier)
-     
-    ;; CVE-2025-24813 
-    (exploit-by-internal-dot-path-manipulation ?CVEID - cve-identifier)
-    (exploit-by-web-shell ?CVEID - cve-identifier)
-
-    ;; CVE-2023-2976
-    (exploit-by-symlink-attack ?CVEID - cve-identifier)
-    (exploit-by-temp-file-prediction ?CVEID - cve-identifier)
-    (exploit-by-temp-file-access ?CVEID - cve-identifier)
-
-    ;; CVE-2024-38809
-    (exploit-by-crafting-malicious-etag-header ?CVE - cve-identifier)
-
-    ;; CVE-2024-47072
-    (exploit-by-craft-malicious-binary-payload ?CVEID - cve-identifier)
+    (vulnerable-tomcat ?Tomcat - tomcat)
+    (vulnerable-java-library ?Guava - java-library)
     (vulnerable-xstream-binary-driver ?XStreamLibrary - java-library)
-
-    ;; CVE-2023-33202
     (vulnerable-bouncycastle ?Library - java-library)
+    (vulnerable-host-validation ?Application - application)
     (vulnerable-pemparser-in-process ?Application - application)
-    (exploit-by-craft-malicious-pem-payload ?CVEID - cve-identifier)
-    (exploit-by-craft-malicious-pem-file ?CVEID - cve-identifier)
-    ;(exploit-needs-user-account ?CVEID - cve-identifier)
+    (vulnerable-redirect-URL-created ?MaliciousURL - redirect-url)
+    (vulnerable-bcjsse ?Application - application ?BCJSSE - bcjsse)
+    (vulnerable-dns-infrastructure ?DNSServer - dns-server)
+    (vulnerable-jettison-parser ?JettisionLibrary - java-library)
+    (vulnerable-logback-receiver ?ReceiverComponent - logback-receiver)
+    (vulnerable-receiver ?ReceiverComponent - receiver-component)
+    (vulnerable-http2-server ?Server - http2-server)
+    (vulnerable-password-validation ?Application - application)
+    (vulnerable-file-system-path-created ?ConcatenatedPath - filesystem-path)
+    (vulnerable-tomcat-default-servlet ?Tomcat - tomcat ?DefaultServlet - default-servlet)
+    (vulnerable-etag-parsing ?FW - spring-framework)
 
-    ;; CVE-2023-46589    
-    (exploit-by-http-request-smuggling ?CVEID - cve-identifier)
-
-    
-    ;;############################ CVE-2024-12798 ##############################
+    ;; ============ Other states, relationships, non-numeric attributes of system configuration and external environment ============
     ; The application deploys logback
     (has-logback ?Application - application ?Logback - logback)  
 
@@ -389,20 +344,16 @@
     (forged-website-contains-malicious-script-url ?ForgedWebsite - website ?MaliciousScriptUrl - script-url)
     (forged-website-contains-malicious-url ?ForgedWebsite - website ?MaliciousUrl - url)
 
-   ;########CVE-2024-38286 Pedicates########
-    ;; === CVE-2024-38286 Pedicates for Tomcat ===
     (has-tomcat ?Application - application ?Tomcat - tomcat)
     (tomcat-has-tls-connector ?Application - application ?Tomcat - tomcat ?TLSConnector - tls-connector)
     (tomcat-tls-renegotiation-enabled ?Application - application ?Tomcat - tomcat ?TLSConnector - tls-connector)
     (has-memory-limitation ?Application - application ?Tomcat - tomcat)
-    (vulnerable-tomcat ?Tomcat - tomcat)
     (has-memory-protection-mechanisms ?Application - application)
     (max-connection-restriction ?Application - application)
     (firewall-connection-restriction ?Application - application)
     (IDS-monitoring ?Application - application)
     (IPS-monitoring ?Application - application)
     (WAF-monitoring ?Application - application)
-    
 
     (tls-handshake-request-sent ?MaliciousRequestScript - script)
     (tls-handshake-request-received ?MaliciousRequestScript - script)
@@ -428,479 +379,413 @@
 
     (tls-renegotiation-flood-active ?MalRenegoScript - script)
 
-
-   ;######### CVE-2024-22243/CVE-2024-22259/CVE-2024-22262 Pedicates######
-   ;; === entry points ===
     (has-dependency-on-vulnerable-paser ?Application - application ?Parser - url-parser)
     (has-external-settingable-endpoint ?Application - application ?Endpoint - endpoint)
     (url-redirect-enabled ?Application - application)
     (url-endpoint-setting-restriction ?Application - application ?Endpoint - endpoint)
-     ;(url-endpoint-protocol-restriction ?Application - application ?Endpoint - endpoint)
-     ;(url-endpoint-path-restriction ?Application - application ?Endpoint - endpoint)
-     ;(url-endpoint-points-restriction ?Application - application ?Endpoint - endpoint)
      
-
     (external-resource-accessable ?Application - application)
     (internal-resource-accessable ?Application - application)
-    (vulnerable-host-validation ?Application - application)
-    ;(depend-blacklist-host-validation ?Application - application)
-    ;(canonicalization-parse-url ?Application - application)
     
     (anti-redirect-protection ?Application - application)
 
     (WAF-malicious-request-bloack ?Application - application)
     (IPS-malicious-request-bloack ?Application - application)
  
+    (website-mimics-legitimate-app ?PhishingSite - website ?Application - application)
+    (phishing-url-points-to-forge-website ?PhishingURL - phishing-url ?PhishingSite - website )
+    (malicious-redirect-url ?MaliciousRedirectURL - redirect-url)
+    (HTTP-request-includes-redirect-url ?RedirectUrl - redirect-url)
+    (malicious-phishing-site-url ?PhishingURL -  phishing-url)
 
-   (website-mimics-legitimate-app ?PhishingSite - website ?Application - application)
-   (phishing-url-points-to-forge-website ?PhishingURL - phishing-url ?PhishingSite - website )
-   (malicious-redirect-url ?MaliciousRedirectURL - redirect-url)
-   (HTTP-request-includes-redirect-url ?RedirectUrl - redirect-url)
-   (malicious-phishing-site-url ?PhishingURL -  phishing-url)
+    (URL-contains-payload ?MaliciousRedirectURL - redirect-url ?Payload - payload-string)
+    (parsed-with ?Application - application ?Parsetool - url-parser)
+    (running-Parser ?Parser - url-parser)
+    (payload-has-validation-bypass-capability ?Payload - payload-string)
+    (redirects-to-phishing-URL ?MaliciousRedirectURL - redirect-url  ?PhishingURL - phishing-url)
+    (message-has-redirect-url ?Message - message ?MaliciousURL - redirect-url)            
+    (redirect-url-clicked ?RedirectUrl - redirect-url) 
+    (http-request-triggered ?Url - url)
+    (http-request-sent ?HTTPRequest - http-request)
+    (http-request-received ?HTTPRequest - http-request ?Application - application)
+    (URL-host-validation-passed ?RedirectUrl - redirect-url)
+    (redirect-response-sent ?PhishingUrl - phishing-url)
+    (request-sent-to-phishing ?PhishingURL - phishing-url)
+    (mimic-response-sent ?PhishingURL - phishing-url)
+    (user-viewing-phishing-website ?User - user ?Phishingsite - website)
+    (user-has-valid-credentials-application ?User - user ?Credentials - credential ?Application - application)
+    (is-default-browser ?Browser - browser)
+    (running-browser ?Browser - browser)
+    (credentials-entered-to-phishingsite ?Credentials - credential ?PhishingSite - website)
+    (credentials-submitted-on-phishingsite ?Credentials - credential ?PhishingSite - website)
+    (information-obtained ?SensitiveInformation - sensitive-information)
 
-   (URL-contains-payload ?MaliciousRedirectURL - redirect-url ?Payload - payload-string)
-   (parsed-with ?Application - application ?Parsetool - url-parser)
-   (running-Parser ?Parser - url-parser)
-   (payload-has-validation-bypass-capability ?Payload - payload-string)
-   (redirects-to-phishing-URL ?MaliciousRedirectURL - redirect-url  ?PhishingURL - phishing-url)
-   (vulnerable-redirect-URL-created ?MaliciousURL - redirect-url)
-   (message-has-redirect-url ?Message - message ?MaliciousURL - redirect-url)            
-   (redirect-url-clicked ?RedirectUrl - redirect-url) 
-   (http-request-triggered ?Url - url)
-   (http-request-sent ?HTTPRequest - http-request)
-   (http-request-received ?HTTPRequest - http-request ?Application - application)
-   (URL-host-validation-passed ?RedirectUrl - redirect-url)
-   (redirect-response-sent ?PhishingUrl - phishing-url)
-   (request-sent-to-phishing ?PhishingURL - phishing-url)
-   (mimic-response-sent ?PhishingURL - phishing-url)
-   (user-viewing-phishing-website ?User - user ?Phishingsite - website)
-   (user-has-valid-credentials-application ?User - user ?Credentials - credential ?Application - application)
-   (is-default-browser ?Browser - browser)
-   (running-browser ?Browser - browser)
-   (credentials-entered-to-phishingsite ?Credentials - credential ?PhishingSite - website)
-   (credentials-submitted-on-phishingsite ?Credentials - credential ?PhishingSite - website)
-   (information-obtained ?SensitiveInformation - sensitive-information)
+    (redirect-url-published-on-social-media ?RedirectURL ?SocialMedia)
+    (redirect-url-visible ?RedirectURL ?SocialMedia)
+    (malicious-url-published-on-social-media ?MaliciousURL - url ?SocialMedia - social-media)
+    (malicious-url-visible ?MaliciousURL - url ?SocialMedia - social-media)
+    (running-social-media ?SocialMedia - social-media)
+    (user-scrolling-social-media ?User - user ?SocialMedia - social-media)
+    (user-use-browser ?User - user ?Browser - browser)
+    (malicious-url-noticed ?MaliciousURL - url ?User - user)
+    (malicious-url-clicked ?MaliciousURL - url)            
+    (malicious-redirect-url-clicked ?MaliciousURL - redirect-url)
+    (redirects-to-internal-resource ?MaliciousURL - redirect-url ?InternalResourceAddress -  internal-address)
+    (internal-request-sent ?InternalResourceAddress -  internal-address)
+    (sensitive-information-located-internal-address ?Data - sensitive-information ?InternalResourceAddress -  internal-address)
+    (data-saved-in-internal-address ?Data - information ?InternalResourceAddress - internal-address)
+    (data-sent-to-attacker ?Data - sensitive-information)
 
-   (redirect-url-published-on-social-media ?RedirectURL ?SocialMedia)
-   (redirect-url-visible ?RedirectURL ?SocialMedia)
-   (malicious-url-published-on-social-media ?MaliciousURL - url ?SocialMedia - social-media)
-   (malicious-url-visible ?MaliciousURL - url ?SocialMedia - social-media)
-   (running-social-media ?SocialMedia - social-media)
-   (user-scrolling-social-media ?User - user ?SocialMedia - social-media)
-   (user-use-browser ?User - user ?Browser - browser)
-   (malicious-url-noticed ?MaliciousURL - url ?User - user)
-   (malicious-url-clicked ?MaliciousURL - url)            
-   ;; === AP 2 ===
-   (malicious-redirect-url-clicked ?MaliciousURL - redirect-url)
-   (redirects-to-internal-resource ?MaliciousURL - redirect-url ?InternalResourceAddress -  internal-address)
-   (internal-request-sent ?InternalResourceAddress -  internal-address)
-   (sensitive-information-located-internal-address ?Data - sensitive-information ?InternalResourceAddress -  internal-address)
-   (data-saved-in-internal-address ?Data - information ?InternalResourceAddress - internal-address)
-   (data-sent-to-attacker ?Data - sensitive-information)
-
-
-
-   ;######### CVE-2024-38820 Pedicates######
-   ;; ===== entry points =====
-      (has-dependency-on-spring-framework ?Application - application)
+    (has-dependency-on-spring-framework ?Application - application ?SpringFramework - spring-framework)
       
-      (has-vulnerable-databinder ?application - application ?databinder - data-binder)
-      (databinder-parameter-binding-enabled ?Application - application ?DataBinder - data-binder)
-      (has-disallowed-databinder-fields-configuration ?Application - application)
-
-
-
-      (databinder-has-write-access-to-properties ?Application - application ?DataBinder - data-binder)
-      (databinder-has-additional-input-validation-layer ?Application - application ?DataBinder - data-binder)      
-      (databinder-relies-on-case-insensitive-field-matching ?Application - application ?DataBinder - data-binder)
+    (has-vulnerable-databinder ?application - application ?databinder - data-binder)
+    (databinder-parameter-binding-enabled ?Application - application ?DataBinder - data-binder)
+    (has-disallowed-databinder-fields-configuration ?Application - application)
+    (databinder-has-write-access-to-properties ?Application - application ?DataBinder - data-binder)
+    (databinder-has-additional-input-validation-layer ?Application - application ?DataBinder - data-binder)      
+    (databinder-relies-on-case-insensitive-field-matching ?Application - application ?DataBinder - data-binder)
     
 
-      (has-locale-configuration ?Application - application ?config - locale-config)
-      (has-locale-specific-exceptions ?Application - application)
-      (has-vulnerable-locale-transformation ?Application - application)
-      (processes-requests-in-locale-context ?Application - application)
-      (locale-has-special-case-conversion ?Application - application)
+    (has-locale-configuration ?Application - application ?config - locale-config)
+    (has-locale-specific-exceptions ?Application - application)
+    (has-vulnerable-locale-transformation ?Application - application)
+    (processes-requests-in-locale-context ?Application - application)
+    (locale-has-special-case-conversion ?Application - application)
 
-      (locale-dependent-string-processing ?Application - application)
-      (explicit-locale-specification-in-lowercase ?Application - application)
+    (locale-dependent-string-processing ?Application - application)
+    (explicit-locale-specification-in-lowercase ?Application - application)
 
+    (has-web-controller-accept-http-post-user-input ?Application - application ?Controller - web-controller)
+    (accepts-user-controlled-parameter-names ?Application - application)
 
-      (has-web-controller-accept-http-post-user-input ?Application - application ?Controller - web-controller)
-      (accepts-user-controlled-parameter-names ?Application - application)
-
-
-
-      (has-additional-field-access-controls ?Application - application)
-      (has-parameter-name-sanitization ?Application - application)
-      (has-WAF-case-manipulation-rules ?Application - application)
-      (has-input-filter-case-bypass-detection ?Application - application)
+    (has-additional-field-access-controls ?Application - application)
+    (has-parameter-name-sanitization ?Application - application)
+    (has-WAF-case-manipulation-rules ?Application - application)
+    (has-input-filter-case-bypass-detection ?Application - application)
      
+    ;; === Account and Authentication Predicates ===
+    (account-registered ?account - account ?application - application)
+    (attacker-has-account ?account - account)
+    (session-cookie-obtained ?cookie - session-cookie ?account - account)
+    (account-has-normal-privileges ?account - account)
+    (account-has-admin-privilege ?account - account)
+    (admin-field-set-to-true ?account - account)
 
+    ;; === Malicious URL and Parameter Predicates ===
+    (malicious-locale-bypass-url ?url - locale-bypass-url)
+    (url-contains-locale-bypass-parameter ?url - locale-bypass-url ?param - locale-bypass-parameter)
+    (parameter-uses-non-standard-capitalization ?param - locale-bypass-parameter)
+    (parameter-targets-admin-field ?param - locale-bypass-parameter)
+    (bypass-parameter-created ?param - locale-bypass-parameter)
 
-      ;; === Account and Authentication Predicates ===
-      (account-registered ?account - account ?application - application)
-      (attacker-has-account ?account - account)
-      (session-cookie-obtained ?cookie - session-cookie ?account - account)
-      (account-has-normal-privileges ?account - account)
-      (account-has-admin-privilege ?account - account)
-      (admin-field-set-to-true ?account - account)
+    ;; === HTTP Request Predicates ===
+    (http-get-request-triggered ?url - url)
+    (http-get-request-sent ?HttpGetRequest - http-get-request)
+    (http-get-request-received ?HttpGetRequest - http-get-request ?Application - application)
+    (request-contains-locale-bypass-param ?url - locale-bypass-url ?param - locale-bypass-parameter)
+    (bypass-parameter-received ?param - locale-bypass-parameter ?application - application)
 
+    ;; === DataBinder and Parameter Transformation Predicates ===
+    (databinder-invoked ?databinder - data-binder ?param - locale-bypass-parameter)
+    (parameter-transformed-to-lowercase ?original - locale-bypass-parameter ?transformed - transformed-parameter)
+    (non-standard-lowercase-created ?param - transformed-parameter)
+    (transformed-parameter-name ?param - transformed-parameter)
 
-      ;; === Malicious URL and Parameter Predicates ===
-      (malicious-locale-bypass-url ?url - locale-bypass-url)
-      (url-contains-locale-bypass-parameter ?url - locale-bypass-url ?param - locale-bypass-parameter)
-      (parameter-uses-non-standard-capitalization ?param - locale-bypass-parameter)
-      (parameter-targets-admin-field ?param - locale-bypass-parameter)
-      (bypass-parameter-created ?param - locale-bypass-parameter)
-
-      ;; === HTTP Request Predicates ===
-      (http-get-request-triggered ?url - url)
-      (http-get-request-sent ?HttpGetRequest - http-get-request)
-      (http-get-request-received ?HttpGetRequest - http-get-request ?Application - application)
-      (request-contains-locale-bypass-param ?url - locale-bypass-url ?param - locale-bypass-parameter)
-      (bypass-parameter-received ?param - locale-bypass-parameter ?application - application)
-
-      ;; === DataBinder and Parameter Transformation Predicates ===
-      (databinder-invoked ?databinder - data-binder ?param - locale-bypass-parameter)
-      (parameter-transformed-to-lowercase ?original - locale-bypass-parameter ?transformed - transformed-parameter)
-      (non-standard-lowercase-created ?param - transformed-parameter)
-      (transformed-parameter-name ?param - transformed-parameter)
-
-      ;; === Security Filter and Validation Predicates ===
-      (pattern-matching-failed ?param - transformed-parameter ?pattern - disallowed-pattern)
-      (filter-bypassed ?param - transformed-parameter)
-      (parameter-allowed-to-continue-binding ?param - transformed-parameter)
-      (validation-bypass-successful ?param - transformed-parameter)
+    ;; === Security Filter and Validation Predicates ===
+    (pattern-matching-failed ?param - transformed-parameter ?pattern - disallowed-pattern)
+    (filter-bypassed ?param - transformed-parameter)
+    (parameter-allowed-to-continue-binding ?param - transformed-parameter)
+    (validation-bypass-successful ?param - transformed-parameter)
   
-      ;; === Exploitation Success Predicates ===
-      (privilege-escalation ?account - account)
-      (vulnerability-exploited ?cve - cve-identifier)
+    ;; === Exploitation Success Predicates ===
+    (privilege-escalation ?account - account)
+    (vulnerability-exploited ?cve - cve-identifier)
       
+    (has-spring-boot ?Application - application ?SpringBoot - spring-boot)
+    (spring-boot-has-mvc ?Application - application ?SpringBoot - spring-boot)
+    (spring-boot-has-webflux ?Application - application ?SpringBoot - spring-boot)
+    (has-actuator-dependency ?Application - application ?SpringBoot - spring-boot)
+    (web-metrics-enabled ?Application - application ?SpringBoot - spring-boot)
+    (accepts-external-http-requests ?Application - application)
+    (actuator-endpoints-accessible ?Application - application)
+    (web-observations-active ?Application - application ?SpringBoot - spring-boot)
+    (request-size-limits ?Application - application)
+    (resource-consumption-controls ?Application - application)
+    (http-flood-script ?Script - script)
+    (malicious-http-flood-script ?Script - script)
+    (http-flood-active ?Script - script)
+    (http-requests-sent ?Script - script)
+    (http-requests-received ?Script - script)
+    (resources-allocated ?SpringBoot - spring-boot)
+    (resources-exhausted)
 
-  ;######### CVE-2023-34055 Pedicates######
-  (has-spring-boot ?Application - application ?SpringBoot - spring-boot)
-  (spring-boot-has-mvc ?Application - application ?SpringBoot - spring-boot)
-  (spring-boot-has-webflux ?Application - application ?SpringBoot - spring-boot)
-  (has-actuator-dependency ?Application - application ?SpringBoot - spring-boot)
-  (web-metrics-enabled ?Application - application ?SpringBoot - spring-boot)
-  (accepts-external-http-requests ?Application - application)
-  (actuator-endpoints-accessible ?Application - application)
-  (web-observations-active ?Application - application ?SpringBoot - spring-boot)
-  (request-size-limits ?Application - application)
-  (resource-consumption-controls ?Application - application)
-  (http-flood-script ?Script - script)
-  (malicious-http-flood-script ?Script - script)
-  (http-flood-active ?Script - script)
-  (http-requests-sent ?Script - script)
-  (http-requests-received ?Script - script)
-  (resources-allocated ?SpringBoot - spring-boot)
-  (resources-exhausted)
+    ;; Application and Bouncy Castle related predicates
+    (has-bouncy-castle ?Application - application ?BouncyCastle - bouncy-castle)
+    (bcjsse-enabled ?Application - application ?BouncyCastle - bouncy-castle ?BCJSSE - bcjsse)
+    (endpoint-identification-enabled ?Application - application ?BCJSSE - bcjsse)
+    (ssl-socket-without-explicit-hostname ?Application - application)
+    (https-connections-trigger-dns-resolution ?Application - application)
+    (additional-certificate-validation ?Application - application)
+    (dns-traffic-interception-allowed ?Application - application)
 
+    ;; DNS Server related predicates
+    (dnssec-enabled ?DNSServer - dns-server)
+    (dns-predictable-source-ports ?DNSServer - dns-server)
+    (outdated-dns-software ?DNSServer - dns-server)
+    (dns-attacker-network-reach ?DNSServer - dns-server)
+    (dns-doh-enabled ?DNSServer - dns-server)
+    (dns-dot-enabled ?DNSServer - dns-server)
+    (dns-insufficient-rate-limiting ?DNSServer - dns-server)
+    (dns-predictable-transaction-ids ?DNSServer - dns-server)
 
+    ;; Domain and Server related predicates
+    (legitimate-server-ip-address ?Server - server ?Address -  legitimate-ip-address)
+    (controlled-server-ip-address ?ControlledServer - controlled-server ?Address - malicious-ip-address)
+    (malicious-server-setup-with-domain ?ControlledServer - controlled-server ?Domain - dns-domain)
+    (malicious-server-ready ?ControlledServer - controlled-server)
 
-;######### CVE-2024-34447 Pedicates######
-;; Application and Bouncy Castle related predicates
-(has-bouncy-castle ?Application - application ?BouncyCastle - bouncy-castle)
-(bcjsse-enabled ?Application - application ?BouncyCastle - bouncy-castle ?BCJSSE - bcjsse)
-(endpoint-identification-enabled ?Application - application ?BCJSSE - bcjsse)
-(ssl-socket-without-explicit-hostname ?Application - application)
-(https-connections-trigger-dns-resolution ?Application - application)
-(additional-certificate-validation ?Application - application)
-(dns-traffic-interception-allowed ?Application - application)
-(vulnerable-bcjsse ?Application - application ?BCJSSE - bcjsse)
+    ;; SSL Certificate related predicate
+    (valid-ssl-certificate ?Certificate - ssl-certificate ?Domain - dns-domain)
+    (attacker-has-certificate ?Certificate - ssl-certificate)
+    (server-configured-with-certificate ?ControlledServer - controlled-server ?Certificate - ssl-certificate)
+    (ssl-certificate-presented ?ControlledServer - controlled-server ?Certificate - ssl-certificate)
+    (certificate-verification-pending ?Certificate - ssl-certificate)
+    (certificate-validation-passed-incorrectly ?Certificate - ssl-certificate)
 
-;; DNS Server related predicates
-(dnssec-enabled ?DNSServer - dns-server)
-(dns-predictable-source-ports ?DNSServer - dns-server)
-(outdated-dns-software ?DNSServer - dns-server)
-(dns-attacker-network-reach ?DNSServer - dns-server)
-(dns-doh-enabled ?DNSServer - dns-server)
-(dns-dot-enabled ?DNSServer - dns-server)
-(dns-insufficient-rate-limiting ?DNSServer - dns-server)
-(dns-predictable-transaction-ids ?DNSServer - dns-server)
-(vulnerable-dns-infrastructure ?DNSServer - dns-server)
+    ;; DNS Poisoning related predicates
+    (dns-poisoned ?DNSServer - dns-server ?LegitimateServer - legitimate-server ?MaliciousAddress - malicious-ip-address)
+    (forged-dns-records ?DNSServer - dns-server ?LegitimateServer - legitimate-server ?MaliciousAddress - malicious-ip-address)
+    (dns-lookup-performed ?Application - application ?Server - server)
+    (dns-query-sent ?Application - application ?DNSServer - dns-server ?Server - server)
+    (dns-response-returned ?DNSServer - dns-server ?Server - server ?Address - ip-address)
+    (ip-address-resolved ?Server - server ?Address - ip-address)
 
+    ;; User and Application interaction predicates
+    (application-launched ?User - user ?Application - application)
+    (user-session-active ?User - user ?Application - application)
+    (connection-initiated ?User - user ?Application - application ?Server - server)
+    (connection-request-pending ?Application - application ?Server - server)
 
-;; Domain and Server related predicates
-(legitimate-server-ip-address ?Server - server ?Address -  legitimate-ip-address)
-(controlled-server-ip-address ?ControlledServer - controlled-server ?Address - malicious-ip-address)
-(malicious-server-setup-with-domain-with-domain ?ControlledServer - controlled-server ?Domain - dns-domain)
-;(attacker-controlled-server ?ControlledServer - controlled-server)
-(malicious-server-ready ?ControlledServer - controlled-server)
-
-;; SSL Certificate related predicate
-(valid-ssl-certificate ?Certificate - ssl-certificate ?Domain - dns-domain)
-(attacker-has-certificate ?Certificate - ssl-certificate)
-(server-configured-with-certificate ?ControlledServer - controlled-server ?Certificate - ssl-certificate)
-(ssl-certificate-presented ?ControlledServer - controlled-server ?Certificate - ssl-certificate)
-(certificate-verification-pending ?Certificate - ssl-certificate)
-(certificate-validation-passed-incorrectly ?Certificate - ssl-certificate)
-
-;; DNS Poisoning related predicates
-(dns-poisoned ?DNSServer - dns-server ?LegitimateServer - legitimate-server ?MaliciousAddress - malicious-ip-address)
-(forged-dns-records ?DNSServer - dns-server ?LegitimateServer - legitimate-server ?MaliciousAddress - malicious-ip-address)
-(dns-lookup-performed ?Application - application ?Server - server)
-(dns-query-sent ?Application - application ?DNSServer - dns-server ?Server - server)
-(dns-response-returned ?DNSServer - dns-server ?Server - server ?Address - ip-address)
-(ip-address-resolved ?Server - server ?Address - ip-address)
-
-;; User and Application interaction predicates
-(application-launched ?User - user ?Application - application)
-(user-session-active ?User - user ?Application - application)
-(connection-initiated ?User - user ?Application - application ?Server - server)
-(connection-request-pending ?Application - application ?Server - server)
-
-;; SSL Socket related predicates
-(ssl-socket-created ?Application - application ?Socket - ssl-socket)
-(hostname-parameter-missing ?Socket - ssl-socket)
-(ssl-connection-established ?Application - application ?Server - server)
-(connection-request-to-attacker-server ?Application ?ControlledServer)
-(connected-to-attacker-server ?Application - application ?ControlledServer - controlled-server)
+    ;; SSL Socket related predicates
+    (ssl-socket-created ?Application - application ?Socket - ssl-socket)
+    (hostname-parameter-missing ?Socket - ssl-socket)
+    (ssl-connection-established ?Application - application ?Server - server)
+    (connection-request-to-attacker-server ?Application ?ControlledServer)
+    (connected-to-attacker-server ?Application - application ?ControlledServer - controlled-server)
 
 
-;; Hostname verification related predicates
-(hostname-verification-bypassed ?Application - application ?BCJSSE - bcjsse)
-(connection-trusted-incorrectly ?Application - application)
+    ;; Hostname verification related predicates
+    (hostname-verification-bypassed ?Application - application ?BCJSSE - bcjsse)
+    (connection-trusted-incorrectly ?Application - application)
 
-;; Sensitive data related predicates
-; (credentials-data ?Data - sensitive-information)
-(sensitive-information-inputted ?User - user ?Data - sensitive-information)
-(data-ready-for-transmission ?Application - application ?Data - sensitive-information)
-(sensitive-information-transmitted ?Application - application ?Data - sensitive-information)
-(sensitive-data-sent-to-attacker ?Data - sensitive-information)
-(sensitive-information-captured ?Data - sensitive-information)
+    ;; Sensitive data related predicates
+    ; (credentials-data ?Data - sensitive-information)
+    (sensitive-information-inputted ?User - user ?Data - sensitive-information)
+    (data-ready-for-transmission ?Application - application ?Data - sensitive-information)
+    (sensitive-information-transmitted ?Application - application ?Data - sensitive-information)
+    (sensitive-data-sent-to-attacker ?Data - sensitive-information)
+    (sensitive-information-captured ?Data - sensitive-information)
 
-;; Service and impersonation related predicates
-(credential-reuse-attack ?Data - sensitive-information ?LegitimateService - legitimate-service)
-(user-impersonation ?User - user)
+    ;; Service and impersonation related predicates
+    (credential-reuse-attack ?Data - sensitive-information ?LegitimateService - legitimate-service)
+    (user-impersonation ?User - user)
 
-;######### CVE-2022-40150 Pedicates######
-  (jettison-library ?JettisionLibrary - java-library)
-  (has-api-endpoint ?Application - application ?APIEndpoint - api-endpoint)
-  (has-soap-endpoint ?Application - application ?SOAPEndpoint - soap-endpoint)
-  (has-receive-endpoint ?Application - application ?APIEndpoint - receive-endpoint)
-  (accepts-json-input ?Application - application ?APIEndpoint - api-endpoint)
-  (api-endpoint-has-input-validation ?Application - application ?APIEndpoint - api-endpoint)
-  (api-endpoint-has-input-size-limits ?Application - application ?APIEndpoint - api-endpoint)
-  (api-endpoint-has-complexity-limits ?Application - application ?APIEndpoint - api-endpoint)
-  (api-endpoint-has-input-sanitization ?Application - application ?APIEndpoint - api-endpoint)
-  (api-endpoint-has-preprocessing-detection ?Application - application ?APIEndpoint - api-endpoint)
-  (has-heap-memory-consumption-limits ?Application - application )
-  (has-heap-memory-monitoring ?Application - application)
-  (has-memory-consumption-limits ?Application - application)
-  (has-memory-monitoring ?Application - application)
-  (has-heap-memory-isolation ?Application - application)
-  (has-heap-memory-quotas ?Application - application)
-  (has-throttling-mechanisms ?Application - application ?APIEndpoint - api-endpoint)
-  (has-waf-protection ?Application - application)
-  (has-waf-json-payload-detection ?Application - application)
+    (jettison-library ?JettisionLibrary - java-library)
+    (has-api-endpoint ?Application - application ?APIEndpoint - api-endpoint)
+    (has-soap-endpoint ?Application - application ?SOAPEndpoint - soap-endpoint)
+    (has-receive-endpoint ?Application - application ?APIEndpoint - receive-endpoint)
+    (accepts-json-input ?Application - application ?APIEndpoint - api-endpoint)
+    (api-endpoint-has-input-validation ?Application - application ?APIEndpoint - api-endpoint)
+    (api-endpoint-has-input-size-limits ?Application - application ?APIEndpoint - api-endpoint)
+    (api-endpoint-has-complexity-limits ?Application - application ?APIEndpoint - api-endpoint)
+    (api-endpoint-has-input-sanitization ?Application - application ?APIEndpoint - api-endpoint)
+    (api-endpoint-has-preprocessing-detection ?Application - application ?APIEndpoint - api-endpoint)
+    (has-heap-memory-consumption-limits ?Application - application )
+    (has-heap-memory-monitoring ?Application - application)
+    (has-memory-consumption-limits ?Application - application)
+    (has-memory-monitoring ?Application - application)
+    (has-heap-memory-isolation ?Application - application)
+    (has-heap-memory-quotas ?Application - application)
+    (has-throttling-mechanisms ?Application - application ?APIEndpoint - api-endpoint)
+    (has-waf-protection ?Application - application)
+    (has-waf-json-payload-detection ?Application - application)
   
-  (vulnerable-jettison-parser ?JettisionLibrary - java-library)
-  (json-payload ?MaliciousPayload - json-payload)
-  (malicious-payload ?MaliciousPayload - payload)
-  (deeply-nested-json ?MaliciousPayload - json-payload)
-  (memory-exhaustion-payload ?MaliciousPayload - payload)
-  (http-post-request-sent ?HTTPRequest - http-post-request)
-  ;(malicious-json-transmitted ?MaliciousPayload - json-payload)
-  (malicious-payload-transmitted ?MaliciousPayload - payload) 
-  (http-post-request-received ?Application - application ?HTTPRequest - http-post-request)
-  (json-payload-extracted ?Application - application ?MaliciousPayload - json-payload)
-  (jettison-parser-invoked ?JettisionLibrary - java-library ?MaliciousPayload - json-payload)
-  (json-parsing-started ?JettisionLibrary - java-library)
-  (heap-memory-allocated ?JettisionLibrary - java-library)
-  (json-object-graph-construction ?JettisionLibrary - java-library)
-  (excessive-heap-memory-consumption ?Application - application)
-  (heap-memory-exhausted ?Application - application)
-  (garbage-collection-capacity-exceeded ?Application - application)
-  (application-unresponsive ?Application - application)
+    (json-payload ?MaliciousPayload - json-payload)
+    (malicious-payload ?MaliciousPayload - payload)
+    (deeply-nested-json ?MaliciousPayload - json-payload)
+    (memory-exhaustion-payload ?MaliciousPayload - payload)
+    (http-post-request-sent ?HTTPRequest - http-post-request)
+    (malicious-payload-transmitted ?MaliciousPayload - payload) 
+    (http-post-request-received ?Application - application ?HTTPRequest - http-post-request)
+    (json-payload-extracted ?Application - application ?MaliciousPayload - json-payload)
+    (jettison-parser-invoked ?JettisionLibrary - java-library ?MaliciousPayload - json-payload)
+    (json-parsing-started ?JettisionLibrary - java-library)
+    (heap-memory-allocated ?JettisionLibrary - java-library)
+    (json-object-graph-construction ?JettisionLibrary - java-library)
+    (excessive-heap-memory-consumption ?Application - application)
+    (heap-memory-exhausted ?Application - application)
+    (garbage-collection-capacity-exceeded ?Application - application)
+    (application-unresponsive ?Application - application)
 
-  ;;===Add for AP2=====
-  (deeply-nested-xml ?XMLPayload - xml-payload )
-  (xml-payload-extracted ?Application - application ?XMLPayload - xml-payload )
-  (xml-to-json-transformation-started ?JettisionLibrary - java-library ?XMLPayload - xml-payload )
+    (deeply-nested-xml ?XMLPayload - xml-payload )
+    (xml-payload-extracted ?Application - application ?XMLPayload - xml-payload )
+    (xml-to-json-transformation-started ?JettisionLibrary - java-library ?XMLPayload - xml-payload )
   
-  ;######### CVE-2022-40149 Pedicates######
-  (has-stack-memory-consumption-limits ?Application - application )
-  (has-stack-memory-monitoring ?Application - application)
-  (has-stack-memory-isolation ?Application - application)
-  (has-stack-memory-quotas ?Application - application)
-  (excessive-stack-memory-consumption ?Application - application)
-  (stack-memory-allocated ?JettisionLibrary - java-library)
-  (stack-memory-exhausted ?Application - application)
+    (has-stack-memory-consumption-limits ?Application - application )
+    (has-stack-memory-monitoring ?Application - application)
+    (has-stack-memory-isolation ?Application - application)
+    (has-stack-memory-quotas ?Application - application)
+    (excessive-stack-memory-consumption ?Application - application)
+    (stack-memory-allocated ?JettisionLibrary - java-library)
+    (stack-memory-exhausted ?Application - application)
 
-  ;######### CVE_2023_6378 Pedicates######
-  (logback-library ?LogbackLibrary - java-library)
-  (has-receiver-component ?Application - application ?ReceiverComponent - logback-receiver)
-  (logback-receiver-deployed ?ReceiverComponent - logback-receiver)
-  (logback-receiver-configured ?ReceiverComponent - logback-receiver)
-  (logback-receiver-has-tcp-endpoint ?Application - application ?TCPEndpoint - tcp-endpoint)
-  (logback-receiver-listens-on-port ?ReceiverComponent - logback-receiver ?TCPEndpoint - tcp-endpoint)
-  (tcp-endpoint-external-access-allowed ?TCPEndpoint - tcp-endpoint)
-  (tcp-endpoint-firewall-permits-inbound ?TCPEndpoint - tcp-endpoint)
-  (has-deserialization-validation ?Application - application)
-  (has-input-sanitization ?Application - application)
-  (has-deserialization-filtering ?Application - application)
-  (logback-receiver-requires-authentication ?ReceiverComponent - logback-receiver)
-  (logback-receiver-accepts-remote-events ?ReceiverComponent - logback-receiver)
-  (logback-receiver-configured-in-logback-xml ?ReceiverComponent - logback-receiver)
-  (has-ips-protection ?Application - application)
-  (has-serialized-payload-detection ?Application - application)
-  (has-proper-exception-handling ?Application - application)
-  (has-server ?Application - application ?Server - server)
-  (has-tcp-server ?Application - application ?Server - tcp-server)
-  (server-has-tcp-endpoint ?Server - server ?TCPEndpoint - tcp-endpoint)
-  (server-listens-on-port ?Server - server)
-
-  (vulnerable-logback-receiver ?ReceiverComponent - logback-receiver)
-  (vulnerable-receiver ?ReceiverComponent - receiver-component)
-  (craft-malicious-serialized-payload-for-exploiting-CVE ?Application - application)
+    (logback-library ?LogbackLibrary - java-library)
+    (has-receiver-component ?Application - application ?ReceiverComponent - logback-receiver)
+    (logback-receiver-deployed ?ReceiverComponent - logback-receiver)
+    (logback-receiver-configured ?ReceiverComponent - logback-receiver)
+    (logback-receiver-has-tcp-endpoint ?Application - application ?TCPEndpoint - tcp-endpoint)
+    (logback-receiver-listens-on-port ?ReceiverComponent - logback-receiver ?TCPEndpoint - tcp-endpoint)
+    (tcp-endpoint-external-access-allowed ?TCPEndpoint - tcp-endpoint)
+    (tcp-endpoint-firewall-permits-inbound ?TCPEndpoint - tcp-endpoint)
+    (has-deserialization-validation ?Application - application)
+    (has-input-sanitization ?Application - application)
+    (has-deserialization-filtering ?Application - application)
+    (logback-receiver-requires-authentication ?ReceiverComponent - logback-receiver)
+    (logback-receiver-accepts-remote-events ?ReceiverComponent - logback-receiver)
+    (logback-receiver-configured-in-logback-xml ?ReceiverComponent - logback-receiver)
+    (has-ips-protection ?Application - application)
+    (has-serialized-payload-detection ?Application - application)
+    (has-proper-exception-handling ?Application - application)
+    (has-server ?Application - application ?Server - server)
+    (has-tcp-server ?Application - application ?Server - tcp-server)
+    (server-has-tcp-endpoint ?Server - server ?TCPEndpoint - tcp-endpoint)
+    (server-listens-on-port ?Server - server)
 
 
-  (deserialization-exploit-payload ?MaliciousPayload - serialized-payload)
-  (tcp-connection-established ?Server - tcp-server ?TCPConnection - tcp-connection)
-  (connected-to-receiver ?TCPConnection - tcp-connection ?ReceiverComponent - receiver-component)
-  (payload-sent-through-tcp ?TCPConnection - tcp-connection ?MaliciousPayload - payload)
-  (tcp-connection-received ?Application - application ?TCPConnection - tcp-connection)
-  (plaintext-data-received ?Application - application ?MaliciousPayload - payload)
-  (serialized-payload-extracted ?ReceiverComponent - receiver-component ?MaliciousPayload - serialized-payload)
-  (deserialization-started ?ReceiverComponent - receiver-component ?MaliciousPayload - serialized-payload)
-  (malicious-deserialization-triggered ?Application - application)
-  (infinite-recursion-triggered ?Application - application)
-  (stack-overflow-occurred ?Application - application)
+    (deserialization-exploit-payload ?MaliciousPayload - serialized-payload)
+    (tcp-connection-established ?Server - tcp-server ?TCPConnection - tcp-connection)
+    (connected-to-receiver ?TCPConnection - tcp-connection ?ReceiverComponent - receiver-component)
+    (payload-sent-through-tcp ?TCPConnection - tcp-connection ?MaliciousPayload - payload)
+    (tcp-connection-received ?Application - application ?TCPConnection - tcp-connection)
+    (plaintext-data-received ?Application - application ?MaliciousPayload - payload)
+    (serialized-payload-extracted ?ReceiverComponent - receiver-component ?MaliciousPayload - serialized-payload)
+    (deserialization-started ?ReceiverComponent - receiver-component ?MaliciousPayload - serialized-payload)
+    (malicious-deserialization-triggered ?Application - application)
+    (infinite-recursion-triggered ?Application - application)
+    (stack-overflow-occurred ?Application - application)
 
+    (has-http2-implementation ?Application - application ?Server - http2-server ?HTTP2Implementation - http2-library)
+    (http2-stream-multiplexing-enabled ?Application - application ?Server - http2-server)
+    (http2-server-has-network-interface ?Application - application ?Server  - http2-server ?HTTPInterface - network-interface)
+    (http2-server-public-facing-interface ?Application - application ?HTTPInterface - network-interface)
+    (http2-connections-accepted ?Application - application ?HTTPInterface - network-interface)
+    (http2-server-processes-headers-frames ?Server - http2-server)
+    (http2-server-processes-rst-stream-frame ?Server - http2-server)
+    (http2-server-has-frame-rate-limiting ?Server - http2-server)
+    (http2-server-allocates-stream-resources ?Application - application ?Server - http2-server)
+    (http2-server-allocates-header-parsing-resources ?Application - application ?Server - http2-server)
+    (http2-server-allocates-url-mapping-resources ?Application - application ?Server - http2-server)
+    (http2-server-allows-immediate-rst-stream ?Application - application ?Server - http2-server)
+    (http2-server-requires-stream-coordination ?Application - application ?Server - http2-server)
+    (http2-server-enforces-canceled-request-limits ?Application - application ?Server - http2-server)
+    (http2-server-canceled-requests-not-counted-toward-limits ?Application - application ?Server - http2-server)
+    (http2-server-has-connection-level-pattern-tracking ?Application - application ?Server - http2-server)
+    (http2-server-detects-rapid-creation-cancellation-patterns ?Application - application ?Server - http2-server)
+    (http2-server-maintains-connections-after-cancellation ?Application - application ?Server - http2-server)
+    (http2-server-allows-indefinite-stream-creation ?Application - application ?Server - http2-server)
+    (http2-server-implements-goaway-frame-abuse-detection ?Application - application ?Server - http2-server)
+    (http2-server-has-immediate-connection-termination ?Application - application ?Server - http2-server)
+    (http2-server-vulnerable-http2-implementation ?HTTP2Implementation - http2-library)
+    (http2-server-nodejs-implementation ?HTTP2Implementation - http2-library) 
+    (http2-server-nghttp2-implementation ?HTTP2Implementation - http2-library) 
+    (http2-server-netty-implementation ?HTTP2Implementation - http2-library) 
+    (http2-server-envoy-implementation ?HTTP2Implementation - http2-library)
+    (http2-server-eclipse-jetty-implementation ?HTTP2Implementation - http2-library)
+    (http2-server-caddy-implementation ?HTTP2Implementation - http2-library) 
+    (http2-server-has-rapid-reset-ddos-protection ?Application - application ?Server - http2-server)
+    (http2-server-has-rapid-reset-pattern-detection ?Application - application ?Server - http2-server)
 
-     ;######### CVE_2023_44487 Pedicates######
-     (has-http2-implementation ?Application - application ?Server - http2-server ?HTTP2Implementation - http2-library)
-
-     (http2-stream-multiplexing-enabled ?Application - application ?Server - http2-server)
-     
-     (http2-server-has-network-interface ?Application - application ?Server  - http2-server ?HTTPInterface - network-interface)
-     (http2-server-public-facing-interface ?Application - application ?HTTPInterface - network-interface)
-
-     (http2-connections-accepted ?Application - application ?HTTPInterface - network-interface)
-     
-     (http2-server-processes-headers-frames ?Server - http2-server)
-     (http2-server-processes-rst-stream-frame ?Server - http2-server)
-     (http2-server-has-frame-rate-limiting ?Server - http2-server)
-     
-     (http2-server-allocates-stream-resources ?Application - application ?Server - http2-server)
-     (http2-server-allocates-header-parsing-resources ?Application - application ?Server - http2-server)
-     (http2-server-allocates-url-mapping-resources ?Application - application ?Server - http2-server)
-     (http2-server-allows-immediate-rst-stream ?Application - application ?Server - http2-server)
-     (http2-server-requires-stream-coordination ?Application - application ?Server - http2-server)
-     
-     
-     (http2-server-enforces-canceled-request-limits ?Application - application ?Server - http2-server)
-     (http2-server-canceled-requests-not-counted-toward-limits ?Application - application ?Server - http2-server)
-     
-     (http2-server-has-connection-level-pattern-tracking ?Application - application ?Server - http2-server)
-     (http2-server-detects-rapid-creation-cancellation-patterns ?Application - application ?Server - http2-server)
-     
-     (http2-server-maintains-connections-after-cancellation ?Application - application ?Server - http2-server)
-     (http2-server-allows-indefinite-stream-creation ?Application - application ?Server - http2-server)
-      
-     (http2-server-implements-goaway-frame-abuse-detection ?Application - application ?Server - http2-server)
-     (http2-server-has-immediate-connection-termination ?Application - application ?Server - http2-server)
-    
-     (http2-server-vulnerable-http2-implementation ?HTTP2Implementation - http2-library)
-     (http2-server-nodejs-implementation ?HTTP2Implementation - http2-library) 
-     (http2-server-nghttp2-implementation ?HTTP2Implementation - http2-library) 
-     (http2-server-netty-implementation ?HTTP2Implementation - http2-library) 
-     (http2-server-envoy-implementation ?HTTP2Implementation - http2-library)
-     (http2-server-eclipse-jetty-implementation ?HTTP2Implementation - http2-library)
-     (http2-server-caddy-implementation ?HTTP2Implementation - http2-library) 
-     (http2-server-has-rapid-reset-ddos-protection ?Application - application ?Server - http2-server)
-     (http2-server-has-rapid-reset-pattern-detection ?Application - application ?Server - http2-server)
-    
-     (insufficient-resource-limits ?Application - application ?Server - server)
-     (http2-server-can-handle-rapid-allocation-cancellation-cycles ?Application - application ?Server - http2-server)
-
-     (three-way-handshake-completed ?TCPConnection - tcp-connection)
-     (tls-connection-established ?TLSConnection - tls-connection ?Server - server)
-     (secure-channel-created ?TLSConnection - tls-connection)
-     (http2-settings-frame-sent ?SettingsFrame - http2-settings-frame)
-     (http2-parameter-negotiation-initiated ?Server - http2-server)
-     (http2-settings-frame-response-sent ?Server - http2-server)
-     (http2-max-concurrent-streams-announced ?Server - http2-server ?MaxConcurrentStreams - stream-limit)
-     (http2-settings-ack-frame-sent ?SettingsAckFrame - http2-settings-ack-frame)
-     (http2-settings-ack-frame-received ?SettingsAckFrame - http2-settings-ack-frame)
-     (http2-connection-ready ?Server - http2-server)
+    (insufficient-resource-limits ?Application - application ?Server - server)
+    (http2-server-can-handle-rapid-allocation-cancellation-cycles ?Application - application ?Server - http2-server)
+    (three-way-handshake-completed ?TCPConnection - tcp-connection)
+    (tls-connection-established ?TLSConnection - tls-connection ?Server - server)
+    (secure-channel-created ?TLSConnection - tls-connection)
+    (http2-settings-frame-sent ?SettingsFrame - http2-settings-frame)
+    (http2-parameter-negotiation-initiated ?Server - http2-server)
+    (http2-settings-frame-response-sent ?Server - http2-server)
+    (http2-max-concurrent-streams-announced ?Server - http2-server ?MaxConcurrentStreams - stream-limit)
+    (http2-settings-ack-frame-sent ?SettingsAckFrame - http2-settings-ack-frame)
+    (http2-settings-ack-frame-received ?SettingsAckFrame - http2-settings-ack-frame)
+    (http2-connection-ready ?Server - http2-server)
     
      
-     (http2-connection-established ?HTTP2Connection - http2-connection ?Server - http2-server)
-     (http2-server-ready-for-stream-creation ?Server - http2-server)
-     (http2-server-rapid-reset-attack-possible ?Server - http2-server)
-     (rapid-reset-attack-possible ?Server -server)
+    (http2-connection-established ?HTTP2Connection - http2-connection ?Server - http2-server)
+    (http2-server-ready-for-stream-creation ?Server - http2-server)
+    (http2-server-rapid-reset-attack-possible ?Server - http2-server)
+    (rapid-reset-attack-possible ?Server -server)
 
-     (vulnerable-http2-server ?Server - http2-server)
-     (parallel-streams-initiated ?StreamBatch - stream-batch)
-     (large-stream-batch-created ?StreamBatch - stream-batch)
-     (rapid-stream-creation-started ?Server - http2-server)
-     (stream-ids-allocated ?Server - http2-server  ?StreamBatch - stream-batch)
-     (cpu-cycles-allocated ?ResourcePool - server-resource ?StreamBatch - stream-batch)
-     (memory-buffers-allocated ?ResourcePool - server-resource ?StreamBatch - stream-batch)
-     (connection-state-allocated ?ResourcePool - server-resource ?StreamBatch - stream-batch)
-     (server-resource-consumed ?Server - server ?ResourcePool - server-resource)
-     (rst-stream-frames-sent ?RstStreamFrames - rst-stream-frame?StreamBatch - stream-batch)
-     (stream-cancellation-requests-sent ?Server - http2-server)
-     (rst-stream-frames-received ?Server - http2-server ?RstStreamFrames - rst-stream-frame)
-     (stream-cancellation-processing-triggered ?Server - http2-server)
-     (rst-stream-processing-attempted ?Server - http2-server)
-     (resource-deallocation-attempted ?Server - http2-server ?ResourcePool - server-resource)
-     (processing-pace-insufficient ?Server - server)
-     (cpu-cycles-exhausted ?ResourcePool - server-resource)
-     (memory-buffers-exhausted ?ResourcePool - server-resource)
-     (connection-state-exhausted ?ResourcePool - server-resource)
-     (server-resource-exhausted ?Server - server)
+    (parallel-streams-initiated ?StreamBatch - stream-batch)
+    (large-stream-batch-created ?StreamBatch - stream-batch)
+    (rapid-stream-creation-started ?Server - http2-server)
+    (stream-ids-allocated ?Server - http2-server  ?StreamBatch - stream-batch)
+    (cpu-cycles-allocated ?ResourcePool - server-resource ?StreamBatch - stream-batch)
+    (memory-buffers-allocated ?ResourcePool - server-resource ?StreamBatch - stream-batch)
+    (connection-state-allocated ?ResourcePool - server-resource ?StreamBatch - stream-batch)
+    (server-resource-consumed ?Server - server ?ResourcePool - server-resource)
+    (rst-stream-frames-sent ?RstStreamFrames - rst-stream-frame?StreamBatch - stream-batch)
+    (stream-cancellation-requests-sent ?Server - http2-server)
+    (rst-stream-frames-received ?Server - http2-server ?RstStreamFrames - rst-stream-frame)
+    (stream-cancellation-processing-triggered ?Server - http2-server)
+    (rst-stream-processing-attempted ?Server - http2-server)
+    (resource-deallocation-attempted ?Server - http2-server ?ResourcePool - server-resource)
+    (processing-pace-insufficient ?Server - server)
+    (cpu-cycles-exhausted ?ResourcePool - server-resource)
+    (memory-buffers-exhausted ?ResourcePool - server-resource)
+    (connection-state-exhausted ?ResourcePool - server-resource)
+    (server-resource-exhausted ?Server - server)
+    (vulnerable-spring-framework ?SpringFramework - spring-framework)
     
+    (has-dependency-on-spring-security ?Application - application ?SpringSecurity - spring-security)
+    (use-bcrypt-password-encoder ?Application - application ?PasswordEncoder - password-encoder)
+    (allows-long-passwords ?Application - application)
+    (password-length-validation ?Application - application)
+    (multi-fator-auth-enabled ?Application - application)
+    (two-factor-auth-enabled ?Application - application)
+    (password-truncation-warning ?Application - application)
+    (account-lockout-policy ?Application - application)
+    (rate-limiting-enabled ?Application - application)
+    (anomaly-detection-enabled ?Application - application)
+    (pre-hashing-implemented ?Application - application)
+    (sha256-pre-hash-enabled ?Application - application)
+    (user-needs-to-use-application ?User - user ?Application - application)
+    (user-password-set ?User -user ?Password - password)
+    (password-longer-than-72-chars ?Password - password )
+    (weak-first-72-chars ?Password - password)
+    (user-has-long-weak-password ?User -user ?Password - password ?Application - application)
+    (password-truncated-to-72-chars ?Password - password)
+    (password-hash-created ?PasswordHash - password-hash ?Password - password)
+    (password-hash-saved ?PasswordHash - password-hash ?Application - application)
+    (request-contains-long-password ?LoginRequest - login-request ?InputPassword - password)
+    (stored-hash-only-covers-first-72-chars ?PasswordHash - password-hash) 
+    (online-brute-force-script ?Script - script)
+    (script-targets-application ?Script - script ?Application - application)
+    (automated-brute-force-capability ?Script - script)
+    (script-generates-long-passwords ?Script - script)
+    (large-volume-login-requests-sent ?LoginRequests - login-request ?Application - application)
+    (requests-contain-long-password ?LoginRequests - login-request ?InputPassword - password)
+    (brute-force-attack-initiated ?Application - application)
+    (requests-bypass-detection ?LoginRequests - login-request ?Application - application)
+    (login-request-received ?LoginRequest - login-request ?Application - application)
+    (password-input-truncated ?InputPassword - password)
+    (truncated-to-72-chars ?InputPassword - password)
+    (bcrypt-processing-initiated ?InputPassword - password)
+    (input-password-hashed ?InputPassword - password)
+    (hash-ready-for-comparison ?InputPassword - password)
+    (hash-comparison-performed ?InputPassword - password ?StoredHash - password-hash)
+    (hashes-match ?InputPassword - password ?StoredHash - password-hash)
+    (authentication-successful ?Application - application)
+    (unauthorized-access-granted ?Application - application)
 
-  ;######### added for CVE_2025_22228 Pedicates######
-  (has-dependency-on-spring-security ?Application - application ?SpringSecurity - spring-security)
-  (use-bcrypt-password-encoder ?Application - application ?PasswordEncoder - password-encoder)
-  (allows-long-passwords ?Application - application)
-  (password-length-validation ?Application - application)
-  (multi-fator-auth-enabled ?Application - application)
-  (two-factor-auth-enabled ?Application - application)
-  (password-truncation-warning ?Application - application)
-  (account-lockout-policy ?Application - application)
-  (rate-limiting-enabled ?Application - application)
-  (anomaly-detection-enabled ?Application - application)
-  (pre-hashing-implemented ?Application - application)
-  (sha256-pre-hash-enabled ?Application - application)
-  (vulnerable-password-validation ?Application - application)
-  (user-needs-to-use-application ?User - user ?Application - application)
-  (user-password-set ?User -user ?Password - password)
-  (password-longer-than-72-chars ?Password - password )
-  (weak-first-72-chars ?Password - password)
-  (user-has-long-weak-password ?User -user ?Password - password ?Application - application)
-  (password-truncated-to-72-chars ?Password - password)
-  (password-hash-created ?PasswordHash - password-hash ?Password - password)
-  (password-hash-saved ?PasswordHash - password-hash ?Application - application)
-  (request-contains-long-password ?LoginRequest - login-request ?InputPassword - password)
-  (stored-hash-only-covers-first-72-chars ?PasswordHash - password-hash) 
-  (online-brute-force-script ?Script - script)
-  (script-targets-application ?Script - script ?Application - application)
-  (automated-brute-force-capability ?Script - script)
-  (script-generates-long-passwords ?Script - script)
-  (large-volume-login-requests-sent ?LoginRequests - login-request ?Application - application)
-  (requests-contain-long-password ?LoginRequests - login-request ?InputPassword - password)
-  (brute-force-attack-initiated ?Application - application)
-  (requests-bypass-detection ?LoginRequests - login-request ?Application - application)
-  (login-request-received ?LoginRequest - login-request ?Application - application)
-  (password-input-truncated ?InputPassword - password)
-  (truncated-to-72-chars ?InputPassword - password)
-  (bcrypt-processing-initiated ?InputPassword - password)
-  (input-password-hashed ?InputPassword - password)
-  (hash-ready-for-comparison ?InputPassword - password)
-  (hash-comparison-performed ?InputPassword - password ?StoredHash - password-hash)
-  (hashes-match ?InputPassword - password ?StoredHash - password-hash)
-  (authentication-successful ?Application - application)
-  (unauthorized-access-granted ?Application - application)
-
-
-  
-
-  ;######### added for CVE_2024_38816 Pedicates######
   (uses-WebMvc-web-framework ?Application - application)
   (uses-WebFlux-web-framework ?Application - application)
   (has-router-function-configured ?Application - application ?RouterFunction - router-function)
@@ -928,12 +813,10 @@
   (request-routed-to-handler ?TraversalUrl - path-traversal-url ?ResourceHandler - resource-handler)
   (path-concatenated-without-normalization ?ConcatenatedPath - filesystem-path)
   (traversal-payload-in-path ?ConcatenatedPath - filesystem-path ?Payload - path-traversal-payload)
-  (vulnerable-file-system-path-created ?ConcatenatedPath - filesystem-path)
   (sensitive-data-read-from-filesystem ?Data - sensitive-information ?ConcatenatedPath - filesystem-path)
   (sensitive-data-prepared-by-application ?Application - application ?Data - sensitive-information)
   (data-stored-in-file ?Data - information ?SensitiveFile - file )
 
-  ;######### added for CVE-2022-1471 Pedicates######
   (has-dependency-on-snakeyaml ?Application - application ?SnakeYAML - java-library)
   (implementated-by-java ?Application ?Java)
   (has-external-yaml-endpoint ?Application - application ?Endpoint -yaml-endpoint )
@@ -974,15 +857,11 @@
   (attacker-class-active ?MaliciousClass - class)
   (attacker-commands-executed ?CommandLogic - command-execution-logic)
 
-
-  ;######### added for CVE-2025-24813 Pedicates######
   (tomcat-has-default-servlet ?Application - application ?DefaultServlet - default-servlet)
   (tomcat-default-servlet-write-enabled ?Application - application ?DefaultServlet - default-servlet)
-  (partial-put-request-enabled ?Application - application) 
-        
+  (partial-put-request-enabled ?Application - application)      
   (has-public-directory ?Application - application ?PublicDir - public-directory)
   (public-directory-exposed ?Application - application ?PublicDir - public-directory)
-    
   (public-directory-has-sensitive-subdirectory ?PublicDir - public-directory ?SensitiveDir - sensitive-directory)
       
   (sensitive-filename-exposed ?Application - application ?SensitiveFile - sensitive-file)
@@ -997,7 +876,6 @@
 
   (has-proper-path-normalization-for-filename ?Application - application)
   (has-proper-path-equivalence-validation-for-filename ?Application - application)
-  (vulnerable-tomcat-default-servlet ?Tomcat - tomcat ?DefaultServlet - default-servlet)
 
   (malicious-http-get-request ?HTTPGETRequest - http-get-request)
   (request-includes-internal-dot-path-manipulation ?HTTPGETRequest - http-request)
@@ -1014,8 +892,6 @@
   (file-content-retrieved ?Data - sensitive-information ?SensitiveFile - sensitive-file)
   (http-response-contains-sensitive-data ?HTTPGETRequest ?SensitiveData - sensitive-information)
 
-  (exploit-by-partial-put-request ?CVEID - cve-identifier)
-  ;(http-request-received ?HTTPRequest - http-request ?Application - application)
   (malicious-content-created ?MaliciousContent - malicious-content)
   (content-targets-sensitive-file ?MaliciousContent -  malicious-content ?SensitiveFile - sensitive-file)
   (malicious-http-put-request ?HTTPPUTRequest - http-put-request)
@@ -1055,8 +931,6 @@
   (arbitrary-command-execution ?WebShellScript - web-shell-script)
   (system-commands-executed ?TomcatProcess - tomcat-process)
 
-
-  ;######### added for CVE-2025-24813 Pedicates######
   (guava-library ?Guava - java-library)
   (uses-filebackedoutputstream ?Application - application)
   (uses-uncontrolled-createtempfile ?Application - application)
@@ -1096,7 +970,6 @@
   (temp-file-actually-points-to ?TempFile ?File - file)
   (sensitive-data-written-to-attacker-controlled-file ?Data - sensitive-information ?AttackerControlledFile - controlled-file)
   (sensitive-data-buffering-initiated ?Application - application)
-   (sensitive-data-writing-initiated ?Application - application)
   (temp-file-in-directory ?TempFile - temporary-file  ?Dir - directory)
   (temp-file-has-insecure-permissions ?TempFile - temporary-file)
   (temp-file-world-readable ?TempFile - temporary-file)
@@ -1112,11 +985,10 @@
   (data-confidentiality-breached ?SensitiveData - sensitive-information)
   (unauthorized-data-access ?SensitiveData - sensitive-information)
 
-  ;######### added for CVE-2024-38809 Pedicates######
   ;; Framework / Version
   (has-framework ?App - application ?FW - spring-framework)
   (spring-web-module ?FW - spring-framework)
-    
+
   ;; HTTP endpoint / ETag
   (has-http-endpoint ?App - application ?Endpoint - http-endpoint)
   (has-etag-handler ?App - application ?Handler - etag-handler)
@@ -1144,8 +1016,6 @@
   (has-shared-thread-pool ?App - application)
   (has-endpoint-isolation ?App - application)
 
-  (vulnerable-etag-parsing ?FW - spring-framework)
-
   ;; Malicious request / ETag
   (malicious-http-request ?Request - http-request)
   (pathological-etag-value ?ETag - etag-value)
@@ -1168,7 +1038,6 @@
   (excessive-memory-consumption ?App - application)
   (has-http-rate-limiting ?Application - application ?HTTPEndpoint - http-endpoint)
 
-  ;######### added for CVE-2024-47072 Pedicates######
   ; Application / Library / Driver relationships
   (xstream-library ?XStreamLibrary - java-library)
   (has-binary-stream-driver ?Application - application ?BinaryDriver - binary-stream-driver)
@@ -1206,8 +1075,6 @@
   (recursive-object-graph-construction ?XStreamLibrary - java-library)
   (recursive-mapping-token-resolution ?XStreamLibrary - java-library)
 
-
-  ;######### added for CVE-2023-33202 Pedicates######
   (bouncycastle-library ?Library - java-library)
   (uses-pemparser ?Application - application)
   (has-pem-endpoint ?Application - application ?Endpoint - pem-endpoint)
@@ -1230,7 +1097,6 @@
   (has-cgroup-memory-limit ?Application - application)
   (has-pod-memory-limit ?Application - application)
   (single-jvm-hosting-critical-services ?Application - application)
-
   (parsing-sandboxed ?Application - application)
 
   (has-circuit-breaker-for-oom ?Application - application)
@@ -1260,33 +1126,30 @@
   (has-account ?User - user ?Application - application)
   (malicious-file-transmitted ?MaliciousFile - file)
   (memory-exhaustion-file ?MaliciousPEMFile - file)
-
-  ;######### added for CVE-2023-46589 Pedicates######
-    (has-reverse-proxy ?Application - application ?ReverseProxy - reverse-proxy)
-    (forwards-requests ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
-    (has-endpoint ?Application - application ?Endpoint - endpoint)
+  
+  (has-reverse-proxy ?Application - application ?ReverseProxy - reverse-proxy)
+  (forwards-requests ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
+  (has-endpoint ?Application - application ?Endpoint - endpoint)
+  (accepts-chunked-encoding ?Application - application)
+  (permits-trailer-headers ?ReverseProxy - reverse-proxy)
+  (chunked-encoding-request ?HttpRequest - http-request)
     
-
-    (accepts-chunked-encoding ?Application - application)
-    (permits-trailer-headers ?ReverseProxy - reverse-proxy)
-    (chunked-encoding-request ?HttpRequest - http-request)
+  (mismatched-parsing ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
+  (mismatched-trailer-handling ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
+  (mismatched-header-limits ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
+  (normalizes-trailer-headers ?ReverseProxy - reverse-proxy)
+  (rejects-oversized-trailers ?ReverseProxy - reverse-proxy)
+  (truncates-oversized-trailers ?ReverseProxy - reverse-proxy)
+  (rejects-malformed-trailers ?ReverseProxy - reverse-proxy)
     
-    (mismatched-parsing ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
-    (mismatched-trailer-handling ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
-    (mismatched-header-limits ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
-    (normalizes-trailer-headers ?ReverseProxy - reverse-proxy)
-    (rejects-oversized-trailers ?ReverseProxy - reverse-proxy)
-    (truncates-oversized-trailers ?ReverseProxy - reverse-proxy)
-    (rejects-malformed-trailers ?ReverseProxy - reverse-proxy)
+  (allows-connection-reuse ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
+  (allows-keep-alive ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
+  (allows-pipelining ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
+  (user-tcp-connection-established ?TcpConnection - tcp-connection)
+  (connection-reused ?TcpConnection - tcp-connection)
     
-    (allows-connection-reuse ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
-    (allows-keep-alive ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
-    (allows-pipelining ?ReverseProxy - reverse-proxy ?Tomcat - tomcat)
-    (user-tcp-connection-established ?TcpConnection - tcp-connection)
-    (connection-reused ?TcpConnection - tcp-connection)
-    
-    (strict-per-request-auth ?Endpoint - endpoint)
-    (authenticated-user-request ?HttpRequest - http-request)
+  (strict-per-request-auth ?Endpoint - endpoint)
+  (authenticated-user-request ?HttpRequest - http-request)
     
     (has-waf-smuggling-detection ?Application - application)
     (has-ips-oversized-trailer-rules ?Application - application)
@@ -1361,7 +1224,6 @@
     (contains-sensitive-resource ?HttpResponse - http-response ?Resource - sensitive-information)
     (sensitive-response-sent-to-proxy ?HttpResponse - http-response)
     (bond-to-user-account ?User - user ?SensitiveResource - sensitive-information)
-    
   
     (cacheable-resource ?CachedResource - cached-resource) 
     (cache-poisoning-payload ?Request - http-request ?Payload - cache-poison-payload)
@@ -1382,11 +1244,7 @@
 
  )
 
-
-
-
-
-;#########################################START-Attack Action Defined for CVE-2024-12798 ######################################;
+;;;#################################### Application vulnerability exposure action ####################################;;;
 ;;@start vulnerability expose@;;
 ;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-12798  
 ;  :parameters (?Application - application ?Logback - logback ?JaninoLib - java-library ?User - user ?Directory - path ?ConfigFile - logback-config) ;;?application: the target application
@@ -1444,471 +1302,10 @@
 ;    (has-controllable-env-vars ?Application)
 ;  )
 ;  :effect (and (exposed-attack-surface ?Application CVE_2024_12798)
-;               (exploit-by-malicious-logback CVE_2024_12798)
-;               (exploit-by-inject-malicious-env-var CVE_2024_12798)
+;               (exploit-by CVE_2024_12798 change-to-malicious-logback-config)
 ;               (increase (total-cost) 53)))
 ;;@end vulnerability expose@;;
-;#########
 
-
-  (:action attacker-crafts-malicious-logback
-    :parameters (?BenignFile - logback-config ?MaliciousFile - logback-config ?Application - application ?CVEID - cve-identifier)
-    :precondition (and (legitimate-file ?BenignFile) 
-                       (exposed-attack-surface ?Application ?CVEID)
-                       (exploit-by-malicious-logback ?CVEID))
-    :effect (and (malicious-file ?MaliciousFile)
-                 (has-janino-evaluator ?MaliciousFile) 
-                 (contains-arbitrary-code ?MaliciousFile)
-                 (increase (total-cost) 1)))
-
-   
-   
-  (:action attacker-sends-malicious-file-via-commonication-channel ; this action should be commented out for AP 1.2
-    :parameters (?Application - application ?MaliciousFile - file ?MaliciousMessage - message ?Comchannel - comchannel ?CVEID - cve-identifier)
-    :precondition (and (malicious-file ?MaliciousFile)
-                       (exposed-attack-surface ?Application ?CVEID)
-                       ; (has-janino-evaluator ?MaliciousFile)
-                       ; (contains-arbitrary-code ?MaliciousFile)
-                      )
-    :effect (and (com-channel-msg ?Comchannel ?MaliciousMessage) 
-                 (malicious-msg ?MaliciousMessage)
-                 (message-has-file ?MaliciousMessage ?MaliciousFile) 
-                 (message-sent ?MaliciousMessage)
-                 (increase (total-cost) 1)))
-
-  (:action user-receives-message
-     :parameters (?User - user ?Message - message ?Comchannel - comchannel)
-     :precondition (and (com-channel-msg ?Comchannel ?Message) 
-                     (message-sent ?Message))
-     :effect (and (message-received ?Message)
-                (msg-reminder ?Message)
-                (increase (total-cost) 1)))
- 
-  (:action user-starts-commonication-channel 
-    :parameters (?User - user ?Comchannel - comchannel ?Message - message)
-    :precondition (and (com-channel-msg ?Comchannel ?Message) 
-                       (message-received ?Message)
-                       (msg-reminder ?Message))
-    :effect (and (user-use-communication-channel ?User ?Comchannel)
-                 (running-communication-channel ?Comchannel)
-                 (increase (total-cost) 22)))
-
-  (:action user-reads-message
-    :parameters (?User - user ?Comchannel - comchannel ?Message - message)
-    :precondition (and (user-use-communication-channel ?User ?Comchannel) 
-                       (running-communication-channel ?Comchannel)
-                       (com-channel-msg ?Comchannel ?Message) )
-    :effect (and (msg-opened ?Message)
-                 (increase (total-cost) 11)))
-
-
-
-  (:action user-downloads-malicious-file-in-message
-    :parameters (?User - user ?MaliciousMessage - message ?MaliciousFile - file)
-    :precondition (and (malicious-file ?MaliciousFile)
-                       (malicious-msg ?MaliciousMessage)
-                       ;(com-channel-msg ?Comchannel ?MaliciousMessage)
-                       (message-has-file ?MaliciousMessage ?MaliciousFile) 
-                       (msg-opened ?MaliciousMessage))
-    :effect (and (downloaded ?MaliciousFile)
-                 (increase (total-cost) 171)) ) 
-
-
-
-
-  (:action user-navigates-to-config-dir
-    :parameters (?User - user ?Directory - path ?File - file)
-    :precondition (and (has-access ?User ?Directory) 
-                       (downloaded ?File))
-    :effect (and (in-directory ?User ?Directory)
-                (increase (total-cost) 161)))
-
-
-  (:action user-replaces-logback
-    :parameters (?Application - application ?User - user ?MaliciousFile - logback-config ?LegitimateFile - logback-config ?Directory - path ?CVEID - cve-identifier)
-    :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                       (exploit-by-malicious-logback ?CVEID)
-                      (malicious-file ?MaliciousFile)
-                      (legitimate-file ?LegitimateFile)
-                      (downloaded ?MaliciousFile)
-                      (in-directory ?User ?Directory)
-                      (has-write-access ?User ?Directory)
-                      (located-at ?LegitimateFile ?Directory))
-    :effect (and (not (located-at ?LegitimateFile ?Directory)) 
-                (located-at ?MaliciousFile ?Directory) 
-                (config-replaced ?MaliciousFile)
-                (increase (total-cost) 1)))
-
-  (:action user-starts-application
-    :parameters (?User - user ?Application - application ?MaliciousFile - file)
-    :precondition (and (config-replaced ?MaliciousFile))
-    :effect (and (running-app ?Application)
-                 (increase (total-cost) 1)))
-
-  (:action application-loads-malicious-config-via-dir
-    :parameters (?Application - application ?MaliciousFile - file ?Directory - path)
-    :precondition (and (running-app ?Application)
-                      (malicious-file ?MaliciousFile)
-                      (has-config-dir ?Application ?Directory)
-                      (located-at ?MaliciousFile ?Directory)
-                      (config-replaced ?MaliciousFile))
-    :effect (and (malicious-config-loaded-via-config-dir ?MaliciousFile ?Directory)
-                  (malicious-config-loaded ?MaliciousFile)
-                  (increase (total-cost) 1)))
-
-
-  (:action application-executes-code
-    :parameters (?Application - application ?MaliciousFile - file)
-    :precondition (and (malicious-file ?MaliciousFile)
-                      (has-janino-evaluator ?MaliciousFile)
-                      (malicious-config-loaded ?MaliciousFile))
-    :effect (and (elevation-of-privilege ?Application)
-                 (increase (total-cost) 1)))
-
-  ;; ====================added actions for AP 1.2=====================
-   (:action attacker-hosts-file-on-controlled-server
-    :parameters (?Application - application ?MaliciousFile - file ?ControlledServer - controlled-server ?CVEID - cve-identifier)
-    :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                      (malicious-file ?MaliciousFile)
-                      (has-janino-evaluator ?MaliciousFile) 
-                      (contains-arbitrary-code ?MaliciousFile))
-    :effect (and (file-hosted-on-server ?MaliciousFile ?ControlledServer)
-                  (increase (total-cost) 1)))
- 
- (:action attacker-generates-url-to-file
-    :parameters (?Application - application ?MaliciousFileUrl - file-url ?MaliciousFile - file ?ControlledServer - controlled-server ?CVEID - cve-identifier)
-    :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                       (file-hosted-on-server ?MaliciousFile ?ControlledServer))
-    :effect (and (url-points-to-file ?MaliciousFileUrl ?MaliciousFile)
-                 (malicious-url ?MaliciousFileUrl)
-                 (malicious-file-url ?MaliciousFileUrl)
-                  (increase (total-cost) 1)))
-
- (:action attacker-sends-malicious-file-url-via-communication-channel  ;;this action should be commented out for AP 1.3
-    :parameters (?Application - application ?FileUrl - file-url ?MaliciousMessage - message ?Comchannel - comchannel ?CVEID - cve-identifier)
-    :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                        (malicious-file-url ?FileUrl))
-    :effect (and (com-channel-msg ?Comchannel ?MaliciousMessage) 
-                 (malicious-msg ?MaliciousMessage)
-                (message-has-file-url ?MaliciousMessage ?FileUrl) 
-                (message-sent ?MaliciousMessage)
-                (increase (total-cost) 1)))
-
- ;; download the file by clicking
-  (:action user-downloads-malicious-file-by-clicking-url-in-message
-    :parameters (?User - user ?MaliciousMessage - message ?MalicousFileUrl - file-url ?MaliciousFile -file)
-    :precondition (and (malicious-msg ?MaliciousMessage)
-                      (malicious-file-url ?MalicousFileUrl)
-                      (malicious-file ?MaliciousFile)
-                      (msg-opened ?MaliciousMessage)
-                      (message-has-file-url ?MaliciousMessage ?MalicousFileUrl) 
-                      (url-points-to-file ?MalicousFileUrl ?MaliciousFile))
-    :effect (and (downloaded ?MaliciousFile)
-                 (file-url-accessed ?MalicousFileUrl)
-                  (increase (total-cost) 171)))
-
-
-;;#####################################
-
-;; ====================added actions for AP 1.3=====================
-  (:action attacker-forges-website ; comment for AP 1.2 for CVE_2024_22243 CVE_2024_12798
-    :parameters (?Application - application ?Website - website ?ControlledServer - controlled-server ?CVEID - cve-identifier)
-    :precondition (and (exposed-attack-surface ?Application CVE_2024_12798)) 
-    :effect (and (website-hosted-on-server ?Website ?ControlledServer)
-               (forged-website ?Website)
-                (increase (total-cost) 1)))
- 
-  (:action attacker-includes-malicious-file-url-in-website   ;;; commented for AP 2.3
-    :parameters (?Application - application ?Website - website ?MaliciousFileUrl - file-url ?MaliciousFile - file ?CVEID - cve-identifier)
-   :precondition (and  (exposed-attack-surface ?Application ?CVEID)
-                       (forged-website ?Website)
-                       (malicious-file-url ?MaliciousFileUrl)
-                       (malicious-file ?MaliciousFile)
-                       (url-points-to-file ?MaliciousFileUrl ?MaliciousFile)) 
-    :effect (and (forged-website-contains-malicious-file-url ?Website ?MaliciousFileUrl)
-                 (forged-website-contains-malicious-url ?Website ?MaliciousFileUrl)
-                  (increase (total-cost) 1)))
-
-
-(:action attacker-generates-forged-website-url
-  :parameters (?Application - application ?WebsiteUrl - website-url ?Website - website ?ControlledServer - controlled-server ?MaliciousUrl -url ?CVEID - cve-identifier) ;; the forged website notonly can include the malicious file url, also can include malicious script url, thus define the embeded url as malicious url not certain url such as file url or script url
-  :precondition (and  (exposed-attack-surface ?Application ?CVEID)
-                     (forged-website ?Website)
-                     (malicious-url ?MaliciousUrl)
-                     (website-hosted-on-server ?Website ?ControlledServer)
-                     (forged-website-contains-malicious-url ?Website ?MaliciousUrl)) ;;; Reuse A.P 1.3, change this action to a more general action
-
-  :effect (and (url-points-to-forged-website ?WebsiteUrl ?Website)
-               (malicious-url ?WebsiteUrl)
-               (malicious-website-url ?WebsiteUrl)
-                (increase (total-cost) 1)))
-
-
- (:action attacker-sends-forged-website-url-via-communication-channel ;;this action should be commented out for AP 2.2 
-    :parameters (?Application - application ?WebsiteUrl - website-url ?MaliciousMessage - message ?Comchannel - comchannel ?CVEID - cve-identifier)
-    :precondition (and  (exposed-attack-surface ?Application ?CVEID)
-                        (malicious-website-url ?WebsiteUrl))
-    :effect (and (com-channel-msg ?Comchannel ?MaliciousMessage) 
-                 (malicious-msg ?MaliciousMessage)
-                (message-has-website-url ?MaliciousMessage ?WebsiteUrl) 
-                (message-sent ?MaliciousMessage)
-                (increase (total-cost) 1)))
-
- (:action user-clicks-mailicious-website-url-in-message
-    :parameters (?User - user ?Comchannel - comchannel ?MaliciousMessage - message  ?MaliciousWebsiteUrl - website-url)
-    :precondition (and (malicious-msg ?MaliciousMessage) 
-                      (malicious-website-url ?MaliciousWebsiteUrl)
-                      (user-use-communication-channel ?User ?Comchannel) 
-                      (com-channel-msg ?Comchannel ?MaliciousMessage) 
-                      (message-has-website-url ?MaliciousMessage ?MaliciousWebsiteUrl) 
-                      (msg-opened ?MaliciousMessage))
-    :effect (and (website-url-accessed ?MaliciousWebsiteUrl)
-                 (increase (total-cost) 171)))
-
-(:action user-visits-forged-website
-  :parameters (?User - user ?WebsiteUrl  - website-url ?ForgedWebsite - website)
-  :precondition (and (malicious-website-url ?WebsiteUrl)
-                     (forged-website ?ForgedWebsite)
-                     (url-points-to-forged-website ?WebsiteUrl ?ForgedWebsite)
-                     (website-url-accessed ?WebsiteUrl))
-  :effect (and (forged-website-visited-by-user ?ForgedWebsite ?User)
-               (increase (total-cost) 1)))
-
-(:action user-downloads-malicious-file-by-clicking-url-in-forged-website
-  :parameters (?User - user ?ForgedWebsite - website ?MaliciousFileUrl - file-url ?MaliciousFile - file)
-  :precondition (and (forged-website ?ForgedWebsite)          
-                     (malicious-file-url ?MaliciousFileUrl)
-                     (malicious-file ?MaliciousFile)
-                     (forged-website-visited-by-user ?ForgedWebsite ?User)
-                     (forged-website-contains-malicious-file-url ?ForgedWebsite ?MaliciousFileUrl)
-                     (url-points-to-file ?MaliciousFileUrl ?MaliciousFile))
-  :effect (and (file-url-accessed ?MaliciousFileUrl)
-          (downloaded ?MaliciousFile)
-           (increase (total-cost) 171)))
-
-;;#########################
-
-
-;; ====================added actions for AP 2.1=====================
-(:action attacker-creates-malicious-script-tampering-env-var-as-malicious-url
-  :parameters (?Application - application ?MaliciousScript - script ?EnvVar - env-var ?MaliciousFileUrl - file-url ?CVEID - cve-identifier)
-  :precondition (and  (exposed-attack-surface ?Application ?CVEID)
-                      (exploit-by-inject-malicious-env-var CVE_2024_12798)
-                     (env-var-logback-set-script ?MaliciousScript)
-                     (malicious-file-url ?MaliciousFileUrl) )
-  :effect (and (malicious-script ?MaliciousScript)
-               (malicious-script-sets-env-var ?MaliciousScript ?EnvVar ?MaliciousFileUrl)
-                (increase (total-cost) 1)))
-
-(:action attacker-sends-malicious-script-via-communication-channel        ;;this action should be commented out for AP 2.2
-    :parameters (?Application - application ?MaliciousScript - script ?MaliciousMessage - message ?Comchannel - comchannel ?CVEID - cve-identifier)
-    :precondition (and   (exposed-attack-surface ?Application ?CVEID)
-                      (env-var-logback-set-script ?MaliciousScript)
-                      (malicious-script ?MaliciousScript))
-    :effect (and (com-channel-msg ?Comchannel ?MaliciousMessage)
-        (malicious-msg ?MaliciousMessage)
-        (message-has-malicious-script ?MaliciousMessage ?MaliciousScript)
-        (message-sent ?MaliciousMessage)
-        (increase (total-cost) 1)))
-
-;; ===  the user may directly install the script by opening / first doownload then installed by making sure the execution==
-;; == AP  2.1.(1) ==
-(:action user-opens-malicious-script-attachment-in-message
-    :parameters (?Application - application ?User - user ?MaliciousMessage - message ?MaliciousScript - script ?Comchannel - comchannel)
-    :precondition (and 
-        (not (script-execution-prompt-enabled ?Application))
-        (malicious-msg ?MaliciousMessage)
-        (env-var-logback-set-script ?MaliciousScript)
-        (malicious-script ?MaliciousScript)
-        (com-channel-msg ?Comchannel ?MaliciousMessage)
-        (message-has-malicious-script ?MaliciousMessage ?MaliciousScript)
-        (msg-opened ?MaliciousMessage) ; Requires email to be opened first (from user-reads-email)
-    )
-    :effect (and (malicious-script-installed  ?MaliciousScript)
-               (increase (total-cost) 171)))
-
-(:action application-sets-env-var-via-malicious-script
-    :parameters (?Application - application ?MaliciousScript - script ?EnvVar - env-var ?MaliciousFileUrl - file-url ?MaliciousFile - file ?CVEID - cve-identifier)
-    :precondition (and (env-var-logback-set-script ?MaliciousScript)
-        (exposed-attack-surface ?Application ?CVEID)
-        (malicious-script ?MaliciousScript)
-        (malicious-file ?MaliciousFile)
-        (malicious-file-url ?MaliciousFileUrl)
-        (malicious-script-installed ?MaliciousScript)
-        (malicious-script-sets-env-var ?MaliciousScript ?EnvVar ?MaliciousFileUrl)
-        (url-points-to-file ?MaliciousFileUrl ?MaliciousFile)   )
-    :effect (and (env-var-set-by-malicious-url ?EnvVar ?MaliciousFileUrl)
-            (config-replaced ?MaliciousFile)
-             (increase (total-cost) 1)))
-
-;; == AP 2.1.(2) the probability that application support warning mecenism for executing suspicious documents==
-(:action user-downloads-malicious-script-in-message
-    :parameters (?Application - application ?User - user ?MaliciousMessage - message ?MaliciousScript - script)
-    :precondition (and (script-execution-prompt-enabled ?Application)
-         (malicious-msg ?MaliciousMessage)
-        (env-var-logback-set-script ?MaliciousScript)
-        (malicious-script ?MaliciousScript)
-        (message-has-malicious-script ?MaliciousMessage ?MaliciousScript)        (msg-opened ?MaliciousMessage))
-    :effect (and (malicious-script-downloaded ?MaliciousScript)
-                 (increase (total-cost) 171)) )
-
-    ;; ===The way of activating mal-script's execution==
-
-(:action user-double-click-download-script
- :parameters (?Application - application ?User - user ?MaliciousScript - script)
-    :precondition (and  (script-execution-prompt-enabled ?Application)
-                       (env-var-logback-set-script ?MaliciousScript)
-                       (malicious-script ?MaliciousScript)
-                       (malicious-script-downloaded ?MaliciousScript))
-    :effect (and (malicious-script-execution-activated ?MaliciousScript)
-                 (increase (total-cost) 1)))
-
-
-(:action application-prompt-malicious-script-execution
-    :parameters (?Application - application ?MaliciousScript - script)
-    :precondition (and   (script-execution-prompt-enabled ?Application)
-                       (env-var-logback-set-script ?MaliciousScript)
-                       (malicious-script ?MaliciousScript)
-                       (malicious-script-execution-activated ?MaliciousScript))
-    :effect (and (malicious-script-execution-warning-active ?MaliciousScript)
-                  (increase (total-cost) 1)))
-
-(:action user-confirm-malicious-script-execution
-    :parameters (?Application - application ?User -user ?MaliciousScript - script)
-    :precondition (and  (script-execution-prompt-enabled ?Application)
-        (env-var-logback-set-script ?MaliciousScript)
-        (malicious-script ?MaliciousScript)
-        (malicious-script-downloaded ?MaliciousScript)
-        (malicious-script-execution-warning-active ?MaliciousScript))
-    :effect (and (malicious-script-execution-confirmed ?MaliciousScript)
-                  (increase (total-cost) 1)))
-
-(:action application-sets-env-var-via-malicious-script
-    :parameters (?Application - application ?MaliciousScript - script ?EnvVar - env-var ?MaliciousFileUrl - file-url ?MaliciousFile - file ?CVEID - cve-identifier)
-    :precondition (and  (exposed-attack-surface ?Application ?CVEID)
-        (env-var-logback-set-script ?MaliciousScript)
-        (malicious-script ?MaliciousScript)
-        (malicious-file ?MaliciousFile)
-        (malicious-file-url ?MaliciousFileUrl)
-        (malicious-script-execution-confirmed ?MaliciousScript)
-        (malicious-script-sets-env-var ?MaliciousScript ?EnvVar ?MaliciousFileUrl)
-        (url-points-to-file ?MaliciousFileUrl ?MaliciousFile) )
-    :effect (and (env-var-set-by-malicious-url ?EnvVar ?MaliciousFileUrl)
-            (config-replaced ?MaliciousFile)
-             (increase (total-cost) 1)))
-
-;;==========
-
-
-(:action application-loads-malicious-config-via-env-var
-    :parameters (?Application - application ?EnvVar - env-var ?MaliciousFileUrl - file-url ?MaliciousFile - file ?CVEID - cve-identifier)
-    :precondition (and 
-        (exposed-attack-surface ?Application ?CVEID)
-        (running-app ?Application)      
-        (malicious-file ?MaliciousFile)
-        (malicious-file-url ?MaliciousFileUrl)
-        (env-var-set-by-malicious-url ?EnvVar ?MaliciousFileUrl)
-        (url-points-to-file ?MaliciousFileUrl ?MaliciousFile)
-        (has-janino-evaluator ?MaliciousFile)
-        (contains-arbitrary-code ?MaliciousFile)
-    )
-    :effect (and (malicious-config-loaded-via-env-var ?MaliciousFile ?EnvVar)
-                (malicious-config-loaded ?MaliciousFile)
-                 (increase (total-cost) 1)) )
-
-;; ###################
-
-
-;; ====================added actions for AP 2.2=====================
-(:action attacker-hosts-malicious-script-on-controlled-server
-  :parameters (?Application - application ?MaliciousScript - script ?ControlledServer - controlled-server ?CVEID - cve-identifier)
-  :precondition (and  (exposed-attack-surface ?Application ?CVEID)
-                      (env-var-logback-set-script ?MaliciousScript)
-                     (malicious-script ?MaliciousScript))
-  :effect (and (malicious-script-hosted-on-server ?MaliciousScript ?ControlledServer)
-               (increase (total-cost) 1)))
-
-(:action attacker-generates-download-url-to-script
-  :parameters (?Application - application ?MalScriptUrl - script-url ?MaliciousScript - script ?ControlledServer - controlled-server ?CVEID - cve-identifier)
-  :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                     (env-var-logback-set-script ?MaliciousScript)
-                     (malicious-script ?MaliciousScript)
-                     (malicious-script-hosted-on-server ?MaliciousScript ?ControlledServer))
-  :effect (and (url-points-to-script ?MalScriptUrl ?MaliciousScript)
-               (malicious-url ?MalScriptUrl)
-               (malicious-script-url ?MalScriptUrl)
-                (increase (total-cost) 1)))
-
-
-(:action attacker-sends-malicious-script-url-via-commuication-channel    ;;Commented for AP 2.3
-  :parameters (?Application - application ?MaliciousMessage - message ?MalScriptUrl - script-url ?Comchannel - comchannel ?CVEID - cve-identifier)
-  :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                (malicious-script-url ?MalScriptUrl))
-  :effect (and (com-channel-msg ?Comchannel ?MaliciousMessage)
-               (malicious-msg ?MaliciousMessage)
-               (message-has-malicious-script-url ?MaliciousMessage ?MalScriptUrl)
-               (message-sent ?MaliciousMessage)
-                (increase (total-cost) 1)))
-
-;; download the script by clicking
-(:action user-downloads-malicious-script-by-clicking-url-in-message
-  :parameters (?User - user ?MaliciousMessage - message ?MalScriptUrl - script-url ?MaliciousScript - script)
-  :precondition (and (malicious-msg ?MaliciousMessage)          
-                     (malicious-script-url ?MalScriptUrl)
-                     (env-var-logback-set-script ?MaliciousScript)
-                     (malicious-script ?MaliciousScript)
-                     (message-has-malicious-script-url ?MaliciousMessage ?MalScriptUrl)
-                     (msg-opened ?MaliciousMessage)
-                     (url-points-to-script ?MalScriptUrl ?MaliciousScript))
-  :effect (and (malicious-script-downloaded ?MaliciousScript)
-           (script-url-accessed ?MalScriptUrl)
-             (increase (total-cost) 171)))
-
-
-;; ====================added actions for AP 2.3=====================
-
-;;; Reuse "Attacker-forges-website" of AP 1.3 CVE-2024-12798
- 
-  (:action attacker-includes-malicious-script-url-in-website
-    :parameters ( ?Application - application ?Website - website ?MaliciousScriptUrl - Script-url ?MaliciousScript - script ?CVEID - cve-identifier)
-    :precondition (and  (exposed-attack-surface ?Application ?CVEID)
-                       (forged-website ?Website)     
-                       (malicious-script-url ?MaliciousScriptUrl)
-                       (env-var-logback-set-script ?MaliciousScript)
-                       (malicious-script ?MaliciousScript)
-                       (url-points-to-script ?MaliciousScriptUrl ?MaliciousScript)) 
-    :effect (and (forged-website-contains-malicious-script-url ?Website ?MaliciousScriptUrl)
-                (forged-website-contains-malicious-url ?Website ?MaliciousScriptUrl)
-                  (increase (total-cost) 1)))
-
-;;; Reuse "attacker-generates-forged-website-ur" of AP 1.3 CVE-2024-12798
-
-;;; Reuse "attacker-sends-forged-website-url-via-email" of AP 1.3 CVE-2024-12798
-
-;;; Reuse "user-clicks-mailicious-website-url-in-email" of AP 1.3 CVE-2024-12798
-
-;;; Reuse "user-visits-forged-website" of AP 1.3 CVE-2024-12798
-
-(:action user-downloads-malicious-script-by-clicking-url-in-forged-website
-  :parameters (?User - user ?ForgedWebsite - website ?MaliciousScriptUrl - script-url ?MaliciousScript - script)
-  :precondition (and (forged-website ?ForgedWebsite)
-                     (malicious-script-url ?MaliciousScriptUrl)
-                     (env-var-logback-set-script ?MaliciousScript)
-                     (malicious-script ?MaliciousScript)
-                     (forged-website-visited-by-user ?ForgedWebsite ?User)
-                     (forged-website-contains-malicious-script-url ?ForgedWebsite ?MaliciousScriptUrl)
-                     (url-points-to-script ?MaliciousScriptUrl ?MaliciousScript))
-  :effect (and (script-url-accessed ?MaliciousScriptUrl)
-          (malicious-script-downloaded ?MaliciousScript)
-            (increase (total-cost) 171)))
-
-
-;#########################################END-Attack Action Defined for CVE-2024-12798 ######################################;
-
-
-;#########################################START-Attack Action Defined for CVE-2024-38286 ######################################;
-
-;; ====================CVE-2024-38286 AP 1=========================
 ;;@start vulnerability expose@;;
 (:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38286
  :parameters (?Application - application ?Tomcat - tomcat ?TLSConnector - tls-connector)
@@ -1956,133 +1353,19 @@
      (not (WAF-monitoring ?Application)))  
 
   :effect (and (exposed-attack-surface ?Application CVE_2024_38286)
+          (exploit-by CVE_2024_38286 abuse-tls-handshake)
           (vulnerable-tomcat ?Tomcat)
           (increase (total-cost) 29))) 
 ;@end vulnerability expose@;;
 
-(:action attacker-crafts-tls-flood-script
-  :parameters (?Application - application ?MaliciousFloodScript - script ?Tomcat - tomcat)
-  :precondition (and  (tls-flood-script ?MaliciousFloodScript)
-                     (exposed-attack-surface ?Application CVE_2024_38286))      
-  :effect (and (malicious-script ?MaliciousFloodScript)
-               (malicious-tls-flood-script ?MaliciousFloodScript)
-                 (increase (total-cost) 1)))
 
-(:action attacker-initiates-tls-flood ;commented for AP 2
-  :parameters (?Application - application ?MaliciousFloodScript - script ?Tomcat - tomcat ?TLSConnector - tls-connector)
-  :precondition (and  (tls-flood-script ?MaliciousFloodScript)
-                     (malicious-script ?MaliciousFloodScript)
-                     (malicious-tls-flood-script ?MaliciousFloodScript)
-                     (exposed-attack-surface ?Application CVE_2024_38286))
-  :effect (and (tls-flood-active ?MaliciousFloodScript)
-           (tls-handshake-request-sent ?MaliciousFloodScript)
-           (increase (total-cost) 1)))
-
-
-(:action application-keeps-allocate-resources-for-handshakes
-  :parameters (?Tomcat - tomcat ?TLSConnector - tls-connector ?MaliciousFloodScript - script)
-  :precondition (and  (tls-flood-script ?MaliciousFloodScript)
-                     (malicious-script ?MaliciousFloodScript)
-                     (malicious-tls-flood-script ?MaliciousFloodScript)
-                     (tls-flood-active ?MaliciousFloodScript) 
-                     (tls-handshake-request-sent ?MaliciousFloodScript)
-                     (vulnerable-tomcat ?Tomcat))
-  :effect (and (tls-handshake-request-received ?MaliciousFloodScript)
-          (much-memory-allocated ?Tomcat)
-          (increase (total-cost) 1)))
-
-(:action application-triggers-outofmemory-error
-  :parameters (?Tomcat - tomcat ?Application - application)
-  :precondition (and  (much-memory-allocated ?Tomcat))
-  :effect (and (memory-exhausted ?Application)
-               (resource-exhausted ?Application)
-               (out-of-memory-error ?Application)
-                 (increase (total-cost) 1)))
-
-;; has some revision
-(:action application-tomcat-crashes
-  :parameters (?Application - application ?Tomcat - tomcat)
-  :precondition ( and(memory-exhausted ?Application)
-                     (much-memory-allocated ?Tomcat))
-  :effect (and (denial-of-service ?Application)
-              (increase (total-cost) 1)))  ; Final goal state: DoS attack achieved
-
-;; ====================CVE-2024-38286 AP 2=========================
-
-;; Step 1-Step 3 reused AP 1
-(:action attacker-crafts-initial-tls-handshake-script
-  :parameters (?MalTLSReScript - script ?Tomcat - tomcat)
-  :precondition (and (tls-initial-handshake-request-script ?MalTLSReScript))
-  :effect (and (malicious-script ?MalTLSReScript)
-               (malicious-initial-tls-handshake-script ?MalTLSReScript)
-                 (increase (total-cost) 1)))
-
-(:action attacker-initial-tls-handshake
- :parameters (?Application - application ?MalTLSReScript - script)
- :precondition (and (malicious-initial-tls-handshake-script ?MalTLSReScript)
-                     (exposed-attack-surface ?Application CVE_2024_38286))
- :effect (and (tls-handshake-request-sent ?MalTLSReScript)
-              (increase (total-cost) 1)))
-
-(:action application-allocates-initial-memory-for-tls-handshake-upon-request-receiving
-  :parameters (?Tomcat - tomcat ?TLSConnector - tls-connector ?MalTLSReScript - script)
-  :precondition (and  (tls-initial-handshake-request-script ?MalTLSReScript)
-                     (malicious-script ?MalTLSReScript)
-                     (malicious-initial-tls-handshake-script ?MalTLSReScript)
-                     (tls-handshake-request-sent ?MalTLSReScript))
-  :effect (and  (tls-handshake-request-received ?MalTLSReScript)
-                (one-time-memory-allocated ?Tomcat)
-                (increase (total-cost) 1)))
-
-(:action attacker-completes-initial-tls-handshake  
-  :parameters (?MalTLSReScript - script ?Tomcat - tomcat ?TLSConnector - tls-connector )
-  :precondition (and (tls-initial-handshake-request-script ?MalTLSReScript)
-                     (malicious-script ?MalTLSReScript)
-                     (malicious-initial-tls-handshake-script ?MalTLSReScript)
-                     (tls-handshake-request-received ?MalTLSReScript)
-                     (one-time-memory-allocated ?Tomcat))
-  :effect (and (initial-tls-handshake-completed ?Tomcat)
-                 (increase (total-cost) 1)))
-
-(:action attacker-crafts-tls-renegotiation-script-to-exploit
-  :parameters (?MalRenegoScript - script ?Tomcat - tomcat)
-  :precondition (and  (tls-renegotiation-script ?MalRenegoScript)
-                      (initial-tls-handshake-completed ?Tomcat))
-  :effect (and (malicious-script ?MalRenegoScript)
-               (malicious-tls-renegotiation-script ?MalRenegoScript)
-                 (increase (total-cost) 1)))
-
-(:action attacker-sends-tls-renegotiation-flood-to-exploit  
-  :parameters (?MalRenegoScript - script ?Tomcat - tomcat  ?TLSConnector - tls-connector)
-  :precondition (and  (tls-renegotiation-script ?MalRenegoScript)
-                     (malicious-script ?MalRenegoScript)
-                     (malicious-tls-renegotiation-script ?MalRenegoScript)
-                     (initial-tls-handshake-completed ?Tomcat))
-  :effect (and (tls-renegotiation-flood-active ?MalRenegoScript)
-                (increase (total-cost) 1)))
-
-(:action application-keeps-allocate-renegotiation-memory  
-  :parameters (?Tomcat - tomcat ?TLSConnector - tls-connector ?MalRenegoScript - script)
-  :precondition (and 
-                     (tls-renegotiation-script ?MalRenegoScript)
-                     (malicious-script ?MalRenegoScript)
-                     (tls-renegotiation-flood-active ?MalRenegoScript) 
-                     (one-time-memory-allocated ?Tomcat))  ; Requires initial allocation
-  :effect (and (much-memory-allocated ?Tomcat)
-               (increase (total-cost) 1)) )
-
-
-
-;#########################################START-Attack Action Defined for CVE-2024-22243 ######################################;
-
-;;=== AP 1: Open Redirect Exploitation===
 ;;@start vulnerability expose@;;
 ;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-22243   
 ;    :parameters (?Application - application ?SpringFramework - spring-framework ?Endpoint - endpoint ?Parser - url-parser)
 ;    :precondition (and 
 ;
 ;      ; 1. Application uses a vulnerable version of Spring Framework
-;      (has-dependency-on-spring-framework ?Application)
+;      (has-dependency-on-spring-framework ?Application ?SpringFramework)
 ;      (or 
 ;         ; 5.3.x before 5.3.31 (5003000000 + 31000 = 5003031000)
 ;         (and (>= (version ?SpringFramework) 5003000000) (< (version ?SpringFramework) 5003031000))
@@ -2123,297 +1406,20 @@
 ;     (not (WAF-malicious-request-bloack ?Application))
 ;     (not (IPS-malicious-request-bloack ?Application)) )
 ;    :effect (and (exposed-attack-surface ?Application CVE_2024_22243)
-;                (exploit-by-crafts-redirect-url CVE_2024_22243)
-;                (exploit-by-crafts-redirect-url-to-phishing-site CVE_2024_22243)
-;                (exploit-by-build-phishingsite CVE_2024_22243)
+;                (exploit-by CVE_2024_22243 crafts-redirect-url)
+;                (exploit-by CVE_2024_22243 crafts-redirect-url-to-phishing-site)
+;                (exploit-by CVE_2024_22243 build-phishingsite)
+;                (vulnerable-spring-framework ?SpringFramework)
 ;                (increase (total-cost) 21)))
-;;@end vulnerability expose@;;           
-
-(:action attacker-forge-phishing-website-minic-legitimate-app
-    :parameters (?Application - application ?PhishingSite - website  ?ControlledServer - controlled-server ?CVEID - cve-identifier)
-    :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                  (exploit-by-build-phishingsite ?CVEID) )
-    :effect (and  (forged-website ?PhishingSite)
-                 (website-hosted-on-server ?PhishingSite ?ControlledServer)
-                 (website-mimics-legitimate-app ?PhishingSite ?Application)
-                   (increase (total-cost) 1)))
+;;@end vulnerability expose@;;  
 
 
-(:action attacker-generates-phishing-website-url
-    :parameters (?Application - application ?PhishingSite - website ?ControlledServer - controlled-server ?PhishingURL - phishing-url ?CVEID - cve-identifier)
-    :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                       (exploit-by-build-phishingsite ?CVEID)
-                       (forged-website ?PhishingSite)
-                       (website-hosted-on-server ?PhishingSite ?ControlledServer))
-    :effect (and (phishing-url-points-to-forge-website ?PhishingURL ?PhishingSite)
-            (malicious-url ?PhishingURL)
-            (malicious-phishing-site-url ?PhishingURL)
-              (increase (total-cost) 1)))
-
-
-(:action attacker-crafts-malicious-redirect-url-point-to-phishingsite 
-    :parameters (?Application - application ?MaliciousURL - redirect-url ?PhishingURL - phishing-url ?PhishingSite - website ?Application - application ?Payload - payload-string ?CVEID - cve-identifier)
-    :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                       (exploit-by-build-phishingsite ?CVEID)
-                       (exploit-by-crafts-redirect-url-to-phishing-site ?CVEID)
-                       (phishing-url-points-to-forge-website ?PhishingURL ?PhishingSite)
-                       (forged-website ?PhishingSite))
-    :effect (and (malicious-redirect-url ?MaliciousURL)
-                 (malicious-url ?MaliciousURL)
-                 (URL-contains-payload ?MaliciousURL ?Payload)
-                 (payload-has-validation-bypass-capability ?Payload)
-                 (redirects-to-phishing-URL ?MaliciousURL ?PhishingURL)
-                 (vulnerable-redirect-URL-created ?MaliciousURL)
-                   (increase (total-cost) 1)))
-
-
-
-;; === Deliver method (1) phishing message through communication channel ===
-(:action attacker-sends-malicious-redirect-url-via-communication-channel
-    :parameters (?MaliciousURL - redirect-url ?Message - message ?Channel - comchannel ?Payload - payload-string ?CVEID - cve-identifier)
-    :precondition (and (exploit-by-crafts-redirect-url ?CVEID)
-                     (malicious-redirect-url ?MaliciousURL)
-                      (URL-contains-payload ?MaliciousURL ?Payload))
-    :effect (and (com-channel-msg ?Channel ?Message)
-                 (malicious-msg ?Message)
-                 (message-has-redirect-url ?Message ?MaliciousURL)
-                 (message-sent ?Message)
-                   (increase (total-cost) 1)))
-  
-; reuse User-receives-message / user-starts-communication-channel / user-read-message
-
-(:action user-clicks-malicious-redirect-url-in-message 
-    :parameters (?User - user ?Browser - browser ?Comchannel - comchannel ?MaliciousMessage - message ?RedirectUrl - redirect-url ?PhishingURL - phishing-url ?Browser - browser) ;
-    :precondition (and 
-                  (malicious-msg ?MaliciousMessage) 
-                  (malicious-redirect-url ?RedirectUrl)
-                  (user-use-communication-channel ?User ?Comchannel) 
-                  (com-channel-msg ?Comchannel ?MaliciousMessage) 
-                  (message-has-redirect-url ?MaliciousMessage ?RedirectUrl) 
-                  (msg-opened ?MaliciousMessage)
-                  (redirects-to-phishing-URL ?RedirectUrl ?PhishingURL)
-                  (is-default-browser ?Browser))
-    :effect (and (redirect-url-clicked ?RedirectUrl) 
-                 (malicious-url-clicked ?RedirectUrl)
-                 (http-request-triggered ?RedirectUrl)
-                 (running-browser ?Browser)
-                 (user-use-browser ?User ?Browser) 
-                   (increase (total-cost) 171))) 
-
-
-;; === Delivery method (2) published in the social media platform === 
-(:action attacker-publishes-redirect-url-social-media
-    :parameters (?RedirectURL - redirect-url ?PhishingURL - phishing-url ?SocialMedia - social-media ?Payload - payload-string ?CVEID - cve-identifier) ;comment for AP 1.1 CVE_2024_22243
-    :precondition (and (exploit-by-crafts-redirect-url ?CVEID)
-                        (malicious-url ?RedirectURL)
-                       (URL-contains-payload ?RedirectURL ?Payload) 
-                       (redirects-to-phishing-URL ?RedirectURL ?PhishingURL))
-    :effect (and (redirect-url-published-on-social-media ?RedirectURL ?SocialMedia)
-                 (redirect-url-visible ?RedirectURL ?SocialMedia)
-                 (malicious-url-published-on-social-media ?RedirectURL ?SocialMedia)
-                 (malicious-url-visible ?RedirectURL ?SocialMedia)
-                 (increase (total-cost) 1)))
-
-(:action user-scrolls-social-media
-    :parameters (?User - user ?SocialMedia - social-media ?MaliciousURL - url)
-    :precondition (and (malicious-url-published-on-social-media ?MaliciousURL ?SocialMedia)
-                       (malicious-url-visible ?MaliciousURL ?SocialMedia))
-    :effect (and (running-social-media ?SocialMedia)
-                 (user-scrolling-social-media ?User ?SocialMedia)
-                 (increase (total-cost) 22)))
-
-(:action user-notices-malicious-url
-    :parameters (?User - user ?SocialMedia - social-media ?MaliciousURL - url)
-    :precondition (and (malicious-url ?MaliciousURL)
-                       (running-social-media ?SocialMedia)
-                       (user-scrolling-social-media ?User ?SocialMedia)
-                       (malicious-url-visible ?MaliciousURL ?SocialMedia))
-    :effect (and (malicious-url-noticed ?MaliciousURL ?User)
-             (increase (total-cost) 365)))
-
-(:action user-clicks-malicious-url-in-social-media
-    :parameters (?User - user ?MaliciousURL - url  ?SocialMedia - platform ?Browser - browser)
-    :precondition (and  (malicious-url ?MaliciousURL)
-                        (malicious-url-published-on-social-media ?MaliciousURL ?SocialMedia)
-                        (malicious-url-noticed ?MaliciousURL ?User)
-                        (is-default-browser ?Browser) )
-    :effect (and (malicious-url-clicked ?MaliciousURL)
-                 (http-request-triggered ?MaliciousURL)
-                 (running-browser ?Browser)
-                 (user-use-browser ?User ?Browser) 
-                   (increase (total-cost) 171) )) 
-;; =========
-
-(:action user-browser-sends-http-get-request-to-application
-    :parameters (?User - user ?HttpGetRequest - http-get-request ?RedirectUrl - redirect-url ?Browser - browser)
-    :precondition (and (malicious-url-clicked ?RedirectUrl) 
-                        (user-use-browser ?User ?Browser)
-                         (running-browser ?Browser))
-    :effect (and (http-get-request-sent ?HttpGetRequest)
-                 (HTTP-request-includes-redirect-url ?RedirectUrl)
-                 (increase (total-cost) 1) ))
-                  
-
-;; reuse "application-receives-http-get-request" of CVE-2024-38816
-
-(:action application-processes-http-get-request-by-parser
-    :parameters (?HttpGetRequest - http-get-request ?RedirectUrl - redirect-url ?Application - application ?Parser - url-parser)
-    :precondition (and (http-get-request-received ?HttpGetRequest ?Application)
-                       (HTTP-request-includes-redirect-url ?RedirectUrl)
-                       (or  (exposed-attack-surface ?Application CVE_2024_22243)
-                            (exposed-attack-surface ?Application CVE_2024_22259)
-                             (exposed-attack-surface ?Application CVE_2024_22262))
-                       (has-dependency-on-vulnerable-paser ?Application ?Parser))
-    :effect (and (running-Parser ?Parser)
-                (increase (total-cost) 1)))
-
-(:action application-vulnerably-validates-host-in-URL
-    :parameters (?Application - application ?RedirectUrl - redirect-url ?Parser - url-parser)
-    :precondition (and (running-Parser ?Parser)
-                       (or  (exposed-attack-surface ?Application CVE_2024_22243)
-                            (exposed-attack-surface ?Application CVE_2024_22259)
-                             (exposed-attack-surface ?Application CVE_2024_22262))
-                       )
-    :effect (and (URL-host-validation-passed ?RedirectUrl)
-                   (increase (total-cost) 1)))
-
-(:action application-server-sends-302-redirect-to-user-browser
-    :parameters (?HttpGetRequest - http-get-request ?RedirectUrl - redirect-url ?PhishingUrl - phishing-url ?PhishingSite - website ?ControlledServer - controlled-server )
-    :precondition (and 
-                  (http-get-request-sent ?HttpGetRequest)
-                  (HTTP-request-includes-redirect-url ?RedirectUrl)
-                  (URL-host-validation-passed ?RedirectUrl)
-                  (redirects-to-phishing-URL ?RedirectUrl ?PhishingUrl)
-                  (phishing-url-points-to-forge-website ?PhishingUrl ?PhishingSite)
-                  (website-hosted-on-server ?PhishingSite ?ControlledServer))
-    :effect (and 
-            (redirect-response-sent ?PhishingUrl)
-              (increase (total-cost) 1))) 
-
-(:action user-browser-follows-redirect
-    :parameters (?User - user ?Browser - browser ?PhishingURL - phishing-url)
-    :precondition (and (user-use-browser ?User ?Browser)
-                   (redirect-response-sent ?PhishingURL))
-    :effect (and (request-sent-to-phishing ?PhishingURL)
-                   (increase (total-cost) 1)))
-
-(:action attacker-serves-mimic-website
-    :parameters (?PhishingURL - phishing-url ?Phishingsite - website  ?ControlledServer - controlled-server ?CVEID - cve-identifier)
-    :precondition (and (request-sent-to-phishing ?PhishingURL)
-                       (website-hosted-on-server ?PhishingSite ?ControlledServer)
-                       (exploit-by-build-phishingsite ?CVEID))
-    :effect (and (mimic-response-sent ?PhishingURL)
-                 (increase (total-cost) 1)))
-
-(:action user-visits-phishing-site
-    :parameters (?User - user ?PhishingURL - phishing-url ?Phishingsite - website)
-    :precondition (and (mimic-response-sent ?PhishingURL)
-                       (phishing-url-points-to-forge-website ?PhishingURL ?Phishingsite) )
-    :effect (and (user-viewing-phishing-website ?User ?Phishingsite)
-                   (increase (total-cost) 1)))
-
-(:action user-enters-credentials
-    :parameters (?User - user ?Credentials - credential ?Phishingsite - website ?Application - application)
-    :precondition (and (user-viewing-phishing-website ?User ?Phishingsite)
-                       (user-has-valid-credentials-application ?User ?Credentials ?Application))
-    :effect (and (credentials-entered-to-phishingsite ?Credentials ?PhishingSite)
-                  (increase (total-cost) 530)))
-
-(:action attacker-phishing-website-submits-user-credentials
-    :parameters (?Credentials - credential ?PhishingSite - website ?ControlledServer - controlled-server ?CVEID - cve-identifier)
-    :precondition (and (credentials-entered-to-phishingsite ?Credentials ?PhishingSite)
-                   (website-hosted-on-server ?PhishingSite ?ControlledServer)
-                   (exploit-by-build-phishingsite ?CVEID))
-    :effect (and (credentials-submitted-on-phishingsite ?Credentials ?PhishingSite)
-                  (increase (total-cost) 1) ))
-
-(:action attacker-intercepts-credentials-of-target-application
-    :parameters (?Application - application ?Credentials - credential ?PhishingSite - website ?ControlledServer - controlled-server)
-    :precondition (and (credentials-submitted-on-phishingsite ?Credentials ?PhishingSite)
-                      (website-hosted-on-server ?PhishingSite ?ControlledServer))
-    :effect (and (information-obtained ?Credentials)
-                  (information-disclosure ?Application)
-                  (increase (total-cost) 1)))
-
-(:action attacker-uses-user-credentials-login-target-application ;; reuse for CVE-2024-34447
-    :parameters (?User - user ?Credentials - credential ?TargetApp - application)
-    :precondition (and (user-has-valid-credentials-application ?User ?Credentials ?TargetApp)
-                       (information-obtained ?Credentials))
-    :effect (and (spoofing ?TargetApp)
-                   (increase (total-cost) 1)))   
-
- ;; ======= AP 2: SSRF Exploitation =======
-(:action attacker-crafts-malicious-redirect-url-point-to-internal-resource ;;comment for AP 1
-    :parameters (?MaliciousURL - redirect-url ?Payload - payload-string 
-                  ?InternalResourceAddress - internal-address ?Application - application ?CVEID - cve-identifier)
-    :precondition (and 
-        (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-crafts-redirect-url ?CVEID))
-    :effect (and 
-        (malicious-redirect-url ?MaliciousURL)
-        (malicious-url ?MaliciousURL)
-        (URL-contains-payload ?MaliciousURL ?Payload)
-        (payload-has-validation-bypass-capability ?Payload)
-        (redirects-to-internal-resource ?MaliciousURL ?InternalResourceAddress)
-        (vulnerable-redirect-URL-created ?MaliciousURL)
-          (increase (total-cost) 1)))
-
-(:action attacker-clicks-malicious-url-includes-internal-resources-request-pyload
-   :parameters (?Browser - browser ?MaliciousURL - redirect-url ?InternalResourceAddress - internal-address)
-   :precondition (and (malicious-redirect-url ?MaliciousURL)
-                      (redirects-to-internal-resource ?MaliciousURL ?InternalResourceAddress)
-                      (is-default-browser ?Browser))
-   :effect (and (malicious-url-clicked ?MaliciousURL)
-                (malicious-redirect-url-clicked ?MaliciousURL)
-                (running-browser ?Browser)
-                  (increase (total-cost) 1)))
-
-
-(:action attacker-browser-sends-malicious-http-get-request-for-internal-resources
-    :parameters (?Browser - browser ?HttpGetRequest - http-get-request ?MaliciousURL - redirect-url ?InternalResourceAddress - internal-address )
-    :precondition (and 
-        (running-browser ?Browser)
-        (malicious-redirect-url ?MaliciousURL)
-        (malicious-redirect-url-clicked ?MaliciousURL)
-        (redirects-to-internal-resource ?MaliciousURL ?InternalResourceAddress))
-    :effect (and (http-get-request-sent ?HttpGetRequest)
-                 (HTTP-request-includes-redirect-url ?MaliciousURL)
-                   (increase (total-cost) 1)))
-
-;; reuse  application-receives-http-get-request / application-server-processes-http-get-request / application-vulnerably-validates-host-in-URL
-
-
-(:action application-server-sends-internal-request
-    :parameters (?RedirectUrl - redirect-url ?InternalResourceAddress - internal-address 
-                  ?Application - application)
-    :precondition (and 
-        (HTTP-request-includes-redirect-url ?RedirectUrl)
-        (redirects-to-internal-resource ?RedirectUrl ?InternalResourceAddress)
-         (or  (exposed-attack-surface ?Application CVE_2024_22243)
-              (exposed-attack-surface ?Application CVE_2024_22259)
-              (exposed-attack-surface ?Application CVE_2024_22262))
-        (URL-host-validation-passed ?RedirectUrl))
-    :effect (and (internal-request-sent ?InternalResourceAddress)
-                 (increase (total-cost) 1)))
-
-(:action application-internal-server-responds-sensitive-information
-    :parameters (?InternalResourceAddress - internal-address ?Data - sensitive-information ?Application - application)
-    :precondition (and (internal-request-sent ?InternalResourceAddress)
-                       (data-saved-in-internal-address ?Data ?InternalResourceAddress))
-    :effect (and  (sensitive-information-located-internal-address ?Data ?InternalResourceAddress)
-                  (sensitive-data-prepared-by-application ?Application ?Data)
-                    (increase (total-cost) 1)))
-
-;; reuse action "application-server-returns-sensitive-information"and "attacker-receives-sensitive-information " of CVE-2024-38816
-
-
- ;#########################################START-Attack Action Defined for CVE-2024-38820 ######################################;
 ;;@start vulnerability expose@;;
 ;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38820
 ;   :parameters (?Application - application ?SpringFramework - spring-framework ?Config - locale-config ?DataBinder - data-binder ?Controller - web-controller ?Pattern - disallowed-pattern)  
 ;   :precondition (and
 ;      ; 1. Application uses a vulnerable version of Spring Framework
-;      (has-dependency-on-spring-framework ?Application)
+;      (has-dependency-on-spring-framework ?Application ?SpringFramework)
 ;     (or 
 ;         ; 5.3.x before 5.3.41 (5003000000 + 41000 = 5003041000)
 ;         (and (>= (version ?SpringFramework) 5003000000) (< (version ?SpringFramework) 5003041000))
@@ -2469,112 +1475,11 @@
 ;      (not (has-input-filter-case-bypass-detection ?Application))
 ;   )   
 ;   :effect (and (exposed-attack-surface ?Application CVE_2024_38820)
-;                 (exploit-by-locale-specific-capitalization-bypass CVE_2024_38820)
-;                (exploit-needs-user-account CVE_2024_38820)
+;                (exploit-by CVE_2024_38820 bypass-locale-specific-capitalization)
+;                (exploit-by CVE_2024_38820 acquire-user-account)
 ;                (increase (total-cost) 63)))
 ;;@end vulnerability expose@;;
 
-
-;; Attacker registers account on target application
-(:action attacker-registers-account-on-target-application
-    :parameters (?Account - account ?Application - application ?SessionCookie - session-cookie ?CVEID - cve-identifier)
-    :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                       (exploit-needs-user-account ?CVEID)) 
-    :effect (and (account-registered ?Account ?Application)
-                 (attacker-has-account ?Account)
-                 (session-cookie-obtained ?SessionCookie ?Account)
-                 (account-has-normal-privileges ?Account)
-                  (increase (total-cost) 1)))
-
-
-;; Attacker crafts malicious URL with locale-specific capitalization bypass
-(:action attacker-crafts-malicious-url-with-locale-bypass
-    :parameters (?LocaleBypassURL - locale-bypass-url ?Application - application ?LocaleBypassParam - locale-bypass-parameter ?Account - account ?CVEID - cve-identifier)
-    :precondition (and (exposed-attack-surface ?Application CVE_2024_38820)
-                        (exploit-by-locale-specific-capitalization-bypass ?CVEID)
-                       (has-locale-specific-exceptions ?Application)
-                       (has-vulnerable-locale-transformation ?Application)
-                       (attacker-has-account ?Account)
-                       (account-has-normal-privileges ?Account))
-    :effect (and (malicious-locale-bypass-url ?LocaleBypassURL)
-                 (malicious-url ?LocaleBypassURL)
-                 (url-contains-locale-bypass-parameter ?LocaleBypassURL ?LocaleBypassParam)
-                 (parameter-uses-non-standard-capitalization ?LocaleBypassParam)
-                 (parameter-targets-admin-field ?LocaleBypassParam)
-                 (bypass-parameter-created ?LocaleBypassParam)
-                   (increase (total-cost) 1)))
-
-
-
-;; Attacker opens/clicks crafted URL in browser
-(:action attacker-clicks-malicious-url-includes-locale-bypass-pyload
-    :parameters (?Browser - browser ?LocaleBypassURL - locale-bypass-url ?LocaleBypassParam - locale-bypass-parameter)
-    :precondition (and (malicious-locale-bypass-url ?LocaleBypassURL)
-                       (url-contains-locale-bypass-parameter ?LocaleBypassURL ?LocaleBypassParam)
-                       (is-default-browser ?Browser))
-    :effect (and (malicious-url-clicked ?LocaleBypassURL)
-                 (http-get-request-triggered ?LocaleBypassURL)
-                 (running-browser ?Browser)
-                   (increase (total-cost) 1)))
-
-
-;; Attacker's browser sends HTTP GET request to application server
-(:action attacker-browser-sends-malicious-http-get-request-with-locale-bypass-pyload
-    :parameters (?HttpGetRequest - http-get-request ?MaliciousURL - locale-bypass-url ?Browser - browser ?LocaleBypassParam - locale-bypass-parameter)
-    :precondition (and (malicious-url-clicked ?MaliciousURL)
-                       (http-get-request-triggered ?MaliciousURL)
-                       (running-browser ?Browser)
-                       (url-contains-locale-bypass-parameter ?MaliciousURL ?LocaleBypassParam))
-    :effect (and (http-get-request-sent ?HttpGetRequest)
-                 (request-contains-locale-bypass-param ?MaliciousURL ?LocaleBypassParam)
-                   (increase (total-cost) 1)))
-
-
-;; Application server receives HTTP GET request with İsAdmin=true parameter 
-;; reuse action "application-receives-http-get-request" of CVE_2024_38816;
-
-
-;; Application server invokes DataBinder with vulnerable locale transformation 
-(:action application-server-invokes-databinder-with-locale-transformation
-    :parameters (?Application - application ?HttpGetRequest - http-get-request ?MaliciousURL - locale-bypass-url ?LocaleBypassParam - locale-bypass-parameter ?DataBinder - data-binder ?TransformedParam - transformed-parameter)
-    :precondition (and (http-get-request-received ?HttpGetRequest ?Application)
-                       (request-contains-locale-bypass-param ?MaliciousURL ?LocaleBypassParam)
-                       (exposed-attack-surface ?Application CVE_2024_38820)
-                       (has-vulnerable-databinder ?Application ?DataBinder))
-    :effect (and (databinder-invoked ?DataBinder ?LocaleBypassParam)
-                 (parameter-transformed-to-lowercase ?LocaleBypassParam ?TransformedParam)
-                 (non-standard-lowercase-created ?TransformedParam)
-                   (increase (total-cost) 1)))
-
-;; DataBinder fails to match transformed parameter against disallowedFields pattern
-(:action application-databinder-fails-to-match-disallowed-fields-pattern
-    :parameters (?Application - application ?DataBinder - data-binder ?LocaleBypassParam - locale-bypass-parameter ?TransformedParam - transformed-parameter ?DisallowedPattern - disallowed-pattern)
-    :precondition (and (databinder-invoked ?DataBinder ?LocaleBypassParam)
-                       (parameter-transformed-to-lowercase ?LocaleBypassParam ?TransformedParam)
-                       (non-standard-lowercase-created ?TransformedParam)
-                       ;(transformed-parameter-name ?TransformedParam)
-                       (has-disallowed-databinder-fields-configuration ?Application))
-    :effect (and (pattern-matching-failed ?TransformedParam ?DisallowedPattern)
-                 (filter-bypassed ?TransformedParam)
-                 (parameter-allowed-to-continue-binding ?TransformedParam)
-                 (validation-bypass-successful ?TransformedParam)
-                   (increase (total-cost) 1)))
-
-;; Application server sets isAdmin field to true achieving Tampering and Privilege Escalation
-(:action application-server-sets-admin-field-for-attacker
-    :parameters (?Application - application ?Account - account ?TransformedParam - transformed-parameter)
-    :precondition (and (parameter-allowed-to-continue-binding ?TransformedParam)
-                       (validation-bypass-successful ?TransformedParam)
-                       (attacker-has-account ?Account)
-                       (account-has-normal-privileges ?Account)
-                       (account-registered ?Account ?Application))
-    :effect (and (admin-field-set-to-true ?Account)
-                 (account-has-admin-privilege ?Account)
-                 (tampering ?Application)
-                 (elevation-of-privilege ?Application)
-                   (increase (total-cost) 1)))
-
-;#########################################START-Attack Action Defined for CVE-2023-34055 ######################################;
 ;;@start vulnerability expose@;;
 (:action application-exposes-attack-surfaces-to-attackers-CVE-2023-34055 
  :parameters (?Application - application ?SpringBoot - spring-boot)
@@ -2632,60 +1537,11 @@
      (not (request-size-limits ?Application)))
 
   :effect (and (exposed-attack-surface ?Application CVE_2023_34055)
-            (exploit-by-flood-script CVE_2023_34055)
+             (exploit-by CVE_2023_34055 craft-http-flood-script)
             (vulnerable-spring-boot ?SpringBoot)
             (increase (total-cost) 43))) 
 ;@end vulnerability expose@;;
 
-(:action attacker-crafts-http-flood-script
-  :parameters (?Application - application ?MaliciousFloodScript - script ?SpringBoot - spring-boot)
-  :precondition (and  (http-flood-script ?MaliciousFloodScript)
-                     (exposed-attack-surface ?Application CVE_2023_34055)
-                      (exploit-by-flood-script CVE_2023_34055))      
-  :effect (and (malicious-script ?MaliciousFloodScript)
-               (malicious-http-flood-script ?MaliciousFloodScript)
-                 (increase (total-cost) 1)))
-
-(:action attacker-initiates-http-flood
-  :parameters (?Application - application ?MaliciousFloodScript - script ?SpringBoot - spring-boot)
-  :precondition (and  (http-flood-script ?MaliciousFloodScript)
-                     (malicious-script ?MaliciousFloodScript)
-                     (malicious-http-flood-script ?MaliciousFloodScript)
-                     (exposed-attack-surface ?Application CVE_2023_34055))
-  :effect (and (http-flood-active ?MaliciousFloodScript)
-           (http-requests-sent ?MaliciousFloodScript)
-             (increase (total-cost) 1)))
-
-;; System processes HTTP requests and allocates resources without limits
-(:action application-processes-http-requests-without-limits
-  :parameters (?SpringBoot - spring-boot ?MaliciousFloodScript - script)
-  :precondition (and  (http-flood-script ?MaliciousFloodScript)
-                     (malicious-script ?MaliciousFloodScript)
-                     (malicious-http-flood-script ?MaliciousFloodScript)
-                     (http-flood-active ?MaliciousFloodScript) 
-                     (http-requests-sent ?MaliciousFloodScript) )
-  :effect (and (http-requests-received ?MaliciousFloodScript)
-          (much-memory-allocated ?SpringBoot)
-            (increase (total-cost) 1)))
-
-(:action application-exhausts-server-memory-resources
-  :parameters (?Application - application ?SpringBoot - spring-boot)
-  :precondition (and  (much-memory-allocated ?SpringBoot))
-  :effect (and (memory-exhausted ?Application)
-               (resource-exhausted ?Application)
-               (application-unresponsive ?Application)
-               (denial-of-service ?Application)
-                 (increase (total-cost) 1)))
-
-(:action application-becomes-unresponsive
-  :parameters (?Application - application)
-  :precondition (and (resource-exhausted ?Application))
-  :effect (and (application-unresponsive ?Application)
-               (denial-of-service ?Application)
-                 (increase (total-cost) 1)))  
-                 
-
- ;#########################################START-Attack Action Defined for CVE-2024-34447 ######################################;
 ;;@start vulnerability expose@;;
 (:action application-exposes-attack-surfaces-to-attackers-CVE-2024-34447
  :parameters (?Application - application ?BouncyCastle - bouncy-castle ?BCJSSE - bcjsse)
@@ -2711,196 +1567,13 @@
      (dns-traffic-interception-allowed ?Application))
      
   :effect (and (exposed-attack-surface ?Application CVE_2024_34447)
+          (exploit-by CVE_2024_34447 perform-dns-poisoning)
+          (exploit-by CVE_2024_34447 sets-up-malicious-server)
           (vulnerable-bcjsse ?Application ?BCJSSE)
           (increase (total-cost) 29)))
 ;@end vulnerability expose@;;
 
-;; Action 1: DNS infrastructure exposes attack surface
-(:action dns-infrastructure-exposes-attack-surface
- :parameters (?DNSServer - dns-server)
- :precondition (and
-     ;1. DNS server lacks DNSSEC validation capability or has DNSSEC disabled
-     (not (dnssec-enabled ?DNSServer))
-     
-     ;2. DNS server uses predictable source port assignments
-     (dns-predictable-source-ports ?DNSServer)
-     
-     ;3. DNS server runs outdated software versions with known vulnerabilities
-     (outdated-dns-software ?DNSServer)
-     
-     ;4. DNS server is positioned within attacker's network reach
-     (dns-attacker-network-reach ?DNSServer)
-     
-     ;5. DNS server lacks DNS-over-HTTPS (DoH) or DNS-over-TLS (DoT) encryption
-     (not (dns-doh-enabled ?DNSServer))
-     (not (dns-dot-enabled ?DNSServer))
-     
-     ;6. DNS server has insufficient rate limiting and behavioral analysis protections
-     (dns-insufficient-rate-limiting ?DNSServer)
-     
-     ;7. DNS server uses predictable transaction ID generation algorithms
-     (dns-predictable-transaction-ids ?DNSServer))
-     
-  :effect (and (vulnerable-dns-infrastructure ?DNSServer)
-                (increase (total-cost) 21) ))
 
-;; Action 2: Attacker sets up malicious server
-(:action attacker-sets-up-malicious-server-with-domain
- :parameters (?Application - application  ?DNSServer - dns-server ?ControlledServer - controlled-server ?ControlledDomain - controlled-domain)
- :precondition (and (exposed-attack-surface ?Application CVE_2024_34447)
-              (vulnerable-dns-infrastructure ?DNSServer))
- :effect (and (malicious-server-setup-with-domain-with-domain ?ControlledServer ?ControlledDomain)
-              (increase (total-cost) 1)))
-
-;; Action 3: Attacker obtains valid SSL certificate
-(:action attacker-obtains-valid-ssl-certificate-for-server
- :parameters (?ControlledServer - controlled-server ?SSLCertificate - ssl-certificate ?ControlledDomain -controlled-domain)
- :precondition (and (malicious-server-setup-with-domain-with-domain ?ControlledServer ?ControlledDomain) )
- :effect (and (valid-ssl-certificate ?SSLCertificate ?ControlledDomain)
-         (attacker-has-certificate ?SSLCertificate)
-         (increase (total-cost) 1)))
-
-;; Action 4: Attacker configures malicious server with SSL certificate
-(:action attacker-configures-server-with-certificate
- :parameters (?ControlledServer - controlled-server ?SSLCertificate - ssl-certificate ?ControlledDomain - controlled-domain)
- :precondition (and (malicious-server-setup-with-domain-with-domain ?ControlledServer ?ControlledDomain)
-                   (valid-ssl-certificate ?SSLCertificate ?ControlledDomain)
-                   (attacker-has-certificate ?SSLCertificate))
- :effect (and (server-configured-with-certificate ?ControlledServer ?SSLCertificate)
-         (malicious-server-ready ?ControlledServer)
-          (increase (total-cost) 1)))
-
-;; Action 5: Attacker performs DNS poisoning
-(:action attacker-performs-dns-poisoning
- :parameters (?DNSServer - dns-server ?LegitimateServer - legitimate-server ?ControlledServer - controlled-server ?LegitimateAddress - legitimate-ip-address ?MaliciousAddress - malicious-ip-address)
- :precondition (and (vulnerable-dns-infrastructure ?DNSServer)
-                   (legitimate-server-ip-address ?LegitimateServer ?LegitimateAddress)
-                   (malicious-server-ready ?ControlledServer)
-                   ;(attacker-controlled-server ?ControlledServer)
-                   (controlled-server-ip-address ?ControlledServer ?MaliciousAddress))
- :effect (and (dns-poisoned ?DNSServer ?LegitimateServer ?MaliciousAddress)
-         (forged-dns-records ?DNSServer ?LegitimateServer ?MaliciousAddress)
-           (increase (total-cost) 1)))
-
-;; Action 6: User launches target application
-(:action user-launches-target-application
- :parameters (?User - user ?Application - application ?CVEID - cve-identifier ?DNSServer - dns-server ?LegitimateServer - legitimate-server ?MaliciousAddress - malicious-ip-address)
- :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                  (dns-poisoned ?DNSServer ?LegitimateServer ?MaliciousAddress)
-               (forged-dns-records ?DNSServer ?LegitimateServer ?MaliciousAddress))
- :effect (and (application-launched ?User ?Application)
-         (user-session-active ?User ?Application)
-           (increase (total-cost) 11)))
-
-;; Action 7: User initiates connection to legitimate domain
-(:action user-initiates-connection-to-legitimate-domain
- :parameters (?User - user ?Application - application ?LegitimateServer - legitimate-server ?LegitimateAddress - legitimate-ip-address)
- :precondition (and  (application-launched ?User ?Application)
-                   (user-session-active ?User ?Application)
-                   (legitimate-server-ip-address ?LegitimateServer ?LegitimateAddress))
- :effect (and (connection-initiated ?User ?Application ?LegitimateServer)
-         (connection-request-pending ?Application ?LegitimateServer)
-           (increase (total-cost) 1)))
-
-;; Action 8: Application performs DNS lookup
-(:action application-performs-dns-lookup
- :parameters (?Application - application ?LegitimateServer - legitimate-server ?DNSServer - dns-server)
- :precondition (and (connection-request-pending ?Application ?LegitimateServer)
-                   (https-connections-trigger-dns-resolution ?Application))
- :effect (and (dns-lookup-performed ?Application ?LegitimateServer)
-         (dns-query-sent ?Application ?DNSServer ?LegitimateServer)
-           (increase (total-cost) 1)))
-
-;; Action 9: Poisoned DNS returns attacker's IP
-(:action poisoned-dns-infrastructure-returns-attacker-server-ip
- :parameters (?Application - application ?DNSServer - dns-server ?LegitimateServer - legitimate-server ?MaliciousAddress - malicious-ip-address)
- :precondition (and 
-                   (dns-query-sent ?Application ?DNSServer ?LegitimateServer)
-                   (dns-poisoned ?DNSServer ?LegitimateServer ?MaliciousAddress)
-                   (forged-dns-records ?DNSServer ?LegitimateServer ?MaliciousAddress))
- :effect (and (dns-response-returned ?DNSServer ?LegitimateServer ?MaliciousAddress)
-         (ip-address-resolved ?LegitimateServer ?MaliciousAddress)
-           (increase (total-cost) 1)))
-
-;; Action 10: Application initiates SSL handshake to attacker's server
-(:action application-initiates-ssl-handshake-to-attacker-without-hostname
- :parameters (?Application - application ?ControlledServer - controlled-server ?LegitimateServer - legitimate-server ?MaliciousAddress - malicious-ip-address ?SSLSocket - ssl-socket)
- :precondition (and   (ip-address-resolved ?LegitimateServer ?MaliciousAddress)
-                   (malicious-server-ready ?ControlledServer)
-                   (controlled-server-ip-address ?ControlledServer ?MaliciousAddress))
- :effect (and (ssl-socket-created ?Application ?SSLSocket)
-         (connection-request-to-attacker-server ?Application ?ControlledServer)
-          (hostname-parameter-missing ?SSLSocket)
-            (increase (total-cost) 1) ))
-
-;; Action 11: Attacker's server presents valid SSL certificate
-(:action attacker-server-presents-ssl-certificate
- :parameters (?Application - application ?ControlledServer - controlled-server ?SSLCertificate - ssl-certificate ?ControlledDomain - controlled-domain)
- :precondition (and (connection-request-to-attacker-server ?Application ?ControlledServer)
-                   (server-configured-with-certificate ?ControlledServer ?SSLCertificate)
-                   (valid-ssl-certificate ?SSLCertificate ?ControlledDomain))
- :effect (and (ssl-certificate-presented ?ControlledServer ?SSLCertificate)
-         (certificate-verification-pending ?SSLCertificate)
-           (increase (total-cost) 1)))
-
-;; Action 12: Vulnerable BCJSSE performs incorrect hostname verification
-(:action application-bcjsse-performs-incorrect-hostname-verification
- :parameters (?Application - application ?BCJSSE - bcjsse ?LegitimateServer - legitimate-server ?ControlledServer - controlled-server ?SSLCertificate - ssl-certificate ?SSLSocket - ssl-socket ?MaliciousAddress - malicious-ip-address)
- :precondition (and (vulnerable-bcjsse ?Application ?BCJSSE)
-                   (ssl-certificate-presented ?ControlledServer ?SSLCertificate)
-                   (certificate-verification-pending ?SSLCertificate)
-                   (hostname-parameter-missing ?SSLSocket)
-                   (ip-address-resolved ?LegitimateServer ?MaliciousAddress))
- :effect (and (hostname-verification-bypassed ?Application ?BCJSSE)
-         (connection-trusted-incorrectly ?Application)
-         (certificate-validation-passed-incorrectly ?SSLCertificate)
-           (increase (total-cost) 1)))
-
-
-;; Action 13: Application establishes SSL connection to attacker's server
-(:action application-establishes-ssl-connection-to-attacker-server
- :parameters (?Application - application ?ControlledServer - controlled-server ?LegitimateServer - legitimate-server ?MaliciousAddress - malicious-ip-address ?SSLSocket - ssl-socket)
- :precondition (and  (connection-trusted-incorrectly ?Application)
-                     (ip-address-resolved ?LegitimateServer ?MaliciousAddress)
-                     (malicious-server-ready ?ControlledServer)
-                     (controlled-server-ip-address ?ControlledServer ?MaliciousAddress))
- :effect (and (ssl-connection-established ?Application ?ControlledServer)
-             (connected-to-attacker-server ?Application ?ControlledServer) 
-               (increase (total-cost) 1)))
-
-
-;; Action 14: User inputs sensitive data
-(:action user-inputs-sensitive-information-in-the-webpage
- :parameters (?User - user ?Application - application ?ControlledServer - controlled-server ?SensitiveData - sensitive-information)
- :precondition (and (user-session-active ?User ?Application)
-                    (connected-to-attacker-server ?Application ?ControlledServer)
-                   (connection-trusted-incorrectly ?Application))
- :effect (and (sensitive-information-inputted ?User ?SensitiveData)
-         (data-ready-for-transmission ?Application ?SensitiveData)
-           (increase (total-cost) 530)))    
-
-;; Action 15: Application transmits sensitive data to attacker's server
-(:action application-transmits-sensitive-information-to-attacker
- :parameters (?Application - application ?ControlledServer - controlled-server ?SensitiveData - sensitive-information)
- :precondition (and (connected-to-attacker-server ?Application ?ControlledServer)
-                   (data-ready-for-transmission ?Application ?SensitiveData)
-                   (connection-trusted-incorrectly ?Application))
- :effect (and (sensitive-information-transmitted ?Application ?SensitiveData)
-         (sensitive-data-sent-to-attacker ?SensitiveData)
-           (increase (total-cost) 1)))
-
-;; Action 16: Attacker captures transmitted sensitive data   ; this action has some similarity with action "attacker-intercepts-credentials-of-target-application" for  CVE-2024-22243 AP 1
-(:action attacker-captures-sensitive-information-of-target-application  
- :parameters (?Application - application ?SensitiveData - sensitive-information  ?CVEID - cve-identifier)
- :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                   (sensitive-data-sent-to-attacker ?SensitiveData)
-                   (sensitive-information-transmitted ?Application ?SensitiveData))
- :effect (and (sensitive-information-captured ?SensitiveData)
-         (information-obtained ?SensitiveData)
-           (information-disclosure ?Application)
-           (increase (total-cost) 1)))
-
- ;#########################################START-Attack Action Defined for CVE-2022-40150######################################;
 ;;@start vulnerability expose@;;
 ;(:action application-exposes-attack-surfaces-to-attackers-CVE-2022-40150
 ; :parameters (?Application - application ?JettisionLibrary - java-library ?APIEndpoint - api-endpoint ?SOAPEndpoint - soap-endpoint)
@@ -2947,122 +1620,10 @@
 ;
 ;  :effect (and (exposed-attack-surface ?Application CVE_2022_40150)
 ;          (vulnerable-jettison-parser ?JettisionLibrary)
-;          ( exploit-by-craft-malicious-json-payload CVE_2022_40150) 
-;          (exploit-by-craft-malicious-xml-payload CVE_2022_40150)
+;          (exploit-by CVE_2022_40150 craft-malicious-json-payload ) 
+;          (exploit-by CVE_2022_40150 craft-malicious-xml-payload)
 ;          (increase (total-cost) 29)))
 ;;@end vulnerability expose@;;
-
-(:action attacker-crafts-malicious-json-payload    
-  :parameters (?Application - application ?MaliciousPayload - json-payload ?JettisionLibrary - java-library ?CVEID - cve-identifier)
-  :precondition (and (exposed-attack-surface ?Application ?CVEID)
-            ( exploit-by-craft-malicious-json-payload ?CVEID))      
-  :effect (and (malicious-payload ?MaliciousPayload)
-               (deeply-nested-json ?MaliciousPayload)
-               (memory-exhaustion-payload ?MaliciousPayload)
-               (increase (total-cost) 1)))
-
-
-(:action attacker-sends-http-post-request-with-malicious-payload
-  :parameters (?Application - application ?HTTPRequest - http-post-request ?MaliciousPayload - payload ?ReceiveEndpoint - receive-endpoint ?CVEID - cve-identifier)
-  :precondition (and (malicious-payload ?MaliciousPayload)
-                     ;(memory-exhaustion-payload ?MaliciousPayload)
-                     (has-receive-endpoint ?Application ?ReceiveEndpoint)
-                     (exposed-attack-surface ?Application ?CVEID))
-  :effect (and (http-post-request-sent ?HTTPRequest)
-               (malicious-payload-transmitted ?MaliciousPayload)
-                 (increase (total-cost) 1)))
-
-
-(:action application-receives-http-post-request-with-malicious-payload
-  :parameters (?Application - application ?HTTPRequest - http-post-request ?MaliciousPayload - payload ?ReceiveEndpoint - receive-endpoint)
-  :precondition (and (http-post-request-sent ?HTTPRequest)
-                     (malicious-payload-transmitted ?MaliciousPayload)
-                     (has-receive-endpoint ?Application ?ReceiveEndpoint))
-  :effect (and (http-post-request-received ?Application ?HTTPRequest)
-                 (increase (total-cost) 1)))
-
-
-(:action application-extracts-json-payload-from-http-request ;comment for AP 2 of CVE-2022-40150
- :parameters (?Application - application ?HTTPRequest - http-post-request ?MaliciousPayload - json-payload ?APIEndpoint - api-endpoint)
-  :precondition (and  (memory-exhaustion-payload ?MaliciousPayload)
-                      (http-post-request-received ?Application ?HTTPRequest)
-                     (has-api-endpoint ?Application ?APIEndpoint))
-  :effect (and (json-payload-extracted ?Application ?MaliciousPayload)
-                 (increase (total-cost) 1)))
-
-
-(:action application-uses-jettison-json-parser
-  :parameters (?Application - application ?JettisionLibrary - java-library ?MaliciousPayload - json-payload)
-  :precondition (and (json-payload-extracted ?Application ?MaliciousPayload)
-                     (vulnerable-jettison-parser ?JettisionLibrary)
-                     (has-library ?Application ?JettisionLibrary))
-  :effect (and (jettison-parser-invoked ?JettisionLibrary ?MaliciousPayload)
-               (json-parsing-started ?JettisionLibrary)
-                (increase (total-cost) 1)))
-
-
-(:action application-jettison-parser-allocates-heap-memory-for-json-construction    ;commented for AP of CVE_2022_40149
-  :parameters (?JettisionLibrary - java-library ?MaliciousPayload - json-payload ?Application - application)
-  :precondition (and (jettison-parser-invoked ?JettisionLibrary ?MaliciousPayload)
-                     (json-parsing-started ?JettisionLibrary)
-                     (deeply-nested-json ?MaliciousPayload)
-                     (memory-exhaustion-payload ?MaliciousPayload)
-                     (exposed-attack-surface ?Application CVE_2022_40150))
-  :effect (and (heap-memory-allocated ?JettisionLibrary)
-               (json-object-graph-construction ?JettisionLibrary)
-               (excessive-heap-memory-consumption ?Application)
-                 (increase (total-cost) 1)))
-
-(:action application-triggers-OUTOFMEMORY-error
-  :parameters (?Application - application ?CVEID - cve-identifier)
-  :precondition (and (excessive-heap-memory-consumption ?Application)
-                   (exposed-attack-surface ?Application ?CVEID))
-  :effect (and (heap-memory-exhausted ?Application)
-               ;(garbage-collection-capacity-exceeded ?Application)
-               (out-of-memory-error ?Application)
-               (memory-exhausted ?Application)
-               (resource-exhausted ?Application)
-              (application-unresponsive ?Application)
-               ;(denial-of-service ?Application)
-                 (increase (total-cost) 1)))
-
-;; reuse action "application-becomes-unresponsive" of CVE-2023-34055
-
-;; =================================== AP 2 =====================================================
-(:action attacker-crafts-malicious-xml-payload
-  :parameters (?Application - application ?MaliciousPayload - xml-payload ?JettisionLibrary - java-library ?CVEID - cve-identifier)
-  :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                   (exploit-by-craft-malicious-xml-payload ?CVEID))      
-  :effect (and (malicious-payload ?MaliciousPayload)
-               (deeply-nested-xml ?MaliciousPayload)
-               (memory-exhaustion-payload ?MaliciousPayload)
-                 (increase (total-cost) 1)))
-  
- (:action application-extracts-xml-payload-from-http-request
- :parameters (?Application - application ?HTTPRequest - http-post-request ?MaliciousPayload - xml-payload ?SOAPEndpoint - soap-endpoint)
-  :precondition (and (http-post-request-received ?Application ?HTTPRequest)
-                     (has-soap-endpoint ?Application ?SOAPEndpoint)
-                     (memory-exhaustion-payload ?MaliciousPayload))
-  :effect (and (xml-payload-extracted ?Application ?MaliciousPayload)
-               (increase (total-cost) 1)))
-
-  (:action application-invokes-jettison-xml-to-json-transformation
-  :parameters (?Application - application ?JettisionLibrary - java-library ?MaliciousPayload - xml-payload ?TransformedPayload - json-payload)
-  :precondition (and (xml-payload-extracted ?Application ?MaliciousPayload)
-                     (vulnerable-jettison-parser ?JettisionLibrary)
-                     (has-library ?Application ?JettisionLibrary)
-                     (deeply-nested-xml ?MaliciousPayload))
-  :effect (and (xml-to-json-transformation-started ?JettisionLibrary ?MaliciousPayload)
-               (json-payload ?TransformedPayload)
-               (deeply-nested-json ?TransformedPayload)
-               (memory-exhaustion-payload ?TransformedPayload)
-               (json-payload-extracted ?Application ?TransformedPayload)
-                 (increase (total-cost) 1)))
-
-
-
- ;#########################################START-Attack Action Defined for CVE-2022-40149######################################;
- ;; reuse step 1-5 7 of CVE-2022-40150 and action "application-becomes-unresponsive" of CVE-2023-34055
 
 ;;@start vulnerability expose@;;
 ;(:action application-exposes-attack-surfaces-to-attackers-CVE-2022-40149
@@ -3110,37 +1671,13 @@
 ;     (not (has-waf-json-payload-detection ?Application)))
 ;
 ;  :effect (and (exposed-attack-surface ?Application CVE_2022_40149)
-;           (exploit-by-craft-malicious-xml-payload CVE_2022_40149)
-;          ( exploit-by-craft-malicious-json-payload CVE_2022_40149)
+;          (exploit-by CVE_2022_40149 craft-malicious-xml-payload)
+;          (exploit-by CVE_2022_40149 craft-malicious-json-payload)
 ;          (vulnerable-jettison-parser ?JettisionLibrary)
 ;          (increase (total-cost) 29)))
 ;;@end vulnerability expose@;;
 
-(:action application-jettison-parser-allocates-stack-memory-for-json-construction
-  :parameters (?JettisionLibrary - java-library ?MaliciousPayload - json-payload ?Application - application)
-  :precondition (and (jettison-parser-invoked ?JettisionLibrary ?MaliciousPayload)
-                     (json-parsing-started ?JettisionLibrary)
-                     (deeply-nested-json ?MaliciousPayload)
-                     (memory-exhaustion-payload ?MaliciousPayload)
-                     (exposed-attack-surface ?Application CVE_2022_40149))
-  :effect (and (stack-memory-allocated ?JettisionLibrary)
-               (json-object-graph-construction ?JettisionLibrary)
-               (excessive-stack-memory-consumption ?Application)
-              (increase (total-cost) 1)))
 
-(:action application-triggers-STACKOVERFLOW-error
-  :parameters (?Application - application ?CVEID - cve-identifier)
-  :precondition (and (excessive-stack-memory-consumption ?Application)
-                  (exposed-attack-surface ?Application ?CVEID))
-  :effect (and (stack-memory-exhausted ?Application)
-               ;(garbage-collection-capacity-exceeded ?Application)
-               (out-of-memory-error ?Application)
-               (memory-exhausted ?Application)
-               (resource-exhausted ?Application)
-                (increase (total-cost) 1)))
-
-
- ;#########################################START-Attack Action Defined for CVE-2023-6378######################################;
 ;;@start vulnerability expose@;;
 ;(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-6378
 ; :parameters (?Application - application ?LogbackLibrary - java-library ?ReceiverComponent - logback-receiver ?TCPEndpoint - tcp-endpoint)
@@ -3187,93 +1724,11 @@
 ;     (not (has-proper-exception-handling ?Application)))
 ;
 ;  :effect (and (exposed-attack-surface ?Application CVE_2023_6378)
-;          (exploit-by-build-server-connection CVE_2023_6378)
+;          (exploit-by CVE_2023_6378 craft-malicious-serialized-payload)
 ;          (vulnerable-logback-receiver ?ReceiverComponent)
 ;          (vulnerable-receiver ?ReceiverComponent)
-;          (craft-malicious-serialized-payload-for-exploiting-CVE ?Application)
 ;          (increase (total-cost) 29)))
-;;;@end vulnerability expose@;;
-
-
-(:action attacker-crafts-malicious-serialized-payload
-  :parameters (?Application - application ?MaliciousPayload - serialized-payload ?CVEID - cve-identifier)
-  :precondition (and (exposed-attack-surface ?Application ?CVEID)
-            (craft-malicious-serialized-payload-for-exploiting-CVE ?Application))      
-  :effect (and (malicious-payload ?MaliciousPayload)
-               (deserialization-exploit-payload ?MaliciousPayload)
-                 (increase (total-cost) 1)))
-
-
-
-(:action attacker-establishes-tcp-connection-with-application
-  :parameters (?Application - application ?Server - tcp-server ?TCPConnection - tcp-connection ?TCPEndpoint - tcp-endpoint ?CVEID - cve-identifier)
-  :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                     (exploit-by-build-server-connection ?CVEID)
-                     (has-server ?Application ?Server)
-                     (server-has-tcp-endpoint ?Server ?TCPEndpoint)
-                     (server-listens-on-port ?Server)
-                     (tcp-endpoint-external-access-allowed ?TCPEndpoint))
-  :effect (and (tcp-connection-established ?Server ?TCPConnection)
-               (three-way-handshake-completed ?TCPConnection)
-                 (increase (total-cost) 1)))
-
-
-
-(:action attacker-sends-malicious-payload-through-tcp
-  :parameters (?TCPConnection - tcp-connection ?Server - tcp-server ?MaliciousPayload - serialized-payload ?ReceiverComponent - receiver-component)
-  :precondition (and (tcp-connection-established ?Server ?TCPConnection)
-                     (three-way-handshake-completed ?TCPConnection)
-                     (malicious-payload ?MaliciousPayload))
-  :effect (and (malicious-payload-transmitted ?MaliciousPayload)
-               (payload-sent-through-tcp ?TCPConnection ?MaliciousPayload)
-                 (increase (total-cost) 1)))
-
-
-(:action application-receives-tcp-connection-and-data
-  :parameters (?Application - application ?ReceiverComponent - receiver-component ?TCPConnection - tcp-connection ?MaliciousPayload - serialized-payload)
-  :precondition (and (payload-sent-through-tcp ?TCPConnection ?MaliciousPayload)
-                     (has-receiver-component ?Application ?ReceiverComponent))
-  :effect (and (tcp-connection-received ?Application ?TCPConnection)
-               (plaintext-data-received ?Application ?MaliciousPayload)
-                 (increase (total-cost) 1)))
-
-
-(:action application-logback-receiver-extracts-serialized-payload
- :parameters (?Application - application ?ReceiverComponent - logback-receiver ?MaliciousPayload - serialized-payload)
-  :precondition (and (plaintext-data-received ?Application ?MaliciousPayload)
-                     (vulnerable-logback-receiver ?ReceiverComponent)
-                     (has-receiver-component ?Application ?ReceiverComponent))
-  :effect (and (serialized-payload-extracted ?ReceiverComponent ?MaliciousPayload)
-              (increase (total-cost) 1)))
-
-
-(:action application-logback-receiver-deserializes-payload
-  :parameters (?Application - application ?ReceiverComponent - logback-receiver ?MaliciousPayload - serialized-payload)
-  :precondition (and (serialized-payload-extracted ?ReceiverComponent ?MaliciousPayload)
-                     (vulnerable-logback-receiver ?ReceiverComponent)
-                     (deserialization-exploit-payload ?MaliciousPayload))
-  :effect (and (deserialization-started ?ReceiverComponent ?MaliciousPayload)
-               (malicious-deserialization-triggered ?Application)
-                 (increase (total-cost) 1)))
-
-
-(:action application-deserialization-triggers-resource-exhaustion
-  :parameters (?Application - application ?ReceiverComponent - receiver-component ?CVEID - cve-identifier)
-  :precondition (and (malicious-deserialization-triggered ?Application)
-                     (vulnerable-receiver ?ReceiverComponent)
-                     (exposed-attack-surface ?Application ?CVEID))
-  :effect (and (infinite-recursion-triggered ?Application)
-               (stack-overflow-occurred ?Application)
-               (memory-exhausted ?Application)
-               (resource-exhausted ?Application)
-               (application-unresponsive ?Application)
-               (denial-of-service ?Application)
-                 (increase (total-cost) 1)))
-               
-;; reuse action "application-becomes-unresponsive" of CVE-2023-34055 
-
- 
- ;#########################################START-Attack Action Defined for CVE-2023-44487 ######################################;
+;;@end vulnerability expose@;;
 
 ;;@start vulnerability expose@;;
 ;(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-44487
@@ -3343,18 +1798,1920 @@
 ;     (not (http2-server-can-handle-rapid-allocation-cancellation-cycles ?Application ?Server)))
 ;
 ;  :effect (and (exposed-attack-surface ?Application CVE_2023_44487)
+;               (exploit-by CVE_2023_44487 reset-http2-streams)
 ;               (vulnerable-http2-server ?Server)
 ;               (http2-server-rapid-reset-attack-possible ?Server)
 ;               (rapid-reset-attack-possible ?Server)
-;               (exploit-by-build-server-connection CVE_2023_44487)
 ;               (increase (total-cost) 29)))
 ;;@end vulnerability expose@;;
 
+
+;;@start vulnerability expose@;;
+(:action application-exposes-attack-surfaces-to-attackers-CVE-2025-22228
+  :parameters (?Application - application ?SpringSecurity - spring-security ?PasswordEncoder - password-encoder)
+  :precondition (and
+    ; 1. Application uses vulnerable versions of Spring Security
+    (has-dependency-on-spring-security ?Application ?SpringSecurity)
+    (or
+      ; 5.7.0-5.7.15 (5007000000 to 5007015000)
+      (and (>= (version ?SpringSecurity) 5007000000) (<= (version ?SpringSecurity) 5007015000))
+      ; 5.8.0-5.8.17 (5008000000 to 5008017000)
+      (and (>= (version ?SpringSecurity) 5008000000) (<= (version ?SpringSecurity) 5008017000))
+      ; 6.0.0-6.0.15 (6000000000 to 6000015000)
+      (and (>= (version ?SpringSecurity) 6000000000) (<= (version ?SpringSecurity) 6000015000))
+      ; 6.1.0-6.1.13 (6001000000 to 6001013000)
+      (and (>= (version ?SpringSecurity) 6001000000) (<= (version ?SpringSecurity) 6001013000))
+      ; 6.2.0-6.2.9 (6002000000 to 6002009000)
+      (and (>= (version ?SpringSecurity) 6002000000) (<= (version ?SpringSecurity) 6002009000))
+      ; 6.3.0-6.3.7 (6003000000 to 6003007000)
+      (and (>= (version ?SpringSecurity) 6003000000) (<= (version ?SpringSecurity) 6003007000))
+      ; 6.4.0-6.4.3 (6004000000 to 6004003000)
+      (and (>= (version ?SpringSecurity) 6004000000) (<= (version ?SpringSecurity) 6004003000))
+    )
+    ; 2. Authentication mechanism uses BCryptPasswordEncoder for password verification
+    (use-bcrypt-password-encoder ?Application ?PasswordEncoder)
+    ; 3. System allows or accepts user passwords longer than 72 characters
+    (allows-long-passwords ?Application)
+    (not (password-length-validation ?Application))
+    ; 5. No additional authentication factors are required (no MFA/2FA enforcement)
+    (not (multi-fator-auth-enabled ?Application))
+    (not (two-factor-auth-enabled ?Application))
+    ; 6. No password length validation or truncation warnings are implemented
+    (not (password-truncation-warning ?Application))
+    ; 7. No compensating controls
+    (not (account-lockout-policy ?Application))
+    (not (rate-limiting-enabled ?Application))
+    (not (anomaly-detection-enabled ?Application))
+    ; 8. Application does not implement pre-hashing mechanisms
+    (not (pre-hashing-implemented ?Application))
+    (not (sha256-pre-hash-enabled ?Application))
+  )
+  :effect (and (exposed-attack-surface ?Application CVE_2025_22228)
+         (vulnerable-password-validation ?Application)
+         (exploit-by CVE_2025_22228 online-brute-force)
+         (increase (total-cost) 30)))
+;@end vulnerability expose@;;
+
+
+;;@start vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38816
+;    :parameters (?Application - application ?SpringFramework - spring-framework 
+;                 ?RouterFunction - router-function ?ResourceHandler - resource-handler
+;                 ?FileSystemResource - filesystem-resource ?CVEID - cve-identifier)
+;    :precondition (and 
+;      ; 1. Application uses vulnerable version of Spring Framework (5.3.0 to 5.3.39, 6.0.0 to 6.0.23, 6.1.0 to 6.1.12)
+;      (has-dependency-on-spring-framework ?Application ?SpringFramework)
+;      (or 
+;         ; 5.3.0 to 5.3.39 (5003000000 to 5003039000)
+;         (and (>= (version ?SpringFramework) 5003000000) (<= (version ?SpringFramework) 5003039000))
+;         ; 6.0.0 to 6.0.23 (6000000000 to 6000023000)
+;         (and (>= (version ?SpringFramework) 6000000000) (<= (version ?SpringFramework) 6000023000))
+;         ; 6.1.0 to 6.1.12 (6001000000 to 6001012000)
+;         (and (>= (version ?SpringFramework) 6001000000) (<= (version ?SpringFramework) 6001012000))
+;       )
+;      
+;      ; 2. Application uses functional web frameworks WebMvc.fn or WebFlux.fn for serving static resources
+;     (or (uses-WebMvc-web-framework ?Application)
+;         (uses-WebFlux-web-framework ?Application))
+;      
+;      ; 3. Application explicitly configures RouterFunctions to serve static resources
+;      (has-router-function-configured ?Application ?RouterFunction)
+;      (router-function-serves-static-resources ?RouterFunction)
+;      
+;      ; 4. Resource handling configured with FileSystemResource location
+;      (has-filesystem-resource-configured ?Application ?FileSystemResource)
+;      (points-to-filesystem-path ?FileSystemResource)
+;      
+;      ; 5. Application process has read access to sensitive files
+;      (has-filesystem-read-access ?Application)
+;      (sensitive-files-accessible ?Application)
+;      
+;      ; 6. Spring Security HTTP Firewall is NOT enabled
+;      (not (spring-security-http-firewall-enabled ?Application))
+;
+;      
+;      ; 7. NOT running on Tomcat or Jetty (which would block malicious requests)
+;      (not (runs-on-tomcat ?Application))
+;      (not (runs-on-jetty ?Application))
+;      
+;      ; 8. No input validation for URL path parameters
+;      (not (url-path-validation-enabled ?Application))
+;      
+;      ; 9. No WAF rules for path traversal detection
+;      (not (has-WAF-path-traversal-protection ?Application))
+;      
+;      ; 10. File system permissions allow reading outside intended directory
+;      (filesystem-permissions-allow-traversal ?Application))
+;    :effect (and (exposed-attack-surface ?Application CVE_2024_38816)
+;             (exploit-by CVE_2024_38816 path-traversal)
+;            (increase (total-cost) 29)))
+;;@end vulnerability expose@;;
+
+
+;;@start vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2022-1471   
+;    :parameters (?Application - application ?SnakeYAML - snakeyaml-library ?Java - software ?Endpoint - yaml-endpoint)
+;    :precondition (and 
+;      ; 1. Application uses vulnerable SnakeYAML version (prior to 2.0, specifically 1.30-1.33)
+;      (has-dependency-on-snakeyaml ?Application ?SnakeYAML)
+;      (and (>= (version ?SnakeYAML) 1030000) (< (version ?SnakeYAML) 2000000)) ; versions 1.30+ to < 2.0
+;      
+;      ; 2. Java version vulnerable to JNDI injection (≤ 8u190 or ≤ 11.0.0)
+;      (implementated-by-java ?Application ?Java)
+;      (or 
+;        (and (>= (version ?Java) 8000000) (<= (version ?Java) 8000190))
+;        (and (>= (version ?Java) 11000000) (<= (version ?Java) 11000000))
+;      )
+;      
+;      ; 3. Application accepts external YAML content from untrusted sources
+;      (has-external-yaml-endpoint ?Application ?Endpoint)
+;      (accepts-untrusted-yaml-input ?Application)
+;      
+;      ; 4. No input validation on YAML content
+;      (not (has-yaml-input-validation ?Application))
+;      
+;      ; 5. Uses default Constructor() instead of SafeConstructor
+;      (uses-default-constructor ?Application)
+;      (not (uses-safe-constructor ?Application))
+;      
+;      ; 6. No type restrictions during deserialization
+;      (not (has-yaml-type-restrictions ?Application))
+;      
+;      ; 7. Sufficient privileges for code execution
+;      (has-sufficient-code-execution-privilege ?Application)
+;      
+;      ; 8. No security controls preventing dangerous class instantiation
+;      (not (has-dangerous-class-instantiation-prevention ?Application))
+;      
+;      ; 9. No sandbox restrictions
+;      (not (has-sandbox-restrictions ?Application))
+;      
+;      ; 10. Network connectivity for exfiltration
+;      (network-connectivity-available ?Application)
+;    )
+;    :effect (and (exposed-attack-surface ?Application CVE_2022_1471)
+;                 (exploit-by CVE_2022_1471 craft-malicious-java-class )
+;                 (exploit-by CVE_2022_1471 yaml-deserialization)
+;                 (exploit-by CVE_2022_1471 jndi-injection)
+;                 (increase (total-cost) 2)))
+;;@end vulnerability expose@;;
+
+;;@start vulnerability expose@;;
+(:action application-exposes-attack-surfaces-to-attackers-CVE-2025-24813
+    :parameters (?Application - application ?Tomcat - tomcat ?DefaultServlet - default-servlet 
+                 ?SensitiveFile - sensitive-file ?PublicDir - public-directory ?SensitiveDir - sensitive-directory)
+    :precondition (and 
+        ;; 1. Application runs vulnerable Apache Tomcat versions
+        (has-tomcat ?Application ?Tomcat)
+        (or 
+            ;; 11.0.0-M1 through 11.0.2 (versions 11000000001 to 11000002000)
+            (and (>= (version ?Tomcat) 11000000001) (<= (version ?Tomcat) 11000002000))
+            ;; 10.1.0-M1 through 10.1.34 (versions 10001000001 to 10001034000)
+            (and (>= (version ?Tomcat) 10001000001) (<= (version ?Tomcat) 10001034000))
+            ;; 9.0.0.M1 through 9.0.98 (versions 9000000001 to 9000098000)
+            (and (>= (version ?Tomcat) 9000000001) (<= (version ?Tomcat) 9000098000))
+        )
+
+        ;; 2. Tomcat Server's Default servlet has write permissions enabled - writes enabled for the default servlet (disabled by default)
+        (tomcat-has-default-servlet ?Application ?DefaultServlet)
+        (tomcat-default-servlet-write-enabled ?Application ?DefaultServlet)
+
+        ;; 3. Partial PUT request support is enabled (enabled by default) - support for partial PUT (enabled by default) 
+        (partial-put-request-enabled ?Application)
+
+        ;; 4. Attacker has knowledge of public upload directories
+        (has-public-directory ?Application ?PublicDir)
+        (public-directory-exposed ?Application ?PublicDir)
+
+        ;; distinguished preconditions for information disclosure and elevation of priviledge (RCE)
+        (or 
+          (and ;;for information disclosure
+           ;; 5. Security sensitive directories are sub-directories of public directories - a target URL for security sensitive uploads that was a sub-directory of a target URL for public uploads  
+           (public-directory-has-sensitive-subdirectory ?PublicDir ?SensitiveDir)
+           (located-at ?SensitiveFile ?SensitiveDir)
+           ;; 6. Attacker has knowledge of sensitive filenames - attacker knowledge of the names of security sensitive files being uploaded 
+           (sensitive-filename-exposed ?Application ?SensitiveFile)
+           ;; 7. security sensitive files are uploaded via partial PUT requests - the security sensitive files also being uploaded via partial put
+           (sensitive-file-partial-put-uploaded-enabled ?Application ?SensitiveFile)
+          )
+          (and ;;for code excution
+           ;; 8. For remote code execution: application uses Tomcat's file-based session persistence with default storage location -  application was using Tomcat's file based session persistence with the default storage location 
+           (tomcat-file-based-session-persistence-enabled ?Application ?Tomcat) 
+           (tomcat-default-session-storage-location ?Application ?Tomcat)
+           ;; (a future interface combine deserialization vulnerability) 9. application classpath includes libraries vulnerable to deserialization attacks (e.g., Apache Commons Collections, fastjson);
+          )
+        )
+        ;; 10. HTTP PUT method accessible to unauthenticated users
+        (http-put-method-accessible ?Application)
+        
+        ;; 11. No WAF or security controls blocking malicious PUT requests
+        (not (WAF-malicious-request-block ?Application))
+        (not (security-controls-path-manipulation ?Application))
+        
+        ;; 12. Application processes filenames with internal dots without proper normalization
+        (not (has-proper-path-normalization-for-filename ?Application))
+        (not (has-proper-path-equivalence-validation-for-filename ?Application))
+    )
+    :effect (and 
+        (exposed-attack-surface ?Application CVE_2025_24813)
+        (exploit-by CVE_2025_24813 internal-dot-path-manipulation)
+        (exploit-by CVE_2025_24813 craft-partial-put-request)
+        (exploit-by CVE_2025_24813 craft-malicious-web-shell)
+        (vulnerable-tomcat-default-servlet ?Tomcat ?DefaultServlet) 
+        (increase (total-cost) 2)))
+;@end vulnerability expose@;;
+
+
+;;@start vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-22259 
+;    :parameters (?Application - application ?SpringFramework - spring-framework ?Endpoint - endpoint ?Parser - url-parser)
+;    :precondition (and 
+;
+;      ; 1. Application uses a vulnerable version of Spring Framework
+;      (has-dependency-on-spring-framework ?Application ?SpringFramework)
+;      (or 
+;         ; 5.3.x before 5.3.31 (5003000000 + 31000 = 5003031000)
+;         (and (>= (version ?SpringFramework) 5003000000) (< (version ?SpringFramework) 5003031000))
+;         ; 6.0.x before 6.0.16 (6000000000 + 16000 = 6000016000)
+;         (and (>= (version ?SpringFramework) 6000000000) (< (version ?SpringFramework) 6000016000))
+;         ; 6.1.x before 6.1.13 (6001000000 + 13000 = 6001013000)
+;         (and (>= (version ?SpringFramework) 6001000000) (< (version ?SpringFramework) 6001013000))
+;       )
+;
+;      ;1. Application depends on vulnerable UriComponentsBuilder (e.g., specific versions of Spring Framework) 
+;       (has-dependency-on-vulnerable-paser ?Application ?Parser)
+;
+;       
+;      ;2. Endpoints accept external-controlled URL parameters (e.g., /redirect?url=...)
+;       (has-external-settingable-endpoint ?Application ?Endpoint)
+;
+;      ;3. Application supports HTTP url redirects
+;     (url-redirect-enabled ?Application)
+;
+;      ;4. No strict validation on protocol, path, or port in received URLs
+;      (not (url-endpoint-setting-restriction ?Application ?Endpoint))
+;     ;(not (url-endpoint-protocol-restriction ?Application ?Endpoint))
+;     ;(not (url-endpoint-path-restriction ?Application ?Endpoint))
+;     ;(not (url-endpoint-points-restriction ?Application ?Endpoint))
+;      ;2. Application can access internal or external network resources 
+;      (external-resource-accessable ?Application)
+;      (internal-resource-accessable ?Application)
+;
+;      ;5. Host validation flaws: uses blacklist instead of whitelist; fails to handle URL encoding or special characters (e.g., @, %0d%0a); lacks canonical URL parsing
+;      (vulnerable-host-validation ?Application)
+;      ;(depend-blacklist-host-validation ?Application)
+;      ;(not (canonicalization-parse-url ?Application))
+;      
+;      ;6. no anti-open redirect protections (e.g., Spring Security's RedirectValidator not enabled)
+;      (not (anti-redirect-protection ?Application))
+;
+;     ;7. WAF/IPS does not block malicious redirect attempts
+;    (not (WAF-malicious-request-bloack ?Application))
+;     (not (IPS-malicious-request-bloack ?Application)) )
+;    :effect (and (exposed-attack-surface ?Application CVE_2024_22259)
+;                (exploit-by CVE_2024_22259 crafts-redirect-url)
+;                (exploit-by CVE_2024_22259 crafts-redirect-url-to-phishing-site)
+;                (exploit-by CVE_2024_22259 build-phishingsite)
+;                (increase (total-cost) 21)))
+;;@end vulnerability expose@;; 
+
+
+;;@start vulnerability expose@;;
+(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-22262 
+    :parameters (?Application - application ?SpringFramework - spring-framework ?Endpoint - endpoint ?Parser - url-parser)
+    :precondition (and 
+
+      ; 1. Application uses a vulnerable version of Spring Framework
+      (has-dependency-on-spring-framework ?Application ?SpringFramework)
+      (or 
+         ; 5.3.x before 5.3.31 (5003000000 + 31000 = 5003031000)
+         (and (>= (version ?SpringFramework) 5003000000) (< (version ?SpringFramework) 5003031000))
+         ; 6.0.x before 6.0.16 (6000000000 + 16000 = 6000016000)
+         (and (>= (version ?SpringFramework) 6000000000) (< (version ?SpringFramework) 6000016000))
+         ; 6.1.x before 6.1.13 (6001000000 + 13000 = 6001013000)
+         (and (>= (version ?SpringFramework) 6001000000) (< (version ?SpringFramework) 6001013000))
+       )
+
+      ;1. Application depends on vulnerable UriComponentsBuilder (e.g., specific versions of Spring Framework) 
+       (has-dependency-on-vulnerable-paser ?Application ?Parser)
+
+
+      ;2. Endpoints accept external-controlled URL parameters (e.g., /redirect?url=...)
+       (has-external-settingable-endpoint ?Application ?Endpoint)
+
+      ;3. Application supports HTTP url redirects
+     (url-redirect-enabled ?Application)
+
+      ;4. No strict validation on protocol, path, or port in received URLs
+      (not (url-endpoint-setting-restriction ?Application ?Endpoint))
+     ;(not (url-endpoint-protocol-restriction ?Application ?Endpoint))
+     ;(not (url-endpoint-path-restriction ?Application ?Endpoint))
+     ;(not (url-endpoint-points-restriction ?Application ?Endpoint))
+      ;2. Application can access internal or external network resources 
+      (external-resource-accessable ?Application)
+      (internal-resource-accessable ?Application)
+
+      ;5. Host validation flaws: uses blacklist instead of whitelist; fails to handle URL encoding or special characters (e.g., @, %0d%0a); lacks canonical URL parsing
+      (vulnerable-host-validation ?Application)
+      ;(depend-blacklist-host-validation ?Application)
+      ;(not (canonicalization-parse-url ?Application))
+      
+      ;6. no anti-open redirect protections (e.g., Spring Security's RedirectValidator not enabled)
+      (not (anti-redirect-protection ?Application))
+
+     ;7. WAF/IPS does not block malicious redirect attempts
+    (not (WAF-malicious-request-bloack ?Application))
+     (not (IPS-malicious-request-bloack ?Application)) )
+    :effect (and (exposed-attack-surface ?Application CVE_2024_22262)
+                (exploit-by CVE_2024_22262 crafts-redirect-url)
+                (exploit-by CVE_2024_22262 crafts-redirect-url-to-phishing-site)
+                (exploit-by CVE_2024_22262 build-phishingsite)
+                (increase (total-cost) 21)))
+;@end vulnerability expose@;; 
+
+
+;;@start vulnerability expose@;;
+(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-2976
+    :parameters (?Application - application ?Guava - java-library ?Host - host-os)
+    :precondition (and 
+        ; 1. The application's classpath includes Google Guava version 1.0 through 31.1
+        (has-library ?Application ?Guava)
+        (guava-library ?Guava)
+        (and (>= (version ?Guava) 1000000000) (<= (version ?Guava) 31001000000)) ; version 1.0 to 31.1
+        
+        ; 2. The application's code invokes FileBackedOutputStream(int) or FileBackedOutputStream(int, boolean)
+        (uses-filebackedoutputstream ?Application)
+        
+        ; 3. The invoked FileBackedOutputStream calls File.createTempFile without a controlled parent directory
+        (uses-uncontrolled-createtempfile ?Application)
+        
+        ; 4. The application's runtime java.io.tmpdir is set to a world-writable directory
+        (java-tmpdir-set-to-world-writable ?Application)
+        
+        ; 5. The application's host OS umask and /tmp permissions allow other local users to access files
+        (has-os ?Application ?Host)
+        (world-readable-tempdir-permissions ?Host)
+        (world-writable-tempdir-permissions ?Host)
+        
+        ; 6. The application is not isolated by container or OS sandbox
+        (not (container-isolated ?Application))
+        (not (os-sandbox-isolated ?Application))
+        
+        ; 7. The application does not override temp-file creation to per-user directory
+        (not (uses-per-user-temp-directory ?Application))
+        
+        ; 8. The application's host filesystem has no ACLs or mount options restricting access
+        (not (temp-directory-acl-protected ?Application))
+        (not (temp-directory-mount-restricted ?Application))
+        
+        ; 9. The application's use of File.createTempFile yields default, guessable filenames
+        (uses-predictable-temp-filenames ?Application)
+        
+        ; 10. The application writes sensitive data into FileBackedOutputStream temporary files
+        (writes-sensitive-data-to-temp ?Application)
+    )
+    :effect (and 
+        (exposed-attack-surface ?Application CVE_2023_2976)
+        (exploit-by CVE_2023_2976 temp-file-prediction)
+        (exploit-by CVE_2023_2976 temp-file-access)
+        (vulnerable-java-library ?Guava)
+        (increase (total-cost) 34)))
+;@end vulnerability expose@;; 
+
+;;@start vulnerability expose@;;
+(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38809
+ :parameters (?Application - application ?SpringFramework - spring-framework ?HTTPEndpoint - http-endpoint ?ETagHandler - etag-handler)
+ :precondition (and
+     ;; 1. Application uses vulnerable Spring Framework spring-web module
+     (has-framework ?Application ?SpringFramework)
+     (spring-web-module ?SpringFramework)
+     (or (and (>= (version ?SpringFramework) 6001000000) (<= (version ?SpringFramework) 6001011000))
+         (and (>= (version ?SpringFramework) 6000000000) (<= (version ?SpringFramework) 6000022000))
+         (and (>= (version ?SpringFramework) 5003000000) (<= (version ?SpringFramework) 5003037000))
+         (< (version ?SpringFramework) 5003000000))
+     
+     ;; 2. Application processes ETags from If-Match or If-None-Match headers
+     (has-http-endpoint ?Application ?HTTPEndpoint)
+     (has-etag-handler ?Application ?ETagHandler)
+     (processes-if-match-headers ?Application ?ETagHandler)
+     (processes-if-none-match-headers ?Application ?ETagHandler)
+     
+     ;; 3. ETag parsing logic lacks proper validation
+     (not (has-etag-validation ?Application ?ETagHandler))
+     (not (has-etag-size-limits ?Application ?ETagHandler))
+     (not (has-etag-complexity-limits ?Application ?ETagHandler))
+     
+     ;; 4. Application exposes HTTP endpoints to untrusted users
+     (publicly-accessible ?HTTPEndpoint)
+     (not (has-restrictive-access-controls ?HTTPEndpoint))
+     
+     ;; 5. No size limits on If-Match or If-None-Match headers
+     (not (has-header-size-limits ?Application ?HTTPEndpoint))
+     (not (has-framework-header-limits ?SpringFramework))
+     (not (has-servlet-container-limits ?Application))
+     
+     ;; 6. No rate limiting or request throttling
+     (not (has-http-rate-limiting ?Application ?HTTPEndpoint))
+     (not (has-request-throttling ?Application ?HTTPEndpoint))
+     
+     ;; 7. No custom input validation filters
+     (not (has-input-validation-filters ?Application))
+     (not (has-etag-validation-middleware ?Application))
+     
+     ;; 8. No WAF/IPS protection
+     (not (has-waf-protection ?Application))
+     (not (has-ips-protection ?Application))
+     (not (has-etag-header-detection-rules ?Application))
+     
+     ;; 9. Shared server resources without isolation
+     (has-shared-resources ?Application)
+     (not (has-resource-isolation ?Application))
+     
+     ;; 10. Shared thread pool across endpoints
+     (has-shared-thread-pool ?Application)
+     (not (has-endpoint-isolation ?Application)))
+ :effect (and (exposed-attack-surface ?Application CVE_2024_38809)
+              (vulnerable-etag-parsing ?SpringFramework)
+              (exploit-by CVE_2024_38809 craft-malicious-etag-header)
+              (increase (total-cost) 63)))
+;@end vulnerability expose@;; 
+
+
+;;@start vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-47072
+; :parameters (?Application - application ?XStreamLibrary - java-library ?BinaryDriver - binary-stream-driver ?APIEndpoint - api-endpoint)
+; :precondition (and
+;     ;1. Application uses vulnerable XStream version (1.4.20 or earlier)
+;     (has-library ?Application ?XStreamLibrary)
+;     (xstream-library ?XStreamLibrary)
+;     (<= (version ?XStreamLibrary) 1004020000) ; version <= 1.4.20
+;     
+;     ;2. Application configures XStream to use BinaryStreamDriver
+;     (has-binary-stream-driver ?Application ?BinaryDriver)
+;     (binary-stream-driver ?BinaryDriver)
+;     (xstream-uses-driver ?XStreamLibrary ?BinaryDriver)
+;    
+;     ;3. Application accepts and processes attacker-controlled binary input streams
+;     (has-api-endpoint ?Application ?APIEndpoint)
+;     (accepts-binary-input ?Application ?APIEndpoint)
+;     (processes-untrusted-input ?Application ?APIEndpoint)
+;     
+;     ;4. Application lacks robust input validation or integrity checks
+;     (not (api-endpoint-has-input-validation ?Application ?APIEndpoint))
+;     (not (api-endpoint-has-integrity-checks ?Application ?APIEndpoint))
+;     
+;     ;5. Application does not implement StackOverflowError exception handling
+;     (not (has-stackoverflow-exception-handling ?Application))
+;     
+;     ;6. Application's runtime permits deeply nested structures without safeguards
+;     (not (has-defense-in-depth-safeguards ?Application))
+;     (not (has-recursive-structure-limits ?Application))
+;     
+;     ;7. Application lacks effective JVM stack size restrictions
+;     (not (has-jvm-stack-size-restrictions ?Application))
+;     (not (has-sufficient-stack-limits ?Application))
+;     
+;     ;8. Application lacks limits on input stream size or complexity
+;     (not (has-input-stream-size-limits ?Application))
+;     (not (has-structural-complexity-limits ?Application))
+;     
+;     ;9. Application lacks compensating security mechanisms
+;     (not (has-sandboxing ?Application))
+;     (not (has-deserialization-whitelist ?Application))
+;     (not (has-waf-binary-filtering ?Application)))
+; :effect (and (exposed-attack-surface ?Application CVE_2024_47072)
+;              (vulnerable-xstream-binary-driver ?XStreamLibrary)
+;              (exploit-by CVE_2024_47072 craft-malicious-binary-payload) 
+;              (increase (total-cost) 29)))
+;;@end vulnerability expose@;; 
+
+;;@start vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-33202
+; :parameters (?Application - application
+;              ?BCLibrary - java-library
+;              ?PEMEndpoint - pem-endpoint)
+; :precondition (and
+;    ; 1. vulnerable Bouncy Castle present
+;    (has-library ?Application ?BCLibrary)
+;    (bouncycastle-library ?BCLibrary)
+;    (< (version ?BCLibrary) 1007300000) ; version < 1.73.0
+;
+;    ; 2. application code invokes or forwards to PEMParser
+;    (uses-pemparser ?Application)
+;
+;    ; 3. application exposes interface(s) that accept PEM/ASN.1 input
+;    (has-pem-endpoint ?Application ?PEMEndpoint)
+;    (accepts-pem-input ?Application ?PEMEndpoint)
+;
+;    ; 4. parsing performed in-process on same JVM heap
+;    (parser-in-process ?Application)
+;    (parser-shares-jvm-heap ?Application)
+;
+;    ; 5. no effective pre-validation/ASN.1 structural checks
+;    (not (endpoint-has-content-type-enforcement ?Application ?PEMEndpoint))
+;    (not (endpoint-has-asn1-sanity-checks ?Application ?PEMEndpoint))
+;    (not (endpoint-rejects-suspicious-pem-patterns ?Application ?PEMEndpoint))
+;
+;    ; 6. lacks request/resource controls (file-size, depth, timeouts, per-request caps)
+;    (not (endpoint-has-file-size-limits ?Application ?PEMEndpoint))
+;    (not (endpoint-has-asn1-depth-limits ?Application ?PEMEndpoint))
+;    (not (endpoint-has-parser-timeouts ?Application ?PEMEndpoint))
+;    (not (endpoint-has-per-request-memory-caps ?Application ?PEMEndpoint))
+;
+;    ; 7. endpoints reachable with low/no privileges or insufficient rate-limiting
+;    (endpoint-reachable-to-attackers ?Application ?PEMEndpoint)
+;    (not (endpoint-rate-limited ?Application ?PEMEndpoint))
+;
+;    ; 8. JVM/container runtime lacks heap isolation / cgroup limits
+;    (not (has-cgroup-memory-limit ?Application))
+;    (not (has-pod-memory-limit ?Application))
+;    (single-jvm-hosting-critical-services ?Application)
+;
+;    ; 9. no sandboxing or process isolation for untrusted parsing
+;    (not (parsing-sandboxed ?Application))
+;
+;    ; 10. error handling does not gracefully contain OutOfMemoryError
+;    (not (has-circuit-breaker-for-oom ?Application))
+;    (not (graceful-degradation-on-oom ?Application))
+;
+;    ; 11. no upstream protections (WAF / upload policies / scanners)
+;    (not (has-waf-protection ?Application))
+;    (not (has-upload-policy-scanner ?Application ?PEMEndpoint)) )
+; :effect (and
+;    (exposed-attack-surface ?Application CVE_2023_33202)
+;    (vulnerable-bouncycastle ?BCLibrary)
+;    (vulnerable-pemparser-in-process ?Application)
+;    (exploit-by CVE_2023_33202 craft-malicious-pem-payload)
+;    (exploit-by CVE_2023_33202 craft-malicious-pem-file)
+;    (exploit-needs-user-account CVE_2023_33202)
+;    (increase (total-cost) 60)))
+;;@end vulnerability expose@;; 
+
+;;@start vulnerability expose@;;
+(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-46589
+ :parameters (?Application - application ?Tomcat - tomcat ?ReverseProxy - reverse-proxy ?Endpoint - http-endpoint)
+ :precondition (and
+     ; 1. Application runs on vulnerable Apache Tomcat versions
+     (has-tomcat ?Application ?Tomcat)
+     (or (and (>= (version ?Tomcat) 8005000000) (<= (version ?Tomcat) 8005095000))  ; 8.5.0-8.5.95
+         (and (>= (version ?Tomcat) 9000000000) (<= (version ?Tomcat) 9000082000))  ; 9.0.0-M1-9.0.82
+         (and (>= (version ?Tomcat) 10001000000) (<= (version ?Tomcat) 10001015000)) ; 10.1.0-M1-10.1.15
+         (and (>= (version ?Tomcat) 11000000000) (<= (version ?Tomcat) 11000010000))) ; 11.0.0-M1-11.0.0-M10
+     
+     ; 2. Application is deployed behind a reverse proxy/load balancer
+     (has-reverse-proxy ?Application ?ReverseProxy)
+     (forwards-requests ?ReverseProxy ?Tomcat)
+     
+     ; 3. Application accepts HTTP/1.1 requests with Transfer-Encoding: chunked
+     (accepts-chunked-encoding ?Application)
+     (permits-trailer-headers ?ReverseProxy)
+     
+     ; 4. Mismatched parsing between reverse proxy and Tomcat
+     (mismatched-parsing ?ReverseProxy ?Tomcat)
+     (mismatched-trailer-handling ?ReverseProxy ?Tomcat)
+     (mismatched-header-limits ?ReverseProxy ?Tomcat)
+     
+     ; 5. Reverse proxy forwards trailer header bytes without normalization
+     (not (normalizes-trailer-headers ?ReverseProxy))
+     (not (rejects-oversized-trailers ?ReverseProxy))
+     (not (truncates-oversized-trailers ?ReverseProxy))
+     
+     ; 6. Backend connection allows reuse/keep-alive/pipelining
+     (allows-connection-reuse ?ReverseProxy ?Tomcat)
+     (allows-keep-alive ?ReverseProxy ?Tomcat)
+     (allows-pipelining ?ReverseProxy ?Tomcat)
+     
+     ; 7. Application exposes target endpoints reachable by attacker
+     (has-http-endpoint ?Application ?Endpoint)
+     (publicly-accessible ?Endpoint)
+     
+     ; 8. Endpoints do not enforce strict per-request authentication
+     (not (strict-per-request-auth ?Endpoint))
+     
+     ; 9. Application lacks request smuggling detection mechanisms
+     (not (has-waf-smuggling-detection ?Application))
+     (not (has-ips-oversized-trailer-rules ?Application))
+     (not (rejects-malformed-trailers ?ReverseProxy))
+     (not (has-request-canonicalization ?Application)))
+  :effect (and (exposed-attack-surface ?Application CVE_2023_46589)
+          (vulnerable-tomcat ?Tomcat)
+          (exploit-by CVE_2023_46589 http-request-smuggling)
+          (increase (total-cost) 28)))
+;@end vulnerability expose@;;
+
+;;;#################################### Infrastructure vulnerability exposure action ####################################;;;
+;; DNS infrastructure exposes attack surface
+(:action dns-infrastructure-exposes-attack-surfaces-to-attackers
+ :parameters (?DNSServer - dns-server)
+ :precondition (and
+     ;1. DNS server lacks DNSSEC validation capability or has DNSSEC disabled
+     (not (dnssec-enabled ?DNSServer))
+     
+     ;2. DNS server uses predictable source port assignments
+     (dns-predictable-source-ports ?DNSServer)
+     
+     ;3. DNS server runs outdated software versions with known vulnerabilities
+     (outdated-dns-software ?DNSServer)
+     
+     ;4. DNS server is positioned within attacker's network reach
+     (dns-attacker-network-reach ?DNSServer)
+     
+     ;5. DNS server lacks DNS-over-HTTPS (DoH) or DNS-over-TLS (DoT) encryption
+     (not (dns-doh-enabled ?DNSServer))
+     (not (dns-dot-enabled ?DNSServer))
+     
+     ;6. DNS server has insufficient rate limiting and behavioral analysis protections
+     (dns-insufficient-rate-limiting ?DNSServer)
+     
+     ;7. DNS server uses predictable transaction ID generation algorithms
+     (dns-predictable-transaction-ids ?DNSServer))
+     
+  :effect (and (vulnerable-dns-infrastructure ?DNSServer)
+                (increase (total-cost) 21) ))
+
+;;;#################################### Other application, attacker, user, infrastructure actions ####################################;;;
+  (:action attacker-crafts-malicious-logback
+    :parameters (?BenignFile - logback-config ?MaliciousFile - logback-config ?Application - application ?CVEID - cve-identifier)
+    :precondition (and (legitimate-file ?BenignFile) 
+                       (exposed-attack-surface ?Application ?CVEID)
+                       (exploit-by ?CVEID change-to-malicious-logback-config))
+    :effect (and (malicious-file ?MaliciousFile)
+                 (has-janino-evaluator ?MaliciousFile) 
+                 (contains-arbitrary-code ?MaliciousFile)
+                 (increase (total-cost) 1)))
+   
+  (:action attacker-sends-malicious-file-via-commonication-channel 
+    :parameters (?Application - application ?MaliciousFile - file ?MaliciousMessage - message ?Comchannel - comchannel ?CVEID - cve-identifier)
+    :precondition (and (malicious-file ?MaliciousFile)
+                       (exposed-attack-surface ?Application ?CVEID)
+                       ; (has-janino-evaluator ?MaliciousFile)
+                       ; (contains-arbitrary-code ?MaliciousFile)
+                      )
+    :effect (and (com-channel-msg ?Comchannel ?MaliciousMessage) 
+                 (malicious-msg ?MaliciousMessage)
+                 (message-has-file ?MaliciousMessage ?MaliciousFile) 
+                 (message-sent ?MaliciousMessage)
+                 (increase (total-cost) 1)))
+
+  (:action user-receives-message
+     :parameters (?User - user ?Message - message ?Comchannel - comchannel)
+     :precondition (and (com-channel-msg ?Comchannel ?Message) 
+                     (message-sent ?Message))
+     :effect (and (message-received ?Message)
+                (msg-reminder ?Message)
+                (increase (total-cost) 1)))
+ 
+  (:action user-starts-commonication-channel 
+    :parameters (?User - user ?Comchannel - comchannel ?Message - message)
+    :precondition (and (com-channel-msg ?Comchannel ?Message) 
+                       (message-received ?Message)
+                       (msg-reminder ?Message))
+    :effect (and (user-use-communication-channel ?User ?Comchannel)
+                 (running-communication-channel ?Comchannel)
+                 (increase (total-cost) 22)))
+
+  (:action user-reads-message
+    :parameters (?User - user ?Comchannel - comchannel ?Message - message)
+    :precondition (and (user-use-communication-channel ?User ?Comchannel) 
+                       (running-communication-channel ?Comchannel)
+                       (com-channel-msg ?Comchannel ?Message) )
+    :effect (and (msg-opened ?Message)
+                 (increase (total-cost) 11)))
+
+
+  (:action user-downloads-malicious-file-in-message
+    :parameters (?User - user ?MaliciousMessage - message ?MaliciousFile - file)
+    :precondition (and (malicious-file ?MaliciousFile)
+                       (malicious-msg ?MaliciousMessage)
+                       ;(com-channel-msg ?Comchannel ?MaliciousMessage)
+                       (message-has-file ?MaliciousMessage ?MaliciousFile) 
+                       (msg-opened ?MaliciousMessage))
+    :effect (and (downloaded ?MaliciousFile)
+                 (increase (total-cost) 171)) ) 
+
+
+  (:action user-navigates-to-config-dir
+    :parameters (?User - user ?Directory - path ?File - file)
+    :precondition (and (has-access ?User ?Directory) 
+                       (downloaded ?File))
+    :effect (and (in-directory ?User ?Directory)
+                (increase (total-cost) 161)))
+
+
+  (:action user-replaces-logback
+    :parameters (?Application - application ?User - user ?MaliciousFile - logback-config ?LegitimateFile - logback-config ?Directory - path ?CVEID - cve-identifier)
+    :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                       (exploit-by ?CVEID change-to-malicious-logback-config)
+                      (malicious-file ?MaliciousFile)
+                      (legitimate-file ?LegitimateFile)
+                      (downloaded ?MaliciousFile)
+                      (in-directory ?User ?Directory)
+                      (has-write-access ?User ?Directory)
+                      (located-at ?LegitimateFile ?Directory))
+    :effect (and (not (located-at ?LegitimateFile ?Directory)) 
+                (located-at ?MaliciousFile ?Directory) 
+                (config-replaced ?MaliciousFile)
+                (increase (total-cost) 1)))
+
+  (:action user-starts-application
+    :parameters (?User - user ?Application - application ?MaliciousFile - file)
+    :precondition (and (config-replaced ?MaliciousFile))
+    :effect (and (running-app ?Application)
+                 (increase (total-cost) 1)))
+
+  (:action application-loads-malicious-config-via-dir
+    :parameters (?Application - application ?MaliciousFile - file ?Directory - path)
+    :precondition (and (running-app ?Application)
+                      (malicious-file ?MaliciousFile)
+                      (has-config-dir ?Application ?Directory)
+                      (located-at ?MaliciousFile ?Directory)
+                      (config-replaced ?MaliciousFile))
+    :effect (and (malicious-config-loaded-via-config-dir ?MaliciousFile ?Directory)
+                  (malicious-config-loaded ?MaliciousFile)
+                  (increase (total-cost) 1)))
+
+
+  (:action application-executes-code
+    :parameters (?Application - application ?MaliciousFile - file)
+    :precondition (and (malicious-file ?MaliciousFile)
+                      (has-janino-evaluator ?MaliciousFile)
+                      (malicious-config-loaded ?MaliciousFile))
+    :effect (and (elevation-of-privilege ?Application)
+                 (increase (total-cost) 1)))
+
+   (:action attacker-hosts-file-on-controlled-server
+    :parameters (?Application - application ?MaliciousFile - file ?ControlledServer - controlled-server ?CVEID - cve-identifier)
+    :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                      (malicious-file ?MaliciousFile)
+                      (has-janino-evaluator ?MaliciousFile) 
+                      (contains-arbitrary-code ?MaliciousFile))
+    :effect (and (file-hosted-on-server ?MaliciousFile ?ControlledServer)
+                  (increase (total-cost) 1)))
+ 
+ (:action attacker-generates-url-to-file
+    :parameters (?Application - application ?MaliciousFileUrl - file-url ?MaliciousFile - file ?ControlledServer - controlled-server ?CVEID - cve-identifier)
+    :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                       (file-hosted-on-server ?MaliciousFile ?ControlledServer))
+    :effect (and (url-points-to-file ?MaliciousFileUrl ?MaliciousFile)
+                 (malicious-url ?MaliciousFileUrl)
+                 (malicious-file-url ?MaliciousFileUrl)
+                  (increase (total-cost) 1)))
+
+ (:action attacker-sends-malicious-file-url-via-communication-channel  ;;this action should be commented out for AP 1.3
+    :parameters (?Application - application ?FileUrl - file-url ?MaliciousMessage - message ?Comchannel - comchannel ?CVEID - cve-identifier)
+    :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                        (malicious-file-url ?FileUrl))
+    :effect (and (com-channel-msg ?Comchannel ?MaliciousMessage) 
+                 (malicious-msg ?MaliciousMessage)
+                (message-has-file-url ?MaliciousMessage ?FileUrl) 
+                (message-sent ?MaliciousMessage)
+                (increase (total-cost) 1)))
+
+ ;; download the file by clicking
+  (:action user-downloads-malicious-file-by-clicking-url-in-message
+    :parameters (?User - user ?MaliciousMessage - message ?MalicousFileUrl - file-url ?MaliciousFile -file)
+    :precondition (and (malicious-msg ?MaliciousMessage)
+                      (malicious-file-url ?MalicousFileUrl)
+                      (malicious-file ?MaliciousFile)
+                      (msg-opened ?MaliciousMessage)
+                      (message-has-file-url ?MaliciousMessage ?MalicousFileUrl) 
+                      (url-points-to-file ?MalicousFileUrl ?MaliciousFile))
+    :effect (and (downloaded ?MaliciousFile)
+                 (file-url-accessed ?MalicousFileUrl)
+                  (increase (total-cost) 171)))
+
+
+
+  (:action attacker-forges-website
+    :parameters (?Application - application ?Website - website ?ControlledServer - controlled-server ?CVEID - cve-identifier)
+    :precondition (and (exposed-attack-surface ?Application CVE_2024_12798)) 
+    :effect (and (website-hosted-on-server ?Website ?ControlledServer)
+               (forged-website ?Website)
+                (increase (total-cost) 1)))
+ 
+  (:action attacker-includes-malicious-file-url-in-website   
+    :parameters (?Application - application ?Website - website ?MaliciousFileUrl - file-url ?MaliciousFile - file ?CVEID - cve-identifier)
+   :precondition (and  (exposed-attack-surface ?Application ?CVEID)
+                       (forged-website ?Website)
+                       (malicious-file-url ?MaliciousFileUrl)
+                       (malicious-file ?MaliciousFile)
+                       (url-points-to-file ?MaliciousFileUrl ?MaliciousFile)) 
+    :effect (and (forged-website-contains-malicious-file-url ?Website ?MaliciousFileUrl)
+                 (forged-website-contains-malicious-url ?Website ?MaliciousFileUrl)
+                  (increase (total-cost) 1)))
+
+
+(:action attacker-generates-forged-website-url
+  :parameters (?Application - application ?WebsiteUrl - website-url ?Website - website ?ControlledServer - controlled-server ?MaliciousUrl -url ?CVEID - cve-identifier) 
+  :precondition (and  (exposed-attack-surface ?Application ?CVEID)
+                     (forged-website ?Website)
+                     (malicious-url ?MaliciousUrl)
+                     (website-hosted-on-server ?Website ?ControlledServer)
+                     (forged-website-contains-malicious-url ?Website ?MaliciousUrl)) 
+  :effect (and (url-points-to-forged-website ?WebsiteUrl ?Website)
+               (malicious-url ?WebsiteUrl)
+               (malicious-website-url ?WebsiteUrl)
+                (increase (total-cost) 1)))
+
+
+ (:action attacker-sends-forged-website-url-via-communication-channel 
+    :parameters (?Application - application ?WebsiteUrl - website-url ?MaliciousMessage - message ?Comchannel - comchannel ?CVEID - cve-identifier)
+    :precondition (and  (exposed-attack-surface ?Application ?CVEID)
+                        (malicious-website-url ?WebsiteUrl))
+    :effect (and (com-channel-msg ?Comchannel ?MaliciousMessage) 
+                 (malicious-msg ?MaliciousMessage)
+                (message-has-website-url ?MaliciousMessage ?WebsiteUrl) 
+                (message-sent ?MaliciousMessage)
+                (increase (total-cost) 1)))
+
+ (:action user-clicks-mailicious-website-url-in-message
+    :parameters (?User - user ?Comchannel - comchannel ?MaliciousMessage - message  ?MaliciousWebsiteUrl - website-url)
+    :precondition (and (malicious-msg ?MaliciousMessage) 
+                      (malicious-website-url ?MaliciousWebsiteUrl)
+                      (user-use-communication-channel ?User ?Comchannel) 
+                      (com-channel-msg ?Comchannel ?MaliciousMessage) 
+                      (message-has-website-url ?MaliciousMessage ?MaliciousWebsiteUrl) 
+                      (msg-opened ?MaliciousMessage))
+    :effect (and (website-url-accessed ?MaliciousWebsiteUrl)
+                 (increase (total-cost) 171)))
+
+(:action user-visits-forged-website
+  :parameters (?User - user ?WebsiteUrl  - website-url ?ForgedWebsite - website)
+  :precondition (and (malicious-website-url ?WebsiteUrl)
+                     (forged-website ?ForgedWebsite)
+                     (url-points-to-forged-website ?WebsiteUrl ?ForgedWebsite)
+                     (website-url-accessed ?WebsiteUrl))
+  :effect (and (forged-website-visited-by-user ?ForgedWebsite ?User)
+               (increase (total-cost) 1)))
+
+(:action user-downloads-malicious-file-by-clicking-url-in-forged-website
+  :parameters (?User - user ?ForgedWebsite - website ?MaliciousFileUrl - file-url ?MaliciousFile - file)
+  :precondition (and (forged-website ?ForgedWebsite)          
+                     (malicious-file-url ?MaliciousFileUrl)
+                     (malicious-file ?MaliciousFile)
+                     (forged-website-visited-by-user ?ForgedWebsite ?User)
+                     (forged-website-contains-malicious-file-url ?ForgedWebsite ?MaliciousFileUrl)
+                     (url-points-to-file ?MaliciousFileUrl ?MaliciousFile))
+  :effect (and (file-url-accessed ?MaliciousFileUrl)
+          (downloaded ?MaliciousFile)
+           (increase (total-cost) 171)))
+
+(:action attacker-creates-malicious-script-tampering-env-var-as-malicious-url
+  :parameters (?Application - application ?MaliciousScript - script ?EnvVar - env-var ?MaliciousFileUrl - file-url ?CVEID - cve-identifier)
+  :precondition (and  (exposed-attack-surface ?Application ?CVEID)
+                      (exploit-by ?CVEID change-to-malicious-logback-config)
+                     (env-var-logback-set-script ?MaliciousScript)
+                     (malicious-file-url ?MaliciousFileUrl) )
+  :effect (and (malicious-script ?MaliciousScript)
+               (malicious-script-sets-env-var ?MaliciousScript ?EnvVar ?MaliciousFileUrl)
+                (increase (total-cost) 1)))
+
+(:action attacker-sends-malicious-script-via-communication-channel       
+    :parameters (?Application - application ?MaliciousScript - script ?MaliciousMessage - message ?Comchannel - comchannel ?CVEID - cve-identifier)
+    :precondition (and   (exposed-attack-surface ?Application ?CVEID)
+                      (env-var-logback-set-script ?MaliciousScript)
+                      (malicious-script ?MaliciousScript))
+    :effect (and (com-channel-msg ?Comchannel ?MaliciousMessage)
+        (malicious-msg ?MaliciousMessage)
+        (message-has-malicious-script ?MaliciousMessage ?MaliciousScript)
+        (message-sent ?MaliciousMessage)
+        (increase (total-cost) 1)))
+
+(:action user-opens-malicious-script-attachment-in-message
+    :parameters (?Application - application ?User - user ?MaliciousMessage - message ?MaliciousScript - script ?Comchannel - comchannel)
+    :precondition (and 
+        (not (script-execution-prompt-enabled ?Application))
+        (malicious-msg ?MaliciousMessage)
+        (env-var-logback-set-script ?MaliciousScript)
+        (malicious-script ?MaliciousScript)
+        (com-channel-msg ?Comchannel ?MaliciousMessage)
+        (message-has-malicious-script ?MaliciousMessage ?MaliciousScript)
+        (msg-opened ?MaliciousMessage) ; Requires email to be opened first (from user-reads-email)
+    )
+    :effect (and (malicious-script-installed  ?MaliciousScript)
+               (increase (total-cost) 171)))
+
+(:action application-sets-env-var-via-malicious-script
+    :parameters (?Application - application ?MaliciousScript - script ?EnvVar - env-var ?MaliciousFileUrl - file-url ?MaliciousFile - file ?CVEID - cve-identifier)
+    :precondition (and (env-var-logback-set-script ?MaliciousScript)
+        (exposed-attack-surface ?Application ?CVEID)
+        (malicious-script ?MaliciousScript)
+        (malicious-file ?MaliciousFile)
+        (malicious-file-url ?MaliciousFileUrl)
+        (malicious-script-installed ?MaliciousScript)
+        (malicious-script-sets-env-var ?MaliciousScript ?EnvVar ?MaliciousFileUrl)
+        (url-points-to-file ?MaliciousFileUrl ?MaliciousFile)   )
+    :effect (and (env-var-set-by-malicious-url ?EnvVar ?MaliciousFileUrl)
+            (config-replaced ?MaliciousFile)
+             (increase (total-cost) 1)))
+
+(:action user-downloads-malicious-script-in-message
+    :parameters (?Application - application ?User - user ?MaliciousMessage - message ?MaliciousScript - script)
+    :precondition (and (script-execution-prompt-enabled ?Application)
+         (malicious-msg ?MaliciousMessage)
+        (env-var-logback-set-script ?MaliciousScript)
+        (malicious-script ?MaliciousScript)
+        (message-has-malicious-script ?MaliciousMessage ?MaliciousScript)       
+        (msg-opened ?MaliciousMessage))
+    :effect (and (malicious-script-downloaded ?MaliciousScript)
+                 (increase (total-cost) 171)) )
+
+;; ===The way of activating mal-script's execution==
+(:action user-double-click-download-script
+ :parameters (?Application - application ?User - user ?MaliciousScript - script)
+    :precondition (and  (script-execution-prompt-enabled ?Application)
+                       (env-var-logback-set-script ?MaliciousScript)
+                       (malicious-script ?MaliciousScript)
+                       (malicious-script-downloaded ?MaliciousScript))
+    :effect (and (malicious-script-execution-activated ?MaliciousScript)
+                 (increase (total-cost) 1)))
+
+
+(:action application-prompt-malicious-script-execution
+    :parameters (?Application - application ?MaliciousScript - script)
+    :precondition (and   (script-execution-prompt-enabled ?Application)
+                       (env-var-logback-set-script ?MaliciousScript)
+                       (malicious-script ?MaliciousScript)
+                       (malicious-script-execution-activated ?MaliciousScript))
+    :effect (and (malicious-script-execution-warning-active ?MaliciousScript)
+                  (increase (total-cost) 1)))
+
+(:action user-confirm-malicious-script-execution
+    :parameters (?Application - application ?User -user ?MaliciousScript - script)
+    :precondition (and  (script-execution-prompt-enabled ?Application)
+        (env-var-logback-set-script ?MaliciousScript)
+        (malicious-script ?MaliciousScript)
+        (malicious-script-downloaded ?MaliciousScript)
+        (malicious-script-execution-warning-active ?MaliciousScript))
+    :effect (and (malicious-script-execution-confirmed ?MaliciousScript)
+                  (increase (total-cost) 1)))
+
+(:action application-sets-env-var-via-malicious-script
+    :parameters (?Application - application ?MaliciousScript - script ?EnvVar - env-var ?MaliciousFileUrl - file-url ?MaliciousFile - file ?CVEID - cve-identifier)
+    :precondition (and  (exposed-attack-surface ?Application ?CVEID)
+        (env-var-logback-set-script ?MaliciousScript)
+        (malicious-script ?MaliciousScript)
+        (malicious-file ?MaliciousFile)
+        (malicious-file-url ?MaliciousFileUrl)
+        (malicious-script-execution-confirmed ?MaliciousScript)
+        (malicious-script-sets-env-var ?MaliciousScript ?EnvVar ?MaliciousFileUrl)
+        (url-points-to-file ?MaliciousFileUrl ?MaliciousFile) )
+    :effect (and (env-var-set-by-malicious-url ?EnvVar ?MaliciousFileUrl)
+            (config-replaced ?MaliciousFile)
+             (increase (total-cost) 1)))
+
+
+(:action application-loads-malicious-config-via-env-var
+    :parameters (?Application - application ?EnvVar - env-var ?MaliciousFileUrl - file-url ?MaliciousFile - file ?CVEID - cve-identifier)
+    :precondition (and 
+        (exposed-attack-surface ?Application ?CVEID)
+        (running-app ?Application)      
+        (malicious-file ?MaliciousFile)
+        (malicious-file-url ?MaliciousFileUrl)
+        (env-var-set-by-malicious-url ?EnvVar ?MaliciousFileUrl)
+        (url-points-to-file ?MaliciousFileUrl ?MaliciousFile)
+        (has-janino-evaluator ?MaliciousFile)
+        (contains-arbitrary-code ?MaliciousFile)
+    )
+    :effect (and (malicious-config-loaded-via-env-var ?MaliciousFile ?EnvVar)
+                (malicious-config-loaded ?MaliciousFile)
+                 (increase (total-cost) 1)) )
+
+
+(:action attacker-hosts-malicious-script-on-controlled-server
+  :parameters (?Application - application ?MaliciousScript - script ?ControlledServer - controlled-server ?CVEID - cve-identifier)
+  :precondition (and  (exposed-attack-surface ?Application ?CVEID)
+                      (env-var-logback-set-script ?MaliciousScript)
+                     (malicious-script ?MaliciousScript))
+  :effect (and (malicious-script-hosted-on-server ?MaliciousScript ?ControlledServer)
+               (increase (total-cost) 1)))
+
+(:action attacker-generates-download-url-to-script
+  :parameters (?Application - application ?MalScriptUrl - script-url ?MaliciousScript - script ?ControlledServer - controlled-server ?CVEID - cve-identifier)
+  :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                     (env-var-logback-set-script ?MaliciousScript)
+                     (malicious-script ?MaliciousScript)
+                     (malicious-script-hosted-on-server ?MaliciousScript ?ControlledServer))
+  :effect (and (url-points-to-script ?MalScriptUrl ?MaliciousScript)
+               (malicious-url ?MalScriptUrl)
+               (malicious-script-url ?MalScriptUrl)
+                (increase (total-cost) 1)))
+
+
+(:action attacker-sends-malicious-script-url-via-commuication-channel   
+  :parameters (?Application - application ?MaliciousMessage - message ?MalScriptUrl - script-url ?Comchannel - comchannel ?CVEID - cve-identifier)
+  :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                (malicious-script-url ?MalScriptUrl))
+  :effect (and (com-channel-msg ?Comchannel ?MaliciousMessage)
+               (malicious-msg ?MaliciousMessage)
+               (message-has-malicious-script-url ?MaliciousMessage ?MalScriptUrl)
+               (message-sent ?MaliciousMessage)
+                (increase (total-cost) 1)))
+
+;; download the script by clicking
+(:action user-downloads-malicious-script-by-clicking-url-in-message
+  :parameters (?User - user ?MaliciousMessage - message ?MalScriptUrl - script-url ?MaliciousScript - script)
+  :precondition (and (malicious-msg ?MaliciousMessage)          
+                     (malicious-script-url ?MalScriptUrl)
+                     (env-var-logback-set-script ?MaliciousScript)
+                     (malicious-script ?MaliciousScript)
+                     (message-has-malicious-script-url ?MaliciousMessage ?MalScriptUrl)
+                     (msg-opened ?MaliciousMessage)
+                     (url-points-to-script ?MalScriptUrl ?MaliciousScript))
+  :effect (and (malicious-script-downloaded ?MaliciousScript)
+           (script-url-accessed ?MalScriptUrl)
+             (increase (total-cost) 171)))
+ 
+  (:action attacker-includes-malicious-script-url-in-website
+    :parameters ( ?Application - application ?Website - website ?MaliciousScriptUrl - Script-url ?MaliciousScript - script ?CVEID - cve-identifier)
+    :precondition (and  (exposed-attack-surface ?Application ?CVEID)
+                       (forged-website ?Website)     
+                       (malicious-script-url ?MaliciousScriptUrl)
+                       (env-var-logback-set-script ?MaliciousScript)
+                       (malicious-script ?MaliciousScript)
+                       (url-points-to-script ?MaliciousScriptUrl ?MaliciousScript)) 
+    :effect (and (forged-website-contains-malicious-script-url ?Website ?MaliciousScriptUrl)
+                (forged-website-contains-malicious-url ?Website ?MaliciousScriptUrl)
+                  (increase (total-cost) 1)))
+
+(:action user-downloads-malicious-script-by-clicking-url-in-forged-website
+  :parameters (?User - user ?ForgedWebsite - website ?MaliciousScriptUrl - script-url ?MaliciousScript - script)
+  :precondition (and (forged-website ?ForgedWebsite)
+                     (malicious-script-url ?MaliciousScriptUrl)
+                     (env-var-logback-set-script ?MaliciousScript)
+                     (malicious-script ?MaliciousScript)
+                     (forged-website-visited-by-user ?ForgedWebsite ?User)
+                     (forged-website-contains-malicious-script-url ?ForgedWebsite ?MaliciousScriptUrl)
+                     (url-points-to-script ?MaliciousScriptUrl ?MaliciousScript))
+  :effect (and (script-url-accessed ?MaliciousScriptUrl)
+          (malicious-script-downloaded ?MaliciousScript)
+            (increase (total-cost) 171)))
+
+
+(:action attacker-crafts-tls-flood-script
+  :parameters (?Application - application ?MaliciousFloodScript - script ?Tomcat - tomcat ?CVEID - cve-identifier)
+  :precondition (and  (exploit-by ?CVEID abuse-tls-handshake)
+                     (tls-flood-script ?MaliciousFloodScript)
+                     (exposed-attack-surface ?Application ?CVEID))      
+  :effect (and (malicious-script ?MaliciousFloodScript)
+               (malicious-tls-flood-script ?MaliciousFloodScript)
+                 (increase (total-cost) 1)))
+
+(:action attacker-initiates-tls-flood 
+  :parameters (?Application - application ?MaliciousFloodScript - script ?Tomcat - tomcat ?TLSConnector - tls-connector ?CVEID - cve-identifier)
+  :precondition (and  (tls-flood-script ?MaliciousFloodScript)
+                     (malicious-script ?MaliciousFloodScript)
+                     (malicious-tls-flood-script ?MaliciousFloodScript)
+                     (exploit-by ?CVEID abuse-tls-handshake)
+                     (exposed-attack-surface ?Application ?CVEID))
+  :effect (and (tls-flood-active ?MaliciousFloodScript)
+           (tls-handshake-request-sent ?MaliciousFloodScript)
+           (increase (total-cost) 1)))
+
+
+(:action application-keeps-allocate-resources-for-handshakes
+  :parameters (?Tomcat - tomcat ?TLSConnector - tls-connector ?MaliciousFloodScript - script)
+  :precondition (and  (tls-flood-script ?MaliciousFloodScript)
+                     (malicious-script ?MaliciousFloodScript)
+                     (malicious-tls-flood-script ?MaliciousFloodScript)
+                     (tls-flood-active ?MaliciousFloodScript) 
+                     (tls-handshake-request-sent ?MaliciousFloodScript)
+                     (vulnerable-tomcat ?Tomcat))
+  :effect (and (tls-handshake-request-received ?MaliciousFloodScript)
+          (much-memory-allocated ?Tomcat)
+          (increase (total-cost) 1)))
+
+(:action application-triggers-outofmemory-error
+  :parameters (?Tomcat - tomcat ?Application - application)
+  :precondition (and  (much-memory-allocated ?Tomcat))
+  :effect (and (memory-exhausted ?Application)
+               (resource-exhausted ?Application)
+               (out-of-memory-error ?Application)
+                 (increase (total-cost) 1)))
+
+(:action application-tomcat-crashes
+  :parameters (?Application - application ?Tomcat - tomcat)
+  :precondition ( and(memory-exhausted ?Application)
+                     (much-memory-allocated ?Tomcat))
+  :effect (and (denial-of-service ?Application)
+              (increase (total-cost) 1))) 
+
+(:action attacker-crafts-initial-tls-handshake-script
+  :parameters (?Application - application ?MalTLSReScript - script ?Tomcat - tomcat ?CVEID - cve-identifier)
+  :precondition (and (exploit-by ?CVEID abuse-tls-handshake)
+             (exposed-attack-surface  ?Application ?CVEID )
+             (tls-initial-handshake-request-script ?MalTLSReScript))
+  :effect (and (malicious-script ?MalTLSReScript)
+               (malicious-initial-tls-handshake-script ?MalTLSReScript)
+                 (increase (total-cost) 1)))
+
+(:action attacker-initial-tls-handshake
+ :parameters (?Application - application ?MalTLSReScript - script ?CVEID - cve-identifier)
+ :precondition (and (exploit-by ?CVEID abuse-tls-handshake)
+                (exposed-attack-surface  ?Application ?CVEID ) 
+                    (malicious-initial-tls-handshake-script ?MalTLSReScript))
+ :effect (and (tls-handshake-request-sent ?MalTLSReScript)
+              (increase (total-cost) 1)))
+
+(:action application-allocates-initial-memory-for-tls-handshake-upon-request-receiving
+  :parameters (?Tomcat - tomcat ?TLSConnector - tls-connector ?MalTLSReScript - script)
+  :precondition (and  (tls-initial-handshake-request-script ?MalTLSReScript)
+                     (malicious-script ?MalTLSReScript)
+                     (malicious-initial-tls-handshake-script ?MalTLSReScript)
+                     (tls-handshake-request-sent ?MalTLSReScript))
+  :effect (and  (tls-handshake-request-received ?MalTLSReScript)
+                (one-time-memory-allocated ?Tomcat)
+                (increase (total-cost) 1)))
+
+(:action attacker-completes-initial-tls-handshake  
+  :parameters (?MalTLSReScript - script ?Tomcat - tomcat ?TLSConnector - tls-connector )
+  :precondition (and (tls-initial-handshake-request-script ?MalTLSReScript)
+                     (malicious-script ?MalTLSReScript)
+                     (malicious-initial-tls-handshake-script ?MalTLSReScript)
+                     (tls-handshake-request-received ?MalTLSReScript)
+                     (one-time-memory-allocated ?Tomcat))
+  :effect (and (initial-tls-handshake-completed ?Tomcat)
+                 (increase (total-cost) 1)))
+
+(:action attacker-crafts-tls-renegotiation-script-to-exploit
+  :parameters (?Application - application ?MalRenegoScript - script ?Tomcat - tomcat  ?CVEID - cve-identifier)
+  :precondition (and  (exploit-by ?CVEID abuse-tls-handshake)
+                   (exposed-attack-surface  ?Application ?CVEID)
+                 (tls-renegotiation-script ?MalRenegoScript)
+                      (initial-tls-handshake-completed ?Tomcat))
+  :effect (and (malicious-script ?MalRenegoScript)
+               (malicious-tls-renegotiation-script ?MalRenegoScript)
+                 (increase (total-cost) 1)))
+
+(:action attacker-sends-tls-renegotiation-flood-to-exploit  
+  :parameters (?Application - application ?MalRenegoScript - script ?Tomcat - tomcat  ?TLSConnector - tls-connector ?CVEID - cve-identifier)
+  :precondition (and (exploit-by ?CVEID abuse-tls-handshake)
+                     (exposed-attack-surface  ?Application ?CVEID)
+                     (tls-renegotiation-script ?MalRenegoScript)
+                     (malicious-script ?MalRenegoScript)
+                     (malicious-tls-renegotiation-script ?MalRenegoScript)
+                     (initial-tls-handshake-completed ?Tomcat))
+  :effect (and (tls-renegotiation-flood-active ?MalRenegoScript)
+                (increase (total-cost) 1)))
+
+(:action application-keeps-allocate-renegotiation-memory  
+  :parameters (?Tomcat - tomcat ?TLSConnector - tls-connector ?MalRenegoScript - script)
+  :precondition (and 
+                     (tls-renegotiation-script ?MalRenegoScript)
+                     (malicious-script ?MalRenegoScript)
+                     (tls-renegotiation-flood-active ?MalRenegoScript) 
+                     (one-time-memory-allocated ?Tomcat))  ; Requires initial allocation
+  :effect (and (much-memory-allocated ?Tomcat)
+               (increase (total-cost) 1)) )
+
+
+(:action attacker-forge-phishing-website-minic-legitimate-app
+    :parameters (?Application - application ?PhishingSite - website  ?ControlledServer - controlled-server ?CVEID - cve-identifier)
+    :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                   (exploit-by ?CVEID build-phishingsite) )
+    :effect (and  (forged-website ?PhishingSite)
+                 (website-hosted-on-server ?PhishingSite ?ControlledServer)
+                 (website-mimics-legitimate-app ?PhishingSite ?Application)
+                   (increase (total-cost) 1)))
+
+
+(:action attacker-generates-phishing-website-url
+    :parameters (?Application - application ?PhishingSite - website ?ControlledServer - controlled-server ?PhishingURL - phishing-url ?CVEID - cve-identifier)
+    :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                       (exploit-by ?CVEID build-phishingsite)
+                       (forged-website ?PhishingSite)
+                       (website-hosted-on-server ?PhishingSite ?ControlledServer))
+    :effect (and (phishing-url-points-to-forge-website ?PhishingURL ?PhishingSite)
+            (malicious-url ?PhishingURL)
+            (malicious-phishing-site-url ?PhishingURL)
+              (increase (total-cost) 1)))
+
+
+(:action attacker-crafts-malicious-redirect-url-point-to-phishingsite 
+    :parameters (?Application - application ?MaliciousURL - redirect-url ?PhishingURL - phishing-url ?PhishingSite - website ?Payload - payload-string ?CVEID - cve-identifier)
+    :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                       (exploit-by ?CVEID build-phishingsite)
+                       (exploit-by ?CVEID crafts-redirect-url-to-phishing-site)
+                       (phishing-url-points-to-forge-website ?PhishingURL ?PhishingSite)
+                       (forged-website ?PhishingSite))
+    :effect (and (malicious-redirect-url ?MaliciousURL)
+                 (malicious-url ?MaliciousURL)
+                 (URL-contains-payload ?MaliciousURL ?Payload)
+                 (payload-has-validation-bypass-capability ?Payload)
+                 (redirects-to-phishing-URL ?MaliciousURL ?PhishingURL)
+                 (vulnerable-redirect-URL-created ?MaliciousURL)
+                   (increase (total-cost) 1)))
+
+
+(:action attacker-sends-malicious-redirect-url-via-communication-channel
+    :parameters (?MaliciousURL - redirect-url ?Message - message ?Channel - comchannel ?Payload - payload-string ?CVEID - cve-identifier)
+    :precondition (and (exploit-by ?CVEID crafts-redirect-url)
+                     (malicious-redirect-url ?MaliciousURL)
+                      (URL-contains-payload ?MaliciousURL ?Payload))
+    :effect (and (com-channel-msg ?Channel ?Message)
+                 (malicious-msg ?Message)
+                 (message-has-redirect-url ?Message ?MaliciousURL)
+                 (message-sent ?Message)
+                   (increase (total-cost) 1)))
+  
+
+(:action user-clicks-malicious-redirect-url-in-message 
+    :parameters (?User - user ?Browser - browser ?Comchannel - comchannel ?MaliciousMessage - message ?RedirectUrl - redirect-url ?PhishingURL - phishing-url)
+    :precondition (and 
+                  (malicious-msg ?MaliciousMessage) 
+                  (malicious-redirect-url ?RedirectUrl)
+                  (user-use-communication-channel ?User ?Comchannel) 
+                  (com-channel-msg ?Comchannel ?MaliciousMessage) 
+                  (message-has-redirect-url ?MaliciousMessage ?RedirectUrl) 
+                  (msg-opened ?MaliciousMessage)
+                  (redirects-to-phishing-URL ?RedirectUrl ?PhishingURL)
+                  (is-default-browser ?Browser))
+    :effect (and (redirect-url-clicked ?RedirectUrl) 
+                 (malicious-url-clicked ?RedirectUrl)
+                 (http-request-triggered ?RedirectUrl)
+                 (running-browser ?Browser)
+                 (user-use-browser ?User ?Browser) 
+                   (increase (total-cost) 171))) 
+
+
+(:action attacker-publishes-redirect-url-social-media
+    :parameters (?RedirectURL - redirect-url ?PhishingURL - phishing-url ?SocialMedia - social-media ?Payload - payload-string ?CVEID - cve-identifier) 
+    :precondition (and (exploit-by ?CVEID crafts-redirect-url)
+                        (malicious-url ?RedirectURL)
+                       (URL-contains-payload ?RedirectURL ?Payload) 
+                       (redirects-to-phishing-URL ?RedirectURL ?PhishingURL))
+    :effect (and (redirect-url-published-on-social-media ?RedirectURL ?SocialMedia)
+                 (redirect-url-visible ?RedirectURL ?SocialMedia)
+                 (malicious-url-published-on-social-media ?RedirectURL ?SocialMedia)
+                 (malicious-url-visible ?RedirectURL ?SocialMedia)
+                 (increase (total-cost) 1)))
+
+(:action user-scrolls-social-media
+    :parameters (?User - user ?SocialMedia - social-media ?MaliciousURL - url)
+    :precondition (and (malicious-url-published-on-social-media ?MaliciousURL ?SocialMedia)
+                       (malicious-url-visible ?MaliciousURL ?SocialMedia))
+    :effect (and (running-social-media ?SocialMedia)
+                 (user-scrolling-social-media ?User ?SocialMedia)
+                 (increase (total-cost) 22)))
+
+(:action user-notices-malicious-url
+    :parameters (?User - user ?SocialMedia - social-media ?MaliciousURL - url)
+    :precondition (and (malicious-url ?MaliciousURL)
+                       (running-social-media ?SocialMedia)
+                       (user-scrolling-social-media ?User ?SocialMedia)
+                       (malicious-url-visible ?MaliciousURL ?SocialMedia))
+    :effect (and (malicious-url-noticed ?MaliciousURL ?User)
+             (increase (total-cost) 365)))
+
+(:action user-clicks-malicious-url-in-social-media
+    :parameters (?User - user ?MaliciousURL - url  ?SocialMedia - platform ?Browser - browser)
+    :precondition (and  (malicious-url ?MaliciousURL)
+                        (malicious-url-published-on-social-media ?MaliciousURL ?SocialMedia)
+                        (malicious-url-noticed ?MaliciousURL ?User)
+                        (is-default-browser ?Browser) )
+    :effect (and (malicious-url-clicked ?MaliciousURL)
+                 (http-request-triggered ?MaliciousURL)
+                 (running-browser ?Browser)
+                 (user-use-browser ?User ?Browser) 
+                   (increase (total-cost) 171) )) 
+
+(:action user-browser-sends-http-get-request-to-application
+    :parameters (?User - user ?HttpGetRequest - http-get-request ?RedirectUrl - redirect-url ?Browser - browser)
+    :precondition (and (malicious-url-clicked ?RedirectUrl) 
+                        (user-use-browser ?User ?Browser)
+                         (running-browser ?Browser))
+    :effect (and (http-get-request-sent ?HttpGetRequest)
+                 (HTTP-request-includes-redirect-url ?RedirectUrl)
+                 (increase (total-cost) 1) ))
+                  
+
+(:action application-processes-http-get-request-by-parser
+    :parameters (?HttpGetRequest - http-get-request ?RedirectUrl - redirect-url ?Application - application ?Parser - url-parser)
+    :precondition (and (http-get-request-received ?HttpGetRequest ?Application)
+                       (HTTP-request-includes-redirect-url ?RedirectUrl)
+                       (or  (exposed-attack-surface ?Application CVE_2024_22243)
+                            (exposed-attack-surface ?Application CVE_2024_22259)
+                             (exposed-attack-surface ?Application CVE_2024_22262))
+                       (has-dependency-on-vulnerable-paser ?Application ?Parser))
+    :effect (and (running-Parser ?Parser)
+                (increase (total-cost) 1)))
+
+(:action application-vulnerably-validates-host-in-URL
+    :parameters (?Application - application ?RedirectUrl - redirect-url ?Parser - url-parser)
+    :precondition (and (running-Parser ?Parser)
+                       (or  (exposed-attack-surface ?Application CVE_2024_22243)
+                            (exposed-attack-surface ?Application CVE_2024_22259)
+                             (exposed-attack-surface ?Application CVE_2024_22262))
+                       )
+    :effect (and (URL-host-validation-passed ?RedirectUrl)
+                   (increase (total-cost) 1)))
+
+(:action application-server-sends-302-redirect-to-user-browser
+    :parameters (?HttpGetRequest - http-get-request ?RedirectUrl - redirect-url ?PhishingUrl - phishing-url ?PhishingSite - website ?ControlledServer - controlled-server )
+    :precondition (and 
+                  (http-get-request-sent ?HttpGetRequest)
+                  (HTTP-request-includes-redirect-url ?RedirectUrl)
+                  (URL-host-validation-passed ?RedirectUrl)
+                  (redirects-to-phishing-URL ?RedirectUrl ?PhishingUrl)
+                  (phishing-url-points-to-forge-website ?PhishingUrl ?PhishingSite)
+                  (website-hosted-on-server ?PhishingSite ?ControlledServer))
+    :effect (and 
+            (redirect-response-sent ?PhishingUrl)
+              (increase (total-cost) 1))) 
+
+(:action user-browser-follows-redirect
+    :parameters (?User - user ?Browser - browser ?PhishingURL - phishing-url)
+    :precondition (and (user-use-browser ?User ?Browser)
+                   (redirect-response-sent ?PhishingURL))
+    :effect (and (request-sent-to-phishing ?PhishingURL)
+                   (increase (total-cost) 1)))
+
+(:action attacker-serves-mimic-website
+    :parameters (?PhishingURL - phishing-url ?Phishingsite - website  ?ControlledServer - controlled-server ?CVEID - cve-identifier)
+    :precondition (and (request-sent-to-phishing ?PhishingURL)
+                       (website-hosted-on-server ?PhishingSite ?ControlledServer)
+                       (exploit-by ?CVEID build-phishingsite))
+    :effect (and (mimic-response-sent ?PhishingURL)
+                 (increase (total-cost) 1)))
+
+(:action user-visits-phishing-site
+    :parameters (?User - user ?PhishingURL - phishing-url ?Phishingsite - website)
+    :precondition (and (mimic-response-sent ?PhishingURL)
+                       (phishing-url-points-to-forge-website ?PhishingURL ?Phishingsite) )
+    :effect (and (user-viewing-phishing-website ?User ?Phishingsite)
+                   (increase (total-cost) 1)))
+
+(:action user-enters-credentials
+    :parameters (?User - user ?Credentials - credential ?Phishingsite - website ?Application - application)
+    :precondition (and (user-viewing-phishing-website ?User ?Phishingsite)
+                       (user-has-valid-credentials-application ?User ?Credentials ?Application))
+    :effect (and (credentials-entered-to-phishingsite ?Credentials ?PhishingSite)
+                  (increase (total-cost) 530)))
+
+(:action attacker-phishing-website-submits-user-credentials
+    :parameters (?Credentials - credential ?PhishingSite - website ?ControlledServer - controlled-server ?CVEID - cve-identifier)
+    :precondition (and (credentials-entered-to-phishingsite ?Credentials ?PhishingSite)
+                   (website-hosted-on-server ?PhishingSite ?ControlledServer)
+                   (exploit-by ?CVEID build-phishingsite ))
+    :effect (and (credentials-submitted-on-phishingsite ?Credentials ?PhishingSite)
+                  (increase (total-cost) 1) ))
+
+(:action attacker-intercepts-credentials-of-target-application
+    :parameters (?Application - application ?Credentials - credential ?PhishingSite - website ?ControlledServer - controlled-server)
+    :precondition (and (credentials-submitted-on-phishingsite ?Credentials ?PhishingSite)
+                      (website-hosted-on-server ?PhishingSite ?ControlledServer))
+    :effect (and (information-obtained ?Credentials)
+                  (information-disclosure ?Application)
+                  (increase (total-cost) 1)))
+
+(:action attacker-uses-user-credentials-login-target-application 
+    :parameters (?User - user ?Credentials - credential ?TargetApp - application)
+    :precondition (and (user-has-valid-credentials-application ?User ?Credentials ?TargetApp)
+                       (information-obtained ?Credentials))
+    :effect (and (spoofing ?TargetApp)
+                   (increase (total-cost) 1)))   
+
+(:action attacker-crafts-malicious-redirect-url-point-to-internal-resource 
+    :parameters (?MaliciousURL - redirect-url ?Payload - payload-string 
+                  ?InternalResourceAddress - internal-address ?Application - application ?CVEID - cve-identifier)
+    :precondition (and 
+        (exposed-attack-surface ?Application ?CVEID)
+        (exploit-by ?CVEID crafts-redirect-url))
+    :effect (and 
+        (malicious-redirect-url ?MaliciousURL)
+        (malicious-url ?MaliciousURL)
+        (URL-contains-payload ?MaliciousURL ?Payload)
+        (payload-has-validation-bypass-capability ?Payload)
+        (redirects-to-internal-resource ?MaliciousURL ?InternalResourceAddress)
+        (vulnerable-redirect-URL-created ?MaliciousURL)
+          (increase (total-cost) 1)))
+
+(:action attacker-clicks-malicious-url-includes-internal-resources-request-pyload
+   :parameters (?Browser - browser ?MaliciousURL - redirect-url ?InternalResourceAddress - internal-address)
+   :precondition (and (malicious-redirect-url ?MaliciousURL)
+                      (redirects-to-internal-resource ?MaliciousURL ?InternalResourceAddress)
+                      (is-default-browser ?Browser))
+   :effect (and (malicious-url-clicked ?MaliciousURL)
+                (malicious-redirect-url-clicked ?MaliciousURL)
+                (running-browser ?Browser)
+                  (increase (total-cost) 1)))
+
+
+(:action attacker-browser-sends-malicious-http-get-request-for-internal-resources
+    :parameters (?Browser - browser ?HttpGetRequest - http-get-request ?MaliciousURL - redirect-url ?InternalResourceAddress - internal-address )
+    :precondition (and 
+        (running-browser ?Browser)
+        (malicious-redirect-url ?MaliciousURL)
+        (malicious-redirect-url-clicked ?MaliciousURL)
+        (redirects-to-internal-resource ?MaliciousURL ?InternalResourceAddress))
+    :effect (and (http-get-request-sent ?HttpGetRequest)
+                 (HTTP-request-includes-redirect-url ?MaliciousURL)
+                   (increase (total-cost) 1)))
+
+
+(:action application-server-sends-internal-request
+    :parameters (?RedirectUrl - redirect-url ?InternalResourceAddress - internal-address 
+                  ?Application - application)
+    :precondition (and 
+        (HTTP-request-includes-redirect-url ?RedirectUrl)
+        (redirects-to-internal-resource ?RedirectUrl ?InternalResourceAddress)
+         (or  (exposed-attack-surface ?Application CVE_2024_22243)
+              (exposed-attack-surface ?Application CVE_2024_22259)
+              (exposed-attack-surface ?Application CVE_2024_22262))
+        (URL-host-validation-passed ?RedirectUrl))
+    :effect (and (internal-request-sent ?InternalResourceAddress)
+                 (increase (total-cost) 1)))
+
+(:action application-internal-server-responds-sensitive-information
+    :parameters (?InternalResourceAddress - internal-address ?Data - sensitive-information ?Application - application)
+    :precondition (and (internal-request-sent ?InternalResourceAddress)
+                       (data-saved-in-internal-address ?Data ?InternalResourceAddress))
+    :effect (and  (sensitive-information-located-internal-address ?Data ?InternalResourceAddress)
+                  (sensitive-data-prepared-by-application ?Application ?Data)
+                    (increase (total-cost) 1)))
+
+(:action attacker-registers-account-on-target-application
+    :parameters (?Account - account ?Application - application ?SessionCookie - session-cookie ?CVEID - cve-identifier)
+    :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                       (exploit-by ?CVEID acquire-user-account)) 
+    :effect (and (account-registered ?Account ?Application)
+                 (attacker-has-account ?Account)
+                 (session-cookie-obtained ?SessionCookie ?Account)
+                 (account-has-normal-privileges ?Account)
+                  (increase (total-cost) 1)))
+
+
+(:action attacker-crafts-malicious-url-with-locale-bypass
+    :parameters (?LocaleBypassURL - locale-bypass-url ?Application - application ?LocaleBypassParam - locale-bypass-parameter ?Account - account ?CVEID - cve-identifier)
+    :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                       (exploit-by ?CVEID bypass-locale-specific-capitalization)
+                       (has-locale-specific-exceptions ?Application)
+                       (has-vulnerable-locale-transformation ?Application)
+                       (attacker-has-account ?Account)
+                       (account-has-normal-privileges ?Account))
+    :effect (and (malicious-locale-bypass-url ?LocaleBypassURL)
+                 (malicious-url ?LocaleBypassURL)
+                 (url-contains-locale-bypass-parameter ?LocaleBypassURL ?LocaleBypassParam)
+                 (parameter-uses-non-standard-capitalization ?LocaleBypassParam)
+                 (parameter-targets-admin-field ?LocaleBypassParam)
+                 (bypass-parameter-created ?LocaleBypassParam)
+                   (increase (total-cost) 1)))
+
+
+(:action attacker-clicks-malicious-url-includes-locale-bypass-pyload
+    :parameters (?Browser - browser ?LocaleBypassURL - locale-bypass-url ?LocaleBypassParam - locale-bypass-parameter)
+    :precondition (and (malicious-locale-bypass-url ?LocaleBypassURL)
+                       (url-contains-locale-bypass-parameter ?LocaleBypassURL ?LocaleBypassParam)
+                       (is-default-browser ?Browser))
+    :effect (and (malicious-url-clicked ?LocaleBypassURL)
+                 (http-get-request-triggered ?LocaleBypassURL)
+                 (running-browser ?Browser)
+                   (increase (total-cost) 1)))
+
+(:action attacker-browser-sends-malicious-http-get-request-with-locale-bypass-pyload
+    :parameters (?HttpGetRequest - http-get-request ?MaliciousURL - locale-bypass-url ?Browser - browser ?LocaleBypassParam - locale-bypass-parameter)
+    :precondition (and (malicious-url-clicked ?MaliciousURL)
+                       (http-get-request-triggered ?MaliciousURL)
+                       (running-browser ?Browser)
+                       (url-contains-locale-bypass-parameter ?MaliciousURL ?LocaleBypassParam))
+    :effect (and (http-get-request-sent ?HttpGetRequest)
+                 (request-contains-locale-bypass-param ?MaliciousURL ?LocaleBypassParam)
+                   (increase (total-cost) 1)))
+
+(:action application-server-invokes-databinder-with-locale-transformation
+    :parameters (?Application - application ?HttpGetRequest - http-get-request ?MaliciousURL - locale-bypass-url ?LocaleBypassParam - locale-bypass-parameter ?DataBinder - data-binder ?TransformedParam - transformed-parameter ?CVEID - cve-identifier)
+    :precondition (and (http-get-request-received ?HttpGetRequest ?Application)
+                       (request-contains-locale-bypass-param ?MaliciousURL ?LocaleBypassParam)
+                       (exposed-attack-surface ?Application ?CVEID)
+                       (exploit-by ?CVEID bypass-locale-specific-capitalization)
+                       (has-vulnerable-databinder ?Application ?DataBinder))
+    :effect (and (databinder-invoked ?DataBinder ?LocaleBypassParam)
+                 (parameter-transformed-to-lowercase ?LocaleBypassParam ?TransformedParam)
+                 (non-standard-lowercase-created ?TransformedParam)
+                   (increase (total-cost) 1)))
+
+(:action application-databinder-fails-to-match-disallowed-fields-pattern
+    :parameters (?Application - application ?DataBinder - data-binder ?LocaleBypassParam - locale-bypass-parameter ?TransformedParam - transformed-parameter ?DisallowedPattern - disallowed-pattern)
+    :precondition (and (databinder-invoked ?DataBinder ?LocaleBypassParam)
+                       (parameter-transformed-to-lowercase ?LocaleBypassParam ?TransformedParam)
+                       (non-standard-lowercase-created ?TransformedParam)
+                       ;(transformed-parameter-name ?TransformedParam)
+                       (has-disallowed-databinder-fields-configuration ?Application))
+    :effect (and (pattern-matching-failed ?TransformedParam ?DisallowedPattern)
+                 (filter-bypassed ?TransformedParam)
+                 (parameter-allowed-to-continue-binding ?TransformedParam)
+                 (validation-bypass-successful ?TransformedParam)
+                   (increase (total-cost) 1)))
+
+(:action application-server-sets-admin-field-for-attacker
+    :parameters (?Application - application ?Account - account ?TransformedParam - transformed-parameter)
+    :precondition (and (parameter-allowed-to-continue-binding ?TransformedParam)
+                       (validation-bypass-successful ?TransformedParam)
+                       (attacker-has-account ?Account)
+                       (account-has-normal-privileges ?Account)
+                       (account-registered ?Account ?Application))
+    :effect (and (admin-field-set-to-true ?Account)
+                 (account-has-admin-privilege ?Account)
+                 (tampering ?Application)
+                 (elevation-of-privilege ?Application)
+                   (increase (total-cost) 1)))
+
+(:action attacker-crafts-http-flood-script
+  :parameters (?Application - application ?MaliciousFloodScript - script ?SpringBoot - spring-boot ?CVEID - cve-identifier)
+  :precondition (and  (http-flood-script ?MaliciousFloodScript)
+                     (exposed-attack-surface  ?Application ?CVEID)
+                      (exploit-by ?CVEID craft-http-flood-script))      
+  :effect (and (malicious-script ?MaliciousFloodScript)
+               (malicious-http-flood-script ?MaliciousFloodScript)
+                 (increase (total-cost) 1)))
+
+(:action attacker-initiates-http-flood
+  :parameters (?Application - application ?MaliciousFloodScript - script ?SpringBoot - spring-boot ?CVEID - cve-identifier)
+  :precondition (and  (http-flood-script ?MaliciousFloodScript)
+                     (malicious-script ?MaliciousFloodScript)
+                     (malicious-http-flood-script ?MaliciousFloodScript)
+                     (exposed-attack-surface  ?Application ?CVEID))
+  :effect (and (http-flood-active ?MaliciousFloodScript)
+           (http-requests-sent ?MaliciousFloodScript)
+             (increase (total-cost) 1)))
+
+(:action application-processes-http-requests-without-limits
+  :parameters (?SpringBoot - spring-boot ?MaliciousFloodScript - script)
+  :precondition (and  (http-flood-script ?MaliciousFloodScript)
+                     (malicious-script ?MaliciousFloodScript)
+                     (malicious-http-flood-script ?MaliciousFloodScript)
+                     (http-flood-active ?MaliciousFloodScript) 
+                     (http-requests-sent ?MaliciousFloodScript) )
+  :effect (and (http-requests-received ?MaliciousFloodScript)
+          (much-memory-allocated ?SpringBoot)
+            (increase (total-cost) 1)))
+
+(:action application-exhausts-server-memory-resources
+  :parameters (?Application - application ?SpringBoot - spring-boot)
+  :precondition (and  (much-memory-allocated ?SpringBoot))
+  :effect (and (memory-exhausted ?Application)
+               (resource-exhausted ?Application)
+               (application-unresponsive ?Application)
+               (denial-of-service ?Application)
+                 (increase (total-cost) 1)))
+
+(:action application-becomes-unresponsive
+  :parameters (?Application - application)
+  :precondition (and (resource-exhausted ?Application))
+  :effect (and (application-unresponsive ?Application)
+               (denial-of-service ?Application)
+                 (increase (total-cost) 1)))  
+                 
+
+(:action attacker-sets-up-malicious-server-with-domain
+ :parameters (?Application - application  ?DNSServer - dns-server ?ControlledServer - controlled-server ?ControlledDomain - controlled-domain ?CVEID - cve-identifier)
+ :precondition (and (exposed-attack-surface ?Application ?CVEID)
+              (exploit-by ?CVEID sets-up-malicious-server)
+              (vulnerable-dns-infrastructure ?DNSServer))
+ :effect (and (malicious-server-setup-with-domain ?ControlledServer ?ControlledDomain)
+              (increase (total-cost) 1)))
+
+(:action attacker-obtains-valid-ssl-certificate-for-server
+ :parameters (?ControlledServer - controlled-server ?SSLCertificate - ssl-certificate ?ControlledDomain -controlled-domain)
+ :precondition (and (malicious-server-setup-with-domain ?ControlledServer ?ControlledDomain) )
+ :effect (and (valid-ssl-certificate ?SSLCertificate ?ControlledDomain)
+         (attacker-has-certificate ?SSLCertificate)
+         (increase (total-cost) 1)))
+
+
+(:action attacker-configures-server-with-certificate
+ :parameters (?ControlledServer - controlled-server ?SSLCertificate - ssl-certificate ?ControlledDomain - controlled-domain)
+ :precondition (and (malicious-server-setup-with-domain ?ControlledServer ?ControlledDomain)
+                   (valid-ssl-certificate ?SSLCertificate ?ControlledDomain)
+                   (attacker-has-certificate ?SSLCertificate))
+ :effect (and (server-configured-with-certificate ?ControlledServer ?SSLCertificate)
+         (malicious-server-ready ?ControlledServer)
+          (increase (total-cost) 1)))
+
+
+(:action attacker-performs-dns-poisoning
+ :parameters (?DNSServer - dns-server ?LegitimateServer - legitimate-server ?ControlledServer - controlled-server ?LegitimateAddress - legitimate-ip-address ?MaliciousAddress - malicious-ip-address ?CVEID - cve-identifier)
+ :precondition (and (exploit-by ?CVEID perform-dns-poisoning)
+                   (vulnerable-dns-infrastructure ?DNSServer)
+                   (legitimate-server-ip-address ?LegitimateServer ?LegitimateAddress)
+                   (malicious-server-ready ?ControlledServer)
+                   ;(attacker-controlled-server ?ControlledServer)
+                   (controlled-server-ip-address ?ControlledServer ?MaliciousAddress))
+ :effect (and (dns-poisoned ?DNSServer ?LegitimateServer ?MaliciousAddress)
+         (forged-dns-records ?DNSServer ?LegitimateServer ?MaliciousAddress)
+           (increase (total-cost) 1)))
+
+(:action user-launches-target-application
+ :parameters (?User - user ?Application - application ?CVEID - cve-identifier ?DNSServer - dns-server ?LegitimateServer - legitimate-server ?MaliciousAddress - malicious-ip-address)
+ :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                  (dns-poisoned ?DNSServer ?LegitimateServer ?MaliciousAddress)
+               (forged-dns-records ?DNSServer ?LegitimateServer ?MaliciousAddress))
+ :effect (and (application-launched ?User ?Application)
+         (user-session-active ?User ?Application)
+           (increase (total-cost) 11)))
+
+(:action user-initiates-connection-to-legitimate-domain
+ :parameters (?User - user ?Application - application ?LegitimateServer - legitimate-server ?LegitimateAddress - legitimate-ip-address)
+ :precondition (and  (application-launched ?User ?Application)
+                   (user-session-active ?User ?Application)
+                   (legitimate-server-ip-address ?LegitimateServer ?LegitimateAddress))
+ :effect (and (connection-initiated ?User ?Application ?LegitimateServer)
+         (connection-request-pending ?Application ?LegitimateServer)
+           (increase (total-cost) 1)))
+
+(:action application-performs-dns-lookup
+ :parameters (?Application - application ?LegitimateServer - legitimate-server ?DNSServer - dns-server)
+ :precondition (and (connection-request-pending ?Application ?LegitimateServer)
+                   (https-connections-trigger-dns-resolution ?Application))
+ :effect (and (dns-lookup-performed ?Application ?LegitimateServer)
+         (dns-query-sent ?Application ?DNSServer ?LegitimateServer)
+           (increase (total-cost) 1)))
+
+(:action poisoned-dns-infrastructure-returns-attacker-server-ip
+ :parameters (?Application - application ?DNSServer - dns-server ?LegitimateServer - legitimate-server ?MaliciousAddress - malicious-ip-address)
+ :precondition (and 
+                   (dns-query-sent ?Application ?DNSServer ?LegitimateServer)
+                   (dns-poisoned ?DNSServer ?LegitimateServer ?MaliciousAddress)
+                   (forged-dns-records ?DNSServer ?LegitimateServer ?MaliciousAddress))
+ :effect (and (dns-response-returned ?DNSServer ?LegitimateServer ?MaliciousAddress)
+         (ip-address-resolved ?LegitimateServer ?MaliciousAddress)
+           (increase (total-cost) 1)))
+
+(:action application-initiates-ssl-handshake-to-attacker-without-hostname
+ :parameters (?Application - application ?ControlledServer - controlled-server ?LegitimateServer - legitimate-server ?MaliciousAddress - malicious-ip-address ?SSLSocket - ssl-socket)
+ :precondition (and   (ip-address-resolved ?LegitimateServer ?MaliciousAddress)
+                   (malicious-server-ready ?ControlledServer)
+                   (controlled-server-ip-address ?ControlledServer ?MaliciousAddress))
+ :effect (and (ssl-socket-created ?Application ?SSLSocket)
+         (connection-request-to-attacker-server ?Application ?ControlledServer)
+          (hostname-parameter-missing ?SSLSocket)
+            (increase (total-cost) 1) ))
+
+(:action attacker-server-presents-ssl-certificate
+ :parameters (?Application - application ?ControlledServer - controlled-server ?SSLCertificate - ssl-certificate ?ControlledDomain - controlled-domain)
+ :precondition (and (connection-request-to-attacker-server ?Application ?ControlledServer)
+                   (server-configured-with-certificate ?ControlledServer ?SSLCertificate)
+                   (valid-ssl-certificate ?SSLCertificate ?ControlledDomain))
+ :effect (and (ssl-certificate-presented ?ControlledServer ?SSLCertificate)
+         (certificate-verification-pending ?SSLCertificate)
+           (increase (total-cost) 1)))
+
+(:action application-bcjsse-performs-incorrect-hostname-verification
+ :parameters (?Application - application ?BCJSSE - bcjsse ?LegitimateServer - legitimate-server ?ControlledServer - controlled-server ?SSLCertificate - ssl-certificate ?SSLSocket - ssl-socket ?MaliciousAddress - malicious-ip-address)
+ :precondition (and (vulnerable-bcjsse ?Application ?BCJSSE)
+                   (ssl-certificate-presented ?ControlledServer ?SSLCertificate)
+                   (certificate-verification-pending ?SSLCertificate)
+                   (hostname-parameter-missing ?SSLSocket)
+                   (ip-address-resolved ?LegitimateServer ?MaliciousAddress))
+ :effect (and (hostname-verification-bypassed ?Application ?BCJSSE)
+         (connection-trusted-incorrectly ?Application)
+         (certificate-validation-passed-incorrectly ?SSLCertificate)
+           (increase (total-cost) 1)))
+
+(:action application-establishes-ssl-connection-to-attacker-server
+ :parameters (?Application - application ?ControlledServer - controlled-server ?LegitimateServer - legitimate-server ?MaliciousAddress - malicious-ip-address ?SSLSocket - ssl-socket)
+ :precondition (and  (connection-trusted-incorrectly ?Application)
+                     (ip-address-resolved ?LegitimateServer ?MaliciousAddress)
+                     (malicious-server-ready ?ControlledServer)
+                     (controlled-server-ip-address ?ControlledServer ?MaliciousAddress))
+ :effect (and (ssl-connection-established ?Application ?ControlledServer)
+             (connected-to-attacker-server ?Application ?ControlledServer) 
+               (increase (total-cost) 1)))
+
+(:action user-inputs-sensitive-information-in-the-webpage
+ :parameters (?User - user ?Application - application ?ControlledServer - controlled-server ?SensitiveData - sensitive-information)
+ :precondition (and (user-session-active ?User ?Application)
+                    (connected-to-attacker-server ?Application ?ControlledServer)
+                   (connection-trusted-incorrectly ?Application))
+ :effect (and (sensitive-information-inputted ?User ?SensitiveData)
+         (data-ready-for-transmission ?Application ?SensitiveData)
+           (increase (total-cost) 530)))
+
+(:action application-transmits-sensitive-information-to-attacker
+ :parameters (?Application - application ?ControlledServer - controlled-server ?SensitiveData - sensitive-information)
+ :precondition (and (connected-to-attacker-server ?Application ?ControlledServer)
+                   (data-ready-for-transmission ?Application ?SensitiveData)
+                   (connection-trusted-incorrectly ?Application))
+ :effect (and (sensitive-information-transmitted ?Application ?SensitiveData)
+         (sensitive-data-sent-to-attacker ?SensitiveData)
+           (increase (total-cost) 1)))
+
+(:action attacker-captures-sensitive-information-of-target-application  
+ :parameters (?Application - application ?SensitiveData - sensitive-information  ?CVEID - cve-identifier)
+ :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                   (sensitive-data-sent-to-attacker ?SensitiveData)
+                   (sensitive-information-transmitted ?Application ?SensitiveData))
+ :effect (and (sensitive-information-captured ?SensitiveData)
+         (information-obtained ?SensitiveData)
+           (information-disclosure ?Application)
+           (increase (total-cost) 1)))
+
+
+(:action attacker-crafts-malicious-json-payload    
+  :parameters (?Application - application ?MaliciousPayload - json-payload ?JettisionLibrary - java-library ?CVEID - cve-identifier)
+  :precondition (and (exposed-attack-surface ?Application ?CVEID)
+               (exploit-by ?CVEID craft-malicious-json-payload))      
+  :effect (and (malicious-payload ?MaliciousPayload)
+               (deeply-nested-json ?MaliciousPayload)
+               (memory-exhaustion-payload ?MaliciousPayload)
+               (increase (total-cost) 1)))
+
+(:action attacker-sends-http-post-request-with-malicious-payload
+  :parameters (?Application - application ?HTTPRequest - http-post-request ?MaliciousPayload - payload ?ReceiveEndpoint - receive-endpoint ?CVEID - cve-identifier)
+  :precondition (and (malicious-payload ?MaliciousPayload)
+                     ;(memory-exhaustion-payload ?MaliciousPayload)
+                     (has-receive-endpoint ?Application ?ReceiveEndpoint)
+                     (exposed-attack-surface ?Application ?CVEID))
+  :effect (and (http-post-request-sent ?HTTPRequest)
+               (malicious-payload-transmitted ?MaliciousPayload)
+                 (increase (total-cost) 1)))
+
+
+(:action application-receives-http-post-request-with-malicious-payload
+  :parameters (?Application - application ?HTTPRequest - http-post-request ?MaliciousPayload - payload ?ReceiveEndpoint - receive-endpoint)
+  :precondition (and (http-post-request-sent ?HTTPRequest)
+                     (malicious-payload-transmitted ?MaliciousPayload)
+                     (has-receive-endpoint ?Application ?ReceiveEndpoint))
+  :effect (and (http-post-request-received ?Application ?HTTPRequest)
+                 (increase (total-cost) 1)))
+
+
+(:action application-extracts-json-payload-from-http-request 
+ :parameters (?Application - application ?HTTPRequest - http-post-request ?MaliciousPayload - json-payload ?APIEndpoint - api-endpoint)
+  :precondition (and  (memory-exhaustion-payload ?MaliciousPayload)
+                      (http-post-request-received ?Application ?HTTPRequest)
+                     (has-api-endpoint ?Application ?APIEndpoint))
+  :effect (and (json-payload-extracted ?Application ?MaliciousPayload)
+                 (increase (total-cost) 1)))
+
+
+(:action application-uses-jettison-json-parser
+  :parameters (?Application - application ?JettisionLibrary - java-library ?MaliciousPayload - json-payload)
+  :precondition (and (json-payload-extracted ?Application ?MaliciousPayload)
+                     (vulnerable-jettison-parser ?JettisionLibrary)
+                     (has-library ?Application ?JettisionLibrary))
+  :effect (and (jettison-parser-invoked ?JettisionLibrary ?MaliciousPayload)
+               (json-parsing-started ?JettisionLibrary)
+                (increase (total-cost) 1)))
+
+
+(:action application-jettison-parser-allocates-heap-memory-for-json-construction   
+  :parameters (?JettisionLibrary - java-library ?MaliciousPayload - json-payload ?Application - application)
+  :precondition (and (jettison-parser-invoked ?JettisionLibrary ?MaliciousPayload)
+                     (json-parsing-started ?JettisionLibrary)
+                     (deeply-nested-json ?MaliciousPayload)
+                     (memory-exhaustion-payload ?MaliciousPayload)
+                     (exposed-attack-surface ?Application CVE_2022_40150))
+  :effect (and (heap-memory-allocated ?JettisionLibrary)
+               (json-object-graph-construction ?JettisionLibrary)
+               (excessive-heap-memory-consumption ?Application)
+                 (increase (total-cost) 1)))
+
+(:action application-triggers-OUTOFMEMORY-error
+  :parameters (?Application - application ?CVEID - cve-identifier)
+  :precondition (and (excessive-heap-memory-consumption ?Application)
+                   (exposed-attack-surface ?Application ?CVEID))
+  :effect (and (heap-memory-exhausted ?Application)
+               ;(garbage-collection-capacity-exceeded ?Application)
+               (out-of-memory-error ?Application)
+               (memory-exhausted ?Application)
+               (resource-exhausted ?Application)
+              (application-unresponsive ?Application)
+               ;(denial-of-service ?Application)
+                 (increase (total-cost) 1)))
+
+(:action attacker-crafts-malicious-xml-payload
+  :parameters (?Application - application ?MaliciousPayload - xml-payload ?JettisionLibrary - java-library ?CVEID - cve-identifier)
+  :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                   (exploit-by ?CVEID craft-malicious-xml-payload))      
+  :effect (and (malicious-payload ?MaliciousPayload)
+               (deeply-nested-xml ?MaliciousPayload)
+               (memory-exhaustion-payload ?MaliciousPayload)
+                 (increase (total-cost) 1)))
+  
+ (:action application-extracts-xml-payload-from-http-request
+ :parameters (?Application - application ?HTTPRequest - http-post-request ?MaliciousPayload - xml-payload ?SOAPEndpoint - soap-endpoint)
+  :precondition (and (http-post-request-received ?Application ?HTTPRequest)
+                     (has-soap-endpoint ?Application ?SOAPEndpoint)
+                     (memory-exhaustion-payload ?MaliciousPayload))
+  :effect (and (xml-payload-extracted ?Application ?MaliciousPayload)
+               (increase (total-cost) 1)))
+
+  (:action application-invokes-jettison-xml-to-json-transformation
+  :parameters (?Application - application ?JettisionLibrary - java-library ?MaliciousPayload - xml-payload ?TransformedPayload - json-payload)
+  :precondition (and (xml-payload-extracted ?Application ?MaliciousPayload)
+                     (vulnerable-jettison-parser ?JettisionLibrary)
+                     (has-library ?Application ?JettisionLibrary)
+                     (deeply-nested-xml ?MaliciousPayload))
+  :effect (and (xml-to-json-transformation-started ?JettisionLibrary ?MaliciousPayload)
+               (json-payload ?TransformedPayload)
+               (deeply-nested-json ?TransformedPayload)
+               (memory-exhaustion-payload ?TransformedPayload)
+               (json-payload-extracted ?Application ?TransformedPayload)
+                 (increase (total-cost) 1)))
+
+(:action application-jettison-parser-allocates-stack-memory-for-json-construction
+  :parameters (?JettisionLibrary - java-library ?MaliciousPayload - json-payload ?Application - application)
+  :precondition (and (jettison-parser-invoked ?JettisionLibrary ?MaliciousPayload)
+                     (json-parsing-started ?JettisionLibrary)
+                     (deeply-nested-json ?MaliciousPayload)
+                     (memory-exhaustion-payload ?MaliciousPayload)
+                     (exposed-attack-surface ?Application CVE_2022_40149))
+  :effect (and (stack-memory-allocated ?JettisionLibrary)
+               (json-object-graph-construction ?JettisionLibrary)
+               (excessive-stack-memory-consumption ?Application)
+              (increase (total-cost) 1)))
+
+(:action application-triggers-STACKOVERFLOW-error
+  :parameters (?Application - application ?CVEID - cve-identifier)
+  :precondition (and (excessive-stack-memory-consumption ?Application)
+                  (exposed-attack-surface ?Application ?CVEID))
+  :effect (and (stack-memory-exhausted ?Application)
+               ;(garbage-collection-capacity-exceeded ?Application)
+               (out-of-memory-error ?Application)
+               (memory-exhausted ?Application)
+               (resource-exhausted ?Application)
+                (increase (total-cost) 1)))
+
+
+(:action attacker-crafts-malicious-serialized-payload
+  :parameters (?Application - application ?MaliciousPayload - serialized-payload ?CVEID - cve-identifier)
+  :precondition (and (exposed-attack-surface ?Application ?CVEID)
+             (exploit-by ?CVEID craft-malicious-serialized-payload))      
+  :effect (and (malicious-payload ?MaliciousPayload)
+               (deserialization-exploit-payload ?MaliciousPayload)
+                 (increase (total-cost) 1)))
+
+
+(:action attacker-establishes-tcp-connection-with-application
+  :parameters (?Application - application ?Server - tcp-server ?TCPConnection - tcp-connection ?TCPEndpoint - tcp-endpoint ?CVEID - cve-identifier)
+  :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                     (has-server ?Application ?Server)
+                     (server-has-tcp-endpoint ?Server ?TCPEndpoint)
+                     (server-listens-on-port ?Server)
+                     (tcp-endpoint-external-access-allowed ?TCPEndpoint))
+  :effect (and (tcp-connection-established ?Server ?TCPConnection)
+               (three-way-handshake-completed ?TCPConnection)
+                 (increase (total-cost) 1)))
+
+
+(:action attacker-sends-malicious-payload-through-tcp
+  :parameters (?TCPConnection - tcp-connection ?Server - tcp-server ?MaliciousPayload - serialized-payload ?ReceiverComponent - receiver-component)
+  :precondition (and (tcp-connection-established ?Server ?TCPConnection)
+                     (three-way-handshake-completed ?TCPConnection)
+                     (malicious-payload ?MaliciousPayload))
+  :effect (and (malicious-payload-transmitted ?MaliciousPayload)
+               (payload-sent-through-tcp ?TCPConnection ?MaliciousPayload)
+                 (increase (total-cost) 1)))
+
+
+(:action application-receives-tcp-connection-and-data
+  :parameters (?Application - application ?ReceiverComponent - receiver-component ?TCPConnection - tcp-connection ?MaliciousPayload - serialized-payload)
+  :precondition (and (payload-sent-through-tcp ?TCPConnection ?MaliciousPayload)
+                     (has-receiver-component ?Application ?ReceiverComponent))
+  :effect (and (tcp-connection-received ?Application ?TCPConnection)
+               (plaintext-data-received ?Application ?MaliciousPayload)
+                 (increase (total-cost) 1)))
+
+
+(:action application-logback-receiver-extracts-serialized-payload
+ :parameters (?Application - application ?ReceiverComponent - logback-receiver ?MaliciousPayload - serialized-payload)
+  :precondition (and (plaintext-data-received ?Application ?MaliciousPayload)
+                     (vulnerable-logback-receiver ?ReceiverComponent)
+                     (has-receiver-component ?Application ?ReceiverComponent))
+  :effect (and (serialized-payload-extracted ?ReceiverComponent ?MaliciousPayload)
+              (increase (total-cost) 1)))
+
+
+(:action application-logback-receiver-deserializes-payload
+  :parameters (?Application - application ?ReceiverComponent - logback-receiver ?MaliciousPayload - serialized-payload)
+  :precondition (and (serialized-payload-extracted ?ReceiverComponent ?MaliciousPayload)
+                     (vulnerable-logback-receiver ?ReceiverComponent)
+                     (deserialization-exploit-payload ?MaliciousPayload))
+  :effect (and (deserialization-started ?ReceiverComponent ?MaliciousPayload)
+               (malicious-deserialization-triggered ?Application)
+                 (increase (total-cost) 1)))
+
+
+(:action application-deserialization-triggers-resource-exhaustion
+  :parameters (?Application - application ?ReceiverComponent - receiver-component ?CVEID - cve-identifier)
+  :precondition (and (malicious-deserialization-triggered ?Application)
+                     (vulnerable-receiver ?ReceiverComponent)
+                     (exposed-attack-surface ?Application ?CVEID))
+  :effect (and (infinite-recursion-triggered ?Application)
+               (stack-overflow-occurred ?Application)
+               (memory-exhausted ?Application)
+               (resource-exhausted ?Application)
+               (application-unresponsive ?Application)
+               (denial-of-service ?Application)
+                 (increase (total-cost) 1)))
+
+
 (:action attacker-establishes-tls-connection-with-application
   :parameters (?Application - application ?TCPserver - tcp-server ?HTTP2Server - http2-server ?TCPConnection - tcp-connection ?TLSConnection - tls-connection ?CVEID - cve-identifier)
-  :precondition (and (tcp-connection-established ?TCPserver ?TCPConnection)
+  :precondition (and (exposed-attack-surface  ?Application ?CVEID)
+                    (tcp-connection-established ?TCPserver ?TCPConnection)
                      (three-way-handshake-completed ?TCPConnection)
-                     (exploit-by-build-server-connection ?CVEID)
                      (has-server ?Application ?HTTP2Server))
   :effect (and (tls-connection-established ?TLSConnection ?HTTP2Server)
                (secure-channel-created ?TLSConnection)
@@ -3398,8 +3755,7 @@
 (:action attacker-establishes-http2-connection-with-application
   :parameters (?Application - application ?Server - http2-server ?HTTP2Connection - http2-connection ?SettingsAckFrame - http2-settings-ack-frame ?CVEID -cve-identifier)
   :precondition (and (http2-settings-ack-frame-received ?SettingsAckFrame)
-                     (has-server ?Application ?Server)
-                     (exploit-by-build-server-connection ?CVEID))
+                     (has-server ?Application ?Server))
   :effect (and (http2-connection-established ?HTTP2Connection ?Server)
                (http2-server-ready-for-stream-creation ?Server)
                  (increase (total-cost) 1)))
@@ -3432,8 +3788,9 @@
 
 
 (:action attacker-sends-rst-stream-frames-immediately
-  :parameters (?Application - application ?Server - http2-server ?StreamBatch - stream-batch ?RstStreamFrames - rst-stream-frame ?ResourcePool - server-resource)
-  :precondition (and (stream-ids-allocated ?Server ?StreamBatch)
+  :parameters (?Application - application ?Server - http2-server ?StreamBatch - stream-batch ?RstStreamFrames - rst-stream-frame ?ResourcePool - server-resource ?CVEID - cve-identifier)
+  :precondition (and (exploit-by ?CVEID reset-http2-streams)
+                     (stream-ids-allocated ?Server ?StreamBatch)
                      (server-resource-consumed ?Server ?ResourcePool)
                      (http2-server-allows-immediate-rst-stream ?Application ?Server))
   :effect (and (rst-stream-frames-sent ?RstStreamFrames ?StreamBatch)
@@ -3477,58 +3834,6 @@
                (resource-exhausted ?Application)
                 (increase (total-cost) 1)))
 
-
-;; reuse the action of "application-becomes-unresponsive" of vulnerability CVE-2023-34055
-
-
- ;#########################################START-Attack Action Defined for CVE-2025-22228 ######################################;
-;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2025-22228
-  :parameters (?Application - application ?SpringSecurity - spring-security ?PasswordEncoder - password-encoder)
-  :precondition (and
-    ; 1. Application uses vulnerable versions of Spring Security
-    (has-dependency-on-spring-security ?Application ?SpringSecurity)
-    (or
-      ; 5.7.0-5.7.15 (5007000000 to 5007015000)
-      (and (>= (version ?SpringSecurity) 5007000000) (<= (version ?SpringSecurity) 5007015000))
-      ; 5.8.0-5.8.17 (5008000000 to 5008017000)
-      (and (>= (version ?SpringSecurity) 5008000000) (<= (version ?SpringSecurity) 5008017000))
-      ; 6.0.0-6.0.15 (6000000000 to 6000015000)
-      (and (>= (version ?SpringSecurity) 6000000000) (<= (version ?SpringSecurity) 6000015000))
-      ; 6.1.0-6.1.13 (6001000000 to 6001013000)
-      (and (>= (version ?SpringSecurity) 6001000000) (<= (version ?SpringSecurity) 6001013000))
-      ; 6.2.0-6.2.9 (6002000000 to 6002009000)
-      (and (>= (version ?SpringSecurity) 6002000000) (<= (version ?SpringSecurity) 6002009000))
-      ; 6.3.0-6.3.7 (6003000000 to 6003007000)
-      (and (>= (version ?SpringSecurity) 6003000000) (<= (version ?SpringSecurity) 6003007000))
-      ; 6.4.0-6.4.3 (6004000000 to 6004003000)
-      (and (>= (version ?SpringSecurity) 6004000000) (<= (version ?SpringSecurity) 6004003000))
-    )
-    ; 2. Authentication mechanism uses BCryptPasswordEncoder for password verification
-    (use-bcrypt-password-encoder ?Application ?PasswordEncoder)
-    ; 3. System allows or accepts user passwords longer than 72 characters
-    (allows-long-passwords ?Application)
-    (not (password-length-validation ?Application))
-    ; 5. No additional authentication factors are required (no MFA/2FA enforcement)
-    (not (multi-fator-auth-enabled ?Application))
-    (not (two-factor-auth-enabled ?Application))
-    ; 6. No password length validation or truncation warnings are implemented
-    (not (password-truncation-warning ?Application))
-    ; 7. No compensating controls
-    (not (account-lockout-policy ?Application))
-    (not (rate-limiting-enabled ?Application))
-    (not (anomaly-detection-enabled ?Application))
-    ; 8. Application does not implement pre-hashing mechanisms
-    (not (pre-hashing-implemented ?Application))
-    (not (sha256-pre-hash-enabled ?Application))
-  )
-  :effect (and (exposed-attack-surface ?Application CVE_2025_22228)
-         (vulnerable-password-validation ?Application)
-         (exploit-by-gain-password CVE_2025_22228)
-        (exploit-by-online-brute-force CVE_2025_22228)
-         (increase (total-cost) 30)))
-;@end vulnerability expose@;;
-
 (:action user-sets-weak-password-longer-than-72-chars
   :parameters (?User - user ?Application - application ?Password - password)
   :precondition (and
@@ -3542,9 +3847,9 @@
      (increase (total-cost) 108)))
 
 (:action application-hashes-and-stores-first-72-chars-only
-  :parameters (?User - user ?Application - application ?Password - password ?PasswordHash - password-hash ?PasswordEncoder - password-encoder)
+  :parameters (?User - user ?Application - application ?Password - password ?PasswordHash - password-hash ?PasswordEncoder - password-encoder ?CVEID - cve-identifier)
   :precondition (and
-    (exposed-attack-surface ?Application CVE_2025_22228)
+    (exposed-attack-surface ?Application ?CVEID)
     (user-password-set ?User ?Password)
     (password-longer-than-72-chars ?Password)
     (use-bcrypt-password-encoder ?Application ?PasswordEncoder))
@@ -3558,7 +3863,7 @@
 (:action attacker-crafts-online-brute-force-script
   :parameters (?Script - script ?Application - application ?PasswordHash - password-hash ?CVEID - cve-identifier)
   :precondition (and
-    (exploit-by-online-brute-force ?CVEID)
+    (exploit-by ?CVEID online-brute-force)
     (online-brute-force-script ?Script)
     (password-hash-saved ?PasswordHash ?Application)
     (stored-hash-only-covers-first-72-chars ?PasswordHash))
@@ -3632,8 +3937,9 @@
     
 
 (:action application-authenticates-attacker-successfully
-  :parameters (?Application - application ?InputPassword - password ?StoredHash - password-hash ?CVEID -cve-identifier )
+  :parameters (?User - user ?Application - application ?InputPassword - password ?StoredHash - password-hash ?CVEID -cve-identifier )
   :precondition (and
+    (user-has-valid-credentials-application ?User ?InputPassword ?Application)
     (hash-comparison-performed ?InputPassword ?StoredHash)
     (hashes-match ?InputPassword ?StoredHash)
     (exposed-attack-surface ?Application ?CVEID))
@@ -3646,71 +3952,12 @@
     (spoofing ?Application)
     (increase (total-cost) 1)))
 
-
-;#########################################START-Attack Action Defined for CVE-2024-38816 ######################################;
-
-;====================================AP1====================================
-;;@start vulnerability expose@;;
-;(:action application-exposes-attack-surface-to-attackers-CVE-2024-38816
-;    :parameters (?Application - application ?SpringFramework - spring-framework 
-;                 ?RouterFunction - router-function ?ResourceHandler - resource-handler
-;                 ?FileSystemResource - filesystem-resource ?CVEID - cve-identifier)
-;    :precondition (and 
-;      ; 1. Application uses vulnerable version of Spring Framework (5.3.0 to 5.3.39, 6.0.0 to 6.0.23, 6.1.0 to 6.1.12)
-;      (has-dependency-on-spring-framework ?Application)
-;      (or 
-;         ; 5.3.0 to 5.3.39 (5003000000 to 5003039000)
-;         (and (>= (version ?SpringFramework) 5003000000) (<= (version ?SpringFramework) 5003039000))
-;         ; 6.0.0 to 6.0.23 (6000000000 to 6000023000)
-;         (and (>= (version ?SpringFramework) 6000000000) (<= (version ?SpringFramework) 6000023000))
-;         ; 6.1.0 to 6.1.12 (6001000000 to 6001012000)
-;         (and (>= (version ?SpringFramework) 6001000000) (<= (version ?SpringFramework) 6001012000))
-;       )
-;      
-;      ; 2. Application uses functional web frameworks WebMvc.fn or WebFlux.fn for serving static resources
-;     (or (uses-WebMvc-web-framework ?Application)
-;         (uses-WebFlux-web-framework ?Application))
-;      
-;      ; 3. Application explicitly configures RouterFunctions to serve static resources
-;      (has-router-function-configured ?Application ?RouterFunction)
-;      (router-function-serves-static-resources ?RouterFunction)
-;      
-;      ; 4. Resource handling configured with FileSystemResource location
-;      (has-filesystem-resource-configured ?Application ?FileSystemResource)
-;      (points-to-filesystem-path ?FileSystemResource)
-;      
-;      ; 5. Application process has read access to sensitive files
-;      (has-filesystem-read-access ?Application)
-;      (sensitive-files-accessible ?Application)
-;      
-;      ; 6. Spring Security HTTP Firewall is NOT enabled
-;      (not (spring-security-http-firewall-enabled ?Application))
-;
-;      
-;      ; 7. NOT running on Tomcat or Jetty (which would block malicious requests)
-;      (not (runs-on-tomcat ?Application))
-;      (not (runs-on-jetty ?Application))
-;      
-;      ; 8. No input validation for URL path parameters
-;      (not (url-path-validation-enabled ?Application))
-;      
-;      ; 9. No WAF rules for path traversal detection
-;      (not (has-WAF-path-traversal-protection ?Application))
-;      
-;      ; 10. File system permissions allow reading outside intended directory
-;      (filesystem-permissions-allow-traversal ?Application))
-;    :effect (and (exposed-attack-surface ?Application CVE_2024_38816)
-;            (exploit-by-craft-path-traversal-url CVE_2024_38816)
-;            (increase (total-cost) 29)))
-;;@end vulnerability expose@;;
-
-
-(:action attacker-crafts-malicious-path-traversal-url   ;; comment for AP 2
+(:action attacker-crafts-malicious-path-traversal-url  
     :parameters (?MaliciousURL - path-traversal-url ?Payload - path-traversal-payload ?SensitiveFile - sensitive-file ?Application - application ?CVEID - cve-identifier)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
         (sensitive-files-accessible ?Application)
-        (exploit-by-craft-path-traversal-url ?CVEID))
+        (exploit-by ?CVEID path-traversal))
     :effect (and 
         (malicious-path-traversal-url ?MaliciousURL)
         (malicious-url ?MaliciousURL)
@@ -3748,12 +3995,12 @@
                  (increase (total-cost) 1)))
 
 (:action application-matches-request-to-resource-handler
-    :parameters (?HttpGetRequest - http-get-request ?TraversalUrl - path-traversal-url ?Payload - payload ?Application - application ?RouterFunction - router-function ?ResourceHandler - resource-handler)
+    :parameters (?HttpGetRequest - http-get-request ?TraversalUrl - path-traversal-url ?Payload - payload ?Application - application ?RouterFunction - router-function ?ResourceHandler - resource-handler ?CVEID - cve-identifier)
     :precondition (and 
         (plaintext-payload ?Payload)
         (http-get-request-received ?HttpGetRequest ?Application)
          (request-contains-path-traversal-payload ?Payload)
-        (exposed-attack-surface ?Application CVE_2024_38816)
+        (exposed-attack-surface ?Application ?CVEID)
         (has-router-function-configured ?Application ?RouterFunction))
     :effect (and (request-matched-to-handler ?TraversalUrl ?ResourceHandler)
                   (increase (total-cost) 1)))
@@ -3808,13 +4055,12 @@
                  (increase (total-cost) 1) ))
 
 
-;====================================AP2====================================
 (:action attacker-crafts-malicious-url-includes-encoded-path-traversal-payload
     :parameters (?MaliciousURL - path-traversal-url ?Payload - path-traversal-payload ?SensitiveFile - sensitive-file ?Application - application ?CVEID - cve-identifier)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
         (sensitive-files-accessible ?Application)
-        (exploit-by-craft-path-traversal-url ?CVEID))
+        (exploit-by ?CVEID path-traversal))
     :effect (and 
         (encoded-payload ?Payload)
         (malicious-path-traversal-url ?MaliciousURL)
@@ -3832,60 +4078,10 @@
            (plaintext-payload ?Payload)
             (increase (total-cost) 1)))
 
-
-;#########################################START-Attack Action Defined for CVE-2022-1471 ######################################;
-;;@start vulnerability expose@;;
-;(:action application-exposes-attack-surfaces-to-attackers-CVE-2022-1471   
-;    :parameters (?Application - application ?SnakeYAML - snakeyaml-library ?Java - software ?Endpoint - yaml-endpoint)
-;    :precondition (and 
-;      ; 1. Application uses vulnerable SnakeYAML version (prior to 2.0, specifically 1.30-1.33)
-;      (has-dependency-on-snakeyaml ?Application ?SnakeYAML)
-;      (and (>= (version ?SnakeYAML) 1030000) (< (version ?SnakeYAML) 2000000)) ; versions 1.30+ to < 2.0
-;      
-;      ; 2. Java version vulnerable to JNDI injection (≤ 8u190 or ≤ 11.0.0)
-;      (implementated-by-java ?Application ?Java)
-;      (or 
-;        (and (>= (version ?Java) 8000000) (<= (version ?Java) 8000190))
-;        (and (>= (version ?Java) 11000000) (<= (version ?Java) 11000000))
-;      )
-;      
-;      ; 3. Application accepts external YAML content from untrusted sources
-;      (has-external-yaml-endpoint ?Application ?Endpoint)
-;      (accepts-untrusted-yaml-input ?Application)
-;      
-;      ; 4. No input validation on YAML content
-;      (not (has-yaml-input-validation ?Application))
-;      
-;      ; 5. Uses default Constructor() instead of SafeConstructor
-;      (uses-default-constructor ?Application)
-;      (not (uses-safe-constructor ?Application))
-;      
-;      ; 6. No type restrictions during deserialization
-;      (not (has-yaml-type-restrictions ?Application))
-;      
-;      ; 7. Sufficient privileges for code execution
-;      (has-sufficient-code-execution-privilege ?Application)
-;      
-;      ; 8. No security controls preventing dangerous class instantiation
-;      (not (has-dangerous-class-instantiation-prevention ?Application))
-;      
-;      ; 9. No sandbox restrictions
-;      (not (has-sandbox-restrictions ?Application))
-;      
-;      ; 10. Network connectivity for exfiltration
-;      (network-connectivity-available ?Application)
-;    )
-;    :effect (and (exposed-attack-surface ?Application CVE_2022_1471)
-;                 (exploit-by-malicious-java-class  CVE_2022_1471)
-;                 (exploit-by-yaml-deserialization CVE_2022_1471)
-;                (exploit-by-jndi-injection CVE_2022_1471)
-;                 (increase (total-cost) 2)))
-;;@end vulnerability expose@;;
-
 (:action attacker-crafts-malicious-java-class
     :parameters (?Application - application ?MaliciousClass - java-class ?CommandLogic - command-execution-logic ?CVEID - cve-identifier)
     :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                       (exploit-by-malicious-java-class ?CVEID)) 
+                       (exploit-by ?CVEID  craft-malicious-java-class)) 
     :effect (and (malicious-java-class ?MaliciousClass)
                  (java-class-contains-command-execution-logic ?MaliciousClass ?CommandLogic)
                   (increase (total-cost) 1)))
@@ -3901,7 +4097,6 @@
 (:action attacker-sets-up-malicious-ldap-rmi-registry
     :parameters (?Application - application ?AttackerServer - controlled-server ?LDAPService - ldap-service ?RMIService - rmi-service ?MaliciousClass - java-class ?CVEID - cve-identifier)
     :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                     (exploit-by-jndi-injection ?CVEID)
                     (class-hosted-on-server ?MaliciousClass ?AttackerServer)
                    (malicious-class-accessible ?MaliciousClass))
     :effect (and (malicious-ldap-service ?LDAPService)
@@ -3913,7 +4108,7 @@
 (:action attacker-generates-jndi-endpoint-with-ldap-or-rmi
     :parameters (?Application - application ?Endpoint - jndi-endpoint ?MaliciousClass - java-class ?LDAPService - ldap-service ?RMIService - rmi-service ?CVEID - cve-identifier)
     :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                     (exploit-by-jndi-injection ?CVEID)
+                     (exploit-by ?CVEID jndi-injection)
                       (malicious-class-accessible ?MaliciousClass)
                        (or (malicious-ldap-service ?LDAPService) (malicious-rmi-service ?RMIService)))
     :effect (and (malicious-jndi-endpoint ?Endpoint)
@@ -3924,7 +4119,7 @@
 (:action attacker-crafts-malicious-yaml-payload
     :parameters (?Application - application ?YAMLPayload - yaml-payload ?GadgetClass - java-gadget-class ?JNDIEndpoint - jndi-endpoint ?MaliciousClass - java-class ?CVEID - cve-identifier)
     :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                       (exploit-by-yaml-deserialization ?CVEID)
+                       (exploit-by ?CVEID yaml-deserialization)
                        (jndi-endpoint-created ?JNDIEndpoint)
                        (malicious-jndi-endpoint ?JNDIEndpoint)
                       (endpoint-to-malicious-class ?JNDIEndpoint ?MaliciousClass))
@@ -3938,7 +4133,6 @@
 (:action attacker-sends-malicious-yaml-via-http-post
     :parameters ( ?HTTPRequest - http-post-request ?Application - application ?YAMLPayload - yaml-payload ?Endpoint - yaml-endpoint ?CVEID - cve-identifier)
     :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                        (exploit-by-yaml-deserialization ?CVEID)
                        (yaml-payload-crafted ?YAMLPayload)
                        (malicious-yaml-payload ?YAMLPayload)
                        (has-external-yaml-endpoint ?Application ?Endpoint))
@@ -3947,10 +4141,6 @@
                  (malicious-yaml-transmitted ?YAMLPayload)
                  (malicious-payload-transmitted ?YAMLPayload)
                   (increase (total-cost) 1)))
-
-
-;; reuse action of "application-receives-http-post-request-with-malicious-payload" of CVE-2022-40150
-
 
 
 (:action application-passes-yaml-to-snakeyaml-loader
@@ -3971,9 +4161,9 @@
                   (increase (total-cost) 1)))
 
 (:action application-instantiates-dangerous-java-gadget-class
-    :parameters (?Application - application ?Constructor - yaml-constructor ?GadgetClass - java-gadget-class ?YAMLPayload - yaml-payload)
+    :parameters (?Application - application ?Constructor - yaml-constructor ?GadgetClass - java-gadget-class ?YAMLPayload - yaml-payload ?CVEID - cve-identifier)
     :precondition (and (running-constructor ?Constructor)
-                       (exposed-attack-surface ?Application CVE_2022_1471)
+                       (exposed-attack-surface ?Application ?CVEID)
                        (yaml-deserialization-started ?YAMLPayload ?Constructor)
                        (payload-contains-java-gadget-chains ?YAMLPayload ?GadgetClass))
     :effect (and (dangerous-gadget-class-instantiated ?GadgetClass)
@@ -3984,7 +4174,6 @@
 (:action application-loads-malicious-class-from-jndi-endpoint
     :parameters ( ?Application - application ?GadgetClass - java-gadget-class ?JNDIEndpoint - jndi-endpoint ?MaliciousClass - java-class ?YAMLPayload - yaml-payload ?CVEID - cve-identifier)
     :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                        (exploit-by-jndi-injection ?CVEID)
                        (gadget-class-active ?GadgetClass)
                        (references-jndi-endpoint ?YAMLPayload ?JNDIEndpoint)
                        (endpoint-to-malicious-class ?JNDIEndpoint ?MaliciousClass))
@@ -4012,79 +4201,11 @@
                  (elevation-of-privilege ?Application)
                   (increase (total-cost) 1)))
 
-;#########################################START-Attack Action Defined for CVE-2025-24813 ######################################;
-;; ================================ AP1 ===========================================
-;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2025-24813
-    :parameters (?Application - application ?Tomcat - tomcat ?DefaultServlet - default-servlet 
-                 ?SensitiveFile - sensitive-file ?PublicDir - public-directory ?SensitiveDir - sensitive-directory)
-    :precondition (and 
-        ;; 1. Application runs vulnerable Apache Tomcat versions
-        (has-tomcat ?Application ?Tomcat)
-        (or 
-            ;; 11.0.0-M1 through 11.0.2 (versions 11000000001 to 11000002000)
-            (and (>= (version ?Tomcat) 11000000001) (<= (version ?Tomcat) 11000002000))
-            ;; 10.1.0-M1 through 10.1.34 (versions 10001000001 to 10001034000)
-            (and (>= (version ?Tomcat) 10001000001) (<= (version ?Tomcat) 10001034000))
-            ;; 9.0.0.M1 through 9.0.98 (versions 9000000001 to 9000098000)
-            (and (>= (version ?Tomcat) 9000000001) (<= (version ?Tomcat) 9000098000))
-        )
-
-        ;; 2. Tomcat Server's Default servlet has write permissions enabled - writes enabled for the default servlet (disabled by default)
-        (tomcat-has-default-servlet ?Application ?DefaultServlet)
-        (tomcat-default-servlet-write-enabled ?Application ?DefaultServlet)
-
-        ;; 3. Partial PUT request support is enabled (enabled by default) - support for partial PUT (enabled by default) 
-        (partial-put-request-enabled ?Application)
-
-        ;; 4. Attacker has knowledge of public upload directories
-        (has-public-directory ?Application ?PublicDir)
-        (public-directory-exposed ?Application ?PublicDir)
-
-        ;; distinguished preconditions for information disclosure and elevation of priviledge (RCE)
-        (or 
-          (and ;;for information disclosure
-           ;; 5. Security sensitive directories are sub-directories of public directories - a target URL for security sensitive uploads that was a sub-directory of a target URL for public uploads  
-           (public-directory-has-sensitive-subdirectory ?PublicDir ?SensitiveDir)
-           (located-at ?SensitiveFile ?SensitiveDir)
-           ;; 6. Attacker has knowledge of sensitive filenames - attacker knowledge of the names of security sensitive files being uploaded 
-           (sensitive-filename-exposed ?Application ?SensitiveFile)
-           ;; 7. security sensitive files are uploaded via partial PUT requests - the security sensitive files also being uploaded via partial put
-           (sensitive-file-partial-put-uploaded-enabled ?Application ?SensitiveFile)
-          )
-          (and ;;for code excution
-           ;; 8. For remote code execution: application uses Tomcat's file-based session persistence with default storage location -  application was using Tomcat's file based session persistence with the default storage location 
-           (tomcat-file-based-session-persistence-enabled ?Application ?Tomcat) 
-           (tomcat-default-session-storage-location ?Application ?Tomcat)
-           ;; (a future interface combine deserialization vulnerability) 9. application classpath includes libraries vulnerable to deserialization attacks (e.g., Apache Commons Collections, fastjson);
-          )
-        )
-        ;; 10. HTTP PUT method accessible to unauthenticated users
-        (http-put-method-accessible ?Application)
-        
-        ;; 11. No WAF or security controls blocking malicious PUT requests
-        (not (WAF-malicious-request-block ?Application))
-        (not (security-controls-path-manipulation ?Application))
-        
-        ;; 12. Application processes filenames with internal dots without proper normalization
-        (not (has-proper-path-normalization-for-filename ?Application))
-        (not (has-proper-path-equivalence-validation-for-filename ?Application))
-    )
-    :effect (and 
-        (exposed-attack-surface ?Application CVE_2025_24813)
-        (exploit-by-internal-dot-path-manipulation CVE_2025_24813)
-        (exploit-by-partial-put-request CVE_2025_24813)
-        (exploit-by-web-shell CVE_2025_24813)
-        (vulnerable-tomcat-default-servlet ?Tomcat ?DefaultServlet) 
-        (increase (total-cost) 2)))
-;@end vulnerability expose@;;
-
-;;; Attacker Action: Craft HTTP GET request with internal dot path manipulation
-(:action attacker-crafts-http-get-request-with-internal-dot-path-manipulation  ;;commented for AP2, AP3 of CVE-2025-24813
+(:action attacker-crafts-http-get-request-with-internal-dot-path-manipulation  
     :parameters (?HTTPGETRequest - http-get-request ?SensitiveFile - sensitive-file ?PublicDir - public-directory ?SensitiveDir - sensitive-directory ?Application - application ?CVEID - cve-identifier)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-internal-dot-path-manipulation ?CVEID)
+        (exploit-by ?CVEID internal-dot-path-manipulation)
         (has-public-directory ?Application ?PublicDir)
         (public-directory-has-sensitive-subdirectory ?PublicDir ?SensitiveDir)
         (located-at ?SensitiveFile ?SensitiveDir)
@@ -4095,8 +4216,7 @@
         (request-targets-sensitive-file ?HTTPGETRequest ?SensitiveFile) 
         (increase (total-cost) 1)))
 
-;;; Attacker Action: Send crafted HTTP GET request to Tomcat server
-(:action attacker-sends-malicious-http-get-request-to-tomcat      ;;commented for AP3 of CVE-2025-24813
+(:action attacker-sends-malicious-http-get-request-to-tomcat     
     :parameters (?HttpGetRequest - http-get-request ?Application - application ?Tomcat - tomcat ?CVEID - cve-identifier)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
@@ -4108,10 +4228,6 @@
         (malicious-request-sent-to-tomcat ?HTTPGETRequest ?Tomcat)
         (increase (total-cost) 1)))
 
-;; reuse action of "application-receives-http-get-request" CVE-2024-38816
-
-
-;;; System Action: Tomcat's DefaultServlet processes request without proper validation
 (:action application-tomcat-default-servlet-processes-request-without-proper-validation
     :parameters (?HTTPRequest - http-request ?Application - application ?DefaultServlet - default-servlet ?Tomcat - tomcat)
     :precondition (and 
@@ -4128,7 +4244,6 @@
         (internal-dot-section-ignored ?HTTPRequest)
         (increase (total-cost) 1)))
 
-;;; System Action: DefaultServlet incorrectly normalizes the path
 (:action application-tomcat-default-servlet-incorrectly-normalizes-path
     :parameters (?HTTPRequest - http-request ?DefaultServlet - default-servlet ?Tomcat - tomcat ?Application - application)
     :precondition (and 
@@ -4142,7 +4257,6 @@
         (increase (total-cost) 1)))
 
 
-;;; System Action: DefaultServlet locates and accesses target sensitive file ; similar to action " application-tomcat-default-servlet-accesses-sensitive-file" of CVE-38816
 (:action application-tomcat-default-servlet-accesses-sensitive-file
     :parameters (?Application - application ?HTTPRequest - http-request ?DefaultServlet - default-servlet ?SensitiveFile - sensitive-file ?SensitiveDir - sensitive-directory ?Data - sensitive-information)
     :precondition (and 
@@ -4158,29 +4272,21 @@
         (increase (total-cost) 1)))
 
 
-;;; System Action: DefaultServlet returns sensitive file content in HTTP response
-;; reuse action "application-server-returns-sensitive-information "of CVE-2024-38816
-;; and " attacker-receives-sensitive-information"of CVE-2024-38816
-
-;; ================================ AP2 ==========================================
-;; Action 1: Attacker creates malicious content to inject
 (:action attacker-creates-malicious-content-for-injection
     :parameters (?Application - application ?MaliciousContent - malicious-content ?SensitiveFile - sensitive-file ?CVEID - cve-identifier)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-internal-dot-path-manipulation ?CVEID)
         (sensitive-filename-exposed ?Application ?SensitiveFile))
     :effect (and 
         (malicious-content-created ?MaliciousContent)
         (content-targets-sensitive-file ?MaliciousContent ?SensitiveFile)
         (increase (total-cost) 1)))
 
-;; Action 2: Attacker crafts partial HTTP PUT request with internal dot path manipulation
 (:action attacker-crafts-http-put-request-with-internal-dot-path-manipulation
-    :parameters (?HTTPPUTRequest - http-put-request ?SensitiveFile - sensitive-file ?PublicDir - public-directory ?SensitiveDir - sensitive-directory ?Application - application ?CVEID - cve-identifier ?MaliciousContent - malicious-content)
+    :parameters (?HTTPPUTRequest - http-put-request ?SensitiveFile - sensitive-file ?PublicDir - public-directory ?SensitiveDir - sensitive-directory ?Application - application ?MaliciousContent - malicious-content ?CVEID - cve-identifier)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-internal-dot-path-manipulation ?CVEID)
+        (exploit-by ?CVEID internal-dot-path-manipulation)
         (has-public-directory ?Application ?PublicDir)
         (public-directory-has-sensitive-subdirectory ?PublicDir ?SensitiveDir)
         (located-at ?SensitiveFile ?SensitiveDir)
@@ -4196,24 +4302,22 @@
         (increase (total-cost) 1)))
 
 
-;; Attacker includes appropriate Content-Range headers for partial PUT
 (:action attacker-includes-content-range-headers-for-partial-put
     :parameters (?HTTPPUTRequest - http-put-request ?ContentRangeHeaders - content-range-headers ?Application - application ?CVEID - cve-identifier)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-partial-put-request ?CVEID)
+        (exploit-by ?CVEID craft-partial-put-request)
         (malicious-http-put-request ?HTTPPUTRequest)
         (request-includes-internal-dot-path-manipulation ?HTTPPUTRequest))
     :effect (and 
         (partial-put-headers-configured ?ContentRangeHeaders)
         (increase (total-cost) 1)))
 
-;; Attacker sends crafted HTTP PUT request with malicious content payload
 (:action attacker-sends-malicious-partial-http-put-request-to-tomcat
     :parameters (?HTTPPUTRequest - http-put-request ?ContentRangeHeaders - content-range-headers ?Application - application ?Tomcat - tomcat ?MaliciousContent - malicious-content ?CVEID - cve-identifier)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-partial-put-request ?CVEID)
+        (exploit-by ?CVEID craft-partial-put-request)
         (has-tomcat ?Application ?Tomcat)
         (partial-put-request-enabled ?Application)
         (malicious-http-put-request ?HTTPPUTRequest)
@@ -4225,7 +4329,6 @@
         (put-request-includes-malicious-content ?HTTPPUTRequest)
         (increase (total-cost) 1)))
 
-;; Application receives HTTP PUT request (generalized from example)
 (:action application-receives-http-put-request
     :parameters (?HTTPPUTRequest - http-put-request ?Application - application)
     :precondition (http-put-request-sent ?HTTPPUTRequest)
@@ -4233,11 +4336,7 @@
                  (http-request-received ?HTTPPUTRequest ?Application)
                  (increase (total-cost) 1)))
 
-;; reuse action "application-tomcat-default-servlet-processes-request-without-proper-validation", 
-;; "application-tomcat-default-servlet-incorrectly-normalizes-path", 
-;; and "application-tomcat-default-servlet-accesses-sensitive-file"
 
-;; DefaultServlet writes malicious content to sensitive file using partial PUT
 (:action application-tomcat-default-servlet-writes-malicious-content-to-sensitive-file
     :parameters (?Application - application ?HTTPPUTRequest - http-put-request ?DefaultServlet - default-servlet ?SensitiveFile - sensitive-file ?MaliciousContent - malicious-content ?CVEID - cve-identifier)
     :precondition (and 
@@ -4254,20 +4353,17 @@
         (tampering ?Application)
         (increase (total-cost) 1)))
 
-;; ======================= AP3 ===============================
-;; Attacker crafts malicious web shell script
 (:action attacker-crafts-malicious-web-shell-script
     :parameters (?Application - application ?WebShellScript - web-shell-script ?CVEID - cve-identifier)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-internal-dot-path-manipulation ?CVEID)
-        (exploit-by-web-shell ?CVEID))
+        (exploit-by ?CVEID craft-malicious-web-shell))
     :effect (and 
         (malicious-web-shell-script ?WebShellScript)
         (web-shell-script-has-command-execution-capability ?WebShellScript)
         (increase (total-cost) 1)))
 
-;; Attacker sets appropriate file extension for server-side execution
+
 (:action attacker-sets-server-side-execution-extension
     :parameters (?WebShellScript - web-shell-script ?FileExtension - file-extension ?Application - application ?CVEID - cve-identifier)
     :precondition (and 
@@ -4279,12 +4375,11 @@
         (server-side-executable ?WebShellScript)
         (increase (total-cost) 1)))
 
-;; Attacker crafts HTTP PUT request with internal dot path manipulation for web shell upload
+
 (:action attacker-crafts-http-put-request-for-web-shell-upload
     :parameters (?HTTPPUTRequest - http-put-request ?WebShellScript - web-shell-script ?PublicDir - public-directory ?SensitiveDir - sensitive-directory ?Application - application ?CVEID - cve-identifier ?FileExtension - file-extension)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-internal-dot-path-manipulation ?CVEID)
         (has-public-directory ?Application ?PublicDir)
         (public-directory-has-sensitive-subdirectory ?PublicDir ?SensitiveDir)
         (malicious-web-shell-script ?WebShellScript)
@@ -4297,7 +4392,7 @@
         (put-request-targets-web-directory ?HTTPPUTRequest ?SensitiveDir)
         (increase (total-cost) 1)))
 
-;; Attacker sends HTTP PUT request containing malicious web shell
+
 (:action attacker-sends-web-shell-upload-via-http-put-request
     :parameters (?HTTPPUTRequest - http-put-request ?Application - application ?Tomcat - tomcat ?WebShellScript - web-shell-script ?CVEID - cve-identifier)
     :precondition (and 
@@ -4311,7 +4406,7 @@
         (http-put-request-sent ?HTTPPUTRequest)
         (increase (total-cost) 1)))
 
-;; DefaultServlet locates and accesses target sensitive directory
+
 (:action application-tomcat-default-servlet-accesses-web-directory
     :parameters (?Application - application ?HTTPPUTRequest - http-put-request ?DefaultServlet - default-servlet ?SensitiveDir - sensitive-directory)
     :precondition (and 
@@ -4323,7 +4418,6 @@
         (web-directory-accessed ?SensitiveDir)
         (increase (total-cost) 1)))
 
-;; DefaultServlet writes malicious web shell file to web application directory
 (:action application-tomcat-default-servlet-writes-web-shell-to-directory
     :parameters (?Application - application ?HTTPPUTRequest - http-put-request ?DefaultServlet - default-servlet ?WebShellScript - web-shell-script ?SensitiveDir - sensitive-directory ?CVEID - cve-identifier)
     :precondition (and 
@@ -4340,12 +4434,11 @@
         (web-shell-script-accessible-via-http ?WebShellScript)
         (increase (total-cost) 1)))
 
-;; Attacker sends HTTP GET request to access uploaded web shell
+
 (:action attacker-sends-http-get-request-to-web-shell
     :parameters (?HTTPGETRequest - http-get-request ?WebShellScript - web-shell-script ?Application - application ?CVEID - cve-identifier)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-internal-dot-path-manipulation ?CVEID)
         (web-shell-script-uploaded-successfully ?WebShellScript)
         (web-shell-script-accessible-via-http ?WebShellScript))
     :effect (and 
@@ -4353,13 +4446,9 @@
         (request-includes-web-shell-script ?HTTPGETRequest)
         (get-request-targets-web-shell-script ?HTTPGETRequest ?WebShellScript)
         (increase (total-cost) 1)))
-
-;; Tomcat server receives HTTP GET request for web shell
-;; reuse action of "application-receives-http-get-request" CVE-2024-38816 
       
-;; Tomcat JSP engine processes malicious web shell script
 (:action application-tomcat-jsp-engine-processes-web-shell
-    :parameters (?HTTPGETRequest - http-get-request ?Application - application ?Tomcat - tomcat ?JSPEngine - jsp-engine ?WebShellScript - web-shell-script ?HTTPGETRequest - http-get-request)
+    :parameters (?HTTPGETRequest - http-get-request ?Application - application ?Tomcat - tomcat ?JSPEngine - jsp-engine ?WebShellScript - web-shell-script)
     :precondition (and 
         (has-tomcat ?Application ?Tomcat)
         (tomcat-has-jsp-engine ?Tomcat ?JSPEngine)
@@ -4374,7 +4463,6 @@
         (web-shell-script-parsed ?WebShellScript)
         (increase (total-cost) 1)))
 
-;; JSP engine executes malicious web shell with Tomcat process privileges
 (:action application-tomcat-jsp-engine-executes-web-shell
     :parameters (?Application - application ?JSPEngine - jsp-engine ?WebShellScript - web-shell-script ?TomcatProcess - tomcat-process)
     :precondition (and 
@@ -4388,7 +4476,6 @@
         (web-shell-interface-active ?WebShellScript)
         (increase (total-cost) 1)))
 
-;; Attacker uses web shell interface to execute arbitrary system commands
 (:action attacker-executes-arbitrary-commands-via-web-shell
     :parameters (?WebShellScript - web-shell-script ?TomcatProcess - tomcat-process ?Application - application)
     :precondition (and 
@@ -4401,176 +4488,11 @@
         (elevation-of-privilege ?Application)
         (increase (total-cost) 1)))
 
-
-
-
-;#########################################START-Attack Action Defined for CVE-2024-22259######################################;
-;;@start vulnerability expose@;;
-;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-22259 
-;    :parameters (?Application - application ?SpringFramework - spring-framework ?Endpoint - endpoint ?Parser - url-parser)
-;    :precondition (and 
-;
-;      ; 1. Application uses a vulnerable version of Spring Framework
-;      (has-dependency-on-spring-framework ?Application)
-;      (or 
-;         ; 5.3.x before 5.3.31 (5003000000 + 31000 = 5003031000)
-;         (and (>= (version ?SpringFramework) 5003000000) (< (version ?SpringFramework) 5003031000))
-;         ; 6.0.x before 6.0.16 (6000000000 + 16000 = 6000016000)
-;         (and (>= (version ?SpringFramework) 6000000000) (< (version ?SpringFramework) 6000016000))
-;         ; 6.1.x before 6.1.13 (6001000000 + 13000 = 6001013000)
-;         (and (>= (version ?SpringFramework) 6001000000) (< (version ?SpringFramework) 6001013000))
-;       )
-;
-;      ;1. Application depends on vulnerable UriComponentsBuilder (e.g., specific versions of Spring Framework) 
-;       (has-dependency-on-vulnerable-paser ?Application ?Parser)
-;
-;       
-;      ;2. Endpoints accept external-controlled URL parameters (e.g., /redirect?url=...)
-;       (has-external-settingable-endpoint ?Application ?Endpoint)
-;
-;      ;3. Application supports HTTP url redirects
-;     (url-redirect-enabled ?Application)
-;
-;      ;4. No strict validation on protocol, path, or port in received URLs
-;      (not (url-endpoint-setting-restriction ?Application ?Endpoint))
-;     ;(not (url-endpoint-protocol-restriction ?Application ?Endpoint))
-;     ;(not (url-endpoint-path-restriction ?Application ?Endpoint))
-;     ;(not (url-endpoint-points-restriction ?Application ?Endpoint))
-;      ;2. Application can access internal or external network resources 
-;      (external-resource-accessable ?Application)
-;      (internal-resource-accessable ?Application)
-;
-;      ;5. Host validation flaws: uses blacklist instead of whitelist; fails to handle URL encoding or special characters (e.g., @, %0d%0a); lacks canonical URL parsing
-;      (vulnerable-host-validation ?Application)
-;      ;(depend-blacklist-host-validation ?Application)
-;      ;(not (canonicalization-parse-url ?Application))
-;      
-;      ;6. no anti-open redirect protections (e.g., Spring Security's RedirectValidator not enabled)
-;      (not (anti-redirect-protection ?Application))
-;
-;     ;7. WAF/IPS does not block malicious redirect attempts
-;    (not (WAF-malicious-request-bloack ?Application))
-;     (not (IPS-malicious-request-bloack ?Application)) )
-;    :effect (and (exposed-attack-surface ?Application CVE_2024_22259)
-;                (exploit-by-crafts-redirect-url CVE_2024_22259)
-;                (exploit-by-crafts-redirect-url-to-phishing-site CVE_2024_22259)
-;                (exploit-by-build-phishingsite CVE_2024_22259)
-;                (increase (total-cost) 21)))
-;;@end vulnerability expose@;; 
-
-
-;#########################################START-Attack Action Defined for CVE-2024-22262######################################;
-;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-22262 
-    :parameters (?Application - application ?SpringFramework - spring-framework ?Endpoint - endpoint ?Parser - url-parser)
-    :precondition (and 
-
-      ; 1. Application uses a vulnerable version of Spring Framework
-      (has-dependency-on-spring-framework ?Application)
-      (or 
-         ; 5.3.x before 5.3.31 (5003000000 + 31000 = 5003031000)
-         (and (>= (version ?SpringFramework) 5003000000) (< (version ?SpringFramework) 5003031000))
-         ; 6.0.x before 6.0.16 (6000000000 + 16000 = 6000016000)
-         (and (>= (version ?SpringFramework) 6000000000) (< (version ?SpringFramework) 6000016000))
-         ; 6.1.x before 6.1.13 (6001000000 + 13000 = 6001013000)
-         (and (>= (version ?SpringFramework) 6001000000) (< (version ?SpringFramework) 6001013000))
-       )
-
-      ;1. Application depends on vulnerable UriComponentsBuilder (e.g., specific versions of Spring Framework) 
-       (has-dependency-on-vulnerable-paser ?Application ?Parser)
-
-
-      ;2. Endpoints accept external-controlled URL parameters (e.g., /redirect?url=...)
-       (has-external-settingable-endpoint ?Application ?Endpoint)
-
-      ;3. Application supports HTTP url redirects
-     (url-redirect-enabled ?Application)
-
-      ;4. No strict validation on protocol, path, or port in received URLs
-      (not (url-endpoint-setting-restriction ?Application ?Endpoint))
-     ;(not (url-endpoint-protocol-restriction ?Application ?Endpoint))
-     ;(not (url-endpoint-path-restriction ?Application ?Endpoint))
-     ;(not (url-endpoint-points-restriction ?Application ?Endpoint))
-      ;2. Application can access internal or external network resources 
-      (external-resource-accessable ?Application)
-      (internal-resource-accessable ?Application)
-
-      ;5. Host validation flaws: uses blacklist instead of whitelist; fails to handle URL encoding or special characters (e.g., @, %0d%0a); lacks canonical URL parsing
-      (vulnerable-host-validation ?Application)
-      ;(depend-blacklist-host-validation ?Application)
-      ;(not (canonicalization-parse-url ?Application))
-      
-      ;6. no anti-open redirect protections (e.g., Spring Security's RedirectValidator not enabled)
-      (not (anti-redirect-protection ?Application))
-
-     ;7. WAF/IPS does not block malicious redirect attempts
-    (not (WAF-malicious-request-bloack ?Application))
-     (not (IPS-malicious-request-bloack ?Application)) )
-    :effect (and (exposed-attack-surface ?Application CVE_2024_22262)
-                (exploit-by-crafts-redirect-url CVE_2024_22262)
-                (exploit-by-crafts-redirect-url-to-phishing-site CVE_2024_22262)
-                (exploit-by-build-phishingsite CVE_2024_22262)
-                (increase (total-cost) 21)))
-;@end vulnerability expose@;; 
-
-
-
-
-;#########################################START-Attack Action Defined for CVE-2023-2976######################################;
-;;@start vulnerability expose@;;
-(:action application-exposes-attack-surface-to-attackers-CVE-2023-2976
-    :parameters (?Application - application ?Guava - java-library ?Host - host-os)
-    :precondition (and 
-        ; 1. The application's classpath includes Google Guava version 1.0 through 31.1
-        (has-library ?Application ?Guava)
-        (guava-library ?Guava)
-        (and (>= (version ?Guava) 1000000000) (<= (version ?Guava) 31001000000)) ; version 1.0 to 31.1
-        
-        ; 2. The application's code invokes FileBackedOutputStream(int) or FileBackedOutputStream(int, boolean)
-        (uses-filebackedoutputstream ?Application)
-        
-        ; 3. The invoked FileBackedOutputStream calls File.createTempFile without a controlled parent directory
-        (uses-uncontrolled-createtempfile ?Application)
-        
-        ; 4. The application's runtime java.io.tmpdir is set to a world-writable directory
-        (java-tmpdir-set-to-world-writable ?Application)
-        
-        ; 5. The application's host OS umask and /tmp permissions allow other local users to access files
-        (has-os ?Application ?Host)
-        (world-readable-tempdir-permissions ?Host)
-        (world-writable-tempdir-permissions ?Host)
-        
-        ; 6. The application is not isolated by container or OS sandbox
-        (not (container-isolated ?Application))
-        (not (os-sandbox-isolated ?Application))
-        
-        ; 7. The application does not override temp-file creation to per-user directory
-        (not (uses-per-user-temp-directory ?Application))
-        
-        ; 8. The application's host filesystem has no ACLs or mount options restricting access
-        (not (temp-directory-acl-protected ?Application))
-        (not (temp-directory-mount-restricted ?Application))
-        
-        ; 9. The application's use of File.createTempFile yields default, guessable filenames
-        (uses-predictable-temp-filenames ?Application)
-        
-        ; 10. The application writes sensitive data into FileBackedOutputStream temporary files
-        (writes-sensitive-data-to-temp ?Application)
-    )
-    :effect (and 
-        (exposed-attack-surface ?Application CVE_2023_2976)
-        (exploit-by-symlink-attack CVE_2023_2976)
-        (exploit-by-temp-file-prediction CVE_2023_2976)
-        (exploit-by-temp-file-access CVE_2023_2976)
-        (increase (total-cost) 34)))
-;@end vulnerability expose@;; 
-
-;; ============================== AP1: Tampering ===================================
 (:action attacker-identifies-application-default-java-temp-directory
     :parameters (?Application - application ?CVEID - cve-identifier ?TempDir - temporary-directory)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-temp-file-prediction ?CVEID)
+        (exploit-by ?CVEID temp-file-prediction)
         (java-tmpdir-set-to-world-writable ?Application)
     )
     :effect (and 
@@ -4582,7 +4504,7 @@
     :parameters (?Application - application ?NamingPattern - filename-pattern ?CVEID - cve-identifier ?TempDir - temporary-directory)
     :precondition (and 
         (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-temp-file-prediction ?CVEID)
+         (exploit-by ?CVEID temp-file-prediction)
         (uses-predictable-temp-filenames ?Application)
         (temp-directory-identified ?TempDir)
         (attacker-knows-temp-location ?TempDir)
@@ -4619,12 +4541,11 @@
         (writes-sensitive-data-to-temp ?Application)
         (malicious-symlink-prepared ?SymLink)
         (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-temp-file-access ?CVEID)
+        (exploit-by ?CVEID temp-file-access)
     )
     :effect (and 
         (filebackedoutputstream-triggered ?Application)
         (temp-file-creation-requested ?Application)
-        (sensitive-data-writing-initiated ?Application)
         (increase (total-cost) 1)))
 
 
@@ -4639,7 +4560,6 @@
         (symlink-placed-in-temp-dir ?SymLink ?TempDir)
         (symlink-points-to-file ?SymLink ?File)
         (java-tmpdir-set-to-world-writable ?Application)
-        (sensitive-data-writing-initiated ?Application)
     )
     :effect (and 
         (temp-file-created ?TempFile)
@@ -4648,12 +4568,11 @@
         (file-creation-exploited ?TempFile)
         (increase (total-cost) 1)))
 
-(:action application-writes-data-into-resolved-sensitive-file
+(:action application-writes-data-into-resolved-sensitive-file-
     :parameters (?Application - application ?TempFile - temporary-file ?SensitiveFile - sensitive-system-file 
                  ?Data - sensitive-information)
     :precondition (and 
         (filebackedoutputstream-triggered ?Application)
-        (sensitive-data-writing-initiated ?Application)
         (temp-file-created ?TempFile)
         (temp-file-actually-points-to ?TempFile ?SensitiveFile)
         (writes-sensitive-data-to-temp ?Application)
@@ -4678,7 +4597,6 @@
         (system-integrity-compromised ?SensitiveFile)
         (increase (total-cost) 1)))
 
-;; ============================== AP2: Information disclosure ===================================
 (:action attacker-creates-symbolic-link-to-attacker-controlled-file
     :parameters (?App - application ?Host - host-os ?SymLink - symbolic-link ?TempDir - temporary-directory ?AttackerControlledFile - controlled-file 
                  ?PredictedName - filename-pattern )
@@ -4711,11 +4629,6 @@
         (sensitive-data-written-to-attacker-controlled-file ?Data ?AttackerControlledFile)
         (sensitive-data-sent-to-attacker ?Data)
         (increase (total-cost) 1)))
-;; reuse action "attacker-receives-sensitive-information" of CVE-2024-38816
-
-;; ============================== AP3:Information disclosure ===================================
-
-;; reuse action "ATTACKER-IDENTIFIES-APPLICATION-DEFAULT-JAVA-TEMP-DIRECTORY " of AP1
 
 (:action user-triggers-filebackedoutputstream-functionality-buffers-data
     :parameters (?User - user ?Application - application ?CVEID - cve-identifier)
@@ -4723,7 +4636,7 @@
         (uses-filebackedoutputstream ?Application)
         (writes-sensitive-data-to-temp ?Application)
         (exposed-attack-surface ?Application ?CVEID)
-        (exploit-by-temp-file-access ?CVEID)
+        (exploit-by ?CVEID temp-file-access)
     )
     :effect (and 
         (filebackedoutputstream-triggered ?Application)
@@ -4752,11 +4665,11 @@
 (:action application-writes-sensitive-data-to-temp-file
     :parameters (?Application - application ?TempFile - temporary-file ?SensitiveData - sensitive-information)
     :precondition (and 
-        (sensitive-data-buffering-initiated ?Application)
         (filebackedoutputstream-triggered ?Application)
         (temp-file-created ?TempFile)
         (file-ready-for-data-write ?TempFile)
         (writes-sensitive-data-to-temp ?Application)
+        (sensitive-data-buffering-initiated ?Application)
     )
     :effect (and 
         (temp-file-contains-sensitive-data ?TempFile ?SensitiveData)
@@ -4774,7 +4687,7 @@
         (temp-file-world-readable ?TempFile)
         (temp-file-populated-with-data ?TempFile)
         (attacker-knows-temp-location ?TempDir)
-        (exploit-by-temp-file-access ?CVEID)
+        (exploit-by ?CVEID temp-file-access)
     )
     :effect (and 
         (temp-file-detected ?TempFile)
@@ -4793,7 +4706,7 @@
         (temp-file-contains-sensitive-data ?TempFile ?SensitiveData)
         (sensitive-data-exposed-in-filesystem ?SensitiveData)
         (temp-file-world-readable ?TempFile)
-        (exploit-by-temp-file-access ?CVEID)
+        (exploit-by ?CVEID temp-file-access)
     )
     :effect (and 
         (sensitive-data-accessed-by-attacker ?SensitiveData)
@@ -4803,72 +4716,10 @@
         (increase (total-cost) 1)))
 
 
-
-
-;#########################################START-Attack Action Defined for CVE-2024-38809######################################;
-;;@start vulnerability expose@;;
-(:action application-exposes-attack-surface-to-attackers-CVE-2024-38809
- :parameters (?Application - application ?SpringFramework - spring-framework ?HTTPEndpoint - http-endpoint ?ETagHandler - etag-handler)
- :precondition (and
-     ;; 1. Application uses vulnerable Spring Framework spring-web module
-     (has-framework ?Application ?SpringFramework)
-     (spring-web-module ?SpringFramework)
-     (or (and (>= (version ?SpringFramework) 6001000000) (<= (version ?SpringFramework) 6001011000))
-         (and (>= (version ?SpringFramework) 6000000000) (<= (version ?SpringFramework) 6000022000))
-         (and (>= (version ?SpringFramework) 5003000000) (<= (version ?SpringFramework) 5003037000))
-         (< (version ?SpringFramework) 5003000000))
-     
-     ;; 2. Application processes ETags from If-Match or If-None-Match headers
-     (has-http-endpoint ?Application ?HTTPEndpoint)
-     (has-etag-handler ?Application ?ETagHandler)
-     (processes-if-match-headers ?Application ?ETagHandler)
-     (processes-if-none-match-headers ?Application ?ETagHandler)
-     
-     ;; 3. ETag parsing logic lacks proper validation
-     (not (has-etag-validation ?Application ?ETagHandler))
-     (not (has-etag-size-limits ?Application ?ETagHandler))
-     (not (has-etag-complexity-limits ?Application ?ETagHandler))
-     
-     ;; 4. Application exposes HTTP endpoints to untrusted users
-     (publicly-accessible ?HTTPEndpoint)
-     (not (has-restrictive-access-controls ?HTTPEndpoint))
-     
-     ;; 5. No size limits on If-Match or If-None-Match headers
-     (not (has-header-size-limits ?Application ?HTTPEndpoint))
-     (not (has-framework-header-limits ?SpringFramework))
-     (not (has-servlet-container-limits ?Application))
-     
-     ;; 6. No rate limiting or request throttling
-     (not (has-http-rate-limiting ?Application ?HTTPEndpoint))
-     (not (has-request-throttling ?Application ?HTTPEndpoint))
-     
-     ;; 7. No custom input validation filters
-     (not (has-input-validation-filters ?Application))
-     (not (has-etag-validation-middleware ?Application))
-     
-     ;; 8. No WAF/IPS protection
-     (not (has-waf-protection ?Application))
-     (not (has-ips-protection ?Application))
-     (not (has-etag-header-detection-rules ?Application))
-     
-     ;; 9. Shared server resources without isolation
-     (has-shared-resources ?Application)
-     (not (has-resource-isolation ?Application))
-     
-     ;; 10. Shared thread pool across endpoints
-     (has-shared-thread-pool ?Application)
-     (not (has-endpoint-isolation ?Application)))
- :effect (and (exposed-attack-surface ?Application CVE_2024_38809)
-              (vulnerable-etag-parsing ?SpringFramework)
-              (exploit-by-crafting-malicious-etag-header CVE_2024_38809)
-              (increase (total-cost) 63)))
-;@end vulnerability expose@;; 
-
-
 (:action attacker-crafts-malicious-http-request-with-pathological-etag
  :parameters (?Application - application ?MaliciousRequest - http-request ?MaliciousETag - etag-value ?CVEID - cve-identifier)
  :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                    (exploit-by-crafting-malicious-etag-header ?CVEID))
+                    (exploit-by ?CVEID craft-malicious-etag-header))
  :effect (and
      (malicious-http-request ?MaliciousRequest)
      (pathological-etag-value ?MaliciousETag)
@@ -4957,64 +4808,11 @@
      (resource-exhausted ?Application)
      (increase (total-cost) 1)))
 
-;; reuse action "application-becomes-unresponsive" of CVE-2023-34055
-
-
-
-;#########################################START-Attack Action Defined for CVE-2024-47072######################################;
-;;@start vulnerability expose@;;
-;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-47072
-; :parameters (?Application - application ?XStreamLibrary - java-library ?BinaryDriver - binary-stream-driver ?APIEndpoint - api-endpoint)
-; :precondition (and
-;     ;1. Application uses vulnerable XStream version (1.4.20 or earlier)
-;     (has-library ?Application ?XStreamLibrary)
-;     (xstream-library ?XStreamLibrary)
-;     (<= (version ?XStreamLibrary) 1004020000) ; version <= 1.4.20
-;     
-;     ;2. Application configures XStream to use BinaryStreamDriver
-;     (has-binary-stream-driver ?Application ?BinaryDriver)
-;     (binary-stream-driver ?BinaryDriver)
-;     (xstream-uses-driver ?XStreamLibrary ?BinaryDriver)
-;    
-;     ;3. Application accepts and processes attacker-controlled binary input streams
-;     (has-api-endpoint ?Application ?APIEndpoint)
-;     (accepts-binary-input ?Application ?APIEndpoint)
-;     (processes-untrusted-input ?Application ?APIEndpoint)
-;     
-;     ;4. Application lacks robust input validation or integrity checks
-;     (not (api-endpoint-has-input-validation ?Application ?APIEndpoint))
-;     (not (api-endpoint-has-integrity-checks ?Application ?APIEndpoint))
-;     
-;     ;5. Application does not implement StackOverflowError exception handling
-;     (not (has-stackoverflow-exception-handling ?Application))
-;     
-;     ;6. Application's runtime permits deeply nested structures without safeguards
-;     (not (has-defense-in-depth-safeguards ?Application))
-;     (not (has-recursive-structure-limits ?Application))
-;     
-;     ;7. Application lacks effective JVM stack size restrictions
-;     (not (has-jvm-stack-size-restrictions ?Application))
-;     (not (has-sufficient-stack-limits ?Application))
-;     
-;     ;8. Application lacks limits on input stream size or complexity
-;     (not (has-input-stream-size-limits ?Application))
-;     (not (has-structural-complexity-limits ?Application))
-;     
-;     ;9. Application lacks compensating security mechanisms
-;     (not (has-sandboxing ?Application))
-;     (not (has-deserialization-whitelist ?Application))
-;     (not (has-waf-binary-filtering ?Application)))
-; :effect (and (exposed-attack-surface ?Application CVE_2024_47072)
-;              (vulnerable-xstream-binary-driver ?XStreamLibrary)
-;              (exploit-by-craft-malicious-binary-payload CVE_2024_47072)
-;              (increase (total-cost) 29)))
-;;@end vulnerability expose@;; 
-
 
 (:action attacker-crafts-malicious-binary-xstream-payload    
  :parameters (?Application - application ?MaliciousPayload - binary-payload ?XStreamLibrary - java-library ?CVEID - cve-identifier)
  :precondition (and (exposed-attack-surface ?Application ?CVEID)
-                    (exploit-by-craft-malicious-binary-payload ?CVEID))      
+                   (exploit-by ?CVEID craft-malicious-binary-payload))      
  :effect (and (malicious-payload ?MaliciousPayload)
               (binary-xstream-payload ?MaliciousPayload)
               (deeply-nested-binary ?MaliciousPayload)
@@ -5028,14 +4826,11 @@
  :precondition (and (malicious-payload ?MaliciousPayload)
                     (binary-xstream-payload ?MaliciousPayload)
                     (has-receive-endpoint ?Application ?ReceiveEndpoint)
-                    (exposed-attack-surface ?Application ?CVEID))
+                    (exposed-attack-surface ?Application ?CVEID)
+                    (exploit-by ?CVEID craft-malicious-binary-payload))
  :effect (and (http-post-request-sent ?HTTPRequest)
               (malicious-payload-transmitted ?MaliciousPayload)
               (increase (total-cost) 1)))
-
-
-;reuse action "application-receives-http-post-request-with-malicious-payload" CVE_2022_40150
-
 
 
 (:action application-extracts-binary-payload-from-http-request 
@@ -5059,93 +4854,24 @@
 
 
 (:action application-binary-driver-allocates-stack-frames-for-recursive-decoding
- :parameters (?XStreamLibrary - java-library ?BinaryDriver - binary-stream-driver ?MaliciousPayload - binary-payload ?Application - application)
+ :parameters (?XStreamLibrary - java-library ?BinaryDriver - binary-stream-driver ?MaliciousPayload - binary-payload ?Application - application ?CVEID - cve-identifier)
  :precondition (and (xstream-binary-driver-invoked ?XStreamLibrary ?MaliciousPayload)
                     (binary-parsing-started ?XStreamLibrary)
                     (deeply-nested-binary ?MaliciousPayload)
                     (recursive-mapping-payload ?MaliciousPayload)
-                    (exposed-attack-surface ?Application CVE_2024_47072))
+                    (exposed-attack-surface ?Application ?CVEID))
  :effect (and (call-stack-frames-allocated ?XStreamLibrary)
               (recursive-object-graph-construction ?XStreamLibrary)
               (recursive-mapping-token-resolution ?XStreamLibrary)
               (excessive-stack-memory-consumption ?Application)
               (increase (total-cost) 1)))
 
-;reuse action "application-triggers-STACKOVERFLOW-error" CVE_2022_40150
-;reuse action "application-becomes-unresponsive" CVE_2023_34055
 
-
-
-
-;#########################################START-Attack Action Defined for CVE-2023-33202######################################;
-;;@start vulnerability expose@;;
-;(:action application-exposes-attack-surface-to-attackers-CVE-2023-33202
-; :parameters (?Application - application
-;              ?BCLibrary - java-library
-;              ?PEMEndpoint - pem-endpoint)
-; :precondition (and
-;    ; 1. vulnerable Bouncy Castle present
-;    (has-library ?Application ?BCLibrary)
-;    (bouncycastle-library ?BCLibrary)
-;    (< (version ?BCLibrary) 1007300000) ; version < 1.73.0
-;
-;    ; 2. application code invokes or forwards to PEMParser
-;    (uses-pemparser ?Application)
-;
-;    ; 3. application exposes interface(s) that accept PEM/ASN.1 input
-;    (has-pem-endpoint ?Application ?PEMEndpoint)
-;    (accepts-pem-input ?Application ?PEMEndpoint)
-;
-;    ; 4. parsing performed in-process on same JVM heap
-;    (parser-in-process ?Application)
-;    (parser-shares-jvm-heap ?Application)
-;
-;    ; 5. no effective pre-validation/ASN.1 structural checks
-;    (not (endpoint-has-content-type-enforcement ?Application ?PEMEndpoint))
-;    (not (endpoint-has-asn1-sanity-checks ?Application ?PEMEndpoint))
-;    (not (endpoint-rejects-suspicious-pem-patterns ?Application ?PEMEndpoint))
-;
-;    ; 6. lacks request/resource controls (file-size, depth, timeouts, per-request caps)
-;    (not (endpoint-has-file-size-limits ?Application ?PEMEndpoint))
-;    (not (endpoint-has-asn1-depth-limits ?Application ?PEMEndpoint))
-;    (not (endpoint-has-parser-timeouts ?Application ?PEMEndpoint))
-;    (not (endpoint-has-per-request-memory-caps ?Application ?PEMEndpoint))
-;
-;    ; 7. endpoints reachable with low/no privileges or insufficient rate-limiting
-;    (endpoint-reachable-to-attackers ?Application ?PEMEndpoint)
-;    (not (endpoint-rate-limited ?Application ?PEMEndpoint))
-;
-;    ; 8. JVM/container runtime lacks heap isolation / cgroup limits
-;    (not (has-cgroup-memory-limit ?Application))
-;    (not (has-pod-memory-limit ?Application))
-;    (single-jvm-hosting-critical-services ?Application)
-;
-;    ; 9. no sandboxing or process isolation for untrusted parsing
-;    (not (parsing-sandboxed ?Application))
-;
-;    ; 10. error handling does not gracefully contain OutOfMemoryError
-;    (not (has-circuit-breaker-for-oom ?Application))
-;    (not (graceful-degradation-on-oom ?Application))
-;
-;    ; 11. no upstream protections (WAF / upload policies / scanners)
-;    (not (has-waf-protection ?Application))
-;    (not (has-upload-policy-scanner ?Application ?PEMEndpoint)) )
-; :effect (and
-;    (exposed-attack-surface ?Application CVE_2023_33202)
-;    (vulnerable-bouncycastle ?BCLibrary)
-;    (vulnerable-pemparser-in-process ?Application)
-;    (exploit-by-craft-malicious-pem-payload CVE_2023_33202)
-;    (exploit-by-craft-malicious-pem-file CVE_2023_33202)
-;    (exploit-needs-user-account CVE_2023_33202)
-;    (increase (total-cost) 60)))
-;;@end vulnerability expose@;; 
-
-;; ============ AP 1 ===============
-; Action 1: Attacker crafts malicious PEM file
 (:action attacker-crafts-malicious-pem-file
- :parameters (?MaliciousPEMFile - pem-file ?ASN1 - asn1-structure ?CVEID - cve-identifier)
+ :parameters (?Application - application ?MaliciousPEMFile - pem-file ?ASN1 - asn1-structure ?CVEID - cve-identifier)
  :precondition (and
-     (exploit-by-craft-malicious-pem-file ?CVEID))
+      (exploit-by ?CVEID craft-malicious-pem-file)
+       (exposed-attack-surface ?Application ?CVEID))
  :effect (and
     (malicious-file ?MaliciousPEMFile)
     (pem-file ?MaliciousPEMFile)
@@ -5155,7 +4881,6 @@
     (memory-exhaustion-file ?MaliciousPEMFile)
     (increase (total-cost) 1) ))
 
-; Action 2: Attacker sends malicious PEM file to target user
 (:action attacker-sends-malicious-pem-file-to-user
  :parameters (?MaliciousPEMFile - pem-file ?Message - message ?Comchannel - comchannel ?User - user ?Application - application)
  :precondition (and
@@ -5170,9 +4895,7 @@
     (message-sent ?Message)
     (increase (total-cost) 1)))
 
-;; reuse "user-receives-message" / "user-starts-commonication-channel" / "user-reads-message" / "user-downloads-malicious-file-in-message" 
 
-; Action 7: User uploads PEM file to application
 (:action user-uploads-pem-file-to-application
  :parameters (?User - user ?MaliciousPEMFile - pem-file ?Application - application ?PEMEndpoint - pem-endpoint)
  :precondition (and
@@ -5189,7 +4912,7 @@
     (increase (total-cost) 171)))
 
 
-; Action 8: Application receives PEM file
+
 (:action application-receives-pem-file
  :parameters (?Application - application ?MaliciousPEMFile - pem-file ?PEMEndpoint - pem-endpoint)
  :precondition (and 
@@ -5201,7 +4924,7 @@
     (pem-file-received ?Application ?MaliciousPEMFile)
     (increase (total-cost) 1)))
 
-; Action 9: Application extracts PEM payload (modified from provided)
+; Application extracts PEM payload (modified from provided)
 (:action application-extracts-pem-payload-from-file
  :parameters (?Application - application ?MaliciousPEMFile - pem-file ?MaliciousPEM - pem-payload ?PEMEndpoint - pem-endpoint ?ASN1 - asn1-structure)
  :precondition (and
@@ -5217,11 +4940,6 @@
     (increase (total-cost) 1)))
     
 
-;; reuse action "application-uses-bouncycastle-pemparser-readobject", "pemparser-allocates-heap-memory-for-asn1-construction" of CVE_2023_33202 AP3
-;; reuse "application-triggers-OUTOFMEMORY-error" of CVE_2024_40150
-;; reuse "application-becomes-unresponsive" of CVE-2023-34055
-;; ============ AP 2 ===============
-;; reuse action of  "attacker-registers-account-on-target-application" CVE-2024-38820
 (:action attacker-registers-account-on-target-application
     :parameters (?Account - account ?Application - application ?SessionCookie - session-cookie ?CVEID - cve-identifier)
     :precondition (and (exposed-attack-surface ?Application ?CVEID)
@@ -5232,7 +4950,7 @@
                  (account-has-normal-privileges ?Account)
                   (increase (total-cost) 1)))
 
-;Attacker uploads PEM file to application
+
 (:action Attacker-uploads-pem-file-to-application
  :parameters (?MaliciousPEMFile - pem-file ?Application - application ?PEMEndpoint - pem-endpoint ?Account - account)
  :precondition (and
@@ -5246,13 +4964,11 @@
     (file-targets-endpoint ?MaliciousPEMFile ?PEMEndpoint)
     (increase (total-cost) 1)))
 
-;; ============ AP 3 ==============
-
 (:action attacker-crafts-malicious-pem-payload
  :parameters (?Application - application ?MaliciousPEM - pem-payload ?ASN1 - asn1-structure ?CVEID - cve-identifier)
  :precondition (and
     (exposed-attack-surface ?Application ?CVEID)
-    (exploit-by-craft-malicious-pem-payload ?CVEID) )
+    (exploit-by ?CVEID craft-malicious-pem-payload) )
  :effect (and
     (malicious-pem-payload ?MaliciousPEM)
     (payload-contains-asn1 ?MaliciousPEM ?ASN1)
@@ -5273,8 +4989,6 @@
     (malicious-payload-transmitted ?MaliciousPEM)
     (http-request-targets-endpoint ?HTTPRequest ?PEMEndpoint)
     (increase (total-cost) 1)))
-
-;; reuse "application-receives-http-post-request-with-malicious-payload" of CVE_2024_40150
 
 
 (:action application-extracts-pem-payload-from-http-request
@@ -5318,67 +5032,10 @@
     (increase (total-cost) 1)))
 
 
-;; reuse "application-triggers-OUTOFMEMORY-error" of CVE_2024_40150
-;; reuse "application-becomes-unresponsive" of CVE-2023-34055
-
-;#########################################START-Attack Action Defined for CVE-2023-46589######################################;
-;;@start vulnerability expose@;;
-(:action application-exposes-attack-surface-to-attackers-CVE-2023-46589
- :parameters (?Application - application ?Tomcat - tomcat ?ReverseProxy - reverse-proxy ?Endpoint - http-endpoint)
- :precondition (and
-     ; 1. Application runs on vulnerable Apache Tomcat versions
-     (has-tomcat ?Application ?Tomcat)
-     (or (and (>= (version ?Tomcat) 8005000000) (<= (version ?Tomcat) 8005095000))  ; 8.5.0-8.5.95
-         (and (>= (version ?Tomcat) 9000000000) (<= (version ?Tomcat) 9000082000))  ; 9.0.0-M1-9.0.82
-         (and (>= (version ?Tomcat) 10001000000) (<= (version ?Tomcat) 10001015000)) ; 10.1.0-M1-10.1.15
-         (and (>= (version ?Tomcat) 11000000000) (<= (version ?Tomcat) 11000010000))) ; 11.0.0-M1-11.0.0-M10
-     
-     ; 2. Application is deployed behind a reverse proxy/load balancer
-     (has-reverse-proxy ?Application ?ReverseProxy)
-     (forwards-requests ?ReverseProxy ?Tomcat)
-     
-     ; 3. Application accepts HTTP/1.1 requests with Transfer-Encoding: chunked
-     (accepts-chunked-encoding ?Application)
-     (permits-trailer-headers ?ReverseProxy)
-     
-     ; 4. Mismatched parsing between reverse proxy and Tomcat
-     (mismatched-parsing ?ReverseProxy ?Tomcat)
-     (mismatched-trailer-handling ?ReverseProxy ?Tomcat)
-     (mismatched-header-limits ?ReverseProxy ?Tomcat)
-     
-     ; 5. Reverse proxy forwards trailer header bytes without normalization
-     (not (normalizes-trailer-headers ?ReverseProxy))
-     (not (rejects-oversized-trailers ?ReverseProxy))
-     (not (truncates-oversized-trailers ?ReverseProxy))
-     
-     ; 6. Backend connection allows reuse/keep-alive/pipelining
-     (allows-connection-reuse ?ReverseProxy ?Tomcat)
-     (allows-keep-alive ?ReverseProxy ?Tomcat)
-     (allows-pipelining ?ReverseProxy ?Tomcat)
-     
-     ; 7. Application exposes target endpoints reachable by attacker
-     (has-http-endpoint ?Application ?Endpoint)
-     (publicly-accessible ?Endpoint)
-     
-     ; 8. Endpoints do not enforce strict per-request authentication
-     (not (strict-per-request-auth ?Endpoint))
-     
-     ; 9. Application lacks request smuggling detection mechanisms
-     (not (has-waf-smuggling-detection ?Application))
-     (not (has-ips-oversized-trailer-rules ?Application))
-     (not (rejects-malformed-trailers ?ReverseProxy))
-     (not (has-request-canonicalization ?Application)))
-  :effect (and (exposed-attack-surface ?Application CVE_2023_46589)
-          (vulnerable-tomcat ?Tomcat)
-          (exploit-by-http-request-smuggling CVE_2023_46589)
-          (increase (total-cost) 28)))
-;@end vulnerability expose@;;
-
-;================ AP1 =================
 (:action attacker-opens-new-frontend-tcp-connection-to-reverse-proxy
-  :parameters (?Application - application ?Attacker - attacker ?ReverseProxy - reverse-proxy ?TCPServer - tcp-server ?FrontendConnection - tcp-connection)
-  :precondition (and (exposed-attack-surface ?Application CVE_2023_46589)
-                     (exploit-by-http-request-smuggling CVE_2023_46589)
+  :parameters (?Application - application ?Attacker - attacker ?ReverseProxy - reverse-proxy ?TCPServer - tcp-server ?FrontendConnection - tcp-connection ?CVEID - cve-identifier)
+  :precondition (and (exposed-attack-surface ?Application ?CVEID)
+                      (exploit-by ?CVEID  http-request-smuggling)
                      (has-reverse-proxy ?Application ?ReverseProxy))
   :effect (and (frontend-connection-opened ?Attacker ?ReverseProxy ?FrontendConnection)
                (tcp-connection-established ?TCPServer ?FrontendConnection)
@@ -5641,7 +5298,7 @@
                (sensitive-response-sent-to-proxy ?SensitiveResponse)
                (increase (total-cost) 1)))
 
-(:action reverse-proxy-forwards-sensitive-resource-to-attacker-through-frontend-connection-achieving-information-disclosure
+(:action reverse-proxy-forwards-sensitive-resource-to-attacker-through-frontend-connection
   :parameters (?Application - application ?ReverseProxy - reverse-proxy ?SensitiveResponse - http-response ?SensitiveResource - sensitive-information ?Attacker - attacker  ?BackendConnection - tcp-connection)
   :precondition (and (sensitive-response-sent-to-proxy ?SensitiveResponse)
                      (contains-sensitive-resource ?SensitiveResponse ?SensitiveResource)
@@ -5650,9 +5307,8 @@
   :effect (and (information-disclosure ?Application)
                (increase (total-cost) 1)))
 
+   
 
-;================ AP2: cache poisoning =================    
-; Action 13: Attacker sends cache poisoning smuggled request
 (:action attacker-sends-additional-smuggled-http-request-containing-cache-poisoning-on-existing-frontend-connection-to-reverse-proxy
   :parameters (?Attacker - attacker ?ReverseProxy - reverse-proxy ?SmuggledRequest - http-request ?FrontendConnection - tcp-connection ?CachePoison - cache-poison-payload ?CachedResource - cached-resource)
   :precondition (and (can-send-smuggled-payload ?Attacker)
@@ -5666,7 +5322,7 @@
                (attacker-controlled-response-payload ?SmuggledRequest)
                (increase (total-cost) 1)))
 
-; Action 20: User sends HTTP GET request for cached resource
+
 (:action user-sends-http-get-request-for-cached-resource
   :parameters (?User - user ?ReverseProxy - reverse-proxy ?UserRequest - http-request ?CachedResource - cached-resource ?UserFrontendConnection - tcp-connection)
   :precondition (and (has-cached-resource ?CachedResource)
@@ -5678,8 +5334,7 @@
                (authenticated-user-request ?UserRequest)
                (increase (total-cost) 1)))
 
-      
-; Action 25: Tomcat executes smuggled request to inject attacker-controlled response into cache
+
 (:action application-tomcat-executes-additional-smuggled-http-request-injects-attacker-controlled-response-into-cache-as-authenticated-user-achieving-elevation-of-privilege
   :parameters (?Application - application ?Tomcat - tomcat ?SmuggledRequest - http-request ?UserSession - user-session ?User - user ?Cache - application-cache)
   :precondition (and (smuggled-request-with-user-context ?SmuggledRequest ?UserSession)
@@ -5691,7 +5346,7 @@
                (smuggled-request-executed-as-user ?SmuggledRequest ?User)
                (increase (total-cost) 1)))
 
-; Action 26: Tomcat serves response from poisoned cache
+
 (:action application-tomcat-serves-response-from-cache-containing-attacker-injected-content-to-reverse-proxy
   :parameters (?Application - application ?Tomcat - tomcat ?SmuggledRequest - http-request ?Cache - application-cache ?PoisonedResponse - http-response ?CachedResource - cached-resource ?ReverseProxy - reverse-proxy )
   :precondition (and (cache-injected-with-attacker-content ?Cache ?SmuggledRequest)
@@ -5702,7 +5357,7 @@
                (poisoned-response-sent-to-proxy ?PoisonedResponse)
                (increase (total-cost) 1)))
 
-; Action 27: Reverse proxy forwards poisoned cached response to user, achieving tampering
+
 (:action reverse-proxy-forwards-cached-response-to-user-achieving-tampering
   :parameters (?Application - application ?ReverseProxy - reverse-proxy ?PoisonedResponse - http-response ?User - user ?BackendConnection - tcp-connection ?Cache - application-cache)
   :precondition (and (poisoned-response-sent-to-proxy ?PoisonedResponse)
