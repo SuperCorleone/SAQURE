@@ -65,7 +65,6 @@
       <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/AEDI/repudiation.pddl" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/AEDI/repudiation.pddl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/AEDI/spoofing.pddl" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/AEDI/spoofing.pddl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/AEDI/tampering.pddl" beforeDir="false" afterPath="$PROJECT_DIR$/../SAQURE_Replication_Package_SEFA/SAQURE-simulator/AEDI/tampering.pddl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SAQURE-Simulator/Metric-FF/ff.h" beforeDir="false" afterPath="$PROJECT_DIR$/SAQURE-Simulator/Metric-FF/ff.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
