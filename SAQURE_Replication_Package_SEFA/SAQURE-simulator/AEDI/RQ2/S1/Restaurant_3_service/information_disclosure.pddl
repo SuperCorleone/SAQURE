@@ -1,12 +1,10 @@
-(define (problem elevate-privilege-problem)
-  (:domain attack-path-planner)
+(define (problem AEDI-information_disclosure)
+(:domain AED)
   
   (:objects
     CVE_2023_2976 - cve-identifier
     attacker1 - attacker
     
-    ;;;(1).=================================Application Configuration====================;;;
-    ;;; Entity declaration ;;;
     
     SEFA - application ;application
     logback_SEFA - logback
@@ -21,18 +19,13 @@
     logback-env-var1 - env-var
 
 
-   ;; === Added for CVE-2024-38286==
     tomcat_SEFA - tomcat
     tls-connector_SEFA - tls-connector
 
-   ;; ==== Added for CVE-2024-38820 ====;;
    databinder_SEFA - data-binder
-   ;; Locale Configuration
    locale-config_SEFA - locale-config
-   ;; Security Patterns
    admin-field-pattern - disallowed-pattern
   
-  ;; ==== Added for CVE-2022-1471 =====
   snakeyaml-library_SEFA - snakeyaml-library
   java_SEFA - software
   yaml-endpoint_SEFA - yaml-endpoint
@@ -40,29 +33,21 @@
   yaml-constructor_SEFA - yaml-constructor
 
 
-    ;;;(2).================================USER================================;;;
     user1 - user
 
 
-   ;;;(3).=============================Attacker Capability==========================;;;
    malicious-msg - message
    malicious-logback-config - logback-config
-   ;;==== Added for CVE-2024-12798 AP 1.2 =====
    malicious-server1 - controlled-server
    malicious-file-url1 - file-url
-   ;;==== Added for CVE-2024-12798 AP 1.3 =====
    malicious-forged-website1 - website
    forged-website1-url - website-url
-   ;;==== Added for CVE-2024-12798 AP 2.1 =====
    malicious-logback-env-var-set-script1 - script
-   ;; ==== Added for CVE-2024-12798 AP 2.2 ===
    script-url1 - script-url
-   ;; === Added for CVE-2024-38286==
    tomcat-tls-flood-script1 - script
     ; ==== Added for AP 2 =====
    tomcat-tls-initial-handshake-request-script1 - script 
    tomcat-tls-renegotiation-script1 -script
-   ;; ==== Added for CVE-2024-22243 ====;;
    phishing-url1 - phishing-url     ;https://evil.com
    redirect-url1 - redirect-url     ;https://sefa.com/redirect?url=https://sefa.com:80@evil.com
    valiation-pass-pyload1 - payload-string      ;https://sefa.com:80@evil.com
@@ -74,7 +59,6 @@
    internal-resource-address1 - internal-address ;http://localhost:8080/internal-data
    sensitive-file-name1 - sensitive-information
    
-   ;; ==== Added for CVE-2024-38820 ====;;
    spring-framework1 - spring-framework
    web-controller_SEFA - web-controller
    attacker-account_SEFA - account
@@ -87,11 +71,9 @@
 
    i̇sadmin - parameter-name
 
-  ;; ==== Added for CVE-2023-34055 ====;;
    springboot_SEFA - spring-boot
    http-flood-script1 - script
 
-  ;; ==== Added for CVE-2024-34447 ====;;
   bouncy-castle-lib_SEFA - bouncy-castle
   bcjsse-component_SEFA - bcjsse
   vulnerable-dns-server1 - dns-server
@@ -103,7 +85,6 @@
   socket_SEFA - ssl-socket
   SEFA-microservice - legitimate-service
   
- ;; ==== Added for CVE-2022-40150 ====;;
   jettison-library_SEFA - java-library
   malicious-jettison-payload1 - json-payload
   API-endpoint_SEFA - api-endpoint
@@ -112,7 +93,6 @@
   malicious-xml-payload1 - xml-payload
 
 
-;; ==== Added for CVE-2023-6378====;;
   logbacklib_SEFA - java-library
   logback-receiver_SEFA - logback-receiver
   tcp-endpoint_SEFA - tcp-endpoint
@@ -120,7 +100,6 @@
   tcp-connection_SEFA - tcp-connection
   tcp-server_SEFA - tcp-server
 
-;; ==== Added for CVE-2023-44487====;;
   http2-server_SEFA - http2-server
   http2-library_SEFA - http2-library
   http2-connection_SEFA - http2-connection
@@ -134,7 +113,6 @@
   stream-batch1 - stream-batch
   server-resource_SEFA - server-resource 
 
-;; ==== Added for CVE-2025-22228====;;
   spring-security_SEFA - spring-security
   password_encoder_SEFA - password-encoder
   online-brute-force-script1 - script
@@ -142,7 +120,6 @@
   login-request1_SEFA - login-request 
   password-encoder_SEFA - password-encoder
 
-;; ==== Added for CVE_2024_38816====;;
   router-function_SEFA - router-function
   resource-handler_SEFA - resource-handler
   filesystem-resource_SEFA - filesystem-resource
@@ -153,7 +130,6 @@
   sensitive-file-content1 - sensitive-information
 
 
-;; ==== Added for CVE-2022-1471 =====
   command-execution-logic1 - command-execution-logic
   rmi-service1 - rmi-service 
   ldap-service1 - ldap-service
@@ -161,7 +137,6 @@
   malicious-java-class1 - java-class
   jndi-endpoint1 - jndi-endpoint
 
-;; ==== Added for CVE-2025-24813 =====
   default-servlet_SEFA - default-servlet
   public-directory_SEFA - public-directory
   sensitive-directory_SEFA - sensitive-directory
@@ -176,7 +151,6 @@
   web-shell-script1 - web-shell-script
   tomcat-process_SEFA - tomcat-process
 
-;; ====== added for CVE-2023-2976 ======
   guava-library_SEFA - java-library
   temporary-directory_SEFA - temporary-directory
   host-os_SEFA - host-os
@@ -186,17 +160,14 @@
   symbolic-link1 - symbolic-link
   controlled-file1 - controlled-file
 
-;; ====== added for CVE-2024-38809 ======
   http-endpoint_SEFA - http-endpoint
   etag-handler_SEFA - etag-handler
   etag-value_SEFA - etag-value
 
-;; ====== added for CVE-2024-47072 ======
   XStreamLibrary_SEFA - java-library
   binary-stream-driver_SEFA - binary-stream-driver
   binary-payload1 - binary-payload 
 
-;; ====== added for CVE-2023-33202 ======
   BCLibrary_SEFA - java-library
   pem-endpoint_SEFA - pem-endpoint 
   pem-payload1 - pem-payload
@@ -204,7 +175,6 @@
   pem-file1 - pem-file
 
 
-;; ====== added for CVE-2023-46589 ======
   reverse-proxy_SEFA - reverse-proxy
   trailer-header1 - trailer-header 
   user-session1 - user-session
@@ -228,9 +198,6 @@
 
 
    
-    ;;;(1).=================================Application Configuration====================;;;
-    ;; === for CVE-20224-12798 ===
-    ;; entry points: system state
     (has-logback SEFA logback_SEFA)
      
     (= (version logback_SEFA) 1004000002)
@@ -257,7 +224,6 @@
      
     (script-execution-prompt-enabled SEFA)  ;; one key for controlling branches
 
-   ;; ==== Added for CVE-2024-38286 AP 1&2 =====
     (has-tomcat SEFA tomcat_SEFA)
     (tomcat-has-tls-connector SEFA tomcat_SEFA tls-connector_SEFA)
     (= (version tomcat_SEFA) 11000000001)
@@ -270,7 +236,6 @@
     ;not (IPS-monitoring SEFA)
     ;not (WAF-monitoring SEFA) 
 
-    ;; ==== Added for CVE_2024_22243 AP 1&2 =====
     (has-dependency-on-spring-framework SEFA spring-framework1)
     (=(version spring-framework1) 6001000001)
     (has-dependency-on-vulnerable-paser SEFA  UriComponentsBuilder)
@@ -295,7 +260,6 @@
     (data-saved-in-internal-address sensitive-file-name1 internal-resource-address1)
 
 
-  ;; ==== Added for CVE_2024_38820 AP 1&2 =====
    (has-vulnerable-databinder SEFA databinder_SEFA)
    (databinder-parameter-binding-enabled SEFA databinder_SEFA)
 
@@ -323,7 +287,6 @@
    ;not (has-WAF-case-manipulation-rules SEFA)
    ;not (has-input-filter-case-bypass-detection SEFA)
 
-   ;; ==== Added for CVE_2023_34055 AP 1&2 =====
    ;1. Application runs vulnerable Spring Boot versions (2.7.0-2.7.17, 3.0.0-3.0.12, or 3.1.0-3.1.5)
   (has-spring-boot SEFA springboot_SEFA)
    (= (version springboot_SEFA) 2007010001) 
@@ -363,8 +326,6 @@
   ;no (request-size-limits SEFA) 
 
 
-  ;; ==== Added for CVE_2023_34055 AP 1&2 =====
-  ;; Application and Bouncy Castle setup
     (has-bouncy-castle SEFA bouncy-castle-lib_SEFA)
     (bcjsse-enabled SEFA bouncy-castle-lib_SEFA bcjsse-component_SEFA)
     (endpoint-identification-enabled SEFA bcjsse-component_SEFA)
@@ -372,29 +333,23 @@
     (https-connections-trigger-dns-resolution SEFA)
     (dns-traffic-interception-allowed SEFA)
     
-    ;; Bouncy Castle version (before 1.78 - vulnerable)
     (= (version bouncy-castle-lib_SEFA) 1077000000) ; version 1.77
     
-    ;; Absence of security measures (using NOT in preconditions)
     ; Note: These are checked as (not ...) in preconditions
     ; (not (additional-certificate-validation SEFA))
     
-    ;; Legitimate server setup
     (legitimate-server-ip-address legit-server1_SEFA legit-server-address1)
 
-    ;; DNS Server vulnerabilities
     (dns-predictable-source-ports vulnerable-dns-server1)
     (outdated-dns-software vulnerable-dns-server1)
     (dns-attacker-network-reach vulnerable-dns-server1)
     (dns-insufficient-rate-limiting vulnerable-dns-server1)
     (dns-predictable-transaction-ids vulnerable-dns-server1)
-    ;; Absence of security measures (using NOT in preconditions)
     ; Note: These are checked as (not ...) in preconditions
     ; (not (dnssec-enabledvulnerable-dns-server1))
     ; (not (doh-enabled vulnerable-dns-server1))
     ; (not (dot-enabled vulnerable-dns-server1))
 
-     ;; ==== Added for CVE_2022_40150 AP 1&2 =====
       
       (has-library SEFA jettison-library_SEFA)
       (jettison-library jettison-library_SEFA)
@@ -419,17 +374,14 @@
       ;not (has-waf-protection SEFA)
       ;not (has-waf-json-payload-detection SEFA)
     
-      ;;==== for AP 2===
       (has-receive-endpoint SEFA SOAP-endpoint_SEFA)
       (has-soap-endpoint SEFA SOAP-endpoint_SEFA)
 
-      ;; ==== Added for CVE_2022_40149 AP 1&2 =====
       ;not (has-stack-memory-consumption-limits SEFA )
       ;not (has-stack-memory-monitoring SEFA)
       ;not (has-stack-memory-isolation SEFA)
       ;not (has-stack-memory-quotas SEFA)
 
-      ;; ==== Added for CVE-2023-6378 =====
       (has-library SEFA logbacklib_SEFA)
       (logback-library logbacklib_SEFA)
       (= (version logbacklib_SEFA) 1004011000) 
@@ -455,7 +407,6 @@
       (server-listens-on-port tcp-server_SEFA)
        
 
-      ;; ==== Added for CVE-2023-44487 =====
       (has-server SEFA http2-server_SEFA)
       (has-http2-implementation SEFA http2-server_SEFA http2-library_SEFA)
       (http2-stream-multiplexing-enabled SEFA http2-server_SEFA)
@@ -519,7 +470,6 @@
 
     
     
-     ;; ==== Added for CVE-2023-44487 =====
      ; 1. Application uses vulnerable versions of Spring Security
      (has-dependency-on-spring-security SEFA spring-security_SEFA)
      (= (version spring-security_SEFA) 6003000003)
@@ -542,7 +492,6 @@
     ;(not (sha256-pre-hash-enabled SEFA))
 
 
-    ;; ==== Added for CVE-2023-44487 =====
     ; 2. Application uses functional web frameworks WebMvc.fn or WebFlux.fn for serving static resources
     ;(or 
     (uses-WebMvc-web-framework SEFA)
@@ -574,7 +523,6 @@
 
 
 
-    ;; ==== Added for CVE-2022-1471 =====
     ; 1. Application uses vulnerable SnakeYAML version (prior to 2.0, specifically 1.30-1.33)
     (has-dependency-on-snakeyaml SEFA snakeyaml-library_SEFA)
     (= (version  snakeyaml-library_SEFA) 1030003) ; versions 1.30+ to < 2.0
@@ -603,40 +551,23 @@
     (has-receive-endpoint SEFA yaml-endpoint_SEFA)
 
     
-    ;; ==== Added for CVE-2025-24813 =====
-    ;; 2. Tomcat Server's Default servlet has write permissions enabled - writes enabled for the default servlet (disabled by default)
     (tomcat-has-default-servlet SEFA default-servlet_SEFA)
     (tomcat-default-servlet-write-enabled SEFA default-servlet_SEFA)
-    ;; 3. Partial PUT request support is enabled (enabled by default) - support for partial PUT (enabled by default) 
     (partial-put-request-enabled SEFA)
-    ;; 4. Attacker has knowledge of public upload directories
     (has-public-directory SEFA public-directory_SEFA)
     (public-directory-exposed SEFA public-directory_SEFA)
 
-    ;; distinguished preconditions for information disclosure and elevation of priviledge (RCE)
-    ;; (or 
-    ;;      (and ;;for information disclosure
-    ;; 5. Security sensitive directories are sub-directories of public directories - a target URL for security sensitive uploads that was a sub-directory of a target URL for public uploads  
     (public-directory-has-sensitive-subdirectory public-directory_SEFA sensitive-directory_SEFA)
     (located-at sensitive-file2_SEFA sensitive-directory_SEFA)
-    ;; 6. Attacker has knowledge of sensitive filenames - attacker knowledge of the names of security sensitive files being uploaded 
     (sensitive-filename-exposed SEFA sensitive-file2_SEFA)
-    ;; 7. security sensitive files are uploaded via partial PUT requests - the security sensitive files also being uploaded via partial put
     (sensitive-file-partial-put-uploaded-enabled SEFA sensitive-file2_SEFA)
-    ;;)
-    ;; (and ;;for code excution
-    ;; 8. For remote code execution: application uses Tomcat's file-based session persistence with default storage location -  application was using Tomcat's file based session persistence with the default storage location 
     (tomcat-file-based-session-persistence-enabled SEFA tomcat_SEFA) 
     (tomcat-default-session-storage-location SEFA tomcat_SEFA)
-    ;;  ) )
-    ;; 10. HTTP PUT method accessible to unauthenticated users
     (http-put-method-accessible SEFA)
         
-    ;; 11. No WAF or security controls blocking malicious PUT requests
     ; (not (WAF-malicious-request-block SEFA))
     ; (not (security-controls-path-manipulation SEFA))
         
-    ;; 12. Application processes filenames with internal dots without proper normalization
     ; (not (has-proper-path-normalization-for-filename SEFA))
     ; (not (has-proper-path-equivalence-validation-for-filename SEFA))
 
@@ -649,7 +580,6 @@
 
      (has-tomcat-process SEFA tomcat-process_SEFA)
 
-    ;; ==== Added for CVE-2023-2976 =====
  
      (guava-library guava-library_SEFA)
      (has-library SEFA guava-library_SEFA)
@@ -670,53 +600,41 @@
      (temp-directory-under-surveillance temporary-directory_SEFA)
 
 
-    ;; ==== Added for CVE-2024-38809 =====
-     ;; 1. Application uses vulnerable Spring Framework spring-web module
      (has-framework SEFA spring-framework1)
      (spring-web-module spring-framework1)
     
-     ;; 2. Application processes ETags from If-Match or If-None-Match headers
      (has-http-endpoint SEFA  http-endpoint_SEFA)
      (has-etag-handler SEFA etag-handler_SEFA)
      (processes-if-match-headers SEFA etag-handler_SEFA)
      (processes-if-none-match-headers SEFA etag-handler_SEFA)
      
-     ;; 3. ETag parsing logic lacks proper validation
      ;not (has-etag-validation SEFA etag-handler_SEFA)
      ;not (has-etag-size-limits SEFA etag-handler_SEFA)
      ;not (has-etag-complexity-limits SEFA etag-handler_SEFA)
      
-     ;; 4. Application exposes HTTP endpoints to untrusted users
      (publicly-accessible http-endpoint_SEFA)
      ;not (has-restrictive-access-controls http-endpoint_SEFA)
      
-     ;; 5. No size limits on If-Match or If-None-Match headers
      ;not (has-header-size-limits SEFA http-endpoint_SEFA)
      ;not (has-framework-header-limits pring-framework1)
      ;not (has-servlet-container-limits SEFA)
      
-     ;; 6. No rate limiting or request throttling
      ;not (has-http-rate-limiting SEFA http-endpoint_SEFA)
      ;not (has-request-throttling SEFA http-endpoint_SEFA)
      
-     ;; 7. No custom input validation filters
      ;not (has-input-validation-filters SEFA)
      ;not (has-etag-validation-middleware SEFA)
      
-     ;; 8. No WAF/IPS protection
      ;not (has-waf-protection SEFA)
      ;not (has-ips-protection SEFA)
      ;not (has-etag-header-detection-rules SEFA)
      
-     ;; 9. Shared server resources without isolation
      (has-shared-resources SEFA)
      ;not (has-resource-isolation SEFA)
      
-     ;; 10. Shared thread pool across endpoints
      (has-shared-thread-pool SEFA)
      ;not (has-endpoint-isolation SEFA)
 
-    ;; ==== Added for CVE-2024-47072 =====
      ;1. Application uses vulnerable XStream version
      (has-library SEFA XStreamLibrary_SEFA)
      (xstream-library XStreamLibrary_SEFA)
@@ -754,7 +672,6 @@
      ;not (has-deserialization-whitelist SEFA)
      ;not (has-waf-binary-filtering SEFA)
 
-    ;; ==== Added for CVE-2023-33202 =====
     ; 1. vulnerable Bouncy Castle present: version < 1.73.0
     (has-library SEFA BCLibrary_SEFA)
     (bouncycastle-library BCLibrary_SEFA)
@@ -802,7 +719,6 @@
     ;not (has-waf-protection SEFA)
     ;not (has-upload-policy-scanner SEFA pem-endpoint_SEFA)
 
-    ;; ==== Added for CVE-2023-46589 =====
      (has-reverse-proxy SEFA reverse-proxy_SEFA)
      (forwards-requests reverse-proxy_SEFA tomcat_SEFA)
      
@@ -842,55 +758,39 @@
      (has-application-cache SEFA cache1_SEFA)
 
 
-    ;;;(1).====================================END===================================;;;
   
 
 
 
-    ;;;(2).================================USER STATE================================;;;
-    ;; === for CVE-20224-12798 ===
     (user-visits-site user1 email-site)
-    ;;(use-browser browser-chrome)
      
-    ;;==== Added for CVE_2024_22243 AP 1&2 =====
     (user-has-valid-credentials-application user1 user1-password_SEFA SEFA)
     (is-default-browser browser-chrome)
 
-    ;; ==== Added for CVE-2023-44487 =====
     (user-needs-to-use-application user1 SEFA)
 
-    ;; ==== Added for CVE-2023-33202 =====
     (has-account user1 SEFA)
     
-    ;; ==== Added for CVE-2023-46589 =====
     (user-http-request user-http-request1)
-    ;;;(2).====================================END===================================;;;
 
 
 
 
-    ;;;(3).=============================Attacker Capability==========================;;;
-     ;; === for CVE-20224-12798 ===
     ; (malicious-file malicious-logback-config)
     (env-var-logback-set-script malicious-logback-env-var-set-script1)    
     
-    ;; ==== Added for CVE-2024-38286 AP 1&2 =====
     (tls-flood-script tomcat-tls-flood-script1)
     (tomcat-tls-flood-script tomcat-tls-flood-script1)
     (tls-initial-handshake-request-script tomcat-tls-initial-handshake-request-script1)
     (tls-renegotiation-script tomcat-tls-renegotiation-script1)
 
-    ;; ==== Added for CVE_2023_34055 AP 1&2 =====
     (http-flood-script http-flood-script1)
 
 
-    ;; ==== Added for CVE-2024-34447 AP 1&2 =====
     (controlled-server-ip-address  malicious-server1 malicious-server-address1)
 
-    ;; ==== Added for CVE-2025-22223 AP2 =====
     (online-brute-force-script online-brute-force-script1)
 
-     ;; ==== Added for CVE-2023-46589 AP2 =====
     (smuggling-trigger-http-request smuggling-trigger-request1)
     (smuggling-http-request-http  smuggling-request-cache-poisoning1)
     (smuggling-http-request-http  smuggling-request-hijack1)
@@ -898,7 +798,6 @@
     (smuggling-http-request-hijack smuggling-request-hijack1)
 
    
-    ;;;(3).=====================================END================================;;;
   )
  
   (:goal (and 
