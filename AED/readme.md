@@ -32,7 +32,7 @@ make --version
 Download Metric-FF 2.0 from our replication package:
 
 ```
-https://github.com/SuperCorleone/SAQURE/...
+https://github.com/SuperCorleone/SAQURE/tree/SEFA/SAQURE_Replication_Package_SEFA/SAQURE-simulator/Metric-FF
 ```
 
 Unzip the downloaded archive:
