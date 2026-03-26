@@ -1,0 +1,14 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.17)
+
+2026-03-26 17:26:10.321  INFO 26026 --- [           main] saqure.SaqureSimulatorApplication        : Starting SaqureSimulatorApplication using Java 21 on wlan-cl-kit-cs-172-17-107-245.scc.kit.edu with PID 26026 (/Users/adukopun/Documents/CuiCui/cll/SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/cll/SAQURE_Replication_Package_SEFA)
+2026-03-26 17:26:10.322  INFO 26026 --- [           main] saqure.SaqureSimulatorApplication        : No active profile set, falling back to 1 default profile: "default"
+2026-03-26 17:26:10.562  INFO 26026 --- [           main] saqure.SaqureSimulatorApplication        : Started SaqureSimulatorApplication in 0.425 seconds (JVM running for 0.61)
+2026-03-26 17:26:10.567  INFO 26026 --- [           main] saqure.utils.ServiceGraphUtils           : Current graph: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-service","values":{"Vulnerability":0.1,"Availability":0.1,"AverageResponseTime":0.9}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"Vulnerability":0.1,"Availability":0.633333333,"AverageResponseTime":0.1}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"Vulnerability":0.1,"Availability":0.9,"AverageResponseTime":0.592307692}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"Vulnerability":0.1,"Availability":0.366666667,"AverageResponseTime":0.715384615}},"weights":{"Vulnerability":0.4,"Availability":0.3,"AverageResponseTime":0.3}}
+2026-03-26 17:26:10.575  INFO 26026 --- [           main] saqure.utils.PrismModelChecker           : Time to generate and save PRISM model: 7.626ms

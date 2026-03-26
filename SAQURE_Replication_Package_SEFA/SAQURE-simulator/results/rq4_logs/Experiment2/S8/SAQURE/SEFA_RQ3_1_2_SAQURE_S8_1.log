@@ -1,0 +1,32 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.17)
+
+2025-11-03 05:19:59.276  INFO 22847 --- [           main] i.polimi.ramses.utils.RunAllExperiments  : Starting RunAllExperiments using Java 21 on Mac.fritz.box with PID 22847 (/Users/adukopun/Documents/CuiCui/AQUA/ICSOC2024_package/ramses-planner-simulator/build/libs/ramses-planner-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/AQUA/ICSOC2024_package/ramses-planner-simulator)
+2025-11-03 05:19:59.277  INFO 22847 --- [           main] i.polimi.ramses.utils.RunAllExperiments  : No active profile set, falling back to 1 default profile: "default"
+2025-11-03 05:19:59.534  INFO 22847 --- [           main] i.polimi.ramses.utils.RunAllExperiments  : Started RunAllExperiments in 0.416 seconds (JVM running for 0.599)
+2025-11-03 05:19:59.535  INFO 22847 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Start: RQ3
+2025-11-03 05:19:59.536  INFO 22847 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : running experiment of: RQ3_1_2_SAQURE
+2025-11-03 05:20:00.076  INFO 22847 --- [           main] saqure.utils.SimulationsUtils  : Time to implement EADSA for restaurant_0: 243ms
+2025-11-03 05:20:00.343  INFO 22847 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Current graph: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"AverageResponseTime":0.9,"Vulnerability":0.5,"Availability":0.1}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.1,"Vulnerability":0.5,"Availability":0.6333333333333335}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"AverageResponseTime":0.5923076923076924,"Vulnerability":0.5,"Availability":0.9}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.7153846153846154,"Vulnerability":0.5,"Availability":0.3666666666666665}},"weights":{"AverageResponseTime":0.3,"Vulnerability":0.4,"Availability":0.3}}
+2025-11-03 05:20:00.351  INFO 22847 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 7.173ms
+2025-11-03 05:20:18.129  INFO 22847 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 634764.9292323645
+2025-11-03 05:20:18.129  INFO 22847 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 17778ms
+2025-11-03 05:20:18.130  INFO 22847 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Time to generate the graph: 0.072ms
+2025-11-03 05:20:18.131  INFO 22847 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Graph for option  - Change RESTAURANT-SERVICE implementation from restaurant-1-service to restaurant-3-service. null: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-3-service","values":{"AverageResponseTime":0.9,"Vulnerability":0.5,"Availability":0.1}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.1,"Vulnerability":0.5,"Availability":0.6333333333333335}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"AverageResponseTime":0.5923076923076924,"Vulnerability":0.5,"Availability":0.9}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.7153846153846154,"Vulnerability":0.5,"Availability":0.3666666666666665}},"weights":{"AverageResponseTime":0.3,"Vulnerability":0.4,"Availability":0.3}}
+2025-11-03 05:20:18.133  INFO 22847 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 1.628ms
+2025-11-03 05:20:36.211  INFO 22847 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 634764.9292323645
+2025-11-03 05:20:36.211  INFO 22847 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 18078ms
+2025-11-03 05:20:36.211  INFO 22847 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Time to generate the graph: 0.066ms
+2025-11-03 05:20:36.211  INFO 22847 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Graph for option  - Change RESTAURANT-SERVICE implementation from restaurant-1-service to restaurant-2-service. null: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-2-service","values":{"AverageResponseTime":0.9,"Vulnerability":0.5,"Availability":0.1}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.1,"Vulnerability":0.5,"Availability":0.6333333333333335}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"AverageResponseTime":0.5923076923076924,"Vulnerability":0.5,"Availability":0.9}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.7153846153846154,"Vulnerability":0.5,"Availability":0.3666666666666665}},"weights":{"AverageResponseTime":0.3,"Vulnerability":0.4,"Availability":0.3}}
+2025-11-03 05:20:36.213  INFO 22847 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 1.418ms
+2025-11-03 05:20:54.084  INFO 22847 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 634764.9292323645
+2025-11-03 05:20:54.084  INFO 22847 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 17871ms
+2025-11-03 05:20:54.084  INFO 22847 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : No better option found
+2025-11-03 05:20:54.084  INFO 22847 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Time to extract best option RamsesV3: 53741ms
+2025-11-03 05:20:54.084  INFO 22847 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Experiment RQ3 completed successfully
