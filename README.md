@@ -25,28 +25,84 @@ This replication package contains the implementation of `SAQURE` (Java sources),
 
 ### Instructions
 
-To build the sources of `RAMSES` you need the [Gradle build tool](https://gradle.org/). From the directory `SAQURE_Replication_Package_SEFA/SAQURE-simulator` you can run:
+#### 1. Build
 
-```
+You need the [Gradle build tool](https://gradle.org/). From the directory `SAQURE_Replication_Package_SEFA/SAQURE-simulator`, run:
+
+```bash
 ./gradlew clean build
 ```
 
-To replicate the results of all experiments presented in the paper, you can run them separately (this may take a few minutes). From the directory `SAQURE_Replication_Package_SEFA`, execute:
+#### 2. Run experiments
 
-```
-./experiments/run_experiments/run_all_rq1.sh
-./experiments/run_experiments/run_all_rq2.sh
-./experiments/run_experiments/run_all_rq3.sh
-./experiments/run_experiments/run_all_rq4.sh
-```
+All experiments are driven by a single script `run_experiments.sh`. From the directory `SAQURE_Replication_Package_SEFA`, execute:
 
-To generate all plots from the data you need [Python 3](https://www.python.org/). You can run them separately. From the directory `SAQURE_Replication_Package_SEFA`, execute:
+```bash
+# Run all experiments (RQ1–RQ4)
+./run_experiments.sh all
 
-```
-python3 experiments/plots/create_plot_RQ1.py
-python3 experiments/plots/create_plot_RQ2.py
-python3 experiments/plots/create_plot_RQ3.py
-python3 experiments/plots/create_plot_RQ4.py
+# Or run a specific RQ
+./run_experiments.sh rq1
+./run_experiments.sh rq2
+./run_experiments.sh rq3
+./run_experiments.sh rq4
 ```
 
-All the plots are generated in `.png` format in the same directory.
+Each experiment case is controlled via command-line arguments passed to the Java application:
+
+| Flag | Description | Example |
+|------|-------------|---------|
+| `-c, --config` | Experiment case name (**required**) | `-c RQ1_SAQURE_para_S1` |
+| `-s, --service` | Service name override (auto-detected if omitted) | `-s RESTAURANT-SERVICE` |
+| `-t, --time` | Runtime phase, for RQ2/RQ3 | `-t T2` |
+| `-d, --dynamic` | Dynamic parameter value, for RQ4 | `-d 5` |
+
+To run a single experiment case manually:
+
+```bash
+java -jar SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar -c <case> [options]
+```
+
+**Available experiment cases:**
+
+| RQ | Cases | Options |
+|----|-------|---------|
+| RQ1 | `RQ1_SAQURE_para_S1`..`S5`, `RQ1_SAQURE_seq_S1`..`S5`, `RQ1_Aqua_s1`..`s5`, `RQ1_RAMSES_s1`..`s5` | — |
+| RQ2 | `RQ2_SAQURE_s1`..`s3`, `RQ2_AQUA_s1`..`s3` | `-t T1` or `-t T2` |
+| RQ3 | `RQ3_SAQURE_s1`..`s3`, `RQ3_SAQURE_s1_nodyPa`..`s3_nodyPa` | `-t T1` or `-t T2` |
+| RQ4 | `RQ4_1_1_SAQURE`, `RQ4_1_1_AQUA`, `RQ4_1_2_SAQURE`, `RQ4_1_2_AQUA` | `-d <param>` |
+
+Logs are saved under `SAQURE-simulator/results/` with the following directory structure:
+
+```
+SAQURE-simulator/results/
+├── rq1_logs/S{N}/{approach}/               e.g. S1/SAQURE_para/, S3/AQUA/, S2/RAMSES/
+├── rq2_logs/S{N}/{T1|T2}/{approach}/       e.g. S1/T2/SAQURE/, S2/T1/AQUA/
+├── rq3_logs/S{N}/{T1|T2}/{approach}/       e.g. S1/T1/SAQURE/, S2/T2/SAQURE_nodyPa/
+└── rq4_logs/Experiment{1|2}/S{param}/{approach}/  e.g. Experiment1/S5/SAQURE/
+```
+
+#### 3. Generate plots
+
+You need [Python 3](https://www.python.org/) with `matplotlib` and `numpy`. From the directory `SAQURE_Replication_Package_SEFA`, execute:
+
+```bash
+# Generate all plots (RQ1–RQ4)
+python3 create_plots.py
+
+# Or generate plots for a specific RQ
+python3 create_plots.py --experiment RQ1
+python3 create_plots.py --experiment RQ2
+python3 create_plots.py --experiment RQ3
+python3 create_plots.py --experiment RQ4
+```
+
+RQ4 can also be plotted individually:
+
+```bash
+python3 create_plots.py --experiment RQ4.1
+python3 create_plots.py --experiment RQ4.2
+python3 create_plots.py --experiment RQ4_eadsa
+```
+
+All plots are generated in `.png` format under the `experiments/plots/` directory.
