@@ -1,0 +1,17 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.17)
+
+2025-10-30 15:27:45.487  INFO 34523 --- [           main] i.polimi.ramses.utils.RunAllExperiments  : Starting RunAllExperiments using Java 21 on adus-MacBook-Pro.local with PID 34523 (/Users/adukopun/Documents/CuiCui/AQUA/ICSOC2024_package_TVS/ramses-planner-simulator/build/libs/ramses-planner-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/AQUA/ICSOC2024_package_TVS/ramses-planner-simulator)
+2025-10-30 15:27:45.488  INFO 34523 --- [           main] i.polimi.ramses.utils.RunAllExperiments  : No active profile set, falling back to 1 default profile: "default"
+2025-10-30 15:27:45.740  INFO 34523 --- [           main] i.polimi.ramses.utils.RunAllExperiments  : Started RunAllExperiments in 0.414 seconds (JVM running for 0.613)
+2025-10-30 15:27:45.742  INFO 34523 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Start: RQ1
+2025-10-30 15:27:45.743  INFO 34523 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : running experiment of: RQ1_SAQURE_noDTMC_para_s4
+Key with min value: persistence-3-service, Min value: 2.51
+2025-10-30 15:27:46.215  INFO 34523 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Time to extract best option by Radapt without DTMC: 472ms
+2025-10-30 15:27:46.215  INFO 34523 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Experiment RQ1 completed successfully

@@ -1,0 +1,53 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.17)
+
+2026-03-29 12:46:13.171  INFO 29682 --- [           main] saqure.SaqureSimulatorApplication        : Starting SaqureSimulatorApplication using Java 21 on Mac.fritz.box with PID 29682 (/Users/adukopun/Documents/CuiCui/SAQURE_Replication_Package_TeaStore/SAQURE-Simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/SAQURE_Replication_Package_TeaStore)
+2026-03-29 12:46:13.173  INFO 29682 --- [           main] saqure.SaqureSimulatorApplication        : No active profile set, falling back to 1 default profile: "default"
+2026-03-29 12:46:13.427  INFO 29682 --- [           main] saqure.SaqureSimulatorApplication        : Started SaqureSimulatorApplication in 0.427 seconds (JVM running for 0.62)
+
+ spoofing_plan: 8.1
+ tampering_plan: 96.04000000000002
+repudiation_plan:0.0
+ information_disclosure_plan: 9.8
+ denial_of_service:7.5
+ elevation_of_privilege_plan:9.8
+2026-03-29 12:46:14.752  INFO 29682 --- [           main] saqure.utils.SimulationsUtils            : Risk of webui-1-service: 131.24
+
+ spoofing_plan: 8.1
+ tampering_plan: 5.3
+repudiation_plan:0.0
+ information_disclosure_plan: 8.1
+ denial_of_service:7.5
+ elevation_of_privilege_plan:9.8
+2026-03-29 12:46:15.650  INFO 29682 --- [           main] saqure.utils.SimulationsUtils            : Risk of webui-2-service: 38.8
+
+ spoofing_plan: 8.1
+ tampering_plan: 5.3
+repudiation_plan:0.0
+ information_disclosure_plan: 8.1
+ denial_of_service:7.5
+ elevation_of_privilege_plan:9.8
+2026-03-29 12:46:16.508  INFO 29682 --- [           main] saqure.utils.SimulationsUtils            : Risk of webui-3-service: 38.8
+2026-03-29 12:46:16.512  INFO 29682 --- [           main] saqure.utils.ServiceGraphUtils           : Current graph: {"IMAGE-SERVICE":{"currentImplementationId":"image-service","values":{"Availability":0.3666666666666665,"AverageResponseTime":0.6333333333333333,"Vulnerability":0.9}},"WEBUI-SERVICE":{"currentImplementationId":"webui-1-service","values":{"Availability":0.1,"AverageResponseTime":0.7933333333333333,"Vulnerability":0.9}},"PERSISTENCE-SERVICE":{"currentImplementationId":"persistence-service","values":{"Availability":0.6333333333333335,"AverageResponseTime":0.1,"Vulnerability":0.9}},"AUTHENTICATION-SERVICE":{"currentImplementationId":"authentication-service","values":{"Availability":0.9,"AverageResponseTime":0.5266666666666667,"Vulnerability":0.9}},"RECOMMENDER-SERVICE":{"currentImplementationId":"recommender-service","values":{"Availability":0.1,"AverageResponseTime":0.9,"Vulnerability":0.9}},"weights":{"Availability":0.3,"AverageResponseTime":0.3,"Vulnerability":0.4}}
+2026-03-29 12:46:16.520  INFO 29682 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 6.525ms
+2026-03-29 12:46:32.256  INFO 29682 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 391427.41627219645
+2026-03-29 12:46:32.256  INFO 29682 --- [           main] saqure.Planner.PrismModelChecker         : Time to obtain the cost: 15736ms
+2026-03-29 12:46:32.257  INFO 29682 --- [           main] saqure.utils.ServiceGraphUtils           : Time to generate the graph: 0.097ms
+2026-03-29 12:46:32.258  INFO 29682 --- [           main] saqure.utils.ServiceGraphUtils           : Graph for option  - Change WEBUI-SERVICE implementation from webui-1-service to webui-2-service. null: {"WEBUI-SERVICE":{"currentImplementationId":"webui-2-service","values":{"Availability":0.1,"AverageResponseTime":0.7933333333333333,"Vulnerability":0.16003602161296776}},"IMAGE-SERVICE":{"currentImplementationId":"image-service","values":{"Availability":0.3666666666666665,"AverageResponseTime":0.6333333333333333,"Vulnerability":0.9}},"PERSISTENCE-SERVICE":{"currentImplementationId":"persistence-service","values":{"Availability":0.6333333333333335,"AverageResponseTime":0.1,"Vulnerability":0.9}},"AUTHENTICATION-SERVICE":{"currentImplementationId":"authentication-service","values":{"Availability":0.9,"AverageResponseTime":0.5266666666666667,"Vulnerability":0.9}},"RECOMMENDER-SERVICE":{"currentImplementationId":"recommender-service","values":{"Availability":0.1,"AverageResponseTime":0.9,"Vulnerability":0.9}},"weights":{"Availability":0.3,"AverageResponseTime":0.3,"Vulnerability":0.4}}
+2026-03-29 12:46:32.262  INFO 29682 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 3.704ms
+2026-03-29 12:46:48.130  INFO 29682 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 282795.7683588553
+2026-03-29 12:46:48.130  INFO 29682 --- [           main] saqure.Planner.PrismModelChecker         : Time to obtain the cost: 15868ms
+2026-03-29 12:46:48.131  INFO 29682 --- [           main] saqure.utils.ServiceGraphUtils           : Time to generate the graph: 0.116ms
+2026-03-29 12:46:48.131  INFO 29682 --- [           main] saqure.utils.ServiceGraphUtils           : Graph for option  - Change WEBUI-SERVICE implementation from webui-1-service to webui-3-service. null: {"WEBUI-SERVICE":{"currentImplementationId":"webui-3-service","values":{"Availability":0.1,"AverageResponseTime":0.7933333333333333,"Vulnerability":0.16003602161296776}},"IMAGE-SERVICE":{"currentImplementationId":"image-service","values":{"Availability":0.3666666666666665,"AverageResponseTime":0.6333333333333333,"Vulnerability":0.9}},"PERSISTENCE-SERVICE":{"currentImplementationId":"persistence-service","values":{"Availability":0.6333333333333335,"AverageResponseTime":0.1,"Vulnerability":0.9}},"AUTHENTICATION-SERVICE":{"currentImplementationId":"authentication-service","values":{"Availability":0.9,"AverageResponseTime":0.5266666666666667,"Vulnerability":0.9}},"RECOMMENDER-SERVICE":{"currentImplementationId":"recommender-service","values":{"Availability":0.1,"AverageResponseTime":0.9,"Vulnerability":0.9}},"weights":{"Availability":0.3,"AverageResponseTime":0.3,"Vulnerability":0.4}}
+2026-03-29 12:46:48.133  INFO 29682 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 1.665ms
+2026-03-29 12:47:03.939  INFO 29682 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 282795.7683588553
+2026-03-29 12:47:03.939  INFO 29682 --- [           main] saqure.Planner.PrismModelChecker         : Time to obtain the cost: 15806ms
+2026-03-29 12:47:03.939  INFO 29682 --- [           main] saqure.utils.ServiceGraphUtils           : Best option:  - Change WEBUI-SERVICE implementation from webui-1-service to webui-2-service. null
+2026-03-29 12:47:03.939  INFO 29682 --- [           main] saqure.utils.ServiceGraphUtils           : Best cost value: 282795.7683588553
+2026-03-29 12:47:03.939  INFO 29682 --- [           main] saqure.SaqureSimulatorApplication        : Time to extract best option RamsesV3: 47427ms

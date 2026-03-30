@@ -1,0 +1,54 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.17)
+
+2025-11-27 14:47:34.553  INFO 88026 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Starting RamsesPlannerSimulatorApplication using Java 21 on Mac.fritz.box with PID 88026 (/Users/adukopun/Documents/CuiCui/AQUA/ICSOC2024_package_TVS/ramses-planner-simulator/build/libs/ramses-planner-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/AQUA/ICSOC2024_package_TVS/ramses-planner-simulator)
+2025-11-27 14:47:34.554  INFO 88026 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : No active profile set, falling back to 1 default profile: "default"
+2025-11-27 14:47:34.805  INFO 88026 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Started RamsesPlannerSimulatorApplication in 0.411 seconds (JVM running for 0.608)
+
+ spoofing_plan: 8.1
+ tampering_plan: 9.8
+repudiation_plan:0.0
+ information_disclosure_plan: 9.8
+ denial_of_service:7.5
+ elevation_of_privilege_plan:9.8
+2025-11-27 14:47:35.796  INFO 88026 --- [           main] saqure.utils.SimulationsUtils  : Risk of webui-1-service: 45.0
+
+ spoofing_plan: 8.1
+ tampering_plan: 5.3
+repudiation_plan:0.0
+ information_disclosure_plan: 8.1
+ denial_of_service:7.5
+ elevation_of_privilege_plan:9.8
+2025-11-27 14:47:36.428  INFO 88026 --- [           main] saqure.utils.SimulationsUtils  : Risk of webui-2-service: 38.8
+
+ spoofing_plan: 8.1
+ tampering_plan: 5.3
+repudiation_plan:0.0
+ information_disclosure_plan: 8.1
+ denial_of_service:7.5
+ elevation_of_privilege_plan:9.8
+2025-11-27 14:47:37.081  INFO 88026 --- [           main] saqure.utils.SimulationsUtils  : Risk of webui-3-service: 38.8
+2025-11-27 14:47:37.084  INFO 88026 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Runtime risk assessment time: 2277ms
+2025-11-27 14:47:37.085  INFO 88026 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Current graph: {"IMAGE-SERVICE":{"currentImplementationId":"image-service","values":{"Availability":0.3666666666666665,"AverageResponseTime":0.6333333333333333,"Vulnerability":0.9}},"WEBUI-SERVICE":{"currentImplementationId":"webui-1-service","values":{"Availability":0.1,"AverageResponseTime":0.7933333333333333,"Vulnerability":0.9}},"PERSISTENCE-SERVICE":{"currentImplementationId":"persistence-service","values":{"Availability":0.6333333333333335,"AverageResponseTime":0.1,"Vulnerability":0.9}},"AUTHENTICATION-SERVICE":{"currentImplementationId":"authentication-service","values":{"Availability":0.9,"AverageResponseTime":0.5266666666666667,"Vulnerability":0.9}},"RECOMMENDER-SERVICE":{"currentImplementationId":"recommender-service","values":{"Availability":0.1,"AverageResponseTime":0.9,"Vulnerability":0.9}},"weights":{"Availability":0.3,"AverageResponseTime":0.3,"Vulnerability":0.4}}
+2025-11-27 14:47:37.092  INFO 88026 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 6.027ms
+2025-11-27 14:47:52.883  INFO 88026 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 391427.41627219645
+2025-11-27 14:47:52.886  INFO 88026 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 15793ms
+2025-11-27 14:47:52.892  INFO 88026 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Time to generate the graph: 0.289ms
+2025-11-27 14:47:52.895  INFO 88026 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Graph for option  - Change WEBUI-SERVICE implementation from webui-1-service to webui-2-service. null: {"WEBUI-SERVICE":{"currentImplementationId":"webui-2-service","values":{"Availability":0.1,"AverageResponseTime":0.7933333333333333,"Vulnerability":0.5379562043795618}},"IMAGE-SERVICE":{"currentImplementationId":"image-service","values":{"Availability":0.3666666666666665,"AverageResponseTime":0.6333333333333333,"Vulnerability":0.9}},"PERSISTENCE-SERVICE":{"currentImplementationId":"persistence-service","values":{"Availability":0.6333333333333335,"AverageResponseTime":0.1,"Vulnerability":0.9}},"AUTHENTICATION-SERVICE":{"currentImplementationId":"authentication-service","values":{"Availability":0.9,"AverageResponseTime":0.5266666666666667,"Vulnerability":0.9}},"RECOMMENDER-SERVICE":{"currentImplementationId":"recommender-service","values":{"Availability":0.1,"AverageResponseTime":0.9,"Vulnerability":0.9}},"weights":{"Availability":0.3,"AverageResponseTime":0.3,"Vulnerability":0.4}}
+2025-11-27 14:47:52.899  INFO 88026 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 3.505ms
+2025-11-27 14:48:09.480  INFO 88026 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 338276.9720826
+2025-11-27 14:48:09.483  INFO 88026 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 16583ms
+2025-11-27 14:48:09.484  INFO 88026 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Time to generate the graph: 0.39ms
+2025-11-27 14:48:09.484  INFO 88026 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Graph for option  - Change WEBUI-SERVICE implementation from webui-1-service to webui-3-service. null: {"WEBUI-SERVICE":{"currentImplementationId":"webui-3-service","values":{"Availability":0.1,"AverageResponseTime":0.7933333333333333,"Vulnerability":0.5379562043795618}},"IMAGE-SERVICE":{"currentImplementationId":"image-service","values":{"Availability":0.3666666666666665,"AverageResponseTime":0.6333333333333333,"Vulnerability":0.9}},"PERSISTENCE-SERVICE":{"currentImplementationId":"persistence-service","values":{"Availability":0.6333333333333335,"AverageResponseTime":0.1,"Vulnerability":0.9}},"AUTHENTICATION-SERVICE":{"currentImplementationId":"authentication-service","values":{"Availability":0.9,"AverageResponseTime":0.5266666666666667,"Vulnerability":0.9}},"RECOMMENDER-SERVICE":{"currentImplementationId":"recommender-service","values":{"Availability":0.1,"AverageResponseTime":0.9,"Vulnerability":0.9}},"weights":{"Availability":0.3,"AverageResponseTime":0.3,"Vulnerability":0.4}}
+2025-11-27 14:48:09.489  INFO 88026 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to generate and save PRISM model: 4.835ms
+2025-11-27 14:48:25.459  INFO 88026 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Cost Value: 338276.9720826
+2025-11-27 14:48:25.460  INFO 88026 --- [           main] i.polimi.ramses.utils.PrismModelChecker  : Time to obtain the cost: 15970ms
+2025-11-27 14:48:25.461  INFO 88026 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Best option:  - Change WEBUI-SERVICE implementation from webui-1-service to webui-2-service. null
+2025-11-27 14:48:25.461  INFO 88026 --- [           main] i.polimi.ramses.utils.ServiceGraphUtils  : Best cost value: 338276.9720826
+2025-11-27 14:48:25.461  INFO 88026 --- [           main] i.p.r.RamsesPlannerSimulatorApplication  : Time to extract best option RamsesV3: 48376ms
