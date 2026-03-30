@@ -7,8 +7,7 @@ This package contains the raw data as well as scripts used to replicate the resu
 
 ### Structure
 This replication package contains the implementation of `SAQURE` (Java sources), together with all experimental scripts, raw logs, plot-generation code, and the **AED** dataset. The directory layout is as follows:
-- `SAQURE`
-  - `SAQURE-Replication-Package-(SEFA/TS)/`: Gradle project of `SAQURE`, including the implementation of the MAPE-K (Monitor, Aanalyzer, Planner) modules.
+- `SAQURE-Replication-Package-(SEFA/TS)/`: Gradle project of `SAQURE`, including the implementation of the MAPE-K (Monitor, Aanalyzer, Planner) modules.
     - `prism/`: `PRISM` models of `SEFA` and `TeaStore`, as well as corresponding properties used by the Planner module to compute long-term cumulative costs for adaptation option selection.
     - `experiments/`:
       - `run_all_experiments/`: Bash scripts for reproducing the sub-experiments (RQ1, RQ2, RQ3, RQ4) presented in the paper.
@@ -19,10 +18,10 @@ This replication package contains the implementation of `SAQURE` (Java sources),
       - `Updater/`: Applies the predefined runtime changes to `AED` or `AEDIs`.
     - `Metric-FF/`: A fixed `Metric-FF 2.0` tool package, invoked by the `EADSA` of the Analyzer module for generating Attack Paths (APs).
     - `SqureSimulatorApplication/`: Simulation of the Planner module.
-  - `AED/`:
+- `AED/`:
      1. An extensible generic Adversarial Environment Domain `AED.pddl` with ~300 atomic action specifications, covering attacker, application, user, and infrastructure behaviors.
      2. Exemplar `AEDIs/` (e.g., SEFA instances).
-  - `Supplementary Experimental Configuration for RQ1, RQ2, and RQ3.pdf`: Supplementary configuration tables for RQ1, RQ2 and RQ3.
+- `Supplementary Experimental Configuration for RQ1, RQ2, and RQ3.pdf`: Supplementary configuration tables for RQ1, RQ2 and RQ3.
 
 ### Instructions
 
