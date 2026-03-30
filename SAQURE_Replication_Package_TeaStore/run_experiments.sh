@@ -3,7 +3,7 @@
 JAR="SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar"
 JAVA_CMD="java -jar $JAR"
 REPEATS=1
-LOG_BASE="./SAQURE-simulator/results_reproduction"
+LOG_BASE="./SAQURE-simulator/results"
 
 run_rq1() {
     echo "========== RQ1 Experiments =========="
