@@ -30,7 +30,7 @@ This replication package contains the implementation of `SAQURE` (Java sources),
 You need the [Gradle build tool](https://gradle.org/). From the directory `SAQURE_Replication_Package_TeaStore/SAQURE-simulator`, run:
 
 ```bash
-./gradlew clean build
+./gradlew clean bootJar
 ```
 
 #### 2. Run experiments
