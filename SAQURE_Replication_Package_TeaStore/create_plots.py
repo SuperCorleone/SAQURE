@@ -12,7 +12,7 @@ from matplotlib.lines import Line2D
 
 import argparse
 
-RESULTS_BASE = "SAQURE-simulator/results_reproduction" # "SAQURE-simulator/results"
+RESULTS_BASE = "SAQURE-simulator/results"
 PLOTS_DIR = "experiments/plots"
 
 # ═══════════════════════════════════════════════════════════════
