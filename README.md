@@ -8,7 +8,7 @@ This package contains the raw data as well as scripts used to replicate the resu
 ### Structure
 This replication package contains the implementation of `SAQURE` (Java sources), together with all experimental scripts, raw logs, plot-generation code, and the **AED** dataset. The directory layout is as follows:
 - `SAQURE`
-  - `SAQURE-replication-package/`: Gradle project of `SAQURE`, including the implementation of the MAPE-K (Monitor, Aanalyzer, Planner) modules.
+  - `SAQURE-Replication-Package-(SEFA/TS)/`: Gradle project of `SAQURE`, including the implementation of the MAPE-K (Monitor, Aanalyzer, Planner) modules.
     - `prism/`: `PRISM` models of `SEFA` and `TeaStore`, as well as corresponding properties used by the Planner module to compute long-term cumulative costs for adaptation option selection.
     - `experiments/`:
       - `run_all_experiments/`: Bash scripts for reproducing the sub-experiments (RQ1, RQ2, RQ3, RQ4) presented in the paper.
