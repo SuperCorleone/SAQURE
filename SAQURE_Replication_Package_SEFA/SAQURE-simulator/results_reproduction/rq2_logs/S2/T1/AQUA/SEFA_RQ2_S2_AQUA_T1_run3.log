@@ -1,0 +1,31 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.17)
+
+2026-03-29 01:42:34.539  INFO 99747 --- [           main] saqure.SaqureSimulatorApplication        : Starting SaqureSimulatorApplication using Java 21 on Mac.fritz.box with PID 99747 (/Users/adukopun/Documents/CuiCui/SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/SAQURE_Replication_Package_SEFA)
+2026-03-29 01:42:34.540  INFO 99747 --- [           main] saqure.SaqureSimulatorApplication        : No active profile set, falling back to 1 default profile: "default"
+2026-03-29 01:42:34.770  INFO 99747 --- [           main] saqure.SaqureSimulatorApplication        : Started SaqureSimulatorApplication in 0.396 seconds (JVM running for 0.579)
+2026-03-29 01:42:34.771  WARN 99747 --- [           main] saqure.SaqureSimulatorApplication        : Unable to read parameter file, using default parameter 1
+2026-03-29 01:42:34.773  INFO 99747 --- [           main] saqure.utils.SimulationsUtils            : Risk of payment-proxy-1-service: 37.5; Risk of payment-proxy-2-service: 22.5; Risk of payment-proxy-3-service: 22.6
+2026-03-29 01:42:34.776  INFO 99747 --- [           main] saqure.utils.ServiceGraphUtils           : Current graph: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"AverageResponseTime":0.1,"Availability":0.6333333333333335,"Vulnerability":0.1}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.26,"Availability":0.9,"Vulnerability":0.1}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-1-service","values":{"AverageResponseTime":0.42000000000000004,"Availability":0.3666666666666665,"Vulnerability":0.3980988593155893}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.9,"Availability":0.1,"Vulnerability":0.8999999999999999}},"weights":{"AverageResponseTime":0.3,"Availability":0.3,"Vulnerability":0.4}}
+2026-03-29 01:42:34.786  INFO 99747 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 8.951ms
+2026-03-29 01:42:51.796  INFO 99747 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 448265.61861349456
+2026-03-29 01:42:51.796  INFO 99747 --- [           main] saqure.Planner.PrismModelChecker         : Time to obtain the cost: 17009ms
+2026-03-29 01:42:51.800  INFO 99747 --- [           main] saqure.utils.ServiceGraphUtils           : Time to generate the graph: 0.208ms
+2026-03-29 01:42:51.805  INFO 99747 --- [           main] saqure.utils.ServiceGraphUtils           : Graph for option  - Change PAYMENT-PROXY-SERVICE implementation from payment-proxy-1-service to payment-proxy-2-service. null: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"AverageResponseTime":0.1,"Availability":0.6333333333333335,"Vulnerability":0.1}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.26,"Availability":0.9,"Vulnerability":0.1}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-1-service","values":{"AverageResponseTime":0.42000000000000004,"Availability":0.3666666666666665,"Vulnerability":0.3980988593155893}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-2-service","values":{"AverageResponseTime":0.9,"Availability":0.1,"Vulnerability":0.4437262357414449}},"weights":{"AverageResponseTime":0.3,"Availability":0.3,"Vulnerability":0.4}}
+2026-03-29 01:42:51.808  INFO 99747 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 3.548ms
+2026-03-29 01:43:08.764  INFO 99747 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 437401.50624716515
+2026-03-29 01:43:08.765  INFO 99747 --- [           main] saqure.Planner.PrismModelChecker         : Time to obtain the cost: 16956ms
+2026-03-29 01:43:08.766  INFO 99747 --- [           main] saqure.utils.ServiceGraphUtils           : Time to generate the graph: 0.345ms
+2026-03-29 01:43:08.766  INFO 99747 --- [           main] saqure.utils.ServiceGraphUtils           : Graph for option  - Change PAYMENT-PROXY-SERVICE implementation from payment-proxy-1-service to payment-proxy-3-service. null: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"AverageResponseTime":0.1,"Availability":0.6333333333333335,"Vulnerability":0.1}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.26,"Availability":0.9,"Vulnerability":0.1}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-1-service","values":{"AverageResponseTime":0.42000000000000004,"Availability":0.3666666666666665,"Vulnerability":0.3980988593155893}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-3-service","values":{"AverageResponseTime":0.9,"Availability":0.1,"Vulnerability":0.446768060836502}},"weights":{"AverageResponseTime":0.3,"Availability":0.3,"Vulnerability":0.4}}
+2026-03-29 01:43:08.772  INFO 99747 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 6.07ms
+2026-03-29 01:43:25.761  INFO 99747 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 437473.93366186385
+2026-03-29 01:43:25.763  INFO 99747 --- [           main] saqure.Planner.PrismModelChecker         : Time to obtain the cost: 16990ms
+2026-03-29 01:43:25.763  INFO 99747 --- [           main] saqure.utils.ServiceGraphUtils           : Best option:  - Change PAYMENT-PROXY-SERVICE implementation from payment-proxy-1-service to payment-proxy-2-service. null
+2026-03-29 01:43:25.763  INFO 99747 --- [           main] saqure.utils.ServiceGraphUtils           : Best cost value: 437401.50624716515
+2026-03-29 01:43:25.764  INFO 99747 --- [           main] saqure.SaqureSimulatorApplication        : Time to extract best option RamsesV3: 50987ms

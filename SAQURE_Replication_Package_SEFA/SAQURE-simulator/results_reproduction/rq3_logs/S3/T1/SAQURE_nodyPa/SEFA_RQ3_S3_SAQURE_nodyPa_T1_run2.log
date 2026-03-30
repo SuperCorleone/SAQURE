@@ -1,0 +1,49 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.17)
+
+2026-03-29 04:46:53.352  INFO 7042 --- [           main] saqure.SaqureSimulatorApplication        : Starting SaqureSimulatorApplication using Java 21 on Mac.fritz.box with PID 7042 (/Users/adukopun/Documents/CuiCui/SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/SAQURE_Replication_Package_SEFA)
+2026-03-29 04:46:53.353  INFO 7042 --- [           main] saqure.SaqureSimulatorApplication        : No active profile set, falling back to 1 default profile: "default"
+2026-03-29 04:46:53.583  INFO 7042 --- [           main] saqure.SaqureSimulatorApplication        : Started SaqureSimulatorApplication in 0.391 seconds (JVM running for 0.573)
+2026-03-29 04:46:53.585  WARN 7042 --- [           main] saqure.SaqureSimulatorApplication        : Unable to read parameter file, using default parameter 1
+O0 
+ O0--spoofing: 7.4
+ tampering: 96.04000000000002
+ repudiation: 0.0
+ information_disclosure: 9.8
+ denial_of_service: 7.5
+ elevation_of_privilege: 9.8O1 
+ O1--spoofing: 7.5
+ tampering: 5.3
+ repudiation: 0.0
+ information_disclosure: 7.5
+ denial_of_service: 7.5
+ elevation_of_privilege: 9.8O2 
+ O2--spoofing: 7.4
+ tampering: 5.3
+ repudiation: 0.0
+ information_disclosure: 7.4
+ denial_of_service: 7.5
+ elevation_of_privilege: 9.82026-03-29 04:46:56.240  INFO 7042 --- [           main] saqure.utils.SimulationsUtils            : Risk of ordering-1-service: 130.54000000000002; Risk of ordering-2-service: 37.6; Risk of ordering-3-service: 37.400000000000006
+2026-03-29 04:46:56.245  INFO 7042 --- [           main] saqure.utils.ServiceGraphUtils           : Current graph: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"Availability":0.8999999999999999,"AverageResponseTime":0.5,"Vulnerability":0.8999999999999999}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"Availability":0.5000000000000004,"AverageResponseTime":0.1,"Vulnerability":0.8999999999999999}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-1-service","values":{"Availability":0.1,"AverageResponseTime":0.5,"Vulnerability":0.8999999999999999}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"Availability":0.5000000000000004,"AverageResponseTime":0.9,"Vulnerability":0.8999999999999999}},"weights":{"Availability":0.3,"AverageResponseTime":0.3,"Vulnerability":0.4}}
+2026-03-29 04:46:56.254  INFO 7042 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 7.896ms
+2026-03-29 04:47:13.243  INFO 7042 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 367122.8507124564
+2026-03-29 04:47:13.244  INFO 7042 --- [           main] saqure.Planner.PrismModelChecker         : Time to obtain the cost: 16989ms
+2026-03-29 04:47:13.246  INFO 7042 --- [           main] saqure.utils.ServiceGraphUtils           : Time to generate the graph: 0.179ms
+2026-03-29 04:47:13.248  INFO 7042 --- [           main] saqure.utils.ServiceGraphUtils           : Graph for option  - Change ORDERING-SERVICE implementation from ordering-1-service to ordering-2-service. null: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"Availability":0.8999999999999999,"AverageResponseTime":0.5,"Vulnerability":0.8999999999999999}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"Availability":0.5000000000000004,"AverageResponseTime":0.1,"Vulnerability":0.8999999999999999}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-2-service","values":{"Availability":0.1,"AverageResponseTime":0.5,"Vulnerability":0.10171784410564735}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"Availability":0.5000000000000004,"AverageResponseTime":0.9,"Vulnerability":0.8999999999999999}},"weights":{"Availability":0.3,"AverageResponseTime":0.3,"Vulnerability":0.4}}
+2026-03-29 04:47:13.253  INFO 7042 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 4.904ms
+2026-03-29 04:47:30.367  INFO 7042 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 234052.59822290088
+2026-03-29 04:47:30.367  INFO 7042 --- [           main] saqure.Planner.PrismModelChecker         : Time to obtain the cost: 17114ms
+2026-03-29 04:47:30.368  INFO 7042 --- [           main] saqure.utils.ServiceGraphUtils           : Time to generate the graph: 0.216ms
+2026-03-29 04:47:30.368  INFO 7042 --- [           main] saqure.utils.ServiceGraphUtils           : Graph for option  - Change ORDERING-SERVICE implementation from ordering-1-service to ordering-3-service. null: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"Availability":0.8999999999999999,"AverageResponseTime":0.5,"Vulnerability":0.8999999999999999}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"Availability":0.5000000000000004,"AverageResponseTime":0.1,"Vulnerability":0.8999999999999999}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-3-service","values":{"Availability":0.1,"AverageResponseTime":0.5,"Vulnerability":0.1}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"Availability":0.5000000000000004,"AverageResponseTime":0.9,"Vulnerability":0.8999999999999999}},"weights":{"Availability":0.3,"AverageResponseTime":0.3,"Vulnerability":0.4}}
+2026-03-29 04:47:30.372  INFO 7042 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 4.323ms
+2026-03-29 04:47:47.298  INFO 7042 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 233766.24088968732
+2026-03-29 04:47:47.299  INFO 7042 --- [           main] saqure.Planner.PrismModelChecker         : Time to obtain the cost: 16926ms
+2026-03-29 04:47:47.299  INFO 7042 --- [           main] saqure.utils.ServiceGraphUtils           : Best option:  - Change ORDERING-SERVICE implementation from ordering-1-service to ordering-3-service. null
+2026-03-29 04:47:47.299  INFO 7042 --- [           main] saqure.utils.ServiceGraphUtils           : Best cost value: 233766.24088968732
+2026-03-29 04:47:47.299  INFO 7042 --- [           main] saqure.SaqureSimulatorApplication        : Time to extract best option RamsesV3: 51054ms
