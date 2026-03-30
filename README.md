@@ -19,11 +19,9 @@ This replication package contains the implementation of `SAQURE` (Java sources),
       - `Updater/`: Applies the predefined runtime changes to `AED` or `AEDIs`.
     - `Metric-FF/`: A fixed `Metric-FF 2.0` tool package, invoked by the `EADSA` of the Analyzer module for generating Attack Paths (APs).
     - `SqureSimulatorApplication/`: Simulation of the Planner module.
-
   - `AED/`:
      1. An extensible generic Adversarial Environment Domain `AED.pddl` with ~300 atomic action specifications, covering attacker, application, user, and infrastructure behaviors.
      2. Exemplar `AEDIs/` (e.g., SEFA instances).
-  - `Metric-FF/`: A fixed `Metric-FF 2.0` tool package, invoked by the `EADSA` of the Analyzer module for generating Attack Paths (APs).
   - `Supplementary Experimental Configuration for RQ1, RQ2, and RQ3.pdf`: Supplementary configuration tables for RQ1, RQ2 and RQ3.
 
 ### Instructions
