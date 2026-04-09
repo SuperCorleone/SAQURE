@@ -10,14 +10,18 @@ This replication package contains the implementation of `SAQURE` (Java sources),
 - `SAQURE-Replication-Package-(SEFA/TeaStore)/`: Gradle project of `SAQURE`, including the implementation of the MAPE-K (Monitor, Aanalyzer, Planner) modules for SEFA/TeaStore.
     - `prism/`: `PRISM` models of `SEFA` and `TeaStore`, as well as corresponding properties used by the Planner module to compute long-term cumulative costs for adaptation option selection.
     - `Metric-FF/`: A fixed `Metric-FF 2.0` tool package, invoked by the `EADSA` of the Analyzer module for generating Attack Paths (APs).
-    - `SqureSimulatorApplication/`: Simulation of the Planner module.
-    - `Analyzer/`
-      - `EADSA/`: Implementation of `Environment-Aware Dynamic Security Assessment (EADSA)`.
-      - `Updater/`: Applies the predefined runtime changes to `AED` or `AEDIs`.
+    - `src/`: Java sources implementing the MAPE-K loop (`SaqureSimulatorApplication` entry point).
+      - `Analyzer/`: Analyzer module, including `EADSA` (Environment-Aware Dynamic Security Assessment) and service–vulnerability lookup files.
+      - `Planner/`: Planner module wrapping the `PRISM` model checker for adaptation-option selection.
+      - `Knowledge/`: Knowledge base containing `AED`/`AEDI` PDDL domain definitions and `DTMC` models.
+      - `utils/`: Shared utilities for AED processing, infrastructure modelling, and simulation support.
+    - `AED/`, `AEDI/`, `AP/`: Runtime PDDL domain files, AED Instance files, and generated Attack Paths, organised per research question.
+    - `results/`: Experiment output logs (`rq1_logs/`–`rq4_logs/`).
+    - `run_experiments.sh`: Bash script for reproducing the experiments (RQ1–RQ4).
+    - `create_plots.py`: Python script that generates the plots from the produced logs/results.
     - `experiments/`:
-      - `run_all_experiments/`: Bash scripts for reproducing the sub-experiments (RQ1, RQ2, RQ3, RQ4) presented in the paper.
-      - Configuration? include configuration table? lookup file? AED AEDIs? (where to put this part?)
-      - `plots/`: Bash and Python scripts that generate the plots for RQ1–RQ4 from the produced logs/results.
+      - `experiment_config/`: Configuration spreadsheets (`.xlsx`) for RQ1–RQ3.
+      - `plots/`: Pre-generated plot images (`.png`) for RQ1–RQ4.
 - `AED/`:
      1. An extensible generic Adversarial Environment Domain `AED.pddl` with ~300 atomic action specifications, covering attacker, application, user, and infrastructure behaviors.
      2. Exemplar `AEDIs/` (e.g., SEFA instances).
