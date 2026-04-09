@@ -20,12 +20,12 @@ This replication package contains the implementation of `SAQURE` (Java sources),
     - `run_experiments.sh`: Bash script for reproducing the experiments (RQ1–RQ4).
     - `create_plots.py`: Python script that generates the plots from the produced logs/results.
     - `experiments/`:
-      - `experiment_config/`: Configuration spreadsheets (`.xlsx`) for RQ1–RQ3.
+      - `experiment_config/`: Configuration spreadsheets (`.xlsx`) for RQ1–RQ4.
       - `plots/`: Pre-generated plot images (`.png`) for RQ1–RQ4.
 - `AED/`:
      1. An extensible generic Adversarial Environment Domain `AED.pddl` with ~300 atomic action specifications, covering attacker, application, user, and infrastructure behaviors.
      2. Exemplar `AEDIs/` (e.g., SEFA instances).
-- `Supplementary Experimental Configuration for RQ1, RQ2, and RQ3.pdf`: Supplementary configuration tables for RQ1, RQ2 and RQ3.
+- `Supplementary Experimental Configuration for RQ1, RQ2, RQ3 and RQ4.pdf`: Supplementary configuration tables for RQ1, RQ2, RQ3 and RQ4.
 
 ### Instructions
 
