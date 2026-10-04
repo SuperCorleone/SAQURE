@@ -2,3 +2,6 @@
 __pycache__/
 *.pyc
 _archive_results/
+_server_bundle/
+SAQURE_Replication_Package_SEFA/server_rq412/*.tar.gz
+SAQURE_Replication_Package_SEFA/server_rq412/logs/
