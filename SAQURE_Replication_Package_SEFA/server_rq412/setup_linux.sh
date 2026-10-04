@@ -40,9 +40,10 @@ echo "== Building Metric-FF"
     cd SAQURE-simulator/Metric-FF
     # Keep the pre-generated flex/bison sources (make clean would delete them and require
     # flex/bison); only drop objects and the macOS binary. -fcommon is needed for GCC >= 10,
-    # whose -fno-common default rejects Metric-FF's tentative global definitions.
+    # whose -fno-common default rejects Metric-FF's tentative global definitions; gnu89
+    # instead of -ansi because search.h uses // comments, which strict C90 rejects.
     rm -f ./*.o ff
-    make ff CFLAGS="-O6 -ansi -fcommon -g" > build_linux.log 2>&1 || { tail -30 build_linux.log; exit 1; }
+    make ff CFLAGS="-O6 -std=gnu89 -fcommon -g" > build_linux.log 2>&1 || { tail -30 build_linux.log; exit 1; }
 )
 file SAQURE-simulator/Metric-FF/ff 2>/dev/null || ls -la SAQURE-simulator/Metric-FF/ff
 
