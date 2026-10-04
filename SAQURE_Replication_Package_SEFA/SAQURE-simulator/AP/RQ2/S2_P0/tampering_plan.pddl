@@ -36,11 +36,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2024-38820 SEFA 
         8: APPLICATION-SERVER-SETS-ADMIN-FIELD-FOR-ATTACKER SEFA ATTACKER-ACCOUNT_SEFA TRANSFORMED-PARAM1
 plan cost: 71.000000
 
-time spent:    0.06 seconds instantiating 6764 easy, 97 hard action templates
+time spent:    0.05 seconds instantiating 6764 easy, 97 hard action templates
                0.00 seconds reachability analysis, yielding 302 facts and 546 actions
                0.00 seconds creating final representation with 299 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.00 seconds searching, evaluating 101 states, to a max depth of 0
+               0.01 seconds searching, evaluating 101 states, to a max depth of 0
                0.06 seconds total time
 

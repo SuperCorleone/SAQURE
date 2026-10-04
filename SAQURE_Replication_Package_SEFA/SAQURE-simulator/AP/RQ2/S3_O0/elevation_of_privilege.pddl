@@ -46,8 +46,8 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2022-1471 SEFA S
        13: APPLICATION-EXECUTES-ATTACKER-COMMAND-WITH-PRIVILEGES SEFA MALICIOUS-JAVA-CLASS1 COMMAND-EXECUTION-LOGIC1 CVE_2022_1471
 plan cost: 15.000000
 
-time spent:    0.06 seconds instantiating 6792 easy, 101 hard action templates
-               0.01 seconds reachability analysis, yielding 331 facts and 710 actions
+time spent:    0.07 seconds instantiating 6792 easy, 101 hard action templates
+               0.00 seconds reachability analysis, yielding 331 facts and 710 actions
                0.00 seconds creating final representation with 328 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph

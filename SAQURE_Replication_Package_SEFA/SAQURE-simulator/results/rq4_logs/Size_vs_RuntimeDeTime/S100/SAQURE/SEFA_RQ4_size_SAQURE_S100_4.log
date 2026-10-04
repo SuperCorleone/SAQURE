@@ -1,0 +1,123 @@
+Picked up JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.17)
+
+2026-10-01 11:51:24.510  INFO 70275 --- [           main] saqure.SaqureSimulatorApplication        : Starting SaqureSimulatorApplication using Java 17.0.17 on Mac.fritz.box with PID 70275 (/Users/adukopun/Documents/CuiCui/SAQURE_MOD/SAQURE/SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/SAQURE_MOD/SAQURE/SAQURE_Replication_Package_SEFA)
+2026-10-01 11:51:24.511  INFO 70275 --- [           main] saqure.SaqureSimulatorApplication        : No active profile set, falling back to 1 default profile: "default"
+2026-10-01 11:51:24.741  INFO 70275 --- [           main] saqure.SaqureSimulatorApplication        : Started SaqureSimulatorApplication in 0.383 seconds (JVM running for 0.56)
+2026-10-01 11:51:24.742  WARN 70275 --- [           main] saqure.SaqureSimulatorApplication        : Unable to read parameter file, using default parameter 1
+2026-10-01 11:51:24.743  INFO 70275 --- [           main] saqure.utils.SizeAxisExperiment          : SEFA size axis: 100 replicas -> 400 microservices, 400 core structural states, approach SAQURE
+2026-10-01 11:51:25.014  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_1: 13.4ms
+2026-10-01 11:51:25.090  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_2: 13.3ms
+2026-10-01 11:51:25.166  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_3: 13.0ms
+2026-10-01 11:51:25.242  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_4: 13.0ms
+2026-10-01 11:51:25.318  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_5: 13.2ms
+2026-10-01 11:51:25.394  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_6: 13.2ms
+2026-10-01 11:51:25.472  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_7: 13.2ms
+2026-10-01 11:51:25.547  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_8: 13.2ms
+2026-10-01 11:51:25.622  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_9: 13.1ms
+2026-10-01 11:51:25.697  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_10: 12.8ms
+2026-10-01 11:51:25.773  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_11: 12.9ms
+2026-10-01 11:51:25.849  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_12: 13.1ms
+2026-10-01 11:51:25.925  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_13: 13.1ms
+2026-10-01 11:51:26.000  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_14: 13.2ms
+2026-10-01 11:51:26.075  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_15: 13.2ms
+2026-10-01 11:51:26.153  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_16: 13.1ms
+2026-10-01 11:51:26.228  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_17: 13.0ms
+2026-10-01 11:51:26.303  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_18: 13.2ms
+2026-10-01 11:51:26.379  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_19: 13.1ms
+2026-10-01 11:51:26.454  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_20: 13.1ms
+2026-10-01 11:51:26.529  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_21: 13.2ms
+2026-10-01 11:51:26.604  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_22: 13.0ms
+2026-10-01 11:51:26.679  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_23: 13.1ms
+2026-10-01 11:51:26.755  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_24: 13.4ms
+2026-10-01 11:51:26.831  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_25: 13.0ms
+2026-10-01 11:51:26.906  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_26: 13.2ms
+2026-10-01 11:51:26.982  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_27: 13.2ms
+2026-10-01 11:51:27.057  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_28: 12.8ms
+2026-10-01 11:51:27.131  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_29: 13.2ms
+2026-10-01 11:51:27.207  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_30: 13.1ms
+2026-10-01 11:51:27.284  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_31: 13.4ms
+2026-10-01 11:51:27.360  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_32: 12.9ms
+2026-10-01 11:51:27.435  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_33: 13.3ms
+2026-10-01 11:51:27.511  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_34: 13.2ms
+2026-10-01 11:51:27.586  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_35: 13.0ms
+2026-10-01 11:51:27.661  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_36: 13.1ms
+2026-10-01 11:51:27.736  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_37: 13.4ms
+2026-10-01 11:51:27.812  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_38: 13.0ms
+2026-10-01 11:51:27.889  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_39: 13.8ms
+2026-10-01 11:51:27.964  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_40: 12.8ms
+2026-10-01 11:51:28.040  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_41: 13.6ms
+2026-10-01 11:51:28.118  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_42: 13.2ms
+2026-10-01 11:51:28.195  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_43: 12.9ms
+2026-10-01 11:51:28.274  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_44: 13.1ms
+2026-10-01 11:51:28.350  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_45: 13.6ms
+2026-10-01 11:51:28.426  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_46: 13.0ms
+2026-10-01 11:51:28.502  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_47: 13.3ms
+2026-10-01 11:51:28.579  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_48: 13.0ms
+2026-10-01 11:51:28.654  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_49: 13.2ms
+2026-10-01 11:51:28.729  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_50: 13.0ms
+2026-10-01 11:51:28.805  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_51: 13.3ms
+2026-10-01 11:51:28.880  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_52: 12.8ms
+2026-10-01 11:51:28.957  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_53: 13.2ms
+2026-10-01 11:51:29.033  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_54: 13.2ms
+2026-10-01 11:51:29.109  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_55: 13.4ms
+2026-10-01 11:51:29.186  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_56: 12.9ms
+2026-10-01 11:51:29.263  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_57: 13.7ms
+2026-10-01 11:51:29.339  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_58: 13.0ms
+2026-10-01 11:51:29.414  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_59: 13.0ms
+2026-10-01 11:51:29.490  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_60: 13.1ms
+2026-10-01 11:51:29.565  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_61: 13.1ms
+2026-10-01 11:51:29.643  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_62: 13.7ms
+2026-10-01 11:51:29.719  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_63: 13.1ms
+2026-10-01 11:51:29.796  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_64: 12.9ms
+2026-10-01 11:51:29.872  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_65: 13.3ms
+2026-10-01 11:51:29.948  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_66: 13.1ms
+2026-10-01 11:51:30.024  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_67: 13.5ms
+2026-10-01 11:51:30.100  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_68: 13.0ms
+2026-10-01 11:51:30.175  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_69: 12.9ms
+2026-10-01 11:51:30.250  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_70: 13.0ms
+2026-10-01 11:51:30.327  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_71: 13.1ms
+2026-10-01 11:51:30.403  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_72: 12.8ms
+2026-10-01 11:51:30.479  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_73: 13.1ms
+2026-10-01 11:51:30.554  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_74: 13.3ms
+2026-10-01 11:51:30.630  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_75: 12.8ms
+2026-10-01 11:51:30.705  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_76: 13.1ms
+2026-10-01 11:51:30.780  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_77: 13.0ms
+2026-10-01 11:51:30.855  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_78: 13.2ms
+2026-10-01 11:51:30.930  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_79: 12.9ms
+2026-10-01 11:51:31.006  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_80: 13.2ms
+2026-10-01 11:51:31.081  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_81: 12.8ms
+2026-10-01 11:51:31.156  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_82: 13.3ms
+2026-10-01 11:51:31.233  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_83: 13.3ms
+2026-10-01 11:51:31.308  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_84: 13.2ms
+2026-10-01 11:51:31.384  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_85: 13.1ms
+2026-10-01 11:51:31.459  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_86: 13.1ms
+2026-10-01 11:51:31.535  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_87: 12.9ms
+2026-10-01 11:51:31.610  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_88: 13.2ms
+2026-10-01 11:51:31.685  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_89: 13.0ms
+2026-10-01 11:51:31.760  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_90: 12.9ms
+2026-10-01 11:51:31.835  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_91: 12.9ms
+2026-10-01 11:51:31.910  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_92: 13.0ms
+2026-10-01 11:51:31.985  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_93: 13.0ms
+2026-10-01 11:51:32.060  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_94: 13.0ms
+2026-10-01 11:51:32.138  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_95: 13.0ms
+2026-10-01 11:51:32.213  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_96: 13.0ms
+2026-10-01 11:51:32.289  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_97: 13.3ms
+2026-10-01 11:51:32.365  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_98: 13.5ms
+2026-10-01 11:51:32.442  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_99: 13.0ms
+2026-10-01 11:51:32.516  INFO 70275 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_100: 13.1ms
+2026-10-01 11:51:32.521  INFO 70275 --- [           main] saqure.utils.ServiceGraphUtils           : Current graph: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"Vulnerability":0.1,"AverageResponseTime":0.5,"Availability":0.999}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"Vulnerability":0.1,"AverageResponseTime":0.5,"Availability":0.9}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"Vulnerability":0.1,"AverageResponseTime":0.5,"Availability":0.999}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"Vulnerability":0.1,"AverageResponseTime":0.5,"Availability":0.9}},"weights":{"Vulnerability":0.4,"AverageResponseTime":0.3,"Availability":0.3}}
+2026-10-01 11:51:32.529  INFO 70275 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 7.431ms
+2026-10-01 11:51:33.534  INFO 70275 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 1.0
+2026-10-01 11:51:33.539  INFO 70275 --- [           main] saqure.utils.ServiceGraphUtils           : Graph for option Goal: Availability - Change RESTAURANT-SERVICE implementation from restaurant-1-service to restaurant-3-service. Changing implementation: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-3-service","values":{"Vulnerability":0.9,"AverageResponseTime":0.5,"Availability":0.9994999999999999}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"Vulnerability":0.1,"AverageResponseTime":0.5,"Availability":0.9}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"Vulnerability":0.1,"AverageResponseTime":0.5,"Availability":0.999}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"Vulnerability":0.1,"AverageResponseTime":0.5,"Availability":0.9}},"weights":{"Vulnerability":0.4,"AverageResponseTime":0.3,"Availability":0.3}}
+2026-10-01 11:51:33.541  INFO 70275 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 2.531ms
+2026-10-01 11:51:34.564  INFO 70275 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 1.494312225549981
+2026-10-01 11:51:34.565  INFO 70275 --- [           main] saqure.utils.ServiceGraphUtils           : No better option found
+2026-10-01 11:51:34.565  INFO 70275 --- [           main] saqure.utils.SizeAxisExperiment          : Runtime decision time: 2157ms

@@ -23,6 +23,11 @@ public final class FilePathConstants {
     public static String configuration_rq311_path = "experiments/experiment_config/Configuration_RQ3.1.1.xlsx";
     public static String configuration_rq312_path = "experiments/experiment_config/Configuration_RQ3.1.2.xlsx";
 
+    // RQ4 vulnerability axis: 136 independent attack-path domains, 1-100 CVEs.
+    public static String configuration_rq4vuln_path = "experiments/experiment_config/Configuration_RQ4_vuln.xlsx";
+    public static String LookupFilePathExtended = "SAQURE-simulator/src/main/java/saqure/Analyzer/EADSA/Sv_Pa_lookupfiles/Sv_Pa_lookupfile_extended.json";
+    public static String PreparedAPPath = "SAQURE-vulnerability-scalability/prepared";
+
     public static String model_prism_defination_path = "SAQURE-simulator/src/main/java/saqure/Knowledge/DTMC/model.prism";
     public static String model_props_defination_path = "SAQURE-simulator/src/main/java/saqure/Knowledge/DTMC/model.props";
 

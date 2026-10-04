@@ -30,11 +30,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2024-38286 SEFA 
         5: APPLICATION-TOMCAT-CRASHES SEFA TOMCAT_SEFA
 plan cost: 34.000000
 
-time spent:    0.06 seconds instantiating 6779 easy, 101 hard action templates
+time spent:    0.07 seconds instantiating 6779 easy, 101 hard action templates
                0.00 seconds reachability analysis, yielding 408 facts and 812 actions
                0.00 seconds creating final representation with 405 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.01 seconds searching, evaluating 95 states, to a max depth of 0
+               0.00 seconds searching, evaluating 95 states, to a max depth of 0
                0.07 seconds total time
 

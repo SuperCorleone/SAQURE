@@ -1,0 +1,23 @@
+Picked up JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.17)
+
+2026-10-01 10:49:04.235  INFO 46274 --- [           main] saqure.SaqureSimulatorApplication        : Starting SaqureSimulatorApplication using Java 17.0.17 on Mac.fritz.box with PID 46274 (/Users/adukopun/Documents/CuiCui/SAQURE_MOD/SAQURE/SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/SAQURE_MOD/SAQURE/SAQURE_Replication_Package_SEFA)
+2026-10-01 10:49:04.236  INFO 46274 --- [           main] saqure.SaqureSimulatorApplication        : No active profile set, falling back to 1 default profile: "default"
+2026-10-01 10:49:04.454  INFO 46274 --- [           main] saqure.SaqureSimulatorApplication        : Started SaqureSimulatorApplication in 0.37 seconds (JVM running for 0.544)
+2026-10-01 10:49:05.093  INFO 46274 --- [           main] saqure.SaqureSimulatorApplication        : SEFA DTMC scale: 1x -> 4 x 1 = 4 core structural states, plus START, success and failure = 7 reachable states
+2026-10-01 10:49:05.094  INFO 46274 --- [           main] saqure.utils.ServiceGraphUtils           : Current graph: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-service","values":{"AverageResponseTime":0.9,"Vulnerability":0.1,"Availability":0.1}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.1,"Vulnerability":0.1,"Availability":0.6333333333333335}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"AverageResponseTime":0.5923076923076924,"Vulnerability":0.1,"Availability":0.9}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.9,"Vulnerability":0.1,"Availability":0.1}},"weights":{"AverageResponseTime":0.3,"Vulnerability":0.4,"Availability":0.3}}
+2026-10-01 10:49:05.099  INFO 46274 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 5.063ms
+2026-10-01 10:49:05.844  INFO 46274 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 1.0
+2026-10-01 10:49:05.849  INFO 46274 --- [           main] saqure.utils.ServiceGraphUtils           : Graph for option  - Change PAYMENT-PROXY-SERVICE implementation from payment-proxy-1-service to payment-proxy-2-service. null: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-service","values":{"AverageResponseTime":0.9,"Vulnerability":0.1,"Availability":0.1}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.1,"Vulnerability":0.1,"Availability":0.6333333333333335}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"AverageResponseTime":0.5923076923076924,"Vulnerability":0.1,"Availability":0.9}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-2-service","values":{"AverageResponseTime":0.5923076923076924,"Vulnerability":0.9,"Availability":0.9}},"weights":{"AverageResponseTime":0.3,"Vulnerability":0.4,"Availability":0.3}}
+2026-10-01 10:49:05.850  INFO 46274 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 1.296ms
+2026-10-01 10:49:06.596  INFO 46274 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 0.9949404435023561
+2026-10-01 10:49:06.596  INFO 46274 --- [           main] saqure.utils.ServiceGraphUtils           : Best option:  - Change PAYMENT-PROXY-SERVICE implementation from payment-proxy-1-service to payment-proxy-2-service. null
+2026-10-01 10:49:06.596  INFO 46274 --- [           main] saqure.utils.ServiceGraphUtils           : Best cost value: 0.9949404435023561
+2026-10-01 10:49:06.596  INFO 46274 --- [           main] saqure.SaqureSimulatorApplication        : Runtime decision time: 1750ms

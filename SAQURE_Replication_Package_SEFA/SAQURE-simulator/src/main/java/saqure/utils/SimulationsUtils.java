@@ -1,6 +1,8 @@
 package saqure.utils;
 
 import saqure.Analyzer.EADSA;
+import saqure.Analyzer.VulnAxisAP;
+import saqure.Analyzer.VulnAxisAPProfiler;
 import saqure.utils.infrastructure.adaptation.specifications.Availability;
 import saqure.utils.infrastructure.adaptation.specifications.AverageResponseTime;
 import saqure.utils.infrastructure.adaptation.specifications.QoSSpecification;
@@ -238,6 +240,7 @@ public class SimulationsUtils {
                 benchmarkForImplementation,
                 currentQoSValues);
     }
+
     public static Map<String, Service> RQ1_s2_SAQURE_ExpConfig(){
         double availabilityWeight = 0.3;
         double responseTimeWeight = 0.3;
@@ -362,6 +365,7 @@ public class SimulationsUtils {
                 benchmarkForImplementation,
                 currentQoSValues);
     }
+
     public static Map<String, Service> RQ1_s3_SAQURE_ExpConfig(){
         double availabilityWeight = 0.3;
         double responseTimeWeight = 0.3;
@@ -495,6 +499,7 @@ public class SimulationsUtils {
                 benchmarkForImplementation,
                 currentQoSValues);
     }
+
     public static Map<String, Service> RQ1_s4_SAQURE_ExpConfig(){
         double availabilityWeight = 0.3;
         double responseTimeWeight = 0.3;
@@ -629,6 +634,7 @@ public class SimulationsUtils {
                 benchmarkForImplementation,
                 currentQoSValues);
     }
+
     public static Map<String, Service> RQ1_s5_SAQURE_ExpConfig(){
         double availabilityWeight = 0.3;
         double responseTimeWeight = 0.3;
@@ -777,24 +783,24 @@ public class SimulationsUtils {
         serviceImplementations.put("RESTAURANT-SERVICE", restaurantImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark1 = new HashMap<>();//option configuration
-        restaurantBenchmark1.put(Availability.class, 0.766666667);
-        restaurantBenchmark1.put(AverageResponseTime.class, 0.165306122);//50
-        restaurantBenchmark1.put(Vulnerability.class, 0.633333333);//
+        restaurantBenchmark1.put(Availability.class, 0.9);
+        restaurantBenchmark1.put(AverageResponseTime.class, 0.1);//50
+        restaurantBenchmark1.put(Vulnerability.class, 0.56);//
         benchmarkForImplementation.put("restaurant-1-service", restaurantBenchmark1);
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark2 = new HashMap<>();
-        restaurantBenchmark2.put(Availability.class, 0.8);//0.92
-        restaurantBenchmark2.put(AverageResponseTime.class, 0.132653061);//30
-        restaurantBenchmark2.put(Vulnerability.class, 0.232212885);//
+        restaurantBenchmark2.put(Availability.class, 0.93);//0.92
+        restaurantBenchmark2.put(AverageResponseTime.class, 0.06);//30
+        restaurantBenchmark2.put(Vulnerability.class, 0.311666667);//
         benchmarkForImplementation.put("restaurant-2-service", restaurantBenchmark2);
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark3 = new HashMap<>();
-        restaurantBenchmark3.put(Availability.class, 0.866666667);
-        restaurantBenchmark3.put(AverageResponseTime.class, 0.1);
-        restaurantBenchmark3.put(Vulnerability.class, 0.785714286);//
+        restaurantBenchmark3.put(Availability.class, 0.96);
+        restaurantBenchmark3.put(AverageResponseTime.class, 0.02);
+        restaurantBenchmark3.put(Vulnerability.class, 0.723333333);//
         benchmarkForImplementation.put("restaurant-3-service", restaurantBenchmark3);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantCurrentQoS = new HashMap<>();//Initial configuration
-        restaurantCurrentQoS.put(Availability.class, 0.766666667);
-        restaurantCurrentQoS.put(AverageResponseTime.class, 0.165306122);
+        restaurantCurrentQoS.put(Availability.class, 0.9);
+        restaurantCurrentQoS.put(AverageResponseTime.class, 0.1);
         currentQoSValues.put("RESTAURANT-SERVICE", restaurantCurrentQoS);
 
         // Ordering //
@@ -802,14 +808,14 @@ public class SimulationsUtils {
         serviceImplementations.put("ORDERING-SERVICE", orderingImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark = new HashMap<>();
-        orderingBenchmark.put(Availability.class, 0.8);
-        orderingBenchmark.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark.put(Vulnerability.class, 0.498879552);
+        orderingBenchmark.put(Availability.class, 0.92);
+        orderingBenchmark.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark.put(Vulnerability.class, 0.51);
         benchmarkForImplementation.put("ordering-service", orderingBenchmark);
 
         Map<Class<? extends QoSSpecification>, Double> orderingCurrentQoS = new HashMap<>();
-        orderingCurrentQoS.put(Availability.class, 0.8);
-        orderingCurrentQoS.put(AverageResponseTime.class, 0.655102041);
+        orderingCurrentQoS.put(Availability.class, 0.92);
+        orderingCurrentQoS.put(AverageResponseTime.class, 0.7);
         currentQoSValues.put("ORDERING-SERVICE", orderingCurrentQoS);
 
         // Delivery //
@@ -817,14 +823,14 @@ public class SimulationsUtils {
         serviceImplementations.put("DELIVERY-PROXY-SERVICE", deliveryProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark1 = new HashMap<>();
-        deliveryProxyBenchmark1.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.573469388);
-        deliveryProxyBenchmark1.put(Vulnerability.class, 0.655742297);
+        deliveryProxyBenchmark1.put(Availability.class, 0.85);
+        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark1.put(Vulnerability.class, 0.626666667);
         benchmarkForImplementation.put("delivery-proxy-1-service", deliveryProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyCurrentQoS = new HashMap<>();
-        deliveryProxyCurrentQoS.put(Availability.class, 0.683333333);
-        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.573469388);
+        deliveryProxyCurrentQoS.put(Availability.class, 0.85);
+        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.6);
         currentQoSValues.put("DELIVERY-PROXY-SERVICE", deliveryProxyCurrentQoS);
 
         // Payment //
@@ -832,14 +838,14 @@ public class SimulationsUtils {
         serviceImplementations.put("PAYMENT-PROXY-SERVICE", paymentProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark1 = new HashMap<>();
-        paymentProxyBenchmark1.put(Availability.class, 0.766666667);
-        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.818367347);
-        paymentProxyBenchmark1.put(Vulnerability.class, 0.294957983);
+        paymentProxyBenchmark1.put(Availability.class, 0.9);
+        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.9);
+        paymentProxyBenchmark1.put(Vulnerability.class, 0.358333333);
         benchmarkForImplementation.put("payment-proxy-1-service", paymentProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyCurrentQoS = new HashMap<>();//Initial configuration
-        paymentProxyCurrentQoS.put(Availability.class, 0.766666667);
-        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.818367347);
+        paymentProxyCurrentQoS.put(Availability.class, 0.9);
+        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.9);
         currentQoSValues.put("PAYMENT-PROXY-SERVICE", paymentProxyCurrentQoS);
 
         return createServiceMap(availabilityWeight,
@@ -864,24 +870,24 @@ public class SimulationsUtils {
         serviceImplementations.put("RESTAURANT-SERVICE", restaurantImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark1 = new HashMap<>();//option configuration
-        restaurantBenchmark1.put(Availability.class, 0.766666667);
-        restaurantBenchmark1.put(AverageResponseTime.class, 0.165306122);
-        restaurantBenchmark1.put(Vulnerability.class, 0.566106443);
+        restaurantBenchmark1.put(Availability.class, 0.9);
+        restaurantBenchmark1.put(AverageResponseTime.class, 0.1);
+        restaurantBenchmark1.put(Vulnerability.class, 0.56);
         benchmarkForImplementation.put("restaurant-1-service", restaurantBenchmark1);
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark2 = new HashMap<>();
-        restaurantBenchmark2.put(Availability.class, 0.866666667);
-        restaurantBenchmark2.put(AverageResponseTime.class, 0.148979592);
-        restaurantBenchmark2.put(Vulnerability.class, 0.1);
+        restaurantBenchmark2.put(Availability.class, 0.95);
+        restaurantBenchmark2.put(AverageResponseTime.class, 0.08);
+        restaurantBenchmark2.put(Vulnerability.class, 0.213333333);
         benchmarkForImplementation.put("restaurant-2-service", restaurantBenchmark2);
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark3 = new HashMap<>();
-        restaurantBenchmark3.put(Availability.class, 0.9);
-        restaurantBenchmark3.put(AverageResponseTime.class, 0.1);
-        restaurantBenchmark3.put(Vulnerability.class, 0.333053221);
+        restaurantBenchmark3.put(Availability.class, 0.98);
+        restaurantBenchmark3.put(AverageResponseTime.class, 0.02);
+        restaurantBenchmark3.put(Vulnerability.class, 0.386666667);
         benchmarkForImplementation.put("restaurant-3-service", restaurantBenchmark3);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantCurrentQoS = new HashMap<>();//Initial configuration
-        restaurantCurrentQoS.put(Availability.class, 0.766666667);
-        restaurantCurrentQoS.put(AverageResponseTime.class, 0.165306122);
+        restaurantCurrentQoS.put(Availability.class, 0.9);
+        restaurantCurrentQoS.put(AverageResponseTime.class, 0.1);
         currentQoSValues.put("RESTAURANT-SERVICE", restaurantCurrentQoS);
 
         // Ordering //
@@ -889,14 +895,14 @@ public class SimulationsUtils {
         serviceImplementations.put("ORDERING-SERVICE", orderingImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark = new HashMap<>();
-        orderingBenchmark.put(Availability.class, 0.8);
-        orderingBenchmark.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark.put(Vulnerability.class, 0.498879552);
+        orderingBenchmark.put(Availability.class, 0.92);
+        orderingBenchmark.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark.put(Vulnerability.class, 0.51);
         benchmarkForImplementation.put("ordering-service", orderingBenchmark);
 
         Map<Class<? extends QoSSpecification>, Double> orderingCurrentQoS = new HashMap<>();
-        orderingCurrentQoS.put(Availability.class, 0.8);
-        orderingCurrentQoS.put(AverageResponseTime.class, 0.655102041);
+        orderingCurrentQoS.put(Availability.class, 0.92);
+        orderingCurrentQoS.put(AverageResponseTime.class, 0.7);
         currentQoSValues.put("ORDERING-SERVICE", orderingCurrentQoS);
 
         // Delivery //
@@ -904,14 +910,14 @@ public class SimulationsUtils {
         serviceImplementations.put("DELIVERY-PROXY-SERVICE", deliveryProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark1 = new HashMap<>();
-        deliveryProxyBenchmark1.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.573469388);
-        deliveryProxyBenchmark1.put(Vulnerability.class, 0.655742297);
+        deliveryProxyBenchmark1.put(Availability.class, 0.85);
+        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark1.put(Vulnerability.class, 0.626666667);
         benchmarkForImplementation.put("delivery-proxy-1-service", deliveryProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyCurrentQoS = new HashMap<>();
-        deliveryProxyCurrentQoS.put(Availability.class, 0.683333333);
-        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.573469388);
+        deliveryProxyCurrentQoS.put(Availability.class, 0.85);
+        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.6);
         currentQoSValues.put("DELIVERY-PROXY-SERVICE", deliveryProxyCurrentQoS);
 
         // Payment //
@@ -919,14 +925,14 @@ public class SimulationsUtils {
         serviceImplementations.put("PAYMENT-PROXY-SERVICE", paymentProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark1 = new HashMap<>();
-        paymentProxyBenchmark1.put(Availability.class, 0.766666667);
-        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.818367347);
-        paymentProxyBenchmark1.put(Vulnerability.class, 0.294957983);
+        paymentProxyBenchmark1.put(Availability.class, 0.9);
+        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.9);
+        paymentProxyBenchmark1.put(Vulnerability.class, 0.358333333);
         benchmarkForImplementation.put("payment-proxy-1-service", paymentProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyCurrentQoS = new HashMap<>();//Initial configuration
-        paymentProxyCurrentQoS.put(Availability.class, 0.766666667);
-        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.818367347);
+        paymentProxyCurrentQoS.put(Availability.class, 0.9);
+        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.9);
         currentQoSValues.put("PAYMENT-PROXY-SERVICE", paymentProxyCurrentQoS);
 
         return createServiceMap(availabilityWeight,
@@ -951,14 +957,14 @@ public class SimulationsUtils {
         serviceImplementations.put("RESTAURANT-SERVICE", restaurantImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark1 = new HashMap<>();//option configuration
-        restaurantBenchmark1.put(Availability.class, 0.183333333);
-        restaurantBenchmark1.put(AverageResponseTime.class, 0.9);
-        restaurantBenchmark1.put(Vulnerability.class, 0.566106443);
+        restaurantBenchmark1.put(Availability.class, 0.55);
+        restaurantBenchmark1.put(AverageResponseTime.class, 1.0);
+        restaurantBenchmark1.put(Vulnerability.class, 0.56);
         benchmarkForImplementation.put("restaurant-1-service", restaurantBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantCurrentQoS = new HashMap<>();//Initial configuration
-        restaurantCurrentQoS.put(Availability.class, 0.183333333);
-        restaurantCurrentQoS.put(AverageResponseTime.class, 0.9);
+        restaurantCurrentQoS.put(Availability.class, 0.55);
+        restaurantCurrentQoS.put(AverageResponseTime.class, 1.0);
         currentQoSValues.put("RESTAURANT-SERVICE", restaurantCurrentQoS);
 
         // Ordering //
@@ -966,29 +972,29 @@ public class SimulationsUtils {
         serviceImplementations.put("ORDERING-SERVICE", orderingImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark1 = new HashMap<>();
-        orderingBenchmark1.put(Availability.class, 0.6);
-        orderingBenchmark1.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark1.put(Vulnerability.class, 0.718487395);
+        orderingBenchmark1.put(Availability.class, 0.8);
+        orderingBenchmark1.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark1.put(Vulnerability.class, 0.673333333);
         benchmarkForImplementation.put("ordering-1-service", orderingBenchmark1);
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark2 = new HashMap<>();
-        orderingBenchmark2.put(Availability.class, 0.733333333);
-        orderingBenchmark2.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark2.put(Vulnerability.class, 0.718487395);
+        orderingBenchmark2.put(Availability.class, 0.88);
+        orderingBenchmark2.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark2.put(Vulnerability.class, 0.673333333);
         benchmarkForImplementation.put("ordering-2-service", orderingBenchmark2);
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark3 = new HashMap<>();
-        orderingBenchmark3.put(Availability.class, 0.6);
-        orderingBenchmark3.put(AverageResponseTime.class, 0.491836735);
-        orderingBenchmark3.put(Vulnerability.class, 0.718487395);
+        orderingBenchmark3.put(Availability.class, 0.8);
+        orderingBenchmark3.put(AverageResponseTime.class, 0.5);
+        orderingBenchmark3.put(Vulnerability.class, 0.673333333);
         benchmarkForImplementation.put("ordering-3-service", orderingBenchmark3);
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark4 = new HashMap<>();
-        orderingBenchmark4.put(Availability.class, 0.6);
-        orderingBenchmark4.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark4.put(Vulnerability.class, 0.308403361);
+        orderingBenchmark4.put(Availability.class, 0.8);
+        orderingBenchmark4.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark4.put(Vulnerability.class, 0.368333333);
         benchmarkForImplementation.put("ordering-4-service", orderingBenchmark4);
 
         Map<Class<? extends QoSSpecification>, Double> orderingCurrentQoS = new HashMap<>();
-        orderingCurrentQoS.put(Availability.class, 0.6);
-        orderingCurrentQoS.put(AverageResponseTime.class, 0.655102041);
+        orderingCurrentQoS.put(Availability.class, 0.8);
+        orderingCurrentQoS.put(AverageResponseTime.class, 0.7);
         currentQoSValues.put("ORDERING-SERVICE", orderingCurrentQoS);
 
         // Delivery //
@@ -996,14 +1002,14 @@ public class SimulationsUtils {
         serviceImplementations.put("DELIVERY-PROXY-SERVICE", deliveryProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark1 = new HashMap<>();
-        deliveryProxyBenchmark1.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.573469388);
-        deliveryProxyBenchmark1.put(Vulnerability.class, 0.655742297);
+        deliveryProxyBenchmark1.put(Availability.class, 0.85);
+        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark1.put(Vulnerability.class, 0.626666667);
         benchmarkForImplementation.put("delivery-proxy-1-service", deliveryProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyCurrentQoS = new HashMap<>();
-        deliveryProxyCurrentQoS.put(Availability.class, 0.683333333);
-        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.573469388);
+        deliveryProxyCurrentQoS.put(Availability.class, 0.85);
+        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.6);
         currentQoSValues.put("DELIVERY-PROXY-SERVICE", deliveryProxyCurrentQoS);
 
         // Payment //
@@ -1011,14 +1017,14 @@ public class SimulationsUtils {
         serviceImplementations.put("PAYMENT-PROXY-SERVICE", paymentProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark1 = new HashMap<>();
-        paymentProxyBenchmark1.put(Availability.class, 0.766666667);
-        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.818367347);
-        paymentProxyBenchmark1.put(Vulnerability.class, 0.294957983);
+        paymentProxyBenchmark1.put(Availability.class, 0.9);
+        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.9);
+        paymentProxyBenchmark1.put(Vulnerability.class, 0.358333333);
         benchmarkForImplementation.put("payment-proxy-1-service", paymentProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyCurrentQoS = new HashMap<>();//Initial configuration
-        paymentProxyCurrentQoS.put(Availability.class, 0.766666667);
-        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.818367347);
+        paymentProxyCurrentQoS.put(Availability.class, 0.9);
+        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.9);
         currentQoSValues.put("PAYMENT-PROXY-SERVICE", paymentProxyCurrentQoS);
 
         return createServiceMap(availabilityWeight,
@@ -1043,14 +1049,14 @@ public class SimulationsUtils {
         serviceImplementations.put("RESTAURANT-SERVICE", restaurantImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark1 = new HashMap<>();//option configuration
-        restaurantBenchmark1.put(Availability.class, 0.766666667);
-        restaurantBenchmark1.put(AverageResponseTime.class, 0.165306122);
-        restaurantBenchmark1.put(Vulnerability.class, 0.281512605);
+        restaurantBenchmark1.put(Availability.class, 0.9);
+        restaurantBenchmark1.put(AverageResponseTime.class, 0.1);
+        restaurantBenchmark1.put(Vulnerability.class, 0.598333333);
         benchmarkForImplementation.put("restaurant-1-service", restaurantBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantCurrentQoS = new HashMap<>();//Initial configuration
-        restaurantCurrentQoS.put(Availability.class, 0.766666667);
-        restaurantCurrentQoS.put(AverageResponseTime.class, 0.165306122);
+        restaurantCurrentQoS.put(Availability.class, 0.9);
+        restaurantCurrentQoS.put(AverageResponseTime.class, 0.1);
         currentQoSValues.put("RESTAURANT-SERVICE", restaurantCurrentQoS);
 
         // Ordering //
@@ -1058,14 +1064,14 @@ public class SimulationsUtils {
         serviceImplementations.put("ORDERING-SERVICE", orderingImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark1 = new HashMap<>();
-        orderingBenchmark1.put(Availability.class, 0.266666667);
-        orderingBenchmark1.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark1.put(Vulnerability.class, 0.666946779);
+        orderingBenchmark1.put(Availability.class, 0.6);
+        orderingBenchmark1.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark1.put(Vulnerability.class, 0.673333333);
         benchmarkForImplementation.put("ordering-1-service", orderingBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> orderingCurrentQoS = new HashMap<>();
-        orderingCurrentQoS.put(Availability.class, 0.266666667);
-        orderingCurrentQoS.put(AverageResponseTime.class, 0.655102041);
+        orderingCurrentQoS.put(Availability.class, 0.6);
+        orderingCurrentQoS.put(AverageResponseTime.class, 0.7);
         currentQoSValues.put("ORDERING-SERVICE", orderingCurrentQoS);
 
         // Delivery //
@@ -1073,29 +1079,29 @@ public class SimulationsUtils {
         serviceImplementations.put("DELIVERY-PROXY-SERVICE", deliveryProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark1 = new HashMap<>();
-        deliveryProxyBenchmark1.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.573469388);
-        deliveryProxyBenchmark1.put(Vulnerability.class, 0.87535014);
+        deliveryProxyBenchmark1.put(Availability.class, 0.85);
+        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark1.put(Vulnerability.class, 0.463333333);
         benchmarkForImplementation.put("delivery-proxy-1-service", deliveryProxyBenchmark1);
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark2 = new HashMap<>();
-        deliveryProxyBenchmark2.put(Availability.class, 0.85);
-        deliveryProxyBenchmark2.put(AverageResponseTime.class, 0.573469388);
-        deliveryProxyBenchmark2.put(Vulnerability.class, 0.87535014);
+        deliveryProxyBenchmark2.put(Availability.class, 0.95);
+        deliveryProxyBenchmark2.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark2.put(Vulnerability.class, 0.626666667);
         benchmarkForImplementation.put("delivery-proxy-2-service", deliveryProxyBenchmark2);
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark3 = new HashMap<>();
-        deliveryProxyBenchmark3.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark3.put(AverageResponseTime.class, 0.410204082);
-        deliveryProxyBenchmark3.put(Vulnerability.class, 0.87535014);
+        deliveryProxyBenchmark3.put(Availability.class, 0.85);
+        deliveryProxyBenchmark3.put(AverageResponseTime.class, 0.4);
+        deliveryProxyBenchmark3.put(Vulnerability.class, 0.626666667);
         benchmarkForImplementation.put("delivery-proxy-3-service", deliveryProxyBenchmark3);
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark4 = new HashMap<>();
-        deliveryProxyBenchmark4.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark4.put(AverageResponseTime.class, 0.573469388);
-        deliveryProxyBenchmark4.put(Vulnerability.class, 0.268067227);
+        deliveryProxyBenchmark4.put(Availability.class, 0.85);
+        deliveryProxyBenchmark4.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark4.put(Vulnerability.class, 0.338333333);
         benchmarkForImplementation.put("delivery-proxy-4-service", deliveryProxyBenchmark4);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyCurrentQoS = new HashMap<>();
-        deliveryProxyCurrentQoS.put(Availability.class, 0.683333333);
-        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.573469388);
+        deliveryProxyCurrentQoS.put(Availability.class, 0.85);
+        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.6);
         currentQoSValues.put("DELIVERY-PROXY-SERVICE", deliveryProxyCurrentQoS);
 
         // Payment //
@@ -1103,14 +1109,14 @@ public class SimulationsUtils {
         serviceImplementations.put("PAYMENT-PROXY-SERVICE", paymentProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark1 = new HashMap<>();
-        paymentProxyBenchmark1.put(Availability.class, 0.1);
-        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.736734694);
-        paymentProxyBenchmark1.put(Vulnerability.class, 0.294957983);
+        paymentProxyBenchmark1.put(Availability.class, 0.5);
+        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.8);
+        paymentProxyBenchmark1.put(Vulnerability.class, 0.358333333);
         benchmarkForImplementation.put("payment-proxy-1-service", paymentProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyCurrentQoS = new HashMap<>();//Initial configuration
-        paymentProxyCurrentQoS.put(Availability.class, 0.1);
-        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.736734694);
+        paymentProxyCurrentQoS.put(Availability.class, 0.5);
+        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.8);
         currentQoSValues.put("PAYMENT-PROXY-SERVICE", paymentProxyCurrentQoS);
 
         return createServiceMap(availabilityWeight,
@@ -1135,14 +1141,14 @@ public class SimulationsUtils {
         serviceImplementations.put("RESTAURANT-SERVICE", restaurantImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark1 = new HashMap<>();//option configuration
-        restaurantBenchmark1.put(Availability.class, 0.766666667);
-        restaurantBenchmark1.put(AverageResponseTime.class, 0.165306122);
-        restaurantBenchmark1.put(Vulnerability.class, 0.281512605);
+        restaurantBenchmark1.put(Availability.class, 0.9);
+        restaurantBenchmark1.put(AverageResponseTime.class, 0.1);
+        restaurantBenchmark1.put(Vulnerability.class, 0.348333333);
         benchmarkForImplementation.put("restaurant-1-service", restaurantBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantCurrentQoS = new HashMap<>();//Initial configuration
-        restaurantCurrentQoS.put(Availability.class, 0.766666667);
-        restaurantCurrentQoS.put(AverageResponseTime.class, 0.165306122);
+        restaurantCurrentQoS.put(Availability.class, 0.9);
+        restaurantCurrentQoS.put(AverageResponseTime.class, 0.1);
         currentQoSValues.put("RESTAURANT-SERVICE", restaurantCurrentQoS);
 
         // Ordering //
@@ -1150,14 +1156,14 @@ public class SimulationsUtils {
         serviceImplementations.put("ORDERING-SERVICE", orderingImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark1 = new HashMap<>();
-        orderingBenchmark1.put(Availability.class, 0.8);
-        orderingBenchmark1.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark1.put(Vulnerability.class, 0.498879552);
+        orderingBenchmark1.put(Availability.class, 0.92);
+        orderingBenchmark1.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark1.put(Vulnerability.class, 0.51);
         benchmarkForImplementation.put("ordering-1-service", orderingBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> orderingCurrentQoS = new HashMap<>();
-        orderingCurrentQoS.put(Availability.class, 0.8);
-        orderingCurrentQoS.put(AverageResponseTime.class, 0.655102041);
+        orderingCurrentQoS.put(Availability.class, 0.92);
+        orderingCurrentQoS.put(AverageResponseTime.class, 0.7);
         currentQoSValues.put("ORDERING-SERVICE", orderingCurrentQoS);
 
         // Delivery //
@@ -1165,14 +1171,14 @@ public class SimulationsUtils {
         serviceImplementations.put("DELIVERY-PROXY-SERVICE", deliveryProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark1 = new HashMap<>();
-        deliveryProxyBenchmark1.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.655102041);
-        deliveryProxyBenchmark1.put(Vulnerability.class, 0.436134454);
+        deliveryProxyBenchmark1.put(Availability.class, 0.85);
+        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark1.put(Vulnerability.class, 0.626666667);
         benchmarkForImplementation.put("delivery-proxy-1-service", deliveryProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyCurrentQoS = new HashMap<>();
-        deliveryProxyCurrentQoS.put(Availability.class, 0.683333333);
-        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.655102041);
+        deliveryProxyCurrentQoS.put(Availability.class, 0.85);
+        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.6);
         currentQoSValues.put("DELIVERY-PROXY-SERVICE", deliveryProxyCurrentQoS);
 
         // Payment //
@@ -1180,29 +1186,29 @@ public class SimulationsUtils {
         serviceImplementations.put("PAYMENT-PROXY-SERVICE", paymentProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark1 = new HashMap<>();
-        paymentProxyBenchmark1.put(Availability.class, 0.766666667);
-        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.818367347);
-        paymentProxyBenchmark1.put(Vulnerability.class, 0.460784314);//
+        paymentProxyBenchmark1.put(Availability.class, 0.9);
+        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.9);
+        paymentProxyBenchmark1.put(Vulnerability.class, 0.358333333);//
         benchmarkForImplementation.put("payment-proxy-1-service", paymentProxyBenchmark1);
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark2 = new HashMap<>();
-        paymentProxyBenchmark2.put(Availability.class, 0.8);
-        paymentProxyBenchmark2.put(AverageResponseTime.class, 0.9);
-        paymentProxyBenchmark2.put(Vulnerability.class, 0.9);//
+        paymentProxyBenchmark2.put(Availability.class, 0.92);
+        paymentProxyBenchmark2.put(AverageResponseTime.class, 1.0);
+        paymentProxyBenchmark2.put(Vulnerability.class, 0.685);//
         benchmarkForImplementation.put("payment-proxy-2-service", paymentProxyBenchmark2);
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark3 = new HashMap<>();
-        paymentProxyBenchmark3.put(Availability.class, 0.433333333);
-        paymentProxyBenchmark3.put(AverageResponseTime.class, 0.573469388);
-        paymentProxyBenchmark3.put(Vulnerability.class, 0.9);//
+        paymentProxyBenchmark3.put(Availability.class, 0.7);
+        paymentProxyBenchmark3.put(AverageResponseTime.class, 0.6);
+        paymentProxyBenchmark3.put(Vulnerability.class, 0.685);//
         benchmarkForImplementation.put("payment-proxy-3-service", paymentProxyBenchmark3);
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark4 = new HashMap<>();
-        paymentProxyBenchmark4.put(Availability.class, 0.433333333);
-        paymentProxyBenchmark4.put(AverageResponseTime.class, 0.9);
-        paymentProxyBenchmark4.put(Vulnerability.class, 0.126890756);//
+        paymentProxyBenchmark4.put(Availability.class, 0.7);
+        paymentProxyBenchmark4.put(AverageResponseTime.class, 1.0);
+        paymentProxyBenchmark4.put(Vulnerability.class, 0.233333333);//
         benchmarkForImplementation.put("payment-proxy-4-service", paymentProxyBenchmark4);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyCurrentQoS = new HashMap<>();//Initial configuration
-        paymentProxyCurrentQoS.put(Availability.class, 0.766666667);
-        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.818367347);
+        paymentProxyCurrentQoS.put(Availability.class, 0.9);
+        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.9);
         currentQoSValues.put("PAYMENT-PROXY-SERVICE", paymentProxyCurrentQoS);
 
         return createServiceMap(availabilityWeight,
@@ -1228,24 +1234,24 @@ public class SimulationsUtils {
         serviceImplementations.put("RESTAURANT-SERVICE", restaurantImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark1 = new HashMap<>();//option configuration
-        restaurantBenchmark1.put(Availability.class, 0.766666667);
-        restaurantBenchmark1.put(AverageResponseTime.class, 0.165306122);//50
-        restaurantBenchmark1.put(Vulnerability.class, 0.633333333);//
+        restaurantBenchmark1.put(Availability.class, 0.9);
+        restaurantBenchmark1.put(AverageResponseTime.class, 0.1);//50
+        restaurantBenchmark1.put(Vulnerability.class, 0.56);//
         benchmarkForImplementation.put("restaurant-1-service", restaurantBenchmark1);
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark2 = new HashMap<>();
-        restaurantBenchmark2.put(Availability.class, 0.8);//0.92
-        restaurantBenchmark2.put(AverageResponseTime.class, 0.132653061);//30
-        restaurantBenchmark2.put(Vulnerability.class, 0.232212885);//
+        restaurantBenchmark2.put(Availability.class, 0.93);//0.92
+        restaurantBenchmark2.put(AverageResponseTime.class, 0.06);//30
+        restaurantBenchmark2.put(Vulnerability.class, 0.311666667);//
         benchmarkForImplementation.put("restaurant-2-service", restaurantBenchmark2);
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark3 = new HashMap<>();
-        restaurantBenchmark3.put(Availability.class, 0.866666667);
-        restaurantBenchmark3.put(AverageResponseTime.class, 0.1);
-        restaurantBenchmark3.put(Vulnerability.class, 0.785714286);//
+        restaurantBenchmark3.put(Availability.class, 0.96);
+        restaurantBenchmark3.put(AverageResponseTime.class, 0.02);
+        restaurantBenchmark3.put(Vulnerability.class, 0.723333333);//
         benchmarkForImplementation.put("restaurant-3-service", restaurantBenchmark3);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantCurrentQoS = new HashMap<>();//Initial configuration
-        restaurantCurrentQoS.put(Availability.class, 0.766666667);
-        restaurantCurrentQoS.put(AverageResponseTime.class, 0.165306122);
+        restaurantCurrentQoS.put(Availability.class, 0.9);
+        restaurantCurrentQoS.put(AverageResponseTime.class, 0.1);
         currentQoSValues.put("RESTAURANT-SERVICE", restaurantCurrentQoS);
 
         // Ordering //
@@ -1253,14 +1259,14 @@ public class SimulationsUtils {
         serviceImplementations.put("ORDERING-SERVICE", orderingImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark = new HashMap<>();
-        orderingBenchmark.put(Availability.class, 0.8);
-        orderingBenchmark.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark.put(Vulnerability.class, 0.498879552);
+        orderingBenchmark.put(Availability.class, 0.92);
+        orderingBenchmark.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark.put(Vulnerability.class, 0.51);
         benchmarkForImplementation.put("ordering-service", orderingBenchmark);
 
         Map<Class<? extends QoSSpecification>, Double> orderingCurrentQoS = new HashMap<>();
-        orderingCurrentQoS.put(Availability.class, 0.8);
-        orderingCurrentQoS.put(AverageResponseTime.class, 0.655102041);
+        orderingCurrentQoS.put(Availability.class, 0.92);
+        orderingCurrentQoS.put(AverageResponseTime.class, 0.7);
         currentQoSValues.put("ORDERING-SERVICE", orderingCurrentQoS);
 
         // Delivery //
@@ -1268,14 +1274,14 @@ public class SimulationsUtils {
         serviceImplementations.put("DELIVERY-PROXY-SERVICE", deliveryProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark1 = new HashMap<>();
-        deliveryProxyBenchmark1.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.573469388);
-        deliveryProxyBenchmark1.put(Vulnerability.class, 0.655742297);
+        deliveryProxyBenchmark1.put(Availability.class, 0.85);
+        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark1.put(Vulnerability.class, 0.626666667);
         benchmarkForImplementation.put("delivery-proxy-1-service", deliveryProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyCurrentQoS = new HashMap<>();
-        deliveryProxyCurrentQoS.put(Availability.class, 0.683333333);
-        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.573469388);
+        deliveryProxyCurrentQoS.put(Availability.class, 0.85);
+        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.6);
         currentQoSValues.put("DELIVERY-PROXY-SERVICE", deliveryProxyCurrentQoS);
 
         // Payment //
@@ -1283,14 +1289,14 @@ public class SimulationsUtils {
         serviceImplementations.put("PAYMENT-PROXY-SERVICE", paymentProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark1 = new HashMap<>();
-        paymentProxyBenchmark1.put(Availability.class, 0.766666667);
-        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.818367347);
-        paymentProxyBenchmark1.put(Vulnerability.class, 0.294957983);
+        paymentProxyBenchmark1.put(Availability.class, 0.9);
+        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.9);
+        paymentProxyBenchmark1.put(Vulnerability.class, 0.358333333);
         benchmarkForImplementation.put("payment-proxy-1-service", paymentProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyCurrentQoS = new HashMap<>();//Initial configuration
-        paymentProxyCurrentQoS.put(Availability.class, 0.766666667);
-        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.818367347);
+        paymentProxyCurrentQoS.put(Availability.class, 0.9);
+        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.9);
         currentQoSValues.put("PAYMENT-PROXY-SERVICE", paymentProxyCurrentQoS);
 
         return createServiceMap(availabilityWeight,
@@ -1315,24 +1321,24 @@ public class SimulationsUtils {
         serviceImplementations.put("RESTAURANT-SERVICE", restaurantImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark1 = new HashMap<>();//option configuration
-        restaurantBenchmark1.put(Availability.class, 0.766666667);
-        restaurantBenchmark1.put(AverageResponseTime.class, 0.165306122);
-        restaurantBenchmark1.put(Vulnerability.class, 0.566106443);
+        restaurantBenchmark1.put(Availability.class, 0.9);
+        restaurantBenchmark1.put(AverageResponseTime.class, 0.1);
+        restaurantBenchmark1.put(Vulnerability.class, 0.56);
         benchmarkForImplementation.put("restaurant-1-service", restaurantBenchmark1);
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark2 = new HashMap<>();
-        restaurantBenchmark2.put(Availability.class, 0.85);
-        restaurantBenchmark2.put(AverageResponseTime.class, 0.148979592);
-        restaurantBenchmark2.put(Vulnerability.class, 0.1);
+        restaurantBenchmark2.put(Availability.class, 0.95);
+        restaurantBenchmark2.put(AverageResponseTime.class, 0.08);
+        restaurantBenchmark2.put(Vulnerability.class, 0.213333333);
         benchmarkForImplementation.put("restaurant-2-service", restaurantBenchmark2);
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark3 = new HashMap<>();
-        restaurantBenchmark3.put(Availability.class, 0.9);
-        restaurantBenchmark3.put(AverageResponseTime.class, 0.1);
-        restaurantBenchmark3.put(Vulnerability.class, 0.333053221);
+        restaurantBenchmark3.put(Availability.class, 0.98);
+        restaurantBenchmark3.put(AverageResponseTime.class, 0.02);
+        restaurantBenchmark3.put(Vulnerability.class, 0.386666667);
         benchmarkForImplementation.put("restaurant-3-service", restaurantBenchmark3);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantCurrentQoS = new HashMap<>();//Initial configuration
-        restaurantCurrentQoS.put(Availability.class, 0.766666667);
-        restaurantCurrentQoS.put(AverageResponseTime.class, 0.165306122);
+        restaurantCurrentQoS.put(Availability.class, 0.9);
+        restaurantCurrentQoS.put(AverageResponseTime.class, 0.1);
         currentQoSValues.put("RESTAURANT-SERVICE", restaurantCurrentQoS);
 
         // Ordering //
@@ -1340,14 +1346,14 @@ public class SimulationsUtils {
         serviceImplementations.put("ORDERING-SERVICE", orderingImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark = new HashMap<>();
-        orderingBenchmark.put(Availability.class, 0.8);
-        orderingBenchmark.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark.put(Vulnerability.class, 0.498879552);
+        orderingBenchmark.put(Availability.class, 0.92);
+        orderingBenchmark.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark.put(Vulnerability.class, 0.51);
         benchmarkForImplementation.put("ordering-service", orderingBenchmark);
 
         Map<Class<? extends QoSSpecification>, Double> orderingCurrentQoS = new HashMap<>();
-        orderingCurrentQoS.put(Availability.class, 0.8);
-        orderingCurrentQoS.put(AverageResponseTime.class, 0.655102041);
+        orderingCurrentQoS.put(Availability.class, 0.92);
+        orderingCurrentQoS.put(AverageResponseTime.class, 0.7);
         currentQoSValues.put("ORDERING-SERVICE", orderingCurrentQoS);
 
         // Delivery //
@@ -1355,14 +1361,14 @@ public class SimulationsUtils {
         serviceImplementations.put("DELIVERY-PROXY-SERVICE", deliveryProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark1 = new HashMap<>();
-        deliveryProxyBenchmark1.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.573469388);
-        deliveryProxyBenchmark1.put(Vulnerability.class, 0.655742297);
+        deliveryProxyBenchmark1.put(Availability.class, 0.85);
+        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark1.put(Vulnerability.class, 0.626666667);
         benchmarkForImplementation.put("delivery-proxy-1-service", deliveryProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyCurrentQoS = new HashMap<>();
-        deliveryProxyCurrentQoS.put(Availability.class, 0.683333333);
-        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.573469388);
+        deliveryProxyCurrentQoS.put(Availability.class, 0.85);
+        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.6);
         currentQoSValues.put("DELIVERY-PROXY-SERVICE", deliveryProxyCurrentQoS);
 
         // Payment //
@@ -1370,14 +1376,14 @@ public class SimulationsUtils {
         serviceImplementations.put("PAYMENT-PROXY-SERVICE", paymentProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark1 = new HashMap<>();
-        paymentProxyBenchmark1.put(Availability.class, 0.766666667);
-        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.818367347);
-        paymentProxyBenchmark1.put(Vulnerability.class, 0.294957983);
+        paymentProxyBenchmark1.put(Availability.class, 0.9);
+        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.9);
+        paymentProxyBenchmark1.put(Vulnerability.class, 0.358333333);
         benchmarkForImplementation.put("payment-proxy-1-service", paymentProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyCurrentQoS = new HashMap<>();//Initial configuration
-        paymentProxyCurrentQoS.put(Availability.class, 0.766666667);
-        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.818367347);
+        paymentProxyCurrentQoS.put(Availability.class, 0.9);
+        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.9);
         currentQoSValues.put("PAYMENT-PROXY-SERVICE", paymentProxyCurrentQoS);
 
         return createServiceMap(availabilityWeight,
@@ -1402,14 +1408,14 @@ public class SimulationsUtils {
         serviceImplementations.put("RESTAURANT-SERVICE", restaurantImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark1 = new HashMap<>();//option configuration
-        restaurantBenchmark1.put(Availability.class, 0.183333333);
-        restaurantBenchmark1.put(AverageResponseTime.class, 0.9);
-        restaurantBenchmark1.put(Vulnerability.class, 0.566106443);
+        restaurantBenchmark1.put(Availability.class, 0.55);
+        restaurantBenchmark1.put(AverageResponseTime.class, 1.0);
+        restaurantBenchmark1.put(Vulnerability.class, 0.56);
         benchmarkForImplementation.put("restaurant-1-service", restaurantBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantCurrentQoS = new HashMap<>();//Initial configuration
-        restaurantCurrentQoS.put(Availability.class, 0.183333333);
-        restaurantCurrentQoS.put(AverageResponseTime.class, 0.9);
+        restaurantCurrentQoS.put(Availability.class, 0.55);
+        restaurantCurrentQoS.put(AverageResponseTime.class, 1.0);
         currentQoSValues.put("RESTAURANT-SERVICE", restaurantCurrentQoS);
 
         // Ordering //
@@ -1417,29 +1423,29 @@ public class SimulationsUtils {
         serviceImplementations.put("ORDERING-SERVICE", orderingImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark1 = new HashMap<>();
-        orderingBenchmark1.put(Availability.class, 0.6);
-        orderingBenchmark1.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark1.put(Vulnerability.class, 0.718487395);
+        orderingBenchmark1.put(Availability.class, 0.8);
+        orderingBenchmark1.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark1.put(Vulnerability.class, 0.673333333);
         benchmarkForImplementation.put("ordering-1-service", orderingBenchmark1);
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark2 = new HashMap<>();
-        orderingBenchmark2.put(Availability.class, 0.733333333);
-        orderingBenchmark2.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark2.put(Vulnerability.class, 0.718487395);
+        orderingBenchmark2.put(Availability.class, 0.88);
+        orderingBenchmark2.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark2.put(Vulnerability.class, 0.673333333);
         benchmarkForImplementation.put("ordering-2-service", orderingBenchmark2);
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark3 = new HashMap<>();
-        orderingBenchmark3.put(Availability.class, 0.6);
-        orderingBenchmark3.put(AverageResponseTime.class, 0.491836735);
-        orderingBenchmark3.put(Vulnerability.class, 0.718487395);
+        orderingBenchmark3.put(Availability.class, 0.8);
+        orderingBenchmark3.put(AverageResponseTime.class, 0.5);
+        orderingBenchmark3.put(Vulnerability.class, 0.673333333);
         benchmarkForImplementation.put("ordering-3-service", orderingBenchmark3);
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark4 = new HashMap<>();
-        orderingBenchmark4.put(Availability.class, 0.6);
-        orderingBenchmark4.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark4.put(Vulnerability.class, 0.308403361);
+        orderingBenchmark4.put(Availability.class, 0.8);
+        orderingBenchmark4.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark4.put(Vulnerability.class, 0.368333333);
         benchmarkForImplementation.put("ordering-4-service", orderingBenchmark4);
 
         Map<Class<? extends QoSSpecification>, Double> orderingCurrentQoS = new HashMap<>();
-        orderingCurrentQoS.put(Availability.class, 0.6);
-        orderingCurrentQoS.put(AverageResponseTime.class, 0.655102041);
+        orderingCurrentQoS.put(Availability.class, 0.8);
+        orderingCurrentQoS.put(AverageResponseTime.class, 0.7);
         currentQoSValues.put("ORDERING-SERVICE", orderingCurrentQoS);
 
         // Delivery //
@@ -1447,14 +1453,14 @@ public class SimulationsUtils {
         serviceImplementations.put("DELIVERY-PROXY-SERVICE", deliveryProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark1 = new HashMap<>();
-        deliveryProxyBenchmark1.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.573469388);
-        deliveryProxyBenchmark1.put(Vulnerability.class, 0.655742297);
+        deliveryProxyBenchmark1.put(Availability.class, 0.85);
+        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark1.put(Vulnerability.class, 0.626666667);
         benchmarkForImplementation.put("delivery-proxy-1-service", deliveryProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyCurrentQoS = new HashMap<>();
-        deliveryProxyCurrentQoS.put(Availability.class, 0.683333333);
-        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.573469388);
+        deliveryProxyCurrentQoS.put(Availability.class, 0.85);
+        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.6);
         currentQoSValues.put("DELIVERY-PROXY-SERVICE", deliveryProxyCurrentQoS);
 
         // Payment //
@@ -1462,14 +1468,14 @@ public class SimulationsUtils {
         serviceImplementations.put("PAYMENT-PROXY-SERVICE", paymentProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark1 = new HashMap<>();
-        paymentProxyBenchmark1.put(Availability.class, 0.766666667);
-        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.818367347);
-        paymentProxyBenchmark1.put(Vulnerability.class, 0.294957983);
+        paymentProxyBenchmark1.put(Availability.class, 0.9);
+        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.9);
+        paymentProxyBenchmark1.put(Vulnerability.class, 0.358333333);
         benchmarkForImplementation.put("payment-proxy-1-service", paymentProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyCurrentQoS = new HashMap<>();//Initial configuration
-        paymentProxyCurrentQoS.put(Availability.class, 0.766666667);
-        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.818367347);
+        paymentProxyCurrentQoS.put(Availability.class, 0.9);
+        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.9);
         currentQoSValues.put("PAYMENT-PROXY-SERVICE", paymentProxyCurrentQoS);
 
         return createServiceMap(availabilityWeight,
@@ -1494,14 +1500,14 @@ public class SimulationsUtils {
         serviceImplementations.put("RESTAURANT-SERVICE", restaurantImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark1 = new HashMap<>();//option configuration
-        restaurantBenchmark1.put(Availability.class, 0.766666667);
-        restaurantBenchmark1.put(AverageResponseTime.class, 0.165306122);
-        restaurantBenchmark1.put(Vulnerability.class, 0.281512605);
+        restaurantBenchmark1.put(Availability.class, 0.9);
+        restaurantBenchmark1.put(AverageResponseTime.class, 0.1);
+        restaurantBenchmark1.put(Vulnerability.class, 0.598333333);
         benchmarkForImplementation.put("restaurant-1-service", restaurantBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantCurrentQoS = new HashMap<>();//Initial configuration
-        restaurantCurrentQoS.put(Availability.class, 0.766666667);
-        restaurantCurrentQoS.put(AverageResponseTime.class, 0.165306122);
+        restaurantCurrentQoS.put(Availability.class, 0.9);
+        restaurantCurrentQoS.put(AverageResponseTime.class, 0.1);
         currentQoSValues.put("RESTAURANT-SERVICE", restaurantCurrentQoS);
 
         // Ordering //
@@ -1509,14 +1515,14 @@ public class SimulationsUtils {
         serviceImplementations.put("ORDERING-SERVICE", orderingImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark1 = new HashMap<>();
-        orderingBenchmark1.put(Availability.class, 0.266666667);
-        orderingBenchmark1.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark1.put(Vulnerability.class, 0.666946779);
+        orderingBenchmark1.put(Availability.class, 0.6);
+        orderingBenchmark1.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark1.put(Vulnerability.class, 0.673333333);
         benchmarkForImplementation.put("ordering-1-service", orderingBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> orderingCurrentQoS = new HashMap<>();
-        orderingCurrentQoS.put(Availability.class, 0.266666667);
-        orderingCurrentQoS.put(AverageResponseTime.class, 0.655102041);
+        orderingCurrentQoS.put(Availability.class, 0.6);
+        orderingCurrentQoS.put(AverageResponseTime.class, 0.7);
         currentQoSValues.put("ORDERING-SERVICE", orderingCurrentQoS);
 
         // Delivery //
@@ -1524,29 +1530,29 @@ public class SimulationsUtils {
         serviceImplementations.put("DELIVERY-PROXY-SERVICE", deliveryProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark1 = new HashMap<>();
-        deliveryProxyBenchmark1.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.573469388);
-        deliveryProxyBenchmark1.put(Vulnerability.class, 0.87535014);
+        deliveryProxyBenchmark1.put(Availability.class, 0.85);
+        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark1.put(Vulnerability.class, 0.463333333);
         benchmarkForImplementation.put("delivery-proxy-1-service", deliveryProxyBenchmark1);
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark2 = new HashMap<>();
-        deliveryProxyBenchmark2.put(Availability.class, 0.85);
-        deliveryProxyBenchmark2.put(AverageResponseTime.class, 0.573469388);
-        deliveryProxyBenchmark2.put(Vulnerability.class, 0.87535014);
+        deliveryProxyBenchmark2.put(Availability.class, 0.95);
+        deliveryProxyBenchmark2.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark2.put(Vulnerability.class, 0.626666667);
         benchmarkForImplementation.put("delivery-proxy-2-service", deliveryProxyBenchmark2);
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark3 = new HashMap<>();
-        deliveryProxyBenchmark3.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark3.put(AverageResponseTime.class, 0.410204082);
-        deliveryProxyBenchmark3.put(Vulnerability.class, 0.87535014);
+        deliveryProxyBenchmark3.put(Availability.class, 0.85);
+        deliveryProxyBenchmark3.put(AverageResponseTime.class, 0.4);
+        deliveryProxyBenchmark3.put(Vulnerability.class, 0.626666667);
         benchmarkForImplementation.put("delivery-proxy-3-service", deliveryProxyBenchmark3);
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark4 = new HashMap<>();
-        deliveryProxyBenchmark4.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark4.put(AverageResponseTime.class, 0.573469388);
-        deliveryProxyBenchmark4.put(Vulnerability.class, 0.268067227);
+        deliveryProxyBenchmark4.put(Availability.class, 0.85);
+        deliveryProxyBenchmark4.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark4.put(Vulnerability.class, 0.338333333);
         benchmarkForImplementation.put("delivery-proxy-4-service", deliveryProxyBenchmark4);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyCurrentQoS = new HashMap<>();
-        deliveryProxyCurrentQoS.put(Availability.class, 0.683333333);
-        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.573469388);
+        deliveryProxyCurrentQoS.put(Availability.class, 0.85);
+        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.6);
         currentQoSValues.put("DELIVERY-PROXY-SERVICE", deliveryProxyCurrentQoS);
 
         // Payment //
@@ -1554,14 +1560,14 @@ public class SimulationsUtils {
         serviceImplementations.put("PAYMENT-PROXY-SERVICE", paymentProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark1 = new HashMap<>();
-        paymentProxyBenchmark1.put(Availability.class, 0.1);
-        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.736734694);
-        paymentProxyBenchmark1.put(Vulnerability.class, 0.294957983);
+        paymentProxyBenchmark1.put(Availability.class, 0.5);
+        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.8);
+        paymentProxyBenchmark1.put(Vulnerability.class, 0.358333333);
         benchmarkForImplementation.put("payment-proxy-1-service", paymentProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyCurrentQoS = new HashMap<>();//Initial configuration
-        paymentProxyCurrentQoS.put(Availability.class, 0.1);
-        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.736734694);
+        paymentProxyCurrentQoS.put(Availability.class, 0.5);
+        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.8);
         currentQoSValues.put("PAYMENT-PROXY-SERVICE", paymentProxyCurrentQoS);
 
         return createServiceMap(availabilityWeight,
@@ -1586,14 +1592,14 @@ public class SimulationsUtils {
         serviceImplementations.put("RESTAURANT-SERVICE", restaurantImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark1 = new HashMap<>();//option configuration
-        restaurantBenchmark1.put(Availability.class, 0.766666667);
-        restaurantBenchmark1.put(AverageResponseTime.class, 0.165306122);
-        restaurantBenchmark1.put(Vulnerability.class, 0.281512605);
+        restaurantBenchmark1.put(Availability.class, 0.9);
+        restaurantBenchmark1.put(AverageResponseTime.class, 0.1);
+        restaurantBenchmark1.put(Vulnerability.class, 0.348333333);
         benchmarkForImplementation.put("restaurant-1-service", restaurantBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> restaurantCurrentQoS = new HashMap<>();//Initial configuration
-        restaurantCurrentQoS.put(Availability.class, 0.766666667);
-        restaurantCurrentQoS.put(AverageResponseTime.class, 0.165306122);
+        restaurantCurrentQoS.put(Availability.class, 0.9);
+        restaurantCurrentQoS.put(AverageResponseTime.class, 0.1);
         currentQoSValues.put("RESTAURANT-SERVICE", restaurantCurrentQoS);
 
         // Ordering //
@@ -1601,14 +1607,14 @@ public class SimulationsUtils {
         serviceImplementations.put("ORDERING-SERVICE", orderingImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> orderingBenchmark1 = new HashMap<>();
-        orderingBenchmark1.put(Availability.class, 0.8);
-        orderingBenchmark1.put(AverageResponseTime.class, 0.655102041);
-        orderingBenchmark1.put(Vulnerability.class, 0.498879552);
+        orderingBenchmark1.put(Availability.class, 0.92);
+        orderingBenchmark1.put(AverageResponseTime.class, 0.7);
+        orderingBenchmark1.put(Vulnerability.class, 0.51);
         benchmarkForImplementation.put("ordering-1-service", orderingBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> orderingCurrentQoS = new HashMap<>();
-        orderingCurrentQoS.put(Availability.class, 0.8);
-        orderingCurrentQoS.put(AverageResponseTime.class, 0.655102041);
+        orderingCurrentQoS.put(Availability.class, 0.92);
+        orderingCurrentQoS.put(AverageResponseTime.class, 0.7);
         currentQoSValues.put("ORDERING-SERVICE", orderingCurrentQoS);
 
         // Delivery //
@@ -1616,14 +1622,14 @@ public class SimulationsUtils {
         serviceImplementations.put("DELIVERY-PROXY-SERVICE", deliveryProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark1 = new HashMap<>();
-        deliveryProxyBenchmark1.put(Availability.class, 0.683333333);
-        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.655102041);
-        deliveryProxyBenchmark1.put(Vulnerability.class, 0.436134454);
+        deliveryProxyBenchmark1.put(Availability.class, 0.85);
+        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.6);
+        deliveryProxyBenchmark1.put(Vulnerability.class, 0.626666667);
         benchmarkForImplementation.put("delivery-proxy-1-service", deliveryProxyBenchmark1);
 
         Map<Class<? extends QoSSpecification>, Double> deliveryProxyCurrentQoS = new HashMap<>();
-        deliveryProxyCurrentQoS.put(Availability.class, 0.683333333);
-        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.655102041);
+        deliveryProxyCurrentQoS.put(Availability.class, 0.85);
+        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.6);
         currentQoSValues.put("DELIVERY-PROXY-SERVICE", deliveryProxyCurrentQoS);
 
         // Payment //
@@ -1631,29 +1637,29 @@ public class SimulationsUtils {
         serviceImplementations.put("PAYMENT-PROXY-SERVICE", paymentProxyImplementations);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark1 = new HashMap<>();
-        paymentProxyBenchmark1.put(Availability.class, 0.766666667);
-        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.818367347);
-        paymentProxyBenchmark1.put(Vulnerability.class, 0.460784314);//
+        paymentProxyBenchmark1.put(Availability.class, 0.9);
+        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.9);
+        paymentProxyBenchmark1.put(Vulnerability.class, 0.358333333);//
         benchmarkForImplementation.put("payment-proxy-1-service", paymentProxyBenchmark1);
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark2 = new HashMap<>();
-        paymentProxyBenchmark2.put(Availability.class, 0.8);
-        paymentProxyBenchmark2.put(AverageResponseTime.class, 0.9);
-        paymentProxyBenchmark2.put(Vulnerability.class, 0.9);//
+        paymentProxyBenchmark2.put(Availability.class, 0.92);
+        paymentProxyBenchmark2.put(AverageResponseTime.class, 1.0);
+        paymentProxyBenchmark2.put(Vulnerability.class, 0.685);//
         benchmarkForImplementation.put("payment-proxy-2-service", paymentProxyBenchmark2);
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark3 = new HashMap<>();
-        paymentProxyBenchmark3.put(Availability.class, 0.433333333);
-        paymentProxyBenchmark3.put(AverageResponseTime.class, 0.573469388);
-        paymentProxyBenchmark3.put(Vulnerability.class, 0.9);//
+        paymentProxyBenchmark3.put(Availability.class, 0.7);
+        paymentProxyBenchmark3.put(AverageResponseTime.class, 0.6);
+        paymentProxyBenchmark3.put(Vulnerability.class, 0.685);//
         benchmarkForImplementation.put("payment-proxy-3-service", paymentProxyBenchmark3);
         Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark4 = new HashMap<>();
-        paymentProxyBenchmark4.put(Availability.class, 0.433333333);
-        paymentProxyBenchmark4.put(AverageResponseTime.class, 0.9);
-        paymentProxyBenchmark4.put(Vulnerability.class, 0.126890756);//
+        paymentProxyBenchmark4.put(Availability.class, 0.7);
+        paymentProxyBenchmark4.put(AverageResponseTime.class, 1.0);
+        paymentProxyBenchmark4.put(Vulnerability.class, 0.233333333);//
         benchmarkForImplementation.put("payment-proxy-4-service", paymentProxyBenchmark4);
 
         Map<Class<? extends QoSSpecification>, Double> paymentProxyCurrentQoS = new HashMap<>();//Initial configuration
-        paymentProxyCurrentQoS.put(Availability.class, 0.766666667);
-        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.818367347);
+        paymentProxyCurrentQoS.put(Availability.class, 0.9);
+        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.9);
         currentQoSValues.put("PAYMENT-PROXY-SERVICE", paymentProxyCurrentQoS);
 
         return createServiceMap(availabilityWeight,
@@ -2497,6 +2503,7 @@ public class SimulationsUtils {
                 currentQoSValues);
     }
 
+
     public static Map<String, Service> RQ2_s1_Aqua_ExpConfig(){
         double availabilityWeight = 0.3;
         double responseTimeWeight = 0.3;
@@ -3309,6 +3316,335 @@ public class SimulationsUtils {
                 currentQoSValues);
     }
 
+
+    // RQ4 vulnerability axis: same scenario as RQ3_1_2 but the attack paths come from the
+    // 136 independent domains via VulnAxisAP, so it is not capped at the 21 CVEs the
+    // monolithic AED can switch on.
+    // Measurement-only entry point for the managed-system size axis, so that RQ4.2's
+    // two figures share one definition of risk assessment cost: the same independent
+    // domains and the same critical-path timing as the vulnerability axis, instead of
+    // EADSA on the monolithic AED. SizeAxisExperiment itself is left untouched; the
+    // CVE set below is the one it fixes for the first implementation.
+    private static final String[] SIZE_AXIS_CVES = {
+            "CVE-2024-38286", "CVE-2024-12798", "CVE-2024-38820"
+    };
+
+    public static void RQ4_size_risk_profile(int scale) {
+        for (int replica = 1; replica <= scale; replica++) {
+            VulnAxisAPProfiler.profileReplica(replica, SIZE_AXIS_CVES);
+        }
+    }
+
+    // Measurement-only entry point for the "risk assessment time vs number of
+    // vulnerabilities" figure: it runs the attack-path sweep for the same
+    // implementation the other RQ4 figures report (Restaurant-1-service) and stops
+    // there, so no DTMC is built and PRISM is never called.
+    public static void RQ4_vuln_risk_profile(int number) {
+        ExcelToJsonConverter conv;
+        try {
+            conv = new ExcelToJsonConverter(FilePathConstants.configuration_rq4vuln_path);
+        } catch (Exception e) {
+            throw new ExceptionInInitializerError("Failed to initialize Excel converter: " + e.getMessage());
+        }
+        @SuppressWarnings("unchecked")
+        List<String> cveList = (List<String>) conv.getValue(
+                "Sub-scenario" + number, "RESTAURANT-SERVICE", "Restaurant-1-service", "vulnerabilitylist");
+        VulnAxisAPProfiler.profile(number, cveList.toArray(new String[0]));
+    }
+
+    public static Map<String, Service> RQ4_vuln_SAQURE_ExpConfig(int number){
+        double availabilityWeight = 0.3;
+        double responseTimeWeight = 0.3;
+        double vulnerabilityWeight = 0.4;
+        try {
+            converter = new ExcelToJsonConverter(FilePathConstants.configuration_rq4vuln_path);
+        } catch (Exception e) {
+            throw new ExceptionInInitializerError("Failed to initialize Excel converter: " + e.getMessage());
+        }
+
+        List<String> cveList0 = (List<String>) converter.getValue("Sub-scenario" + number, "RESTAURANT-SERVICE", "Restaurant-1-service", "vulnerabilitylist");
+        String[] cveIds_r0 = cveList0.toArray(new String[0]);
+        List<String> cveList1 = (List<String>) converter.getValue("Sub-scenario" + number, "RESTAURANT-SERVICE", "Restaurant-2-service", "vulnerabilitylist");
+        String[] cveIds_r1 = cveList1.toArray(new String[0]);
+        List<String> cveList2 = (List<String>) converter.getValue("Sub-scenario" + number, "RESTAURANT-SERVICE", "Restaurant-3-service", "vulnerabilitylist");
+        String[] cveIds_r2 = cveList2.toArray(new String[0]);
+
+        // for RQ3.2
+        final double costS1R0 = VulnAxisAP.computeScenario(cveIds_r0);
+
+        final double costS1R1 = VulnAxisAP.computeScenario(cveIds_r1);
+        final double costS1R2 = VulnAxisAP.computeScenario(cveIds_r2);
+
+        double[] costValues = {costS1R0, costS1R1, costS1R2};
+        DynamicNormalize costNormalizer = new DynamicNormalize();
+        costNormalizer.preProcessing(costValues);
+        final double aS1R0 = (double) converter.getValue("Sub-scenario" + number, "RESTAURANT-SERVICE", "Restaurant-1-service", "availability");
+        final double aS1R1 = (double) converter.getValue("Sub-scenario" + number, "RESTAURANT-SERVICE", "Restaurant-2-service", "availability");
+        final double aS1R2 = (double) converter.getValue("Sub-scenario" + number, "RESTAURANT-SERVICE", "Restaurant-3-service", "availability");
+        final double aS1O0 = (double) converter.getValue("Sub-scenario" + number, "ORDERING-SERVICE", "Ordering-service", "availability");
+        final double aS1D0 = (double) converter.getValue("Sub-scenario" + number, "DELIVERY-PROXY-SERVICE", "Delivery-proxy-1-service", "availability");
+        final double aS1P0 = (double) converter.getValue("Sub-scenario" + number, "PAYMENT-PROXY-SERVICE", "Payment-proxy-1-service", "availability");
+        double[] avalibilities = {aS1R0, aS1R1, aS1R2, aS1O0, aS1D0, aS1P0};
+        DynamicNormalize availabilityNormalizer = new DynamicNormalize();
+        availabilityNormalizer.preProcessing(avalibilities);
+        final int tS1R0 = (int) converter.getValue("Sub-scenario" + number, "RESTAURANT-SERVICE", "Restaurant-1-service", "responseTime");
+        final int tS1R1 = (int) converter.getValue("Sub-scenario" + number, "RESTAURANT-SERVICE", "Restaurant-2-service", "responseTime");
+        final int tS1R2 = (int) converter.getValue("Sub-scenario" + number, "RESTAURANT-SERVICE", "Restaurant-3-service", "responseTime");
+        final int tS1O0 = (int) converter.getValue("Sub-scenario" + number, "ORDERING-SERVICE", "Ordering-service", "responseTime");
+        final int tS1D0 = (int) converter.getValue("Sub-scenario" + number, "DELIVERY-PROXY-SERVICE", "Delivery-proxy-1-service", "responseTime");
+        final int tS1P0 = (int) converter.getValue("Sub-scenario" + number, "PAYMENT-PROXY-SERVICE", "Payment-proxy-1-service", "responseTime");
+        int[] responseTimes = {tS1R0, tS1R1, tS1R2, tS1O0, tS1D0, tS1P0};
+        double[] doubleResponseTimes = Arrays.stream(responseTimes).asDoubleStream().toArray();
+        DynamicNormalize responseTimeNormalizer = new DynamicNormalize();
+        responseTimeNormalizer.preProcessing(doubleResponseTimes);
+//        System.out.printf(
+//                "Availability (Normalized):\n" +
+//                        "  aS1R0: %.2f, aS1R1: %.2f, aS1R2: %.2f," +
+//                        "  aS1O0: %.2f, aS1D0: %.2f, aS1P0: %.2f\n" +
+//                        "Response Time (Normalized):\n" +
+//                        "  tS1R0: %.2f, tS1R1: %.2f, tS1R2: %.2f," +
+//                        "  tS1O0: %.2f, tS1D0: %.2f, tS1P0: %.2f\n",
+//                aS1R0,//availabilityNormalizer.normalize(aS1R0),
+//                aS1R1,//availabilityNormalizer.normalize(aS1R1),
+//                aS1R2,//availabilityNormalizer.normalize(aS1R2),
+//                aS1O0,//availabilityNormalizer.normalize(aS1O0),
+//                aS1D0,//availabilityNormalizer.normalize(aS1D0),
+//                aS1P0,//availabilityNormalizer.normalize(aS1P0),
+//                responseTimeNormalizer.normalize(tS1R0),
+//                responseTimeNormalizer.normalize(tS1R1),
+//                responseTimeNormalizer.normalize(tS1R2),
+//                responseTimeNormalizer.normalize(tS1O0),
+//                responseTimeNormalizer.normalize(tS1D0),
+//                responseTimeNormalizer.normalize(tS1P0)
+//        );
+//        System.out.printf("Cost (Normalized):\n" + " vs1r0: %.2f, vs1r1: %.2f, vs1r2: %.2f ", costNormalizer.normalize(costS1R0), costNormalizer.normalize(costS1R1), costNormalizer.normalize(costS1R2));
+
+        Map<String, List<String>> serviceImplementations = new HashMap<>();
+        Map<String, Map<Class<? extends QoSSpecification>, Double>> benchmarkForImplementation = new HashMap<>();
+        Map<String, Map<Class<? extends QoSSpecification>, Double>> currentQoSValues = new HashMap<>();
+
+        // Restaurant //
+        List<String> restaurantImplementations = List.of("restaurant-1-service","restaurant-2-service","restaurant-3-service");
+        serviceImplementations.put("RESTAURANT-SERVICE", restaurantImplementations);
+
+        Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark1 = new HashMap<>();//option configuration
+        restaurantBenchmark1.put(Availability.class, availabilityNormalizer.normalize(aS1R0));//0.766666667
+        restaurantBenchmark1.put(AverageResponseTime.class, responseTimeNormalizer.normalize(tS1R0));//0.165306122
+        restaurantBenchmark1.put(Vulnerability.class, costNormalizer.normalize(costS1R0));//0.633333333
+        benchmarkForImplementation.put("restaurant-1-service", restaurantBenchmark1);
+        Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark2 = new HashMap<>();
+        restaurantBenchmark2.put(Availability.class, availabilityNormalizer.normalize(aS1R1));//0.92
+        restaurantBenchmark2.put(AverageResponseTime.class, responseTimeNormalizer.normalize(tS1R1));//0.132653061
+        restaurantBenchmark2.put(Vulnerability.class, costNormalizer.normalize(costS1R1));//0.227891156
+        benchmarkForImplementation.put("restaurant-2-service", restaurantBenchmark2);
+        Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark3 = new HashMap<>();
+        restaurantBenchmark3.put(Availability.class, availabilityNormalizer.normalize(aS1R2));
+        restaurantBenchmark3.put(AverageResponseTime.class, responseTimeNormalizer.normalize(tS1R2));//0.1
+        restaurantBenchmark3.put(Vulnerability.class, costNormalizer.normalize(costS1R2));//0.9
+        benchmarkForImplementation.put("restaurant-3-service", restaurantBenchmark3);
+
+        Map<Class<? extends QoSSpecification>, Double> restaurantCurrentQoS = new HashMap<>();//Initial configuration
+        restaurantCurrentQoS.put(Availability.class, availabilityNormalizer.normalize(aS1R0));
+        restaurantCurrentQoS.put(AverageResponseTime.class, responseTimeNormalizer.normalize(tS1R0));
+        currentQoSValues.put("RESTAURANT-SERVICE", restaurantCurrentQoS);
+
+        // Ordering //
+        List<String> orderingImplementations = List.of("ordering-service");
+        serviceImplementations.put("ORDERING-SERVICE", orderingImplementations);
+
+        Map<Class<? extends QoSSpecification>, Double> orderingBenchmark = new HashMap<>();
+        orderingBenchmark.put(Availability.class, availabilityNormalizer.normalize(aS1O0));//0.8
+        orderingBenchmark.put(AverageResponseTime.class, responseTimeNormalizer.normalize(tS1O0));//0.655102041
+        orderingBenchmark.put(Vulnerability.class, costNormalizer.normalize(costS1R0));
+        benchmarkForImplementation.put("ordering-service", orderingBenchmark);
+
+        Map<Class<? extends QoSSpecification>, Double> orderingCurrentQoS = new HashMap<>();
+        orderingCurrentQoS.put(Availability.class, availabilityNormalizer.normalize(aS1O0));
+        orderingCurrentQoS.put(AverageResponseTime.class, responseTimeNormalizer.normalize(tS1O0));
+        currentQoSValues.put("ORDERING-SERVICE", orderingCurrentQoS);
+
+        // Delivery //
+        List<String> deliveryProxyImplementations = List.of("delivery-proxy-1-service");
+        serviceImplementations.put("DELIVERY-PROXY-SERVICE", deliveryProxyImplementations);
+
+        Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark1 = new HashMap<>();
+        deliveryProxyBenchmark1.put(Availability.class, availabilityNormalizer.normalize(aS1D0));//0.683333333
+        deliveryProxyBenchmark1.put(AverageResponseTime.class, responseTimeNormalizer.normalize(tS1D0));//0.573469388
+        deliveryProxyBenchmark1.put(Vulnerability.class, costNormalizer.normalize(costS1R0));
+        benchmarkForImplementation.put("delivery-proxy-1-service", deliveryProxyBenchmark1);
+
+        Map<Class<? extends QoSSpecification>, Double> deliveryProxyCurrentQoS = new HashMap<>();
+        deliveryProxyCurrentQoS.put(Availability.class, availabilityNormalizer.normalize(aS1D0));
+        deliveryProxyCurrentQoS.put(AverageResponseTime.class, responseTimeNormalizer.normalize(tS1D0));
+        currentQoSValues.put("DELIVERY-PROXY-SERVICE", deliveryProxyCurrentQoS);
+
+        // Payment //
+        List<String> paymentProxyImplementations = List.of("payment-proxy-1-service");
+        serviceImplementations.put("PAYMENT-PROXY-SERVICE", paymentProxyImplementations);
+
+        Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark1 = new HashMap<>();
+        paymentProxyBenchmark1.put(Availability.class, availabilityNormalizer.normalize(aS1P0));//0.766666667
+        paymentProxyBenchmark1.put(AverageResponseTime.class, responseTimeNormalizer.normalize(tS1P0));//0.818367347
+        paymentProxyBenchmark1.put(Vulnerability.class, costNormalizer.normalize(costS1R0));
+        benchmarkForImplementation.put("payment-proxy-1-service", paymentProxyBenchmark1);
+
+        Map<Class<? extends QoSSpecification>, Double> paymentProxyCurrentQoS = new HashMap<>();//Initial configuration
+        paymentProxyCurrentQoS.put(Availability.class, availabilityNormalizer.normalize(aS1P0));
+        paymentProxyCurrentQoS.put(AverageResponseTime.class, responseTimeNormalizer.normalize(tS1P0));
+        currentQoSValues.put("PAYMENT-PROXY-SERVICE", paymentProxyCurrentQoS);
+
+        return createServiceMap(availabilityWeight,
+                responseTimeWeight,
+                vulnerabilityWeight,
+                serviceImplementations,
+                benchmarkForImplementation,
+                currentQoSValues);
+    }
+
+
+    // RQ4 vulnerability axis, AQUA baseline: static vulnerability scores as in
+    // RQ3_1_2_Aqua_ExpConfig, resampled from 21 to 100 points over the same 0.1-0.9 range.
+    public static Map<String, Service> RQ4_vuln_Aqua_ExpConfig(int number){
+        double availabilityWeight = 0.3;
+        double responseTimeWeight = 0.3;
+        double vulnerabilityWeight = 0.4;
+
+        Map<String, List<String>> serviceImplementations = new HashMap<>();
+        Map<String, Map<Class<? extends QoSSpecification>, Double>> benchmarkForImplementation = new HashMap<>();
+        Map<String, Map<Class<? extends QoSSpecification>, Double>> currentQoSValues = new HashMap<>();
+
+        // Restaurant //
+        double[] vul_r0 = {
+                0.1, 0.110708846, 0.121417693, 0.132126539, 0.142835386, 0.153396712,
+                0.161155162, 0.168913612, 0.176672062, 0.184430512, 0.192232672, 0.200428217,
+                0.208623763, 0.216819309, 0.225014854, 0.232948142, 0.239395305, 0.245842468,
+                0.25228963, 0.258736793, 0.265533632, 0.273729178, 0.281924724, 0.29012027,
+                0.298315816, 0.306675272, 0.315526462, 0.324377651, 0.33322884, 0.342080029,
+                0.350013318, 0.355804837, 0.361596356, 0.367387875, 0.373179394, 0.379812322,
+                0.388007868, 0.396203413, 0.404398959, 0.412594505, 0.42079005, 0.428985596,
+                0.437181142, 0.445376688, 0.453572234, 0.46176778, 0.469963325, 0.478158871,
+                0.486354417, 0.494549962, 0.502745508, 0.510941053, 0.519136599, 0.527332145,
+                0.53552769, 0.543723236, 0.551918782, 0.560114328, 0.568309874, 0.57650542,
+                0.584635401, 0.592721673, 0.600807944, 0.608894216, 0.616980488, 0.625563956,
+                0.634415145, 0.643266335, 0.652117524, 0.660968713, 0.669819903, 0.678671092,
+                0.687522282, 0.696373471, 0.705224661, 0.711781097, 0.717572616, 0.723364135,
+                0.729155654, 0.734947173, 0.742661914, 0.750857459, 0.759053005, 0.76724855,
+                0.775444096, 0.781781985, 0.787792052, 0.793802119, 0.799812185, 0.805822252,
+                0.81379925, 0.821994796, 0.830190341, 0.838385887, 0.846581433, 0.857164614,
+                0.867873461, 0.878582307, 0.889291154, 0.9};
+        double[] vul_r1 = {
+                0.117849899, 0.128558745, 0.139267592, 0.149976438, 0.160685284, 0.171246611,
+                0.179005061, 0.186763511, 0.194521961, 0.202280411, 0.210082571, 0.218278116,
+                0.226473662, 0.234669208, 0.242864753, 0.250798041, 0.257245204, 0.263692367,
+                0.270139529, 0.276586692, 0.283383531, 0.291579077, 0.299774622, 0.307970168,
+                0.316165714, 0.32452517, 0.33337636, 0.342227549, 0.351078739, 0.359929928,
+                0.367863217, 0.373654736, 0.379446255, 0.385237774, 0.391029293, 0.397662221,
+                0.405857767, 0.414053312, 0.422248858, 0.430444404, 0.438639949, 0.446835495,
+                0.455031041, 0.463226586, 0.471422132, 0.479617678, 0.487813223, 0.496008769,
+                0.504204315, 0.512399861, 0.520595407, 0.528790952, 0.536986498, 0.545182044,
+                0.553377589, 0.561573135, 0.569768681, 0.577964226, 0.586159772, 0.594355318,
+                0.602485299, 0.610571571, 0.618657842, 0.626744114, 0.634830386, 0.643413854,
+                0.652265044, 0.661116233, 0.669967423, 0.678818612, 0.687669802, 0.696520991,
+                0.70537218, 0.714223369, 0.723074559, 0.729630995, 0.735422514, 0.741214033,
+                0.747005552, 0.752797071, 0.760511812, 0.768707358, 0.776902903, 0.785098449,
+                0.793293995, 0.799631884, 0.805641951, 0.811652018, 0.817662084, 0.823672151,
+                0.831649149, 0.839844695, 0.84804024, 0.856235786, 0.864431332, 0.871588775,
+                0.878691581, 0.885794387, 0.892897194, 0.9};
+        double[] vul_r2 = {
+                0.117849899, 0.125608349, 0.133366799, 0.141125249, 0.148883699, 0.156664003,
+                0.164859549, 0.173055095, 0.18125064, 0.189446186, 0.197466893, 0.203914056,
+                0.210361219, 0.216808381, 0.223255544, 0.229964964, 0.23816051, 0.246356056,
+                0.254551601, 0.262747147, 0.271073822, 0.279925011, 0.2887762, 0.29762739,
+                0.306478579, 0.314564851, 0.32035637, 0.326147889, 0.331939408, 0.337730927,
+                0.344243654, 0.352439199, 0.360634745, 0.368830291, 0.377025836, 0.385221382,
+                0.393416928, 0.401612473, 0.409808019, 0.418003565, 0.42619911, 0.434394656,
+                0.442590202, 0.450785748, 0.458981294, 0.46717684, 0.475372385, 0.483567931,
+                0.491763477, 0.499959022, 0.508154568, 0.516350113, 0.524545659, 0.532741205,
+                0.54093675, 0.549072196, 0.557158467, 0.565244739, 0.573331011, 0.581417283,
+                0.589962506, 0.598813695, 0.607664884, 0.616516073, 0.625367263, 0.634218452,
+                0.643069642, 0.651920831, 0.660772021, 0.66962321, 0.67633263, 0.682124149,
+                0.687915668, 0.693707187, 0.699498706, 0.707093245, 0.715288791, 0.723484337,
+                0.731679882, 0.739875428, 0.74632259, 0.752332657, 0.758342724, 0.764352791,
+                0.770362858, 0.778230582, 0.786426127, 0.794621673, 0.802817219, 0.811012764,
+                0.821470281, 0.832179127, 0.842887974, 0.85359682, 0.864305667, 0.871588775,
+                0.878691581, 0.885794387, 0.892897194, 0.9};
+        List<String> restaurantImplementations = List.of("restaurant-1-service","restaurant-2-service","restaurant-3-service");
+        serviceImplementations.put("RESTAURANT-SERVICE", restaurantImplementations);
+
+        Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark1 = new HashMap<>();//option configuration
+        restaurantBenchmark1.put(Availability.class, 0.1);//0.766666667
+        restaurantBenchmark1.put(AverageResponseTime.class, 0.9);//0.165306122
+        restaurantBenchmark1.put(Vulnerability.class, vul_r0[number-1]);//0.633333333
+        benchmarkForImplementation.put("restaurant-1-service", restaurantBenchmark1);
+        Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark2 = new HashMap<>();
+        restaurantBenchmark2.put(Availability.class, 0.1);//0.92
+        restaurantBenchmark2.put(AverageResponseTime.class, 0.9);//0.132653061
+        restaurantBenchmark2.put(Vulnerability.class, vul_r1[number-1]);//0.227891156
+        benchmarkForImplementation.put("restaurant-2-service", restaurantBenchmark2);
+        Map<Class<? extends QoSSpecification>, Double> restaurantBenchmark3 = new HashMap<>();
+        restaurantBenchmark3.put(Availability.class, 0.1);
+        restaurantBenchmark3.put(AverageResponseTime.class, 0.9);//0.1
+        restaurantBenchmark3.put(Vulnerability.class, vul_r2[number-1]);//0.9
+        benchmarkForImplementation.put("restaurant-3-service", restaurantBenchmark3);
+
+        Map<Class<? extends QoSSpecification>, Double> restaurantCurrentQoS = new HashMap<>();//Initial configuration
+        restaurantCurrentQoS.put(Availability.class, 0.1);
+        restaurantCurrentQoS.put(AverageResponseTime.class, 0.9);
+        currentQoSValues.put("RESTAURANT-SERVICE", restaurantCurrentQoS);
+
+        // Ordering //
+        List<String> orderingImplementations = List.of("ordering-service");
+        serviceImplementations.put("ORDERING-SERVICE", orderingImplementations);
+
+        Map<Class<? extends QoSSpecification>, Double> orderingBenchmark = new HashMap<>();
+        orderingBenchmark.put(Availability.class, 0.9);//0.8
+        orderingBenchmark.put(AverageResponseTime.class, 0.592307692);//0.655102041
+        orderingBenchmark.put(Vulnerability.class, vul_r2[number-1]);
+        benchmarkForImplementation.put("ordering-service", orderingBenchmark);
+
+        Map<Class<? extends QoSSpecification>, Double> orderingCurrentQoS = new HashMap<>();
+        orderingCurrentQoS.put(Availability.class, 0.9);
+        orderingCurrentQoS.put(AverageResponseTime.class, 0.592307692);
+        currentQoSValues.put("ORDERING-SERVICE", orderingCurrentQoS);
+
+        // Delivery //
+        List<String> deliveryProxyImplementations = List.of("delivery-proxy-1-service");
+        serviceImplementations.put("DELIVERY-PROXY-SERVICE", deliveryProxyImplementations);
+
+        Map<Class<? extends QoSSpecification>, Double> deliveryProxyBenchmark1 = new HashMap<>();
+        deliveryProxyBenchmark1.put(Availability.class, 0.633333333);//0.683333333
+        deliveryProxyBenchmark1.put(AverageResponseTime.class, 0.1);//0.573469388
+        deliveryProxyBenchmark1.put(Vulnerability.class, vul_r2[number-1]);
+        benchmarkForImplementation.put("delivery-proxy-1-service", deliveryProxyBenchmark1);
+
+        Map<Class<? extends QoSSpecification>, Double> deliveryProxyCurrentQoS = new HashMap<>();
+        deliveryProxyCurrentQoS.put(Availability.class, 0.633333333);
+        deliveryProxyCurrentQoS.put(AverageResponseTime.class, 0.1);
+        currentQoSValues.put("DELIVERY-PROXY-SERVICE", deliveryProxyCurrentQoS);
+
+        // Payment //
+        List<String> paymentProxyImplementations = List.of("payment-proxy-1-service");
+        serviceImplementations.put("PAYMENT-PROXY-SERVICE", paymentProxyImplementations);
+
+        Map<Class<? extends QoSSpecification>, Double> paymentProxyBenchmark1 = new HashMap<>();
+        paymentProxyBenchmark1.put(Availability.class, 0.366666667);//0.766666667
+        paymentProxyBenchmark1.put(AverageResponseTime.class, 0.715384615);//0.818367347
+        paymentProxyBenchmark1.put(Vulnerability.class, vul_r2[number-1]);
+        benchmarkForImplementation.put("payment-proxy-1-service", paymentProxyBenchmark1);
+
+        Map<Class<? extends QoSSpecification>, Double> paymentProxyCurrentQoS = new HashMap<>();//Initial configuration
+        paymentProxyCurrentQoS.put(Availability.class, 0.366666667);
+        paymentProxyCurrentQoS.put(AverageResponseTime.class, 0.715384615);
+        currentQoSValues.put("PAYMENT-PROXY-SERVICE", paymentProxyCurrentQoS);
+
+        return createServiceMap(availabilityWeight,
+                responseTimeWeight,
+                vulnerabilityWeight,
+                serviceImplementations,
+                benchmarkForImplementation,
+                currentQoSValues);
+    }
+
     public static Map<String, Service> createServiceMap(
             double availabilityWeight,
             double responseTimeWeight,
@@ -3367,7 +3703,4 @@ public class SimulationsUtils {
         return servicesMap;
     }
 }
-
-
-
 

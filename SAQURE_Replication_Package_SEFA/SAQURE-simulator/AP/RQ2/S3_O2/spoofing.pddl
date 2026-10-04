@@ -38,11 +38,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2025-22228 SEFA 
         9: APPLICATION-AUTHENTICATES-ATTACKER-SUCCESSFULLY USER1 SEFA USER1-PASSWORD-HASH_SEFA USER1-PASSWORD-HASH_SEFA CVE_2025_22228
 plan cost: 146.000000
 
-time spent:    0.05 seconds instantiating 6778 easy, 98 hard action templates
+time spent:    0.07 seconds instantiating 6778 easy, 98 hard action templates
                0.00 seconds reachability analysis, yielding 274 facts and 568 actions
                0.00 seconds creating final representation with 271 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
                0.00 seconds searching, evaluating 116 states, to a max depth of 0
-               0.05 seconds total time
+               0.07 seconds total time
 

@@ -160,8 +160,24 @@ public class PrismModelChecker {
         }
     }
 
+    // Core structural states of one SEFA replica: ordering, payment + delivery, delivery retry, restaurant.
+    public static final int CORE_STATES_PER_SEFA_REPLICA = 4;
+
+    // Core structural states of an n-times scaled SEFA model, e.g. 500x -> 4 * 500 = 2000.
+    public static int coreStatesForScale(int scaleFactor) {
+        if (scaleFactor < 1) {
+            throw new IllegalArgumentException("SEFA scale factor must be >= 1, but was " + scaleFactor);
+        }
+        return CORE_STATES_PER_SEFA_REPLICA * scaleFactor;
+    }
+
     public static Double convertJsonToPrismCustomModel(String currentGraph, String destinationGraph, int numStates) {
-        int cycles = numStates / 4;
+        if (numStates < CORE_STATES_PER_SEFA_REPLICA || numStates % CORE_STATES_PER_SEFA_REPLICA != 0) {
+            throw new IllegalArgumentException("numStates must be a positive multiple of " + CORE_STATES_PER_SEFA_REPLICA
+                    + " (one SEFA replica = " + CORE_STATES_PER_SEFA_REPLICA + " core structural states), but was " + numStates);
+        }
+        // cycles is the SEFA scale factor: numStates = 4 * cycles, e.g. 2000 core states = 500x SEFA.
+        int cycles = numStates / CORE_STATES_PER_SEFA_REPLICA;
         Instant generatePrismStart = Instant.now();
         Gson gson = new Gson();
         JsonObject currentJson = gson.fromJson(currentGraph, JsonObject.class);
@@ -203,9 +219,22 @@ public class PrismModelChecker {
         double orderingResponseTime = destinationJson.getAsJsonObject("ORDERING-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("AverageResponseTime").getAsDouble();
         double orderingVulnerability = destinationJson.getAsJsonObject("ORDERING-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("Vulnerability").getAsDouble();
 
+        // Transition probabilities take each service's own availability (Fig. 8); the normalised
+        // "Availability" above feeds the instant cost (Eq. 5) only. See TransitionAvailability.
+        double restaurantTransition = TransitionAvailability.of(destinationJson, "RESTAURANT-SERVICE");
+        double deliveryTransition = TransitionAvailability.of(destinationJson, "DELIVERY-PROXY-SERVICE");
+        double paymentTransition = TransitionAvailability.of(destinationJson, "PAYMENT-PROXY-SERVICE");
+        double orderingTransition = TransitionAvailability.of(destinationJson, "ORDERING-SERVICE");
+
 
         StringBuilder prismModel = new StringBuilder();
         prismModel.append("dtmc\n\n");
+
+        // scale of the generated model
+        prismModel.append("// SEFA scale: " + cycles + "x -> " + CORE_STATES_PER_SEFA_REPLICA + " core structural states x "
+                + cycles + " replicas = " + numStates + " core structural states\n");
+        prismModel.append("// plus START (s=0), success (s=" + (4*cycles + 1) + ") and failure (s=" + (4*cycles + 2) + ")"
+                + " => " + (numStates + 3) + " reachable states\n\n");
 
         // availabilities
         prismModel.append("// availabilities\n");
@@ -218,7 +247,11 @@ public class PrismModelChecker {
         prismModel.append("const double a_payment = ").append(paymentAvailability).append(";\n");
         prismModel.append("const double a_restaurant = ").append(restaurantAvailablity).append(";\n");
         prismModel.append("const double a_ordering = ").append(orderingAvailability).append(";\n");
-        prismModel.append("const double denom = (a_payment * a_delivery * a_delivery) - (2 * a_payment * a_delivery) - a_delivery + 3;\n\n");
+        prismModel.append("const double p_delivery = ").append(deliveryTransition).append(";\n");
+        prismModel.append("const double p_payment = ").append(paymentTransition).append(";\n");
+        prismModel.append("const double p_restaurant = ").append(restaurantTransition).append(";\n");
+        prismModel.append("const double p_ordering = ").append(orderingTransition).append(";\n");
+        prismModel.append("const double denom = (p_payment * p_delivery * p_delivery) - (2 * p_payment * p_delivery) - p_delivery + 3;\n\n");
 
         // response times
         prismModel.append("// response times\n");
@@ -245,11 +278,38 @@ public class PrismModelChecker {
         prismModel.append("const double v_ordering = ").append(orderingVulnerability).append(";\n\n");
 
         // cost
-        prismModel.append("rewards\n");
-        prismModel.append("s=1 : (w_a * (1 - a_ordering) + w_rt * rt_ordering + w_v * v_ordering) / (w_a * (1 - old_a_ordering) + w_rt * old_rt_ordering + w_v * old_v_ordering);\n");
-        prismModel.append("s=2 : (w_a * (1 - a_delivery) + w_rt * rt_delivery + w_v * v_delivery) / (w_a * (1 - old_a_delivery) + w_rt * old_rt_delivery + w_v * old_v_delivery) * (w_a * (1 - a_payment) + w_rt * rt_payment + w_v * v_payment) / (w_a * (1 - old_a_payment) + w_rt * old_rt_payment + w_v * old_v_payment);\n");
-        prismModel.append("s=3 : (w_a * (1 - a_delivery) + w_rt * rt_delivery + w_v * v_delivery) / (w_a * (1 - old_a_delivery) + w_rt * old_rt_delivery + w_v * old_v_delivery);\n");
-        prismModel.append("s=4 : (w_a * (1 - a_restaurant) + w_rt * rt_restaurant + w_v * v_restaurant) / (w_a * (1 - old_a_restaurant) + w_rt * old_rt_restaurant + w_v * old_v_restaurant);\n\n");
+        // Every one of the "cycles" SEFA replicas carries the same four core structural rewards,
+        // so the whole 4 * cycles core states contribute to the cumulative cost.
+        // Availability reaches the cost through two channels: w_a*(1-A) in the reward, which the
+        // weights govern, and the transition probabilities, which do not. The chain restarts on
+        // failure, so a cumulative reward is (reward of one pass) / P(pass succeeds); that second
+        // factor scales the cost by 1/P regardless of w_a. Measured elasticity of the cumulative
+        // cost w.r.t. a_restaurant was -1.07 even at w_a = 0.1, i.e. almost entirely ungoverned.
+        // The planner nevertheless ranks options by this cumulative cost, as the paper specifies.
+        // The cost per service invocation (the "cost" reward divided by the "visits" reward) cancels
+        // the 1/P factor, leaving an elasticity of exactly the w_a response (-0.067 at w_a = 0.1,
+        // -0.27 at 0.3, -0.65 at 0.5); it is logged alongside for reference.
+        // w_a*(1-A) stays: dropping it collapses the RAMSES baseline (w_v = 0) to
+        // (w_rt*rt)/(w_rt*old_rt), i.e. a pure response-time baseline.
+        String orderingReward = "(w_a * (1 - a_ordering) + w_rt * rt_ordering + w_v * v_ordering) / (w_a * (1 - old_a_ordering) + w_rt * old_rt_ordering + w_v * old_v_ordering)";
+        String paymentDeliveryReward = "(w_a * (1 - a_delivery) + w_rt * rt_delivery + w_v * v_delivery) / (w_a * (1 - old_a_delivery) + w_rt * old_rt_delivery + w_v * old_v_delivery) * (w_a * (1 - a_payment) + w_rt * rt_payment + w_v * v_payment) / (w_a * (1 - old_a_payment) + w_rt * old_rt_payment + w_v * old_v_payment)";
+        String deliveryReward = "(w_a * (1 - a_delivery) + w_rt * rt_delivery + w_v * v_delivery) / (w_a * (1 - old_a_delivery) + w_rt * old_rt_delivery + w_v * old_v_delivery)";
+        String restaurantReward = "(w_a * (1 - a_restaurant) + w_rt * rt_restaurant + w_v * v_restaurant) / (w_a * (1 - old_a_restaurant) + w_rt * old_rt_restaurant + w_v * old_v_restaurant)";
+
+        prismModel.append("rewards \"cost\"\n");
+        for (int i = 0; i < cycles; i++) {
+            prismModel.append("s=" + (i*4 + 1) + " : " + orderingReward + ";\n");
+            prismModel.append("s=" + (i*4 + 2) + " : " + paymentDeliveryReward + ";\n");
+            prismModel.append("s=" + (i*4 + 3) + " : " + deliveryReward + ";\n");
+            prismModel.append("s=" + (i*4 + 4) + " : " + restaurantReward + ";\n");
+        }
+        prismModel.append("\n");
+        prismModel.append("endrewards\n\n");
+
+        // Counts the service invocations the "cost" reward is accumulated over, so the property
+        // can divide by it. Same state set, weight 1 each.
+        prismModel.append("rewards \"visits\"\n");
+        prismModel.append("s>=1 & s<=" + (4*cycles) + " : 1;\n");
         prismModel.append("endrewards\n\n");
 
         // module sefa
@@ -266,10 +326,10 @@ public class PrismModelChecker {
         prismModel.append("\t[] s=0 -> 1 : (s'=1);\n");
 
         for (int i = 0; i < cycles; i++) {
-            prismModel.append("\t[] s=" + (i*4 + 1) + " -> (a_ordering / denom) : (s'=" + (i*4 + 2) + ") + (a_ordering * (1 - a_payment * a_delivery) / denom) : (s'=" + (i*4 + 3) + ") + (a_ordering * (1 - a_payment * a_delivery) * (1 - a_delivery) / denom) : (s'=" + (i*4 + 4) + ") + (1 - a_ordering) : (s'=" + (4*cycles + 2) + ");\n");
-            prismModel.append("\t[] s=" + (i*4 + 2) + " -> a_payment * a_delivery : (s'=" + (i*4 + 4) + ") + (1 - a_payment * a_delivery) : (s'=" + (i*4 + 1) + ");\n");
-            prismModel.append("\t[] s=" + (i*4 + 3) + " -> a_delivery : (s'=" + (i*4 + 4) + ") + (1 - a_delivery) : (s'=" + (i*4 + 1) + ");\n");
-            prismModel.append("\t[] s=" + (i*4 + 4) + " -> a_restaurant : (s'=" + (i*4 + 5) + ") + (1 - a_restaurant) : (s'=" + (4*cycles + 2) + ");\n");
+            prismModel.append("\t[] s=" + (i*4 + 1) + " -> (p_ordering / denom) : (s'=" + (i*4 + 2) + ") + (p_ordering * (1 - p_payment * p_delivery) / denom) : (s'=" + (i*4 + 3) + ") + (p_ordering * (1 - p_payment * p_delivery) * (1 - p_delivery) / denom) : (s'=" + (i*4 + 4) + ") + (1 - p_ordering) : (s'=" + (4*cycles + 2) + ");\n");
+            prismModel.append("\t[] s=" + (i*4 + 2) + " -> p_payment * p_delivery : (s'=" + (i*4 + 4) + ") + (1 - p_payment * p_delivery) : (s'=" + (i*4 + 1) + ");\n");
+            prismModel.append("\t[] s=" + (i*4 + 3) + " -> p_delivery : (s'=" + (i*4 + 4) + ") + (1 - p_delivery) : (s'=" + (i*4 + 1) + ");\n");
+            prismModel.append("\t[] s=" + (i*4 + 4) + " -> p_restaurant : (s'=" + (i*4 + 5) + ") + (1 - p_restaurant) : (s'=" + (4*cycles + 2) + ");\n");
         }
 
         prismModel.append("\t[] s=" + (4*cycles + 1) + " -> 1 : (s'=" + (4*cycles + 1) + ");\n");
@@ -287,11 +347,15 @@ public class PrismModelChecker {
 
         // Create "model.props" file
         try {
-            Files.write(Paths.get(FilePathConstants.model_props_defination_path), "Rmin = ? [ C ]".getBytes());
+            Files.write(Paths.get(FilePathConstants.model_props_defination_path),
+                    "R{\"cost\"}min = ? [ C ]\nR{\"visits\"}min = ? [ C ]\n".getBytes());
         } catch (IOException e) {
             log.error("Error writing model.props file: {}", e.getMessage());
         }
         Instant generatePrismEnd = Instant.now();
+        // RQ4.3.2 (initial model generation vs. size of the managed system) reads this line out
+        // of the Size_vs_RuntimeDeTime logs, so it has to stay at info: at the default level a
+        // debug line is dropped and that sub-question has no data source at all.
         log.info("Time to generate and save PRISM model: {}ms", Duration.between(generatePrismStart, generatePrismEnd).toNanos() / 1000000.0);
 
 
@@ -303,13 +367,25 @@ public class PrismModelChecker {
 
             if (exitCode == 0) {
                 InputStream inputStream = process.getInputStream();
-                String result = parsePrismOutput(inputStream);
+                List<Double> values = parsePrismOutput(inputStream);
+
+                if (values.size() < 2) {
+                    log.error("PRISM returned {} value(s), expected cost and visits", values.size());
+                    return null;
+                }
+                // Options are ranked by the paper's metric, the expected long-term cumulative cost per
+                // request, R{"cost"}=?[C]. The per-invocation cost (cumulative / expected invocations)
+                // is logged next to it for reference. See the comment on the reward structures.
+                double result = values.get(0);
 
                 log.info("Cost Value: " + result);
+                log.info("Per-invocation cost: " + (values.get(0) / values.get(1))
+                        + " (expected service invocations: " + values.get(1) + ")");
                 Instant obtainCostEnd = Instant.now();
-                log.info("Time to obtain the cost: {}ms", Duration.between(obtainCostStart, obtainCostEnd).toMillis());
+                log.debug("Time to obtain the cost: {}ms (cumulative {} over {} visits)",
+                        Duration.between(obtainCostStart, obtainCostEnd).toMillis(), values.get(0), values.get(1));
 
-                return result == null ? null : Double.parseDouble(result);
+                return result;
             } else {
                 log.error("Error executing PRISM command. Exit code: {}", exitCode);
                 InputStream inputStream = process.getInputStream();
@@ -328,18 +404,19 @@ public class PrismModelChecker {
     }
 
     // Analysis of PRISM Model Checker Output
-    private static String parsePrismOutput(InputStream inputStream) throws IOException {
+    private static List<Double> parsePrismOutput(InputStream inputStream) throws IOException {
+        List<Double> values = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.contains("Value in the initial state")) {//Find lines containing the specific identifier string "Value in the initial state".
                     String[] tokens = line.split(":");
                     if (tokens.length > 1) {
-                        return tokens[1].trim();
+                        values.add(Double.parseDouble(tokens[1].trim()));
                     }
                 }
             }
         }
-        return null;
+        return values;
     }
 }

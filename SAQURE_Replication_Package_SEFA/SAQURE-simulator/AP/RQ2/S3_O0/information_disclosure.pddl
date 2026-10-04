@@ -36,11 +36,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2025-24813 SEFA 
         8: ATTACKER-RECEIVES-SENSITIVE-INFORMATION SEFA SENSITIVE-FILE-CONTENT2 CVE_2025_24813
 plan cost: 10.000000
 
-time spent:    0.05 seconds instantiating 6792 easy, 101 hard action templates
+time spent:    0.07 seconds instantiating 6792 easy, 101 hard action templates
                0.00 seconds reachability analysis, yielding 331 facts and 710 actions
                0.00 seconds creating final representation with 328 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
                0.00 seconds searching, evaluating 131 states, to a max depth of 0
-               0.05 seconds total time
+               0.07 seconds total time
 

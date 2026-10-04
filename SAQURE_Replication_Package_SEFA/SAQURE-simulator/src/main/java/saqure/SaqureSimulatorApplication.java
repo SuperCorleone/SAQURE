@@ -10,16 +10,23 @@ import saqure.utils.infrastructure.architecture.Instance;
 import saqure.utils.infrastructure.architecture.Service;
 import saqure.utils.infrastructure.architecture.ServiceConfiguration;
 import saqure.utils.infrastructure.architecture.ServiceImplementation;
+import saqure.utils.SizeAxisExperiment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import saqure.Analyzer.RiskTiming;
+import saqure.Analyzer.VulnAxisAP;
 import saqure.Planner.PrismModelChecker;
+import saqure.Planner.TransitionAvailability;
+import saqure.utils.FilePathConstants;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static saqure.Planner.PrismModelChecker.reverseUpdating;
 import static saqure.Planner.PrismModelChecker.update_AED_AEDI;
@@ -33,6 +40,9 @@ public class SaqureSimulatorApplication {
 
 //    private static final Logger log = LoggerFactory.getLogger(RamsesPlannerSimulatorApplication.class);
 
+    // SEFA scale factor used by all RQ1-RQ4 experiments: 500x SEFA = 4 * 500 = 2000 core structural states.
+    private static final int DEFAULT_SEFA_SCALE = 1;
+
     public static void main(String[] args) {
         SpringApplication.run(SaqureSimulatorApplication.class, args);
 
@@ -40,6 +50,7 @@ public class SaqureSimulatorApplication {
         String serviceOverride = "";
         String runtime = "";
         String dynamicParam = "";
+        String scaleParam = "";
 
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
@@ -67,6 +78,12 @@ public class SaqureSimulatorApplication {
                         dynamicParam = args[++i];
                     }
                     break;
+                case "-x":
+                case "--scale":
+                    if (i + 1 < args.length) {
+                        scaleParam = args[++i]; // SEFA scale factor, e.g. 1, 25, 500
+                    }
+                    break;
                 case "-h":
                 case "--help":
                     printHelp();
@@ -89,12 +106,52 @@ public class SaqureSimulatorApplication {
         // Parse dynamic parameter for RQ4 (from -d flag or file)
         int param = dynamicParam.isEmpty() ? readParam() : Integer.parseInt(dynamicParam);
 
+        // Parse the SEFA scale factor (from -x flag, 500x by default)
+        int sefaScale;
+        try {
+            sefaScale = scaleParam.isEmpty() ? DEFAULT_SEFA_SCALE : Integer.parseInt(scaleParam);
+        } catch (NumberFormatException e) {
+            System.err.println("Error: -x/--scale must be a positive integer, but was '" + scaleParam + "'");
+            return;
+        }
+        if (sefaScale < 1) {
+            System.err.println("Error: -x/--scale must be >= 1, but was " + sefaScale);
+            return;
+        }
+        int sefaCoreStates = PrismModelChecker.coreStatesForScale(sefaScale);
+
+        // RQ4 size axis: the managed system itself is scaled, so offline configuration, risk
+        // assessment and decision are all measured against the same -x value.
+        if (caseName.equals("RQ4_size_SAQURE") || caseName.equals("RQ4_size_AQUA")) {
+            SizeAxisExperiment.run(sefaScale, caseName.endsWith("AQUA")
+                    ? SizeAxisExperiment.Approach.AQUA
+                    : SizeAxisExperiment.Approach.SAQURE);
+            return;
+        }
+
+        // Measurement-only case for the vulnerability-axis risk assessment figure.
+        if (caseName.equals("RQ4_vuln_risk_SAQURE")) {
+            RQ4_vuln_risk_profile(param);
+            return;
+        }
+        if (caseName.equals("RQ4_size_risk_SAQURE")) {
+            RQ4_size_risk_profile(sefaScale);
+            return;
+        }
+
         // Simulate runtime change at T2, for RQ2 and RQ3
         PrismModelChecker.ExternalChanges externalChange = getExternalChangeForCase(caseName);
         boolean isT2 = runtime.equals("T2") && (caseName.startsWith("RQ2") || caseName.startsWith("RQ3")) && externalChange != null;
         if (isT2) {
             update_AED_AEDI(externalChange);
         }
+
+        // Runtime decision time spans the Analyzer's risk assessment of every candidate
+        // implementation and the Planner's search, so start accumulating before the
+        // configuration is built -- that is where the assessments happen.
+        loadTransitionAvailabilities(caseName);
+        VulnAxisAP.warmUpLookup();
+        RiskTiming.reset();
 
         // Experiment Configuration
         Map<String, Service> servicesMap = getServicesMapByConfigName(caseName, param);
@@ -118,11 +175,19 @@ public class SaqureSimulatorApplication {
         ));
         String currentGraph = jsonGraph(servicesMap, null);
 
-        Instant ramsesV3Start = Instant.now();
+        log.info("SEFA DTMC scale: {}x -> {} x {} = {} core structural states, plus START, success and failure = {} reachable states",
+                sefaScale, PrismModelChecker.CORE_STATES_PER_SEFA_REPLICA, sefaScale, sefaCoreStates, sefaCoreStates + 3);
+
+        Instant plannerStart = Instant.now();
         //Simulate SAQURE and calculate cost
-        buildPossibleGraphs(servicesMap, filterOptions(proposedAdaptationOptions), currentGraph, 2000);
-        Instant ramsesV3End = Instant.now();
-        log.info("Time to extract best option RamsesV3: {}ms", Duration.between(ramsesV3Start, ramsesV3End).toMillis());
+        buildPossibleGraphs(servicesMap, filterOptions(proposedAdaptationOptions), currentGraph, sefaCoreStates);
+        Instant plannerEnd = Instant.now();
+
+        long riskAssessmentMillis = RiskTiming.totalMillis();
+        long plannerMillis = Duration.between(plannerStart, plannerEnd).toMillis();
+        log.debug("Risk assessment: {} implementations, {}ms; Planner: {}ms",
+                RiskTiming.count(), riskAssessmentMillis, plannerMillis);
+        log.info("Runtime decision time: {}ms", riskAssessmentMillis + plannerMillis);
 
         // Reverse simulate runtime change at T2
         if (isT2) {
@@ -533,6 +598,22 @@ public class SaqureSimulatorApplication {
         return bestOptionForGoal.get(bestBenefitClass);
     }
 
+    // RQ1 reads Configuration_RQ1; RQ2 and RQ3 (which reuses RQ2's configurations) read
+    // Configuration_RQ2. The sub-scenario is the case's trailing index, e.g. RQ3_SAQURE_s2_nodyPa.
+    private static final Pattern RQ1_TO_RQ3_CASE = Pattern.compile("^RQ([123])_.*_[sS](\\d+)(_nodyPa)?$");
+
+    // The DTMC transitions take the configuration sheet's availabilities (Fig. 8). Loaded before
+    // the decision-time clock starts; other experiments keep the normalised availability.
+    private static void loadTransitionAvailabilities(String caseName) {
+        Matcher m = RQ1_TO_RQ3_CASE.matcher(caseName);
+        if (!m.matches()) {
+            TransitionAvailability.clear();
+            return;
+        }
+        String sheet = m.group(1).equals("1") ? FilePathConstants.configuration_rq1_path : FilePathConstants.configuration_rq2_path;
+        TransitionAvailability.load(sheet, "Sub-scenario" + m.group(2));
+    }
+
     private static Map<String, Service> getServicesMapByConfigName(String caseName, int param) {
         switch (caseName) {
             // RQ1 SAQURE parallel (no SEQUENTIAL)
@@ -548,6 +629,8 @@ public class SaqureSimulatorApplication {
             case "RQ1_SAQURE_seq_S3": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s3_SAQURE_ExpConfig();
             case "RQ1_SAQURE_seq_S4": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s4_SAQURE_ExpConfig();
             case "RQ1_SAQURE_seq_S5": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s5_SAQURE_ExpConfig();
+
+
 
             // RQ1 Aqua (all sequential)
             case "RQ1_Aqua_s1": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s1_Aqua_ExpConfig();
@@ -565,11 +648,11 @@ public class SaqureSimulatorApplication {
 
             // RQ2
             case "RQ2_SAQURE_s1": return RQ2_s1_SAQURE_ExpConfig();
-            case "RQ2_AQUA_s1": return RQ2_s1_Aqua_ExpConfig();
+            case "RQ2_AQUA_s1": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ2_s1_Aqua_ExpConfig();
             case "RQ2_SAQURE_s2": return RQ2_s2_SAQURE_ExpConfig();
-            case "RQ2_AQUA_s2": return RQ2_s2_Aqua_ExpConfig();
+            case "RQ2_AQUA_s2": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ2_s2_Aqua_ExpConfig();
             case "RQ2_SAQURE_s3": return RQ2_s3_SAQURE_ExpConfig();
-            case "RQ2_AQUA_s3": return RQ2_s3_Aqua_ExpConfig();
+            case "RQ2_AQUA_s3": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ2_s3_Aqua_ExpConfig();
 
             // RQ3
             case "RQ3_SAQURE_s1": return RQ2_s1_SAQURE_ExpConfig();
@@ -582,8 +665,10 @@ public class SaqureSimulatorApplication {
             // RQ4 (with dynamic parameter)
             case "RQ4_1_1_SAQURE": return RQ3_1_1_SAQURE_ExpConfig(param);
             case "RQ4_1_2_SAQURE": return RQ3_1_2_SAQURE_ExpConfig(param);
+            case "RQ4_vuln_SAQURE": return RQ4_vuln_SAQURE_ExpConfig(param);
             case "RQ4_1_1_AQUA": return RQ3_1_1_Aqua_ExpConfig(param);
             case "RQ4_1_2_AQUA": return RQ3_1_2_Aqua_ExpConfig(param);
+            case "RQ4_vuln_AQUA": return RQ4_vuln_Aqua_ExpConfig(param);
 
             default:
                 System.err.println("Unknown config: " + caseName);
@@ -593,6 +678,10 @@ public class SaqureSimulatorApplication {
 
     private static String getServiceNameByCase(String caseName) {
         switch (caseName) {
+            // RQ4 size axis → RESTAURANT-SERVICE
+            case "RQ4_size_SAQURE":
+            case "RQ4_size_AQUA":
+                return "RESTAURANT-SERVICE";
             // RQ1 S1 → RESTAURANT-SERVICE
             case "RQ1_SAQURE_para_S1":
             case "RQ1_SAQURE_seq_S1":
@@ -656,6 +745,10 @@ public class SaqureSimulatorApplication {
                 return "PAYMENT-PROXY-SERVICE";
             case "RQ4_1_2_SAQURE":
             case "RQ4_1_2_AQUA":
+            case "RQ4_vuln_SAQURE":
+            case "RQ4_vuln_AQUA":
+            case "RQ4_vuln_risk_SAQURE":
+            case "RQ4_size_risk_SAQURE":
                 return "RESTAURANT-SERVICE";
 
             default:
@@ -694,6 +787,7 @@ public class SaqureSimulatorApplication {
         System.out.println("  -s, --service <name>      Service name override (auto-detected if omitted)");
         System.out.println("  -t, --time <T1|T2>        Runtime phase (T1 or T2, for RQ2/RQ3)");
         System.out.println("  -d, --dynamic <value>     Dynamic parameter value (for RQ4)");
+        System.out.println("  -x, --scale <n>           SEFA scale factor (default 500, i.e. 4 x 500 = 2000 core structural states)");
         System.out.println("  -h, --help                Show this help message");
         System.out.println();
         System.out.println("RQ1 cases:");
@@ -707,6 +801,10 @@ public class SaqureSimulatorApplication {
         System.out.println("  RQ3_SAQURE_s1..s3, RQ3_SAQURE_s1_nodyPa..s3_nodyPa");
         System.out.println("RQ4 cases (use -d <param>):");
         System.out.println("  RQ4_1_1_SAQURE, RQ4_1_2_SAQURE, RQ4_1_1_AQUA, RQ4_1_2_AQUA");
+        System.out.println("  RQ4_vuln_SAQURE, RQ4_vuln_AQUA   (vulnerability axis, -d 1..100)");
+        System.out.println("  RQ4_vuln_risk_SAQURE             (risk assessment only, no PRISM)");
+        System.out.println("RQ4 size axis (use -x <scale>):");
+        System.out.println("  RQ4_size_SAQURE, RQ4_size_AQUA   offline configuration, risk assessment and decision time");
         System.out.println();
         System.out.println("Services: RESTAURANT-SERVICE, ORDERING-SERVICE, DELIVERY-PROXY-SERVICE, PAYMENT-PROXY-SERVICE");
     }

@@ -40,11 +40,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2022-1471 SEFA S
        10: APPLICATION-TOMCAT-DEFAULT-SERVLET-WRITES-MALICIOUS-CONTENT-TO-SENSITIVE-FILE SEFA HTTP-PUT-REQUEST1 DEFAULT-SERVLET_SEFA SENSITIVE-FILE2_SEFA MALICIOUS-CONTENT1 CVE_2025_24813
 plan cost: 13.000000
 
-time spent:    0.06 seconds instantiating 6779 easy, 101 hard action templates
+time spent:    0.08 seconds instantiating 6779 easy, 101 hard action templates
                0.00 seconds reachability analysis, yielding 408 facts and 812 actions
                0.00 seconds creating final representation with 405 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
                0.00 seconds searching, evaluating 178 states, to a max depth of 0
-               0.06 seconds total time
+               0.08 seconds total time
 

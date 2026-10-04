@@ -40,11 +40,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2024-22243 SEFA 
        10: ATTACKER-RECEIVES-SENSITIVE-INFORMATION SEFA SENSITIVE-FILE-NAME1 CVE_2024_22243
 plan cost: 31.000000
 
-time spent:    0.05 seconds instantiating 6778 easy, 99 hard action templates
+time spent:    0.07 seconds instantiating 6778 easy, 99 hard action templates
                0.00 seconds reachability analysis, yielding 334 facts and 632 actions
                0.00 seconds creating final representation with 330 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
                0.00 seconds searching, evaluating 178 states, to a max depth of 0
-               0.05 seconds total time
+               0.07 seconds total time
 

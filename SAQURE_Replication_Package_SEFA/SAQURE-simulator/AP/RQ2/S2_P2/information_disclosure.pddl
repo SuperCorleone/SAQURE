@@ -52,11 +52,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2024-34447 SEFA 
        16: ATTACKER-RECEIVES-SENSITIVE-INFORMATION SEFA USER1-PASSWORD-HASH_SEFA CVE_2024_34447
 plan cost: 45.000000
 
-time spent:    0.06 seconds instantiating 6738 easy, 97 hard action templates
+time spent:    0.07 seconds instantiating 6738 easy, 97 hard action templates
                0.00 seconds reachability analysis, yielding 267 facts and 439 actions
                0.00 seconds creating final representation with 264 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
                0.00 seconds searching, evaluating 172 states, to a max depth of 0
-               0.06 seconds total time
+               0.07 seconds total time
 

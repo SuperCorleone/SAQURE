@@ -1,9 +1,12 @@
 package saqure.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+@Slf4j
 public class AED_Processor {
     private static final String START_MARKER = ";;@start vulnerability expose@;;";
     private static final String END_MARKER = ";;@end vulnerability expose@;;";

@@ -54,11 +54,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2024-34447 SEFA 
        17: ATTACKER-USES-USER-CREDENTIALS-LOGIN-TARGET-APPLICATION USER1 USER1-PASSWORD_SEFA SEFA
 plan cost: 605.000000
 
-time spent:    0.05 seconds instantiating 6792 easy, 103 hard action templates
+time spent:    0.07 seconds instantiating 6792 easy, 103 hard action templates
                0.00 seconds reachability analysis, yielding 448 facts and 1141 actions
                0.00 seconds creating final representation with 445 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.07 seconds searching, evaluating 331 states, to a max depth of 0
-               0.12 seconds total time
+               0.08 seconds searching, evaluating 331 states, to a max depth of 0
+               0.15 seconds total time
 

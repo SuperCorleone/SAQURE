@@ -50,7 +50,7 @@ public class ServiceGraphUtils {
                         Instant calculateGraphStart = Instant.now();
                         String graph = jsonGraph(serviceMapCopy, adaptationOption);
                         Instant calculateGraphEnd = Instant.now();
-                        log.info("Time to generate the graph: {}ms", Duration.between(calculateGraphStart, calculateGraphEnd).toNanos() / 1_000_000.0);
+                        log.debug("Time to generate the graph: {}ms", Duration.between(calculateGraphStart, calculateGraphEnd).toNanos() / 1_000_000.0);
 
 
                         log.info("Graph for option {}: {}", adaptationOption.getDescription(), graph);

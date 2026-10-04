@@ -2,10 +2,12 @@ package saqure.Analyzer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import saqure.utils.FilePathConstants;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
@@ -14,22 +16,99 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.concurrent.*;
 import java.util.*;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.function.Supplier;
 
+@Slf4j
 public class EADSA {
     private static final String cppProgram = FilePathConstants.FFPath;
     public static boolean IS_DEFAULT = true;
 //    System.Logger(" IS_DEFAULT = : "+ DynamicDTMC.IS_DEFAULT);
 
+    /**
+     * Worker threads for attack-path planning. Defaults to the number of cores; the
+     * {@code saqure.eadsa.threads} system property overrides it, which is what the
+     * parallel-speedup measurement varies.
+     */
+    private static final int POOL_SIZE = resolvePoolSize();
+
+    /**
+     * Attack-path planning saturates well below the core count: every call is its own
+     * Metric-FF process, and measured on 12 cores the per-call latency inflates from 72 ms at
+     * one worker to 620 ms at twelve, so the wall clock of a 36-call batch bottoms out around
+     * four to six workers and is worse at twelve than at six. The default therefore caps the
+     * pool at the number of STRIDE targets, which is the concurrency the per-implementation
+     * code already used -- the gain here comes from dropping the barrier between
+     * implementations, not from raising the worker count.
+     */
+    private static final int DEFAULT_MAX_THREADS = 6;
+
+    private static int resolvePoolSize() {
+        String configured = System.getProperty("saqure.eadsa.threads");
+        int cores = Runtime.getRuntime().availableProcessors();
+        if (configured == null || configured.isBlank()) {
+            return Math.max(1, Math.min(cores, DEFAULT_MAX_THREADS));
+        }
+        int requested = Integer.parseInt(configured.trim());
+        if (requested < 1) {
+            throw new IllegalArgumentException("saqure.eadsa.threads must be >= 1, but was " + requested);
+        }
+        return requested;
+    }
+
+    public static int poolSize() {
+        return POOL_SIZE;
+    }
+
     private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(
-            Runtime.getRuntime().availableProcessors(),
-            Runtime.getRuntime().availableProcessors(),
+            POOL_SIZE,
+            POOL_SIZE,
             1, TimeUnit.SECONDS,
             new LinkedBlockingQueue<>());
 
     // main entry
     public static double computeScenario(String domainFile, outputPath path){
-        return computationStrategy.compute(domainFile, path);
+        // One call = the risk assessment of one implementation, which the runtime
+        // decision time now includes. See RiskTiming.
+        Instant riskStart = Instant.now();
+        try {
+            return computationStrategy.compute(domainFile, path);
+        } finally {
+            RiskTiming.record(Duration.between(riskStart, Instant.now()));
+        }
+    }
+
+    /**
+     * Same as {@link #computeScenario(String, outputPath)} but reads the STRIDE problem files
+     * from {@code aediDirectory} instead of the default AEDI folder, which RQ2/RQ3 need because
+     * every implementation has its own environment. Goes through the configured
+     * {@link ScenarioComputation}, so the parallel/sequential ablation still applies, and records
+     * itself with {@link RiskTiming}, so the assessment is charged to the decision time.
+     */
+    public static double computeScenario(String domainFile, String aediDirectory, outputPath path) {
+        String dir = aediDirectory.endsWith("/") ? aediDirectory : aediDirectory + "/";
+        Instant riskStart = Instant.now();
+        try {
+            List<Supplier<Double>> tasks = List.of(
+                    () -> planner_command_AEDI(domainFile, path.spoofingPath, dir + "spoofing.pddl"),
+                    () -> planner_command_AEDI(domainFile, path.tamperingPath, dir + "tampering.pddl"),
+                    () -> planner_command_AEDI(domainFile, path.repudiationPath, dir + "repudiation.pddl"),
+                    () -> planner_command_AEDI(domainFile, path.infoDisclosurePath, dir + "information_disclosure.pddl"),
+                    () -> planner_command_AEDI(domainFile, path.denialOfServicePath, dir + "denial_of_service.pddl"),
+                    () -> planner_command_AEDI(domainFile, path.elevationOfPrivilegePath, dir + "elevation_of_privilege.pddl"));
+
+            if (computationStrategy instanceof ParallelComputation) {
+                return computeParallelSum(tasks.toArray(new Supplier[0]));
+            }
+            double sum = 0.0;
+            for (Supplier<Double> task : tasks) {
+                sum += task.get();
+            }
+            return sum;
+        } finally {
+            RiskTiming.record(Duration.between(riskStart, Instant.now()));
+        }
     }
 
     public static class outputPath {
@@ -49,6 +128,29 @@ public class EADSA {
             this.elevationOfPrivilegePath = elevationOfPrivilegePath;
         }
     }
+
+
+    /**
+     * Writes an attack path, creating the directory first.
+     *
+     * <p>The attack-path directories are generated artefacts and are not tracked, so a clean
+     * checkout has none of them. Before this, a missing directory made every STRIDE call throw
+     * NoSuchFileException after the risk had already been computed: the risk score survived,
+     * but the attack path was lost, the subprocess was never reaped (the write precedes
+     * waitFor), and the stack traces landed in the measurement logs.
+     */
+    private static void writePlan(String outputFile, String content) throws IOException {
+        Path target = Paths.get(outputFile);
+        Path parent = target.getParent();
+        if (parent != null) {
+            Files.createDirectories(parent);
+        }
+        Files.write(target, content.getBytes());
+    }
+
+
+
+
 
     public enum ComputationMode{PARALLEL, SEQUENTIAL}
 
@@ -293,250 +395,107 @@ public class EADSA {
     public static double planner_command_compute_RQ2_s1_r0(String domainFile){
         String outputPath = FilePathConstants.AP_path_RQ2 + "S1_R0/";
         String problemPath = FilePathConstants.AEDI_path + "RQ2/S1/Restaurant_1_service/";
-        System.out.print("RO: \n spoofing_plan: "+ planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl") + "\n tampering_plan: "+ planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                problemPath+"tampering.pddl") +
-                "\nrepudiation_plan:"+ planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                problemPath+"repudiation.pddl")+ "\n information_disclosure_plan: " + planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                problemPath+"information_disclosure.pddl") + "\n denial_of_service:"+ planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                problemPath+"denial_of_service.pddl") + "\n elevation_of_privilege_plan:" + planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                problemPath+"elevation_of_privilege.pddl")+"\n");
-        return planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                        problemPath+"tampering.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                        problemPath+"repudiation.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                        problemPath+"information_disclosure.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                        problemPath+"denial_of_service.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                        problemPath+"elevation_of_privilege.pddl");
+        return computeScenario(domainFile, problemPath, new outputPath(
+                outputPath + "spoofing.pddl",
+                outputPath + "tampering.pddl",
+                outputPath + "repudiation.pddl",
+                outputPath + "information_disclosure.pddl",
+                outputPath + "denial_of_service.pddl",
+                outputPath + "elevation_of_privilege.pddl"));
     }
     public static double planner_command_compute_RQ2_s1_r1(String domainFile){
         String outputPath = FilePathConstants.AP_path_RQ2 + "S1_R1/";
         String problemPath = FilePathConstants.AEDI_path + "RQ2/S1/Restaurant_2_service/";
-        System.out.print("R1: \n spoofing_plan: "+ planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl") + "\n tampering_plan: "+ planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                problemPath+"tampering.pddl") +
-                "\nrepudiation_plan:"+ planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                problemPath+"repudiation.pddl")+ "\n information_disclosure_plan: " + planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                problemPath+"information_disclosure.pddl") + "\n denial_of_service:"+ planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                problemPath+"denial_of_service.pddl") + "\n elevation_of_privilege_plan:" + planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                problemPath+"elevation_of_privilege.pddl")+"\n");
-        return planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                        problemPath+"tampering.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                        problemPath+"repudiation.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                        problemPath+"information_disclosure.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                        problemPath+"denial_of_service.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                        problemPath+"elevation_of_privilege.pddl");
+        return computeScenario(domainFile, problemPath, new outputPath(
+                outputPath + "spoofing.pddl",
+                outputPath + "tampering.pddl",
+                outputPath + "repudiation.pddl",
+                outputPath + "information_disclosure.pddl",
+                outputPath + "denial_of_service.pddl",
+                outputPath + "elevation_of_privilege.pddl"));
     }
     public static double planner_command_compute_RQ2_s1_r2(String domainFile){
         String outputPath = FilePathConstants.AP_path_RQ2 + "S1_R2/";
         String problemPath = FilePathConstants.AEDI_path + "RQ2/S1/Restaurant_3_service/";
-        System.out.print("R2: \n spoofing_plan: "+ planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl") + "\n tampering_plan: "+ planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                problemPath+"tampering.pddl") +
-                "\nrepudiation_plan:"+ planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                problemPath+"repudiation.pddl")+ "\n information_disclosure_plan: " + planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                problemPath+"information_disclosure.pddl") + "\n denial_of_service:"+ planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                problemPath+"denial_of_service.pddl") + "\n elevation_of_privilege_plan:" + planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                problemPath+"elevation_of_privilege.pddl")+"\n");
-        return planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                        problemPath+"tampering.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                        problemPath+"repudiation.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                        problemPath+"information_disclosure.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                        problemPath+"denial_of_service.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                        problemPath+"elevation_of_privilege.pddl");
+        return computeScenario(domainFile, problemPath, new outputPath(
+                outputPath + "spoofing.pddl",
+                outputPath + "tampering.pddl",
+                outputPath + "repudiation.pddl",
+                outputPath + "information_disclosure.pddl",
+                outputPath + "denial_of_service.pddl",
+                outputPath + "elevation_of_privilege.pddl"));
     }
 
     public static double planner_command_compute_RQ2_s2_p0(String domainFile){
         String outputPath = FilePathConstants.AP_path_RQ2 + "S2_P0/";
         String problemPath = FilePathConstants.AEDI_path + "RQ2/S2/Payment_proxy_1_service/";
-        System.out.print("spoofing_plan: "+ planner_command_AEDI(domainFile,outputPath+"spoofing_plan.pddl",
-                problemPath+"spoofing.pddl") + "\n tampering_plan: "+ planner_command_AEDI(domainFile,outputPath+"tampering_plan.pddl",
-                problemPath+"tampering.pddl") +
-                "\nrepudiation_plan:"+ planner_command_AEDI(domainFile,outputPath+"repudiation_plan.pddl",
-                problemPath+"repudiation.pddl")+ "\n information_disclosure_plan: " + planner_command_AEDI(domainFile,outputPath+"information_disclosure_plan.pddl",
-                problemPath+"information_disclosure.pddl") + "\n denial_of_service:"+ planner_command_AEDI(domainFile,outputPath+"denial_of_service_plan.pddl",
-                problemPath+"denial_of_service.pddl") + "\n elevation_of_privilege_plan:" + planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege_plan.pddl",
-                problemPath+"elevation_of_privilege.pddl")+"\n");
-        return planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                        problemPath+"tampering.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                        problemPath+"repudiation.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                        problemPath+"information_disclosure.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                        problemPath+"denial_of_service.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                        problemPath+"elevation_of_privilege.pddl");
+        return computeScenario(domainFile, problemPath, new outputPath(
+                outputPath + "spoofing.pddl",
+                outputPath + "tampering.pddl",
+                outputPath + "repudiation.pddl",
+                outputPath + "information_disclosure.pddl",
+                outputPath + "denial_of_service.pddl",
+                outputPath + "elevation_of_privilege.pddl"));
     }
     public static double planner_command_compute_RQ2_s2_p1(String domainFile){
         String outputPath = FilePathConstants.AP_path_RQ2 + "S2_P1/";
         String problemPath = FilePathConstants.AEDI_path + "RQ2/S2/Payment_proxy_2_service/";
-        System.out.print("spoofing_plan: "+ planner_command_AEDI(domainFile,outputPath+"spoofing_plan.pddl",
-                problemPath+"spoofing.pddl") + "\n tampering_plan: "+ planner_command_AEDI(domainFile,outputPath+"tampering_plan.pddl",
-                problemPath+"tampering.pddl") +
-                "\nrepudiation_plan:"+ planner_command_AEDI(domainFile,outputPath+"repudiation_plan.pddl",
-                problemPath+"repudiation.pddl")+ "\n information_disclosure_plan: " + planner_command_AEDI(domainFile,outputPath+"information_disclosure_plan.pddl",
-                problemPath+"information_disclosure.pddl") + "\n denial_of_service:"+ planner_command_AEDI(domainFile,outputPath+"denial_of_service_plan.pddl",
-                problemPath+"denial_of_service.pddl") + "\n elevation_of_privilege_plan:" + planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege_plan.pddl",
-                problemPath+"elevation_of_privilege.pddl")+"\n");
-        return planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                        problemPath+"tampering.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                        problemPath+"repudiation.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                        problemPath+"information_disclosure.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                        problemPath+"denial_of_service.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                        problemPath+"elevation_of_privilege.pddl");
+        return computeScenario(domainFile, problemPath, new outputPath(
+                outputPath + "spoofing.pddl",
+                outputPath + "tampering.pddl",
+                outputPath + "repudiation.pddl",
+                outputPath + "information_disclosure.pddl",
+                outputPath + "denial_of_service.pddl",
+                outputPath + "elevation_of_privilege.pddl"));
     }
     public static double planner_command_compute_RQ2_s2_p2(String domainFile){
         String outputPath = FilePathConstants.AP_path_RQ2 + "S2_P2/";
         String problemPath = FilePathConstants.AEDI_path + "RQ2/S2/Payment_proxy_3_service/";
-        System.out.print("spoofing_plan: "+ planner_command_AEDI(domainFile,outputPath+"spoofing_plan.pddl",
-                problemPath+"spoofing.pddl") + "\n tampering_plan: "+ planner_command_AEDI(domainFile,outputPath+"tampering_plan.pddl",
-                problemPath+"tampering.pddl") +
-                "\nrepudiation_plan:"+ planner_command_AEDI(domainFile,outputPath+"repudiation_plan.pddl",
-                problemPath+"repudiation.pddl")+ "\n information_disclosure_plan: " + planner_command_AEDI(domainFile,outputPath+"information_disclosure_plan.pddl",
-                problemPath+"information_disclosure.pddl") + "\n denial_of_service:"+ planner_command_AEDI(domainFile,outputPath+"denial_of_service_plan.pddl",
-                problemPath+"denial_of_service.pddl") + "\n elevation_of_privilege_plan:" + planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege_plan.pddl",
-                problemPath+"elevation_of_privilege.pddl")+"\n");
-        return planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                        problemPath+"tampering.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                        problemPath+"repudiation.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                        problemPath+"information_disclosure.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                        problemPath+"denial_of_service.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                        problemPath+"elevation_of_privilege.pddl");
+        return computeScenario(domainFile, problemPath, new outputPath(
+                outputPath + "spoofing.pddl",
+                outputPath + "tampering.pddl",
+                outputPath + "repudiation.pddl",
+                outputPath + "information_disclosure.pddl",
+                outputPath + "denial_of_service.pddl",
+                outputPath + "elevation_of_privilege.pddl"));
     }
 
     public static double planner_command_compute_RQ2_s2_o0(String domainFile){
         String outputPath = FilePathConstants.AP_path_RQ2 + "S3_O0/";
         String problemPath = FilePathConstants.AEDI_path + "RQ2/S3/Ordering_1_service/";
-        System.out.print("O0 \n O0--spoofing: "+ planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl") +
-                "\n tampering: "+
-                planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                        problemPath+"tampering.pddl")+
-                "\n repudiation: "+
-                planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                        problemPath+"repudiation.pddl")+
-                "\n information_disclosure: "+
-                planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                        problemPath+"information_disclosure.pddl")+
-                "\n denial_of_service: "+
-                planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                        problemPath+"denial_of_service.pddl")+
-                "\n elevation_of_privilege: "+
-                planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                        problemPath+"elevation_of_privilege.pddl"));
-        return planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                        problemPath+"tampering.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                        problemPath+"repudiation.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                        problemPath+"information_disclosure.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                        problemPath+"denial_of_service.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                        problemPath+"elevation_of_privilege.pddl");
+        return computeScenario(domainFile, problemPath, new outputPath(
+                outputPath + "spoofing.pddl",
+                outputPath + "tampering.pddl",
+                outputPath + "repudiation.pddl",
+                outputPath + "information_disclosure.pddl",
+                outputPath + "denial_of_service.pddl",
+                outputPath + "elevation_of_privilege.pddl"));
     }
     public static double planner_command_compute_RQ2_s2_o1(String domainFile){
         String outputPath = FilePathConstants.AP_path_RQ2 + "S3_O1/";
         String problemPath = FilePathConstants.AEDI_path + "RQ2/S3/Ordering_2_service/";
-        System.out.print("O1 \n O1--spoofing: "+ planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl") +
-                "\n tampering: "+
-                planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                        problemPath+"tampering.pddl")+
-                "\n repudiation: "+
-                planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                        problemPath+"repudiation.pddl")+
-                "\n information_disclosure: "+
-                planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                        problemPath+"information_disclosure.pddl")+
-                "\n denial_of_service: "+
-                planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                        problemPath+"denial_of_service.pddl")+
-                "\n elevation_of_privilege: "+
-                planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                        problemPath+"elevation_of_privilege.pddl"));
-        return planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                        problemPath+"tampering.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                        problemPath+"repudiation.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                        problemPath+"information_disclosure.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                        problemPath+"denial_of_service.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                        problemPath+"elevation_of_privilege.pddl");
+        return computeScenario(domainFile, problemPath, new outputPath(
+                outputPath + "spoofing.pddl",
+                outputPath + "tampering.pddl",
+                outputPath + "repudiation.pddl",
+                outputPath + "information_disclosure.pddl",
+                outputPath + "denial_of_service.pddl",
+                outputPath + "elevation_of_privilege.pddl"));
     }
     public static double planner_command_compute_RQ2_s2_o2(String domainFile){
         String outputPath = FilePathConstants.AP_path_RQ2 + "S3_O2/";
         String problemPath = FilePathConstants.AEDI_path + "RQ2/S3/Ordering_3_service/";
-        System.out.print("O2 \n O2--spoofing: "+ planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl") +
-                "\n tampering: "+
-                planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                        problemPath+"tampering.pddl")+
-                "\n repudiation: "+
-                planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                        problemPath+"repudiation.pddl")+
-                "\n information_disclosure: "+
-                planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                        problemPath+"information_disclosure.pddl")+
-                "\n denial_of_service: "+
-                planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                        problemPath+"denial_of_service.pddl")+
-                "\n elevation_of_privilege: "+
-                planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                        problemPath+"elevation_of_privilege.pddl"));
-        return planner_command_AEDI(domainFile,outputPath+"spoofing.pddl",
-                problemPath+"spoofing.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"tampering.pddl",
-                        problemPath+"tampering.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"repudiation.pddl",
-                        problemPath+"repudiation.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"information_disclosure.pddl",
-                        problemPath+"information_disclosure.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"denial_of_service.pddl",
-                        problemPath+"denial_of_service.pddl")+
-                planner_command_AEDI(domainFile,outputPath+"elevation_of_privilege.pddl",
-                        problemPath+"elevation_of_privilege.pddl");
+        return computeScenario(domainFile, problemPath, new outputPath(
+                outputPath + "spoofing.pddl",
+                outputPath + "tampering.pddl",
+                outputPath + "repudiation.pddl",
+                outputPath + "information_disclosure.pddl",
+                outputPath + "denial_of_service.pddl",
+                outputPath + "elevation_of_privilege.pddl"));
     }
 
     private static double planner_command_AEDI(String domainFile, String outputFile, String AEDIFilepath) {
+        Instant callStart = Instant.now();
         ProcessBuilder pb = new ProcessBuilder(
                 cppProgram,
                 "-o", domainFile,
@@ -561,7 +520,7 @@ public class EADSA {
             String outputContent = result.fullOutput;
 
             // Write the full output content to the file.
-            Files.write(Paths.get(outputFile), outputContent.getBytes());
+            writePlan(outputFile, outputContent.toString());
 
             int exitCode = process.waitFor();
             if (exitCode != 0) {
@@ -571,6 +530,8 @@ public class EADSA {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        log.debug("Planner call {} on {}: {}ms", AEDIFilepath, domainFile,
+                Duration.between(callStart, Instant.now()).toMillis());
         return planRisk;
     }
     private static double planner_command_AEDI_s(String domainFile, String outputFile) {
@@ -598,7 +559,7 @@ public class EADSA {
             String outputContent = result.fullOutput;
 
             // Write the full output content to the file.
-            Files.write(Paths.get(outputFile), outputContent.getBytes());
+            writePlan(outputFile, outputContent.toString());
 
             int exitCode = process.waitFor();
             if (exitCode != 0) {
@@ -636,7 +597,7 @@ public class EADSA {
             String outputContent = result.fullOutput;
 
             // Write the full output content to the file.
-            Files.write(Paths.get(outputFile), outputContent.getBytes());
+            writePlan(outputFile, outputContent.toString());
 
             int exitCode = process.waitFor();
             if (exitCode != 0) {
@@ -674,7 +635,7 @@ public class EADSA {
             String outputContent = result.fullOutput;
 
             // Write the full output content to the file.
-            Files.write(Paths.get(outputFile), outputContent.getBytes());
+            writePlan(outputFile, outputContent.toString());
 
             int exitCode = process.waitFor();
             if (exitCode != 0) {
@@ -712,7 +673,7 @@ public class EADSA {
             String outputContent = result.fullOutput;
 
             // Write the full output content to the file.
-            Files.write(Paths.get(outputFile), outputContent.getBytes());
+            writePlan(outputFile, outputContent.toString());
 
             int exitCode = process.waitFor();
             if (exitCode != 0) {
@@ -750,7 +711,7 @@ public class EADSA {
             String outputContent = result.fullOutput;
 
             // Write the full output content to the file.
-            Files.write(Paths.get(outputFile), outputContent.getBytes());
+            writePlan(outputFile, outputContent.toString());
 
             int exitCode = process.waitFor();
             if (exitCode != 0) {
@@ -787,7 +748,7 @@ public class EADSA {
             String outputContent = result.fullOutput;
 
             // Write the full output content to the file.
-            Files.write(Paths.get(outputFile), outputContent.getBytes());
+            writePlan(outputFile, outputContent.toString());
 
             int exitCode = process.waitFor();
             if (exitCode != 0) {
@@ -904,6 +865,9 @@ public class EADSA {
         Pattern enterPoint = Pattern.compile("(APPLICATION-EXPOSES-ATTACK[^\\s]*)");
 
         double weightedRisk = 1.0;
+        // Eq.(1) multiplies the CVSS of *the* entry action once; a plan that mentions a second
+        // APPLICATION-EXPOSES-ATTACK line must not multiply another CVSS on top of it.
+        boolean entryCvssApplied = false;
 
         while ((line = outputStream.readLine()) != null) {
 
@@ -922,8 +886,9 @@ public class EADSA {
                 double lookupProbPre = probPreMap.getOrDefault(actionLower, 1.0);
                 double lookupCvss = cvssMap.getOrDefault(actionLower, 0.0);
 
-                boolean isEnterPoint = n.find();
+                boolean isEnterPoint = n.find() && !entryCvssApplied;
                 if (isEnterPoint) {
+                    entryCvssApplied = true;
 //                    System.out.print("\n"+"expose line: "+line+"\n");
                     // CVSS
                     // weightedRisk = lookupCvss;
@@ -1027,6 +992,9 @@ public class EADSA {
         Pattern enterPoint = Pattern.compile("(APPLICATION-EXPOSES-ATTACK[^\\s]*)");
 
         double weightedRisk = 1.0;
+        // Eq.(1) multiplies the CVSS of *the* entry action once; a plan that mentions a second
+        // APPLICATION-EXPOSES-ATTACK line must not multiply another CVSS on top of it.
+        boolean entryCvssApplied = false;
 
         while ((line = outputStream.readLine()) != null) {
 
@@ -1045,8 +1013,9 @@ public class EADSA {
                 double lookupProbPre = probPreMap.getOrDefault(actionLower, 1.0);
                 double lookupCvss = cvssMap.getOrDefault(actionLower, 0.0);
 
-                boolean isEnterPoint = n.find();
+                boolean isEnterPoint = n.find() && !entryCvssApplied;
                 if (isEnterPoint) {
+                    entryCvssApplied = true;
 //                    System.out.print("\n"+"expose line: "+line+"\n");
                     // CVSS
                     // weightedRisk = lookupCvss;

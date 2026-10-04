@@ -564,7 +564,7 @@
     (tomcat-default-session-storage-location SEFA tomcat_SEFA)
     (http-put-method-accessible SEFA)
         
-    ; (not ; (not ; (not ; (not ; (not (WAF-malicious-request-block SEFA))))))
+    (WAF-malicious-request-block SEFA)
     ; (not (security-controls-path-manipulation SEFA))
         
     ; (not (has-proper-path-normalization-for-filename SEFA))
