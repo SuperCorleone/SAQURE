@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import saqure.utils.FilePathConstants;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.Instant;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -20,15 +22,29 @@ public class EADSA {
     private static final String cppProgram = FilePathConstants.FFPath;
     public static boolean IS_DEFAULT = true;
 
+    // 6 = the number of STRIDE problems planned per implementation. Metric-FF is bound by
+    // the ~758 MB of anonymous memory each invocation zero-fills, not by CPU, so the batch
+    // saturates at about 4 concurrent processes on this host; handing it availableProcessors()
+    // (12) is measurably slower than 6. Same setting as the SEFA package.
+    private static final int POOL_SIZE =
+            Math.max(1, Math.min(Runtime.getRuntime().availableProcessors(), 6));
+
     private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(
-            Runtime.getRuntime().availableProcessors(),
-            Runtime.getRuntime().availableProcessors(),
+            POOL_SIZE,
+            POOL_SIZE,
             1, TimeUnit.SECONDS,
             new LinkedBlockingQueue<>());
 
     // Main computing entry point
     public static double computeScenario(String domainFile, outputPath path){
-        return computationStrategy.compute(domainFile, path);
+        // One call = the risk assessment of one implementation, which the runtime decision
+        // time includes. See RiskTiming.
+        Instant riskStart = Instant.now();
+        try {
+            return computationStrategy.compute(domainFile, path);
+        } finally {
+            RiskTiming.record(Duration.between(riskStart, Instant.now()));
+        }
     }
 
     public static class outputPath {
@@ -136,27 +152,38 @@ public class EADSA {
         }
     }
 
+    /**
+     * Risk of one implementation: the six STRIDE attack-path planning problems under
+     * {@code problemPath}, scored against {@code domainFile}.
+     *
+     * <p>Goes through the configured {@link ScenarioComputation} so the parallel/sequential
+     * ablation applies here too, and plans each problem once. The previous body invoked the
+     * planner twice per problem -- once inside the {@code System.out.print} argument list and
+     * once again in the {@code return} expression -- which doubled the work without changing
+     * the result.
+     */
     public static double planner_command_compute(String domainFile, String outputPath, String problemPath, String orderForDebug){
-        System.out.print("\n spoofing_plan: "+ ff_planner_invocation(domainFile,outputPath+"spoofing_plan.pddl",
-                problemPath+"spoofing.pddl", orderForDebug) + "\n tampering_plan: "+ ff_planner_invocation(domainFile,outputPath+"tampering_plan.pddl",
-                problemPath+"tampering.pddl", orderForDebug) +
-                "\nrepudiation_plan:"+ ff_planner_invocation(domainFile,outputPath+"repudiation_plan.pddl",
-                problemPath+"repudiation.pddl", orderForDebug)+ "\n information_disclosure_plan: " + ff_planner_invocation(domainFile,outputPath+"information_disclosure_plan.pddl",
-                problemPath+"information_disclosure.pddl", orderForDebug) + "\n denial_of_service:"+ ff_planner_invocation(domainFile,outputPath+"denial_of_service_plan.pddl",
-                problemPath+"denial_of_service.pddl", orderForDebug) + "\n elevation_of_privilege_plan:" + ff_planner_invocation(domainFile,outputPath+"elevation_of_privilege_plan.pddl",
-                problemPath+"elevation_of_privilege.pddl", orderForDebug)+"\n");
-        return ff_planner_invocation(domainFile,outputPath+"spoofing_plan.pddl",
-                problemPath+"spoofing.pddl", orderForDebug)+
-                ff_planner_invocation(domainFile,outputPath+"tampering_plan.pddl",
-                        problemPath+"tampering.pddl", orderForDebug)+
-                ff_planner_invocation(domainFile,outputPath+"repudiation_plan.pddl",
-                        problemPath+"repudiation.pddl", orderForDebug)+
-                ff_planner_invocation(domainFile,outputPath+"information_disclosure_plan.pddl",
-                        problemPath+"information_disclosure.pddl", orderForDebug)+
-                ff_planner_invocation(domainFile,outputPath+"denial_of_service_plan.pddl",
-                        problemPath+"denial_of_service.pddl", orderForDebug)+
-                ff_planner_invocation(domainFile,outputPath+"elevation_of_privilege_plan.pddl",
-                        problemPath+"elevation_of_privilege.pddl", orderForDebug);
+        List<Supplier<Double>> tasks = List.of(
+                () -> ff_planner_invocation(domainFile, outputPath + "spoofing_plan.pddl", problemPath + "spoofing.pddl", orderForDebug),
+                () -> ff_planner_invocation(domainFile, outputPath + "tampering_plan.pddl", problemPath + "tampering.pddl", orderForDebug),
+                () -> ff_planner_invocation(domainFile, outputPath + "repudiation_plan.pddl", problemPath + "repudiation.pddl", orderForDebug),
+                () -> ff_planner_invocation(domainFile, outputPath + "information_disclosure_plan.pddl", problemPath + "information_disclosure.pddl", orderForDebug),
+                () -> ff_planner_invocation(domainFile, outputPath + "denial_of_service_plan.pddl", problemPath + "denial_of_service.pddl", orderForDebug),
+                () -> ff_planner_invocation(domainFile, outputPath + "elevation_of_privilege_plan.pddl", problemPath + "elevation_of_privilege.pddl", orderForDebug));
+
+        Instant riskStart = Instant.now();
+        try {
+            if (computationStrategy instanceof ParallelComputation) {
+                return computeParallelSum(tasks.toArray(new Supplier[0]));
+            }
+            double sum = 0.0;
+            for (Supplier<Double> task : tasks) {
+                sum += task.get();
+            }
+            return sum;
+        } finally {
+            RiskTiming.record(Duration.between(riskStart, Instant.now()));
+        }
     }
 
     private static double ff_planner_invocation(String domainFile, String outputFile, String problemFilepath, String order) {
@@ -530,6 +557,9 @@ public class EADSA {
         Pattern enterPoint = Pattern.compile("(APPLICATION-EXPOSES-ATTACK[^\\s]*)");
 
         double weightedRisk = 1.0;
+        // Eq.(1) multiplies the CVSS of *the* entry action once; a plan that mentions a second
+        // APPLICATION-EXPOSES-ATTACK line must not multiply another CVSS on top of it.
+        boolean entryCvssApplied = false;
 
         while ((line = outputStream.readLine()) != null) {
 
@@ -548,8 +578,9 @@ public class EADSA {
                 double lookupCvss = cvssMap.getOrDefault(actionLower, 0.0);
 
 //
-                boolean isEnterPoint = n.find();
+                boolean isEnterPoint = n.find() && !entryCvssApplied;
                 if (isEnterPoint) {
+                    entryCvssApplied = true;
                     // CVSS
                     // weightedRisk = lookupCvss;
                     //**added**//
@@ -650,6 +681,9 @@ public class EADSA {
         Pattern enterPoint = Pattern.compile("(APPLICATION-EXPOSES-ATTACK[^\\s]*)");
 
         double weightedRisk = 1.0;
+        // Eq.(1) multiplies the CVSS of *the* entry action once; a plan that mentions a second
+        // APPLICATION-EXPOSES-ATTACK line must not multiply another CVSS on top of it.
+        boolean entryCvssApplied = false;
 
         while ((line = outputStream.readLine()) != null) {
 
@@ -668,8 +702,9 @@ public class EADSA {
                 double lookupCvss = cvssMap.getOrDefault(actionLower, 0.0);
 
 //
-                boolean isEnterPoint = n.find();
+                boolean isEnterPoint = n.find() && !entryCvssApplied;
                 if (isEnterPoint) {
+                    entryCvssApplied = true;
                     // CVSS
                     // weightedRisk = lookupCvss;
                     //**added**//

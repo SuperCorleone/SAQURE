@@ -1,6 +1,7 @@
 package saqure;
 
 import saqure.Analyzer.EADSA;
+import saqure.Analyzer.RiskTiming;
 import saqure.utils.infrastructure.adaptation.options.*;
 import saqure.utils.infrastructure.adaptation.specifications.Availability;
 import saqure.utils.infrastructure.adaptation.specifications.AverageResponseTime;
@@ -14,11 +15,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import saqure.Planner.PrismModelChecker;
+import saqure.Planner.TransitionAvailability;
+import saqure.utils.FilePathConstants;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static saqure.Planner.PrismModelChecker.reverseUpdating;
 import static saqure.Planner.PrismModelChecker.update_AED_AEDI;
@@ -86,6 +91,11 @@ public class SaqureSimulatorApplication {
         }
 
         // Experiment Configuration
+        // Runtime decision time spans the Analyzer's risk assessment of every candidate
+        // implementation and the Planner's search, so start accumulating before the
+        // configuration is built -- that is where the assessments happen.
+        loadTransitionAvailabilities(caseName);
+        RiskTiming.reset();
         Map<String, Service> servicesMap = getServicesMapByConfigName(caseName);
         if (servicesMap == null) {
             System.err.println("Error: Unknown config case '" + caseName + "'");
@@ -109,9 +119,20 @@ public class SaqureSimulatorApplication {
 
         Instant ramsesV3Start = Instant.now();
         //Simulate SAQURE and calculate cost
-        buildPossibleGraphs(servicesMap, filterOptions(proposedAdaptationOptions), currentGraph, 2000);
+        // 4 core structural states = one TeaStore replica (WebUI, Authentication,
+        // Recommender+Image, Persistence) plus START, success and failure = 7 reachable states.
+        // The previous 2000 (500 replicas) put PRISM past its convergence limit: at that size
+        // Jacobi hits -maxiters instead of the epsilon test, so every option came back with the
+        // same value regardless of its availability (s5's four options all returned
+        // 405533.61720272724 while their availabilities ranged from 0.31 to 0.9).
+        buildPossibleGraphs(servicesMap, filterOptions(proposedAdaptationOptions), currentGraph, 4);
         Instant ramsesV3End = Instant.now();
-        log.info("Time to extract best option RamsesV3: {}ms", Duration.between(ramsesV3Start, ramsesV3End).toMillis());
+
+        long riskAssessmentMillis = RiskTiming.totalMillis();
+        long plannerMillis = Duration.between(ramsesV3Start, ramsesV3End).toMillis();
+        log.debug("Risk assessment: {} implementations, {}ms; Planner: {}ms",
+                RiskTiming.count(), riskAssessmentMillis, plannerMillis);
+        log.info("Runtime decision time: {}ms", riskAssessmentMillis + plannerMillis);
 
         // Reverse simulate runtime change at T2
         if (isT2) {
@@ -520,6 +541,22 @@ public class SaqureSimulatorApplication {
 
         log.info("\n\t\t\t\t{}: Selected option {} for {} with benefit {}. \n\t\t\t\tDetails: {}", service.getServiceId(), bestOptionForGoal.get(bestBenefitClass).getClass().getSimpleName(), bestBenefitClass.getSimpleName(), benefits.get(bestBenefitClass), bestOptionForGoal.get(bestBenefitClass));
         return bestOptionForGoal.get(bestBenefitClass);
+    }
+
+    // RQ1 reads Configuration_RQ1; RQ2 and RQ3 (which reuses RQ2's configurations) read
+    // Configuration_RQ2. The sub-scenario is the case's trailing index, e.g. RQ2_SAQURE_s2.
+    private static final Pattern RQ1_TO_RQ3_CASE = Pattern.compile("^RQ([123])_.*_[sS](\\d+)(_nodyPa)?$");
+
+    // The DTMC transitions take the configuration sheet's availabilities (Fig. 8). Loaded before
+    // the decision-time clock starts; other experiments keep the normalised availability.
+    private static void loadTransitionAvailabilities(String caseName) {
+        Matcher m = RQ1_TO_RQ3_CASE.matcher(caseName);
+        if (!m.matches()) {
+            TransitionAvailability.clear();
+            return;
+        }
+        String sheet = m.group(1).equals("1") ? FilePathConstants.configration_rq1_path : FilePathConstants.configration_rq2_path;
+        TransitionAvailability.load(sheet, "Sub-scenario" + m.group(2));
     }
 
     private static Map<String, Service> getServicesMapByConfigName(String caseName) throws IOException {

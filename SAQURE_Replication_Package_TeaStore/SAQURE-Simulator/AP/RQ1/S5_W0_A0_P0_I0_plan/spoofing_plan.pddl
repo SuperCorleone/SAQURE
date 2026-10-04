@@ -38,11 +38,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2025-22228 TEAST
         9: APPLICATION-AUTHENTICATES-ATTACKER-SUCCESSFULLY USER1 TEASTORE USER1-PASSWORD-HASH_TEASTORE USER1-PASSWORD-HASH_TEASTORE CVE_2025_22228
 plan cost: 146.000000
 
-time spent:    0.06 seconds instantiating 6750 easy, 100 hard action templates
-               0.01 seconds reachability analysis, yielding 419 facts and 751 actions
+time spent:    0.05 seconds instantiating 6750 easy, 100 hard action templates
+               0.00 seconds reachability analysis, yielding 419 facts and 751 actions
                0.00 seconds creating final representation with 416 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.00 seconds searching, evaluating 136 states, to a max depth of 0
-               0.07 seconds total time
+               0.01 seconds searching, evaluating 136 states, to a max depth of 0
+               0.06 seconds total time
 

@@ -70,11 +70,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2023-46589 TEAST
        25: APPLICATION-TOMCAT-EXECUTES-ADDITIONAL-SMUGGLED-HTTP-REQUEST-INJECTS-ATTACKER-CONTROLLED-RESPONSE-INTO-CACHE-AS-AUTHENTICATED-USER-ACHIEVING-ELEVATION-OF-PRIVILEGE TEASTORE TOMCAT_TEASTORE SMUGGLING-REQUEST-CACHE-POISONING1 USER-SESSION1 USER1 CACHE1_TEASTORE
 plan cost: 53.000000
 
-time spent:    0.05 seconds instantiating 6743 easy, 99 hard action templates
-               0.01 seconds reachability analysis, yielding 360 facts and 554 actions
+time spent:    0.07 seconds instantiating 6743 easy, 99 hard action templates
+               0.00 seconds reachability analysis, yielding 360 facts and 554 actions
                0.00 seconds creating final representation with 357 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.01 seconds searching, evaluating 335 states, to a max depth of 0
+               0.00 seconds searching, evaluating 335 states, to a max depth of 0
                0.07 seconds total time
 

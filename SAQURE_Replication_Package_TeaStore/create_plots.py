@@ -15,6 +15,10 @@ import argparse
 RESULTS_BASE = "SAQURE-simulator/results"
 PLOTS_DIR = "experiments/plots"
 
+# run_experiments.sh writes the RAMSES arm to rq1_logs/<S>/RAMSES, while the plot configs
+# below key it as "QoS". Without this the RAMSES series is silently missing from every RQ1 plot.
+LOG_DIR_BY_KEY = {"QoS": "RAMSES"}
+
 # ═══════════════════════════════════════════════════════════════
 # Utility functions (unchanged from create_plots.py)
 # ═══════════════════════════════════════════════════════════════
@@ -60,7 +64,7 @@ def extract_log_fields(log_content: str) -> Dict[str, str]:
 
     # 3. extract extract_time
     time_match = re.search(
-        r'Time to extract best option RamsesV3:\s*([\d.]+)ms',
+        r'Runtime decision time:\s*([\d.]+)ms',
         log_content
     )
     if time_match:
@@ -276,11 +280,15 @@ def plot_rq1(time_stats_all, cost_values_all, experiment_name, save_path):
 
     POINTSIZE = 2
     Y_MARGIN_RATIO = 1.02
-    Y_MAX_MARGIN = 75000
-    Y_MIN_MARGIN = -20000
-    RECT_YLIM = 800000
-    RECT_YMIN = 250000
-    DOT_HLINE_DENSITY = 10000
+    # Retuned for the 4-state DTMC and the long-term cumulative cost: decision time is
+    # 2.2-4.7 s (was 45-60 s) and bars span 3.9-6.9. 9.5 puts the tallest bar at 73% of the
+    # axis while the lowest boxplot point sits at 79%; below 10 the scientific tick format needs
+    # no 1e1 offset.
+    Y_MAX_MARGIN = 5000
+    Y_MIN_MARGIN = -8000
+    RECT_YLIM = 9.5
+    RECT_YMIN = 0
+    DOT_HLINE_DENSITY = 1
 
     FONT_SIZE_TICK = 24
     TICK_LABEL_SIZE = 18
@@ -437,7 +445,7 @@ def plot_rq1(time_stats_all, cost_values_all, experiment_name, save_path):
     ax1.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
     ax2.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
     ax2.locator_params(axis='y', nbins=10)
-    ax1.yaxis.set_major_locator(MultipleLocator(5e4))
+    ax1.yaxis.set_major_locator(MultipleLocator(2))
     ax1.yaxis.set_minor_locator(AutoMinorLocator())
 
     ax1.set_xlim(-X_BLOCK_WIDTH, current_pos - GROUP_SPACING + X_BLOCK_WIDTH)
@@ -526,6 +534,12 @@ def plot_rq2_rq3(time_stats_all, cost_values_all, config, save_path):
         x_positions[sub_scenario] = scenario_positions
         x_ticks.append(np.mean(scenario_positions))
         current_pos = max(scenario_positions) + GROUP_SPACING
+
+    # Keep tick/offset-text rendering identical for every sub-scenario: usetex
+    # must be fixed BEFORE the axes (and their tick Text objects and
+    # ScalarFormatter) are created, otherwise only the first figure produced by
+    # the process is rendered without TeX (S1 vs S2/S3 mismatch).
+    plt.rcParams['text.usetex'] = False
 
     fig, ax1 = plt.subplots(figsize=FIG_SIZE)
     ax2 = ax1.twinx()
@@ -659,7 +673,7 @@ def run_rq1():
 
             for baseline_name in baselines:
                 print(f"=== Baseline: {baseline_name} ===")
-                folder_path = f"{RESULTS_BASE}/rq1_logs/{sub_scenario}/{baseline_name}"
+                folder_path = f"{RESULTS_BASE}/rq1_logs/{sub_scenario}/{LOG_DIR_BY_KEY.get(baseline_name, baseline_name)}"
 
                 if os.path.exists(folder_path):
                     if "SAQURE-longcul" in baseline_name:
@@ -680,7 +694,7 @@ def run_rq1():
                     print(f"Folder does not exist: {folder_path}")
 
         if time_stats_all and cost_values_all:
-            plot_rq1(time_stats_all, cost_values_all, experiment, f'{PLOTS_DIR}/RQ1_SEFA.png')
+            plot_rq1(time_stats_all, cost_values_all, experiment, f'{PLOTS_DIR}/RQ1_TeaStore.png')
         else:
             print(f"== {experiment} has no valid data, skipping plot ==")
 
@@ -693,10 +707,12 @@ def run_rq2():
         'S3': {"T1": ['AQUA', 'SAQURE'], "T2": ['AQUA', 'SAQURE']},
     }
 
+    # Long-term cumulative cost; one scale for all three sub-scenarios so they compare directly.
+    # Bars peak at 4.86, i.e. 69% of the axis, under the boxplots.
     configs = {
-        'S1': [0.0, 1.02, 2e5, 6e5, 5e3, 5e4],
-        'S2': [0.0, 1.08, 2e5, 6e5, 5e3, 5e4],
-        'S3': [0.0, 1.13, 2e5, 6e5, 5e3, 5e4],
+        'S1': [0.0, 1.02, 0, 7, 0.5, 1],
+        'S2': [0.0, 1.02, 0, 7, 0.5, 1],
+        'S3': [0.0, 1.02, 0, 7, 0.5, 1],
     }
 
     for item, times in experiments_RQ2.items():
@@ -735,8 +751,12 @@ def run_rq2():
                     if statistics:
                         time_stats_all[time_phase][baseline_name] = statistics
                         if baseline_name == "AQUA":
-                            cost_values_all[time_phase]['AQUA'] = extract_cost_from_SAQURE(folder_path_SAQURE_T1, best_option)
-                            print(f'when baselinename = AQUA, cost_SAQURE_{time_phase}_AQUA: {cost_SAQURE_T1}\n best_option: {best_option}')
+                            # Evaluate AQUA's choice on the SAQURE DTMC of the SAME time phase.
+                            # Using the T1 folder for T2 silently reports a T1 cost whenever the
+                            # environment change affects the option AQUA picked.
+                            aqua_cost = extract_cost_from_SAQURE(folder_path_SAQURE, best_option)
+                            cost_values_all[time_phase]['AQUA'] = aqua_cost
+                            print(f'when baselinename = AQUA, cost_SAQURE_{time_phase}_AQUA: {aqua_cost}\n best_option: {best_option}')
                         else:
                             if best_option == option_SAQURE:
                                 cost_values_all[time_phase][baseline_name] = cost_SAQURE
@@ -750,7 +770,7 @@ def run_rq2():
                     print(f"Folder does not exist: {folder_path}")
 
         if time_stats_all and cost_values_all:
-            plot_rq2_rq3(time_stats_all, cost_values_all, cfg, f'{PLOTS_DIR}/RQ2_SEFA_{item}.png')
+            plot_rq2_rq3(time_stats_all, cost_values_all, cfg, f'{PLOTS_DIR}/RQ2_TeaStore_{item}.png')
         else:
             print(f"== RQ2 {item} has no valid data, skipping plot ==")
 
@@ -763,10 +783,12 @@ def run_rq3():
         'S3': {"T1": ['SAQURE_nodyPa', 'SAQURE'], "T2": ['SAQURE_nodyPa', 'SAQURE']},
     }
 
+    # Long-term cumulative cost; one scale for all three sub-scenarios so they compare directly.
+    # Bars peak at 4.86, i.e. 69% of the axis, under the boxplots.
     configs = {
-        'S1': [0.0, 1.02, 2e5, 6e5, 5e3, 5e4],
-        'S2': [0.0, 1.08, 2e5, 6e5, 5e3, 5e4],
-        'S3': [0.0, 1.13, 2e5, 6e5, 5e3, 5e4],
+        'S1': [0.0, 1.02, 0, 7, 0.5, 1],
+        'S2': [0.0, 1.02, 0, 7, 0.5, 1],
+        'S3': [0.0, 1.02, 0, 7, 0.5, 1],
     }
 
     for item, times in experiments_RQ3.items():
@@ -816,7 +838,7 @@ def run_rq3():
                     print(f"Folder does not exist: {folder_path}")
 
         if time_stats_all and cost_values_all:
-            plot_rq2_rq3(time_stats_all, cost_values_all, cfg, f'{PLOTS_DIR}/RQ3_SEFA_{item}.png')
+            plot_rq2_rq3(time_stats_all, cost_values_all, cfg, f'{PLOTS_DIR}/RQ3_TeaStore_{item}.png')
         else:
             print(f"== RQ3 {item} has no valid data, skipping plot ==")
 

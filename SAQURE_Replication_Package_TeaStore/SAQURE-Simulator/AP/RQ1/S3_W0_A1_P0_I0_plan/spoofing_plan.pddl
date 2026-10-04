@@ -37,10 +37,10 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2023-2976 TEASTO
 plan cost: 42.000000
 
 time spent:    0.05 seconds instantiating 6745 easy, 100 hard action templates
-               0.01 seconds reachability analysis, yielding 484 facts and 537 actions
+               0.00 seconds reachability analysis, yielding 484 facts and 537 actions
                0.00 seconds creating final representation with 480 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.00 seconds searching, evaluating 157 states, to a max depth of 0
+               0.01 seconds searching, evaluating 157 states, to a max depth of 0
                0.06 seconds total time
 

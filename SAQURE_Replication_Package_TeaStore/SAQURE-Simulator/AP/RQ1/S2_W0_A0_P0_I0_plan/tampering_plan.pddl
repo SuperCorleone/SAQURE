@@ -38,11 +38,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2025-24813 TEAST
         9: APPLICATION-TOMCAT-DEFAULT-SERVLET-WRITES-MALICIOUS-CONTENT-TO-SENSITIVE-FILE TEASTORE HTTP-PUT-REQUEST1 DEFAULT-SERVLET_TEASTORE SENSITIVE-FILE2_TEASTORE MALICIOUS-CONTENT1 CVE_2025_24813
 plan cost: 11.000000
 
-time spent:    0.06 seconds instantiating 6759 easy, 103 hard action templates
+time spent:    0.05 seconds instantiating 6759 easy, 103 hard action templates
                0.00 seconds reachability analysis, yielding 537 facts and 653 actions
                0.00 seconds creating final representation with 533 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
                0.01 seconds searching, evaluating 164 states, to a max depth of 0
-               0.07 seconds total time
+               0.06 seconds total time
 

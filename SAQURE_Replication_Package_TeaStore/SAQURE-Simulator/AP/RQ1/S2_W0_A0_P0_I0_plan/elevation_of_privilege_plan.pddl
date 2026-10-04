@@ -52,11 +52,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2025-24813 TEAST
        16: ATTACKER-EXECUTES-ARBITRARY-COMMANDS-VIA-WEB-SHELL WEB-SHELL-SCRIPT1 TOMCAT-PROCESS_TEASTORE TEASTORE
 plan cost: 18.000000
 
-time spent:    0.06 seconds instantiating 6759 easy, 103 hard action templates
+time spent:    0.05 seconds instantiating 6759 easy, 103 hard action templates
                0.00 seconds reachability analysis, yielding 537 facts and 653 actions
                0.00 seconds creating final representation with 533 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
                0.01 seconds searching, evaluating 301 states, to a max depth of 0
-               0.07 seconds total time
+               0.06 seconds total time
 

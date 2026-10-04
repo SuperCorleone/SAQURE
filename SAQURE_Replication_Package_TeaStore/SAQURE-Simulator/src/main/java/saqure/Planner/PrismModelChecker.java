@@ -242,9 +242,9 @@ public class PrismModelChecker {
         double recommenderResponseTime = destinationJson.getAsJsonObject("RECOMMENDER-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("AverageResponseTime").getAsDouble();
         double recommenderVulnerability = destinationJson.getAsJsonObject("RECOMMENDER-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("Vulnerability").getAsDouble();
 
-        double ImageAvailability = currentJson.getAsJsonObject("IMAGE-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("Availability").getAsDouble();
-        double ImageResponseTime = currentJson.getAsJsonObject("IMAGE-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("AverageResponseTime").getAsDouble();
-        double ImageVulnerability = currentJson.getAsJsonObject("IMAGE-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("Vulnerability").getAsDouble();
+        double ImageAvailability = destinationJson.getAsJsonObject("IMAGE-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("Availability").getAsDouble();
+        double ImageResponseTime = destinationJson.getAsJsonObject("IMAGE-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("AverageResponseTime").getAsDouble();
+        double ImageVulnerability = destinationJson.getAsJsonObject("IMAGE-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("Vulnerability").getAsDouble();
 
         double authenticationAvailability = destinationJson.getAsJsonObject("AUTHENTICATION-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("Availability").getAsDouble();
         double authenticationResponseTime = destinationJson.getAsJsonObject("AUTHENTICATION-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("AverageResponseTime").getAsDouble();
@@ -253,6 +253,14 @@ public class PrismModelChecker {
         double webuiAvailability = destinationJson.getAsJsonObject("WEBUI-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("Availability").getAsDouble();
         double webuiResponseTime = destinationJson.getAsJsonObject("WEBUI-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("AverageResponseTime").getAsDouble();
         double webuiVulnerability = destinationJson.getAsJsonObject("WEBUI-SERVICE").getAsJsonObject("values").getAsJsonPrimitive("Vulnerability").getAsDouble();
+
+        // Transition probabilities take each service's own availability (Fig. 8); the normalised
+        // "Availability" above feeds the instant cost (Eq. 5) only. See TransitionAvailability.
+        double webuiTransition = TransitionAvailability.of(destinationJson, "WEBUI-SERVICE");
+        double authenticationTransition = TransitionAvailability.of(destinationJson, "AUTHENTICATION-SERVICE");
+        double recommenderTransition = TransitionAvailability.of(destinationJson, "RECOMMENDER-SERVICE");
+        double imageTransition = TransitionAvailability.of(destinationJson, "IMAGE-SERVICE");
+        double persistenceTransition = TransitionAvailability.of(destinationJson, "PERSISTENCE-SERVICE");
 
 
         StringBuilder prismModel = new StringBuilder();
@@ -270,7 +278,12 @@ public class PrismModelChecker {
         prismModel.append("const double a_image = ").append(ImageAvailability).append(";\n"); // added
         prismModel.append("const double a_authentication = ").append(authenticationAvailability).append(";\n");
         prismModel.append("const double a_persistence = ").append(persistenceAvailability).append(";\n");
-        prismModel.append("const double a_webui = ").append(webuiAvailability).append(";\n\n");
+        prismModel.append("const double a_webui = ").append(webuiAvailability).append(";\n");
+        prismModel.append("const double p_recommender = ").append(recommenderTransition).append(";\n");
+        prismModel.append("const double p_image = ").append(imageTransition).append(";\n");
+        prismModel.append("const double p_authentication = ").append(authenticationTransition).append(";\n");
+        prismModel.append("const double p_persistence = ").append(persistenceTransition).append(";\n");
+        prismModel.append("const double p_webui = ").append(webuiTransition).append(";\n\n");
 
         // response times
         prismModel.append("// response times\n");
@@ -301,11 +314,24 @@ public class PrismModelChecker {
         prismModel.append("const double v_webui = ").append(webuiVulnerability).append(";\n\n");
 
         // cost
-        prismModel.append("rewards\n");
+        // Availability reaches the cost through two channels: w_a*(1-A) in the reward, which the
+        // weights govern, and the transition probabilities, which do not. The chain restarts on
+        // failure, so a cumulative reward is (reward of one pass) / P(pass succeeds); that second
+        // factor scales the cost by 1/P regardless of w_a. The planner nevertheless ranks options
+        // by this cumulative cost, as the paper specifies. The cost per service invocation (the
+        // "cost" reward divided by the "visits" reward) cancels the 1/P factor and is logged
+        // alongside for reference.
+        prismModel.append("rewards \"cost\"\n");
         prismModel.append("s=1 : (w_a * (1 - a_webui) + w_rt * rt_webui + w_v * v_webui) / (w_a * (1 - old_a_webui) + w_rt * old_rt_webui + w_v * old_v_webui);\n");
         prismModel.append("s=2 : (w_a * (1 - a_authentication) + w_rt * rt_authentication + w_v * v_authentication) / (w_a * (1 - old_a_authentication) + w_rt * old_rt_authentication + w_v * old_v_authentication);\n");
         prismModel.append("s=3 : (w_a * (1 - a_recommender) + w_rt * rt_recommender + w_v * v_recommender) / (w_a * (1 - old_a_recommender) + w_rt * old_rt_recommender + w_v * old_v_recommender) * (w_a * (1 - a_image) + w_rt * rt_image + w_v * v_image) / (w_a * (1 - old_a_image) + w_rt * old_rt_image + w_v * old_v_image);\n");
         prismModel.append("s=4 : (w_a * (1 - a_persistence) + w_rt * rt_persistence + w_v * v_persistence) / (w_a * (1 - old_a_persistence) + w_rt * old_rt_persistence + w_v * old_v_persistence);\n\n");
+        prismModel.append("endrewards\n\n");
+
+        // Counts the service invocations the "cost" reward is accumulated over, so the property
+        // can divide by it. Same state set, weight 1 each.
+        prismModel.append("rewards \"visits\"\n");
+        prismModel.append("s>=1 & s<=" + (4*cycles) + " : 1;\n");
         prismModel.append("endrewards\n\n");
 
         // module teaStore
@@ -315,10 +341,10 @@ public class PrismModelChecker {
         prismModel.append("\t[] s=0 -> 1 : (s'=1);\n");
 
         for (int i = 0; i < cycles; i++) {
-            prismModel.append("\t[] s=" + (i*4+1) + " -> a_webui : (s'=" + (i*4+2) + ") + (1-a_webui) : (s'=" + (4*cycles+2) + ");\n");
-            prismModel.append("\t[] s=" + (i*4+2) + " -> a_authentication : (s'=" + (i*4+3) + ") + (1-a_authentication) : (s'=" + (i*4+1) + ");\n");
-            prismModel.append("\t[] s=" + (i*4+3) + " -> (a_recommender * a_image) + (1-a_recommender) * a_image + a_recommender * (1-a_image) : (s'=" + (i*4+4) + ") + (1-a_recommender) * (1-a_image) : (s'=" + (i*4+1) + ");\n");
-            prismModel.append("\t[] s=" + (i*4+4) + " -> a_persistence : (s'=" + (i*4 + 5) + ") + (1-a_persistence) : (s'=" + (4*cycles+2) + ");\n");
+            prismModel.append("\t[] s=" + (i*4+1) + " -> p_webui : (s'=" + (i*4+2) + ") + (1-p_webui) : (s'=" + (4*cycles+2) + ");\n");
+            prismModel.append("\t[] s=" + (i*4+2) + " -> p_authentication : (s'=" + (i*4+3) + ") + (1-p_authentication) : (s'=" + (i*4+1) + ");\n");
+            prismModel.append("\t[] s=" + (i*4+3) + " -> (p_recommender * p_image) + (1-p_recommender) * p_image + p_recommender * (1-p_image) : (s'=" + (i*4+4) + ") + (1-p_recommender) * (1-p_image) : (s'=" + (i*4+1) + ");\n");
+            prismModel.append("\t[] s=" + (i*4+4) + " -> p_persistence : (s'=" + (i*4 + 5) + ") + (1-p_persistence) : (s'=" + (4*cycles+2) + ");\n");
         }
 
         prismModel.append("\t[] s=" + (4*cycles + 1) + " -> 1 : (s'=" + (4*cycles + 1) + ");\n");
@@ -335,7 +361,8 @@ public class PrismModelChecker {
 
         // Create "model.props" file
         try {
-            Files.write(Paths.get(FilePathConstants.model_props_defination_path), "Rmin = ? [ C ]".getBytes());
+            Files.write(Paths.get(FilePathConstants.model_props_defination_path),
+                    "R{\"cost\"}min = ? [ C ]\nR{\"visits\"}min = ? [ C ]\n".getBytes());
         } catch (IOException e) {
             log.error("Error writing model.props file: {}", e.getMessage());
         }
@@ -351,13 +378,24 @@ public class PrismModelChecker {
 
             if (exitCode == 0) {
                 InputStream inputStream = process.getInputStream();
-                String result = parsePrismOutput(inputStream);
+                List<Double> values = parsePrismOutput(inputStream);
+                if (values.size() < 2) {
+                    log.error("PRISM returned {} value(s), expected cost and visits", values.size());
+                    return null;
+                }
+                // Options are ranked by the paper's metric, the expected long-term cumulative cost per
+                // request, R{"cost"}=?[C]. The per-invocation cost (cumulative / expected invocations)
+                // is logged next to it for reference. See the comment on the reward structures.
+                double result = values.get(0);
 
                 log.info("Cost Value: " + result);
+                log.info("Per-invocation cost: " + (values.get(0) / values.get(1))
+                        + " (expected service invocations: " + values.get(1) + ")");
                 Instant obtainCostEnd = Instant.now();
-                log.info("Time to obtain the cost: {}ms", Duration.between(obtainCostStart, obtainCostEnd).toMillis());
+                log.info("Time to obtain the cost: {}ms (cumulative {} over {} visits)",
+                        Duration.between(obtainCostStart, obtainCostEnd).toMillis(), values.get(0), values.get(1));
 
-                return result == null ? null : Double.parseDouble(result);
+                return result;
             } else {
                 log.error("Error executing PRISM command. Exit code: {}", exitCode);
                 InputStream inputStream = process.getInputStream();
@@ -376,18 +414,19 @@ public class PrismModelChecker {
     }
 
     // Analysis of PRISM Model Checker Output
-    private static String parsePrismOutput(InputStream inputStream) throws IOException {
+    private static List<Double> parsePrismOutput(InputStream inputStream) throws IOException {
+        List<Double> values = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.contains("Value in the initial state")) {//Find lines containing the specific identifier string "Value in the initial state".
                     String[] tokens = line.split(":");
                     if (tokens.length > 1) {
-                        return tokens[1].trim();
+                        values.add(Double.parseDouble(tokens[1].trim()));
                     }
                 }
             }
         }
-        return null;
+        return values;
     }
 }

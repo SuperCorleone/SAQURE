@@ -30,11 +30,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2024-38286 TEAST
         5: APPLICATION-TOMCAT-CRASHES TEASTORE TOMCAT_TEASTORE
 plan cost: 34.000000
 
-time spent:    0.06 seconds instantiating 6745 easy, 100 hard action templates
+time spent:    0.05 seconds instantiating 6745 easy, 100 hard action templates
                0.00 seconds reachability analysis, yielding 484 facts and 537 actions
                0.00 seconds creating final representation with 480 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
                0.00 seconds searching, evaluating 89 states, to a max depth of 0
-               0.06 seconds total time
+               0.05 seconds total time
 

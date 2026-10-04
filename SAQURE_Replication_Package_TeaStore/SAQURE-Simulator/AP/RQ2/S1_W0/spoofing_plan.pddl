@@ -62,11 +62,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2024-22243 TEAST
        21: ATTACKER-USES-USER-CREDENTIALS-LOGIN-TARGET-APPLICATION USER1 USER1-PASSWORD_TEASTORE TEASTORE
 plan cost: 42.000000
 
-time spent:    0.07 seconds instantiating 6760 easy, 102 hard action templates
+time spent:    0.08 seconds instantiating 6760 easy, 102 hard action templates
                0.00 seconds reachability analysis, yielding 446 facts and 960 actions
                0.00 seconds creating final representation with 443 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
                0.01 seconds searching, evaluating 414 states, to a max depth of 0
-               0.08 seconds total time
+               0.09 seconds total time
 

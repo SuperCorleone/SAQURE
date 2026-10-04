@@ -46,11 +46,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2022-1471 TEASTO
        13: APPLICATION-EXECUTES-ATTACKER-COMMAND-WITH-PRIVILEGES TEASTORE MALICIOUS-JAVA-CLASS1 COMMAND-EXECUTION-LOGIC1 CVE_2022_1471
 plan cost: 15.000000
 
-time spent:    0.05 seconds instantiating 6740 easy, 100 hard action templates
+time spent:    0.07 seconds instantiating 6740 easy, 100 hard action templates
                0.00 seconds reachability analysis, yielding 329 facts and 588 actions
-               0.00 seconds creating final representation with 326 relevant facts, 1 relevant fluents
+               0.01 seconds creating final representation with 326 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.02 seconds searching, evaluating 186 states, to a max depth of 0
-               0.07 seconds total time
+               0.00 seconds searching, evaluating 186 states, to a max depth of 0
+               0.08 seconds total time
 

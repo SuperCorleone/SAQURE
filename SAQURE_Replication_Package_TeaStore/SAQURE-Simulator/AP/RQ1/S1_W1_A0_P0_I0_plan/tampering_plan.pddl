@@ -34,11 +34,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2023-2976 TEASTO
         7: ATTACKER-ACHIEVES-UNAUTHORIZED-TAMPERING TEASTORE SENSITIVE-SYSTEM-FILE_TEASTORE ATTACKER-CREDENTIALS_TEASTORE
 plan cost: 41.000000
 
-time spent:    0.06 seconds instantiating 6745 easy, 100 hard action templates
+time spent:    0.05 seconds instantiating 6745 easy, 100 hard action templates
                0.00 seconds reachability analysis, yielding 484 facts and 537 actions
                0.00 seconds creating final representation with 480 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
                0.00 seconds searching, evaluating 135 states, to a max depth of 0
-               0.06 seconds total time
+               0.05 seconds total time
 

@@ -41,8 +41,8 @@ plan cost: 146.000000
 time spent:    0.05 seconds instantiating 6764 easy, 103 hard action templates
                0.00 seconds reachability analysis, yielding 474 facts and 896 actions
                0.00 seconds creating final representation with 471 relevant facts, 1 relevant fluents
-               0.01 seconds computing LNF
+               0.00 seconds computing LNF
                0.00 seconds building connectivity graph
                0.01 seconds searching, evaluating 166 states, to a max depth of 0
-               0.07 seconds total time
+               0.06 seconds total time
 

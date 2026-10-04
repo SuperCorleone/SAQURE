@@ -74,11 +74,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2023-46589 TEAST
        27: REVERSE-PROXY-FORWARDS-CACHED-RESPONSE-TO-USER-ACHIEVING-TAMPERING TEASTORE REVERSE-PROXY_TEASTORE HTTP-RESPONSE_TEASTORE USER1 TCP-CONNECTION_TEASTORE CACHE1_TEASTORE
 plan cost: 55.000000
 
-time spent:    0.06 seconds instantiating 6743 easy, 99 hard action templates
+time spent:    0.07 seconds instantiating 6743 easy, 99 hard action templates
                0.00 seconds reachability analysis, yielding 360 facts and 554 actions
                0.00 seconds creating final representation with 357 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
                0.01 seconds searching, evaluating 363 states, to a max depth of 0
-               0.07 seconds total time
+               0.08 seconds total time
 

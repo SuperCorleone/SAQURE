@@ -690,7 +690,7 @@
 
     ; 5. no effective pre-validation/ASN.1 structural checks
     ;not (endpoint-has-content-type-enforcement TeaStore pem-endpoint_TeaStore)
-    ;(not (endpoint-has-asn1-sanity-checks TeaStore pem-endpoint_TeaStore))
+    (endpoint-has-asn1-sanity-checks TeaStore pem-endpoint_TeaStore)
     ;not (endpoint-rejects-suspicious-pem-patterns TeaStore pem-endpoint_TeaStore)
 
     ; 6. lacks request/resource controls (file-size, depth, timeouts, per-request caps)

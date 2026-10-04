@@ -2,7 +2,11 @@
 
 JAR="SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar"
 JAVA_CMD="java -jar $JAR"
-REPEATS=10
+# prism/bin/prism resolves its JDK through /usr/libexec/java_home, which fails when java
+# comes from sdkman; without this the subprocess exits 126 and the run still looks successful.
+export PRISM_JAVA="${PRISM_JAVA:-$(command -v java)}"
+REPEATS=${REPEATS:-10}
+START_RUN=${START_RUN:-1}
 LOG_BASE="./SAQURE-simulator/results"
 
 run_rq1() {
@@ -13,7 +17,7 @@ run_rq1() {
         CASE="RQ1_SAQURE_para_$s"
         LOG_DIR="$LOG_BASE/rq1_logs/$s/SAQURE_para"
         mkdir -p "$LOG_DIR"
-        for run in $(seq 1 $REPEATS); do
+        for run in $(seq $START_RUN $REPEATS); do
             LOG_FILE="$LOG_DIR/SEFA_${CASE}_run${run}.log"
             echo "--- $CASE [run $run/$REPEATS] ---"
             $JAVA_CMD -c "$CASE" > "$LOG_FILE" 2>&1
@@ -26,7 +30,7 @@ run_rq1() {
         CASE="RQ1_SAQURE_seq_$s"
         LOG_DIR="$LOG_BASE/rq1_logs/$s/SAQURE_seq"
         mkdir -p "$LOG_DIR"
-        for run in $(seq 1 $REPEATS); do
+        for run in $(seq $START_RUN $REPEATS); do
             LOG_FILE="$LOG_DIR/SEFA_${CASE}_run${run}.log"
             echo "--- $CASE [run $run/$REPEATS] ---"
             $JAVA_CMD -c "$CASE" > "$LOG_FILE" 2>&1
@@ -39,7 +43,7 @@ run_rq1() {
         CASE="RQ1_Aqua_s${n}"
         LOG_DIR="$LOG_BASE/rq1_logs/S${n}/AQUA"
         mkdir -p "$LOG_DIR"
-        for run in $(seq 1 $REPEATS); do
+        for run in $(seq $START_RUN $REPEATS); do
             LOG_FILE="$LOG_DIR/SEFA_${CASE}_run${run}.log"
             echo "--- $CASE [run $run/$REPEATS] ---"
             $JAVA_CMD -c "$CASE" > "$LOG_FILE" 2>&1
@@ -52,7 +56,7 @@ run_rq1() {
         CASE="RQ1_RAMSES_s${n}"
         LOG_DIR="$LOG_BASE/rq1_logs/S${n}/RAMSES"
         mkdir -p "$LOG_DIR"
-        for run in $(seq 1 $REPEATS); do
+        for run in $(seq $START_RUN $REPEATS); do
             LOG_FILE="$LOG_DIR/SEFA_${CASE}_run${run}.log"
             echo "--- $CASE [run $run/$REPEATS] ---"
             $JAVA_CMD -c "$CASE" > "$LOG_FILE" 2>&1
@@ -72,7 +76,7 @@ run_rq2() {
             for t in T1 T2; do
                 LOG_DIR="$LOG_BASE/rq2_logs/S${n}/${t}/${approach}"
                 mkdir -p "$LOG_DIR"
-                for run in $(seq 1 $REPEATS); do
+                for run in $(seq $START_RUN $REPEATS); do
                     LOG_FILE="$LOG_DIR/SEFA_RQ2_S${n}_${approach}_${t}_run${run}.log"
                     echo "--- $CASE ${t} [run $run/$REPEATS] ---"
                     $JAVA_CMD -c "$CASE" -t "$t" > "$LOG_FILE" 2>&1
@@ -94,7 +98,7 @@ run_rq3() {
         for t in T1 T2; do
             LOG_DIR="$LOG_BASE/rq3_logs/S${n}/${t}/SAQURE"
             mkdir -p "$LOG_DIR"
-            for run in $(seq 1 $REPEATS); do
+            for run in $(seq $START_RUN $REPEATS); do
                 LOG_FILE="$LOG_DIR/SEFA_RQ3_S${n}_SAQURE_${t}_run${run}.log"
                 echo "--- $CASE ${t} [run $run/$REPEATS] ---"
                 $JAVA_CMD -c "$CASE" -t "$t" > "$LOG_FILE" 2>&1
@@ -109,7 +113,7 @@ run_rq3() {
         for t in T1 T2; do
             LOG_DIR="$LOG_BASE/rq3_logs/S${n}/${t}/SAQURE_nodyPa"
             mkdir -p "$LOG_DIR"
-            for run in $(seq 1 $REPEATS); do
+            for run in $(seq $START_RUN $REPEATS); do
                 LOG_FILE="$LOG_DIR/SEFA_RQ3_S${n}_SAQURE_nodyPa_${t}_run${run}.log"
                 echo "--- $CASE ${t} [run $run/$REPEATS] ---"
                 $JAVA_CMD -c "$CASE" -t "$t" > "$LOG_FILE" 2>&1
