@@ -1,7 +1,25 @@
+# OS and editors
 .DS_Store
+.idea/
+.vscode/
+
+# Python and Jupyter
 __pycache__/
 *.pyc
+.ipynb_checkpoints/
+.venv/
+
+# Local tool state and internal notes
+.claude/
+CC-Session-Logs/
+/plan_*.md
+/SAQURE_Replication_Package_SEFA/new_AP_workflow_cn.md
+
+# Runtime scratch of the simulator
+/SAQURE_Replication_Package_SEFA/SAQURE-simulator/tmp/
+
+# Local archives, server runs and earlier paper versions
 _archive_results/
 _server_bundle/
-SAQURE_Replication_Package_SEFA/server_rq412/*.tar.gz
-SAQURE_Replication_Package_SEFA/server_rq412/logs/
+/SAQURE_Replication_Package_SEFA/server_rq412/
+/SAQURE__*.pdf

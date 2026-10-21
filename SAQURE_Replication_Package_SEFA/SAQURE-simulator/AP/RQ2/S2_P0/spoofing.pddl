@@ -7,13 +7,12 @@ problem 'AEDI-SPOOFING' defined
  ... done.
 
 
-translating negated cond for predicate SCRIPT-EXECUTION-PROMPT-ENABLED
 
 ff: search configuration is A*epsilon with weight 1.
 Metric is ((1.00*[RF0](TOTAL-COST)) - () + 0.00)
 COST MINIMIZATION DONE (WITH cost-minimizing relaxed plans).
 
-Advancing to goal distance:   19
+Advancing to goal distance:   18
                               17
                               16
                               15
@@ -50,15 +49,15 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2024-34447 SEFA 
        13: APPLICATION-ESTABLISHES-SSL-CONNECTION-TO-ATTACKER-SERVER SEFA MALICIOUS-SERVER1 LEGIT-SERVER1_SEFA MALICIOUS-SERVER-ADDRESS1 SOCKET_SEFA
        14: USER-INPUTS-SENSITIVE-INFORMATION-IN-THE-WEBPAGE USER1 SEFA MALICIOUS-SERVER1 USER1-PASSWORD_SEFA
        15: APPLICATION-TRANSMITS-SENSITIVE-INFORMATION-TO-ATTACKER SEFA MALICIOUS-SERVER1 USER1-PASSWORD_SEFA
-       16: ATTACKER-RECEIVES-SENSITIVE-INFORMATION SEFA USER1-PASSWORD_SEFA CVE_2024_34447
+       16: ATTACKER-CAPTURES-SENSITIVE-INFORMATION-OF-TARGET-APPLICATION SEFA USER1-PASSWORD_SEFA CVE_2024_34447
        17: ATTACKER-USES-USER-CREDENTIALS-LOGIN-TARGET-APPLICATION USER1 USER1-PASSWORD_SEFA SEFA
 plan cost: 46.000000
 
-time spent:    0.07 seconds instantiating 6764 easy, 97 hard action templates
-               0.00 seconds reachability analysis, yielding 302 facts and 546 actions
-               0.00 seconds creating final representation with 299 relevant facts, 1 relevant fluents
+time spent:    0.01 seconds instantiating 236 easy, 0 hard action templates
+               0.00 seconds reachability analysis, yielding 74 facts and 36 actions
+               0.00 seconds creating final representation with 74 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.00 seconds searching, evaluating 205 states, to a max depth of 0
-               0.07 seconds total time
+               0.01 seconds searching, evaluating 44 states, to a max depth of 0
+               0.02 seconds total time
 

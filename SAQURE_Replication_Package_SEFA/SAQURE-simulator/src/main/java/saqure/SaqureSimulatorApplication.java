@@ -1,6 +1,7 @@
 package saqure;
 
 import saqure.Analyzer.EADSA;
+import saqure.Analyzer.ModularEADSA;
 import saqure.utils.infrastructure.adaptation.options.*;
 import saqure.utils.infrastructure.adaptation.specifications.Availability;
 import saqure.utils.infrastructure.adaptation.specifications.AverageResponseTime;
@@ -134,8 +135,21 @@ public class SaqureSimulatorApplication {
             RQ4_vuln_risk_profile(param);
             return;
         }
+        // Same figure, measured as the paper defines the metric: wall clock of one EADSA
+        // assessment of restaurant0 on the decision path's thread pool.
+        if (caseName.equals("RQ4_vuln_risk_wall_SAQURE")) {
+            // Whole-application assessment, as in RQ1-RQ3 (RQ4_vuln_risk_wall_profile is superseded).
+            RQ4_vuln_risk_wall_profile_WholeApp(param);
+            return;
+        }
         if (caseName.equals("RQ4_size_risk_SAQURE")) {
             RQ4_size_risk_profile(sefaScale);
+            return;
+        }
+        // RQ4.2.2 measured as the paper defines the metric: wall clock per replica.
+        if (caseName.equals("RQ4_size_risk_wall_SAQURE")) {
+            // Same risk assessment as RQ1-RQ3 (riskWallClockSystemAED is superseded).
+            SizeAxisExperiment.riskWallClockModules(sefaScale);
             return;
         }
 
@@ -144,6 +158,8 @@ public class SaqureSimulatorApplication {
         boolean isT2 = runtime.equals("T2") && (caseName.startsWith("RQ2") || caseName.startsWith("RQ3")) && externalChange != null;
         if (isT2) {
             update_AED_AEDI(externalChange);
+            // The same change in the vulnerability modules the SAQURE arms plan on.
+            ModularEADSA.applyExternalChange(externalChange);
         }
 
         // Runtime decision time spans the Analyzer's risk assessment of every candidate
@@ -192,6 +208,7 @@ public class SaqureSimulatorApplication {
         // Reverse simulate runtime change at T2
         if (isT2) {
             reverseUpdating(externalChange);
+            ModularEADSA.reverseExternalChange(externalChange);
         }
     }
 
@@ -616,19 +633,21 @@ public class SaqureSimulatorApplication {
 
     private static Map<String, Service> getServicesMapByConfigName(String caseName, int param) {
         switch (caseName) {
+            // RQ1-RQ3 SAQURE arms assess risk with ModularEADSA; the earlier
+            // *_SAQURE_ExpConfig methods are superseded.
             // RQ1 SAQURE parallel (no SEQUENTIAL)
-            case "RQ1_SAQURE_para_S1": return RQ1_s1_SAQURE_ExpConfig();
-            case "RQ1_SAQURE_para_S2": return RQ1_s2_SAQURE_ExpConfig();
-            case "RQ1_SAQURE_para_S3": return RQ1_s3_SAQURE_ExpConfig();
-            case "RQ1_SAQURE_para_S4": return RQ1_s4_SAQURE_ExpConfig();
-            case "RQ1_SAQURE_para_S5": return RQ1_s5_SAQURE_ExpConfig();
+            case "RQ1_SAQURE_para_S1": return RQ1_s1_SAQURE_Modules_ExpConfig();
+            case "RQ1_SAQURE_para_S2": return RQ1_s2_SAQURE_Modules_ExpConfig();
+            case "RQ1_SAQURE_para_S3": return RQ1_s3_SAQURE_Modules_ExpConfig();
+            case "RQ1_SAQURE_para_S4": return RQ1_s4_SAQURE_Modules_ExpConfig();
+            case "RQ1_SAQURE_para_S5": return RQ1_s5_SAQURE_Modules_ExpConfig();
 
             // RQ1 SAQURE sequential
-            case "RQ1_SAQURE_seq_S1": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s1_SAQURE_ExpConfig();
-            case "RQ1_SAQURE_seq_S2": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s2_SAQURE_ExpConfig();
-            case "RQ1_SAQURE_seq_S3": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s3_SAQURE_ExpConfig();
-            case "RQ1_SAQURE_seq_S4": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s4_SAQURE_ExpConfig();
-            case "RQ1_SAQURE_seq_S5": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s5_SAQURE_ExpConfig();
+            case "RQ1_SAQURE_seq_S1": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s1_SAQURE_Modules_ExpConfig();
+            case "RQ1_SAQURE_seq_S2": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s2_SAQURE_Modules_ExpConfig();
+            case "RQ1_SAQURE_seq_S3": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s3_SAQURE_Modules_ExpConfig();
+            case "RQ1_SAQURE_seq_S4": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s4_SAQURE_Modules_ExpConfig();
+            case "RQ1_SAQURE_seq_S5": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s5_SAQURE_Modules_ExpConfig();
 
 
 
@@ -647,26 +666,28 @@ public class SaqureSimulatorApplication {
             case "RQ1_RAMSES_s5": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ1_s5_RAMSES_ExpConfig();
 
             // RQ2
-            case "RQ2_SAQURE_s1": return RQ2_s1_SAQURE_ExpConfig();
+            case "RQ2_SAQURE_s1": return RQ2_s1_SAQURE_Modules_ExpConfig();
             case "RQ2_AQUA_s1": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ2_s1_Aqua_ExpConfig();
-            case "RQ2_SAQURE_s2": return RQ2_s2_SAQURE_ExpConfig();
+            case "RQ2_SAQURE_s2": return RQ2_s2_SAQURE_Modules_ExpConfig();
             case "RQ2_AQUA_s2": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ2_s2_Aqua_ExpConfig();
-            case "RQ2_SAQURE_s3": return RQ2_s3_SAQURE_ExpConfig();
+            case "RQ2_SAQURE_s3": return RQ2_s3_SAQURE_Modules_ExpConfig();
             case "RQ2_AQUA_s3": setCompMode(EADSA.ComputationMode.SEQUENTIAL); return RQ2_s3_Aqua_ExpConfig();
 
             // RQ3
-            case "RQ3_SAQURE_s1": return RQ2_s1_SAQURE_ExpConfig();
-            case "RQ3_SAQURE_s1_nodyPa": return RQ2_s1_SAQURE_nodyPa_ExpConfig();
-            case "RQ3_SAQURE_s2": return RQ2_s2_SAQURE_ExpConfig();
-            case "RQ3_SAQURE_s2_nodyPa": return RQ2_s2_SAQURE_nodyPa_ExpConfig();
-            case "RQ3_SAQURE_s3": return RQ2_s3_SAQURE_ExpConfig();
-            case "RQ3_SAQURE_s3_nodyPa": return RQ2_s3_SAQURE_nodyPa_ExpConfig();
+            case "RQ3_SAQURE_s1": return RQ2_s1_SAQURE_Modules_ExpConfig();
+            case "RQ3_SAQURE_s1_nodyPa": return RQ2_s1_SAQURE_nodyPa_Modules_ExpConfig();
+            case "RQ3_SAQURE_s2": return RQ2_s2_SAQURE_Modules_ExpConfig();
+            case "RQ3_SAQURE_s2_nodyPa": return RQ2_s2_SAQURE_nodyPa_Modules_ExpConfig();
+            case "RQ3_SAQURE_s3": return RQ2_s3_SAQURE_Modules_ExpConfig();
+            case "RQ3_SAQURE_s3_nodyPa": return RQ2_s3_SAQURE_nodyPa_Modules_ExpConfig();
 
             // RQ4 (with dynamic parameter)
             case "RQ4_1_1_SAQURE": return RQ3_1_1_SAQURE_ExpConfig(param);
             case "RQ4_1_2_SAQURE": return RQ3_1_2_SAQURE_ExpConfig(param);
-            case "RQ4_vuln_SAQURE": return RQ4_vuln_SAQURE_ExpConfig(param);
+            case "RQ4_vuln_SAQURE": return RQ4_vuln_SAQURE_WholeApp_ExpConfig(param);
             case "RQ4_1_1_AQUA": return RQ3_1_1_Aqua_ExpConfig(param);
+            case "RQ4_option_SAQURE": return RQ4_option_SAQURE_Modules_ExpConfig(param);
+            case "RQ4_option_AQUA": return RQ4_option_Aqua_ExpConfig(param);
             case "RQ4_1_2_AQUA": return RQ3_1_2_Aqua_ExpConfig(param);
             case "RQ4_vuln_AQUA": return RQ4_vuln_Aqua_ExpConfig(param);
 
@@ -742,13 +763,17 @@ public class SaqureSimulatorApplication {
             // RQ4
             case "RQ4_1_1_SAQURE":
             case "RQ4_1_1_AQUA":
+            case "RQ4_option_SAQURE":
+            case "RQ4_option_AQUA":
                 return "PAYMENT-PROXY-SERVICE";
             case "RQ4_1_2_SAQURE":
             case "RQ4_1_2_AQUA":
             case "RQ4_vuln_SAQURE":
             case "RQ4_vuln_AQUA":
             case "RQ4_vuln_risk_SAQURE":
+            case "RQ4_vuln_risk_wall_SAQURE":
             case "RQ4_size_risk_SAQURE":
+            case "RQ4_size_risk_wall_SAQURE":
                 return "RESTAURANT-SERVICE";
 
             default:
@@ -802,9 +827,11 @@ public class SaqureSimulatorApplication {
         System.out.println("RQ4 cases (use -d <param>):");
         System.out.println("  RQ4_1_1_SAQURE, RQ4_1_2_SAQURE, RQ4_1_1_AQUA, RQ4_1_2_AQUA");
         System.out.println("  RQ4_vuln_SAQURE, RQ4_vuln_AQUA   (vulnerability axis, -d 1..100)");
-        System.out.println("  RQ4_vuln_risk_SAQURE             (risk assessment only, no PRISM)");
+        System.out.println("  RQ4_vuln_risk_SAQURE             (risk assessment only, no PRISM; critical path)");
+        System.out.println("  RQ4_vuln_risk_wall_SAQURE        (risk assessment only, no PRISM; wall clock of restaurant0)");
         System.out.println("RQ4 size axis (use -x <scale>):");
         System.out.println("  RQ4_size_SAQURE, RQ4_size_AQUA   offline configuration, risk assessment and decision time");
+        System.out.println("  RQ4_size_risk_wall_SAQURE        (risk assessment only; wall clock of restaurant0 per replica)");
         System.out.println();
         System.out.println("Services: RESTAURANT-SERVICE, ORDERING-SERVICE, DELIVERY-PROXY-SERVICE, PAYMENT-PROXY-SERVICE");
     }

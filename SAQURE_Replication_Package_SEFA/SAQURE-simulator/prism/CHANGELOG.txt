@@ -1,6 +1,19 @@
 This file contains details of the changes in each new version of PRISM.
 
 -----------------------------------------------------------------------------
+Version 4.8.1 (first released 13/1/2024)
+-----------------------------------------------------------------------------
+
+* Migrate to CUDD version 3
+* Transition reward export (MDP-like models) for explicit engine
+* Fix broken transient probability computation
+* Updates/fixes in install/launch/testing scripts and build process
+* New tests in etc/tests available for easier build tests
+* New -javaversion switch to show Java version used
+* New --print-failures switch for prism-auto
+* Various bugfixes
+
+-----------------------------------------------------------------------------
 Version 4.8 (first released 5/7/2023)
 -----------------------------------------------------------------------------
 

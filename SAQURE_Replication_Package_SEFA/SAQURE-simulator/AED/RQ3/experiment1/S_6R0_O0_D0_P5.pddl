@@ -1246,172 +1246,172 @@
 
 ;;;#################################### Application vulnerability exposure action ####################################;;;
 ;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-12798  
-  :parameters (?Application - application ?Logback - logback ?JaninoLib - java-library ?User - user ?Directory - path ?ConfigFile - logback-config) ;;?application: the target application
-  :precondition (and
-
-    ;; ==== basic environment compositions ====
-   ; 1. The application deploys logback
-    ;(has-software ?Application ?Logback) 
-    ;(logback-core ?Logback) 
-    (has-logback ?Application ?Logback)
-     
-
-    ; 2. Vulnerable Logback version (version ≤ 1.3.14 or 1.4.0 – 1.5.12)
-    (or
-      ;; version ≤ 1.3.14 
-      
-      (<= (version ?Logback) 1003014000)       ;; 1.4.0 ≤ version ≤ 1.5.12
-      (and 
-        (>= (version ?Logback) 1004000000)  
-        (<= (version ?Logback) 1005012000)  
-      )
-    )
-
-    ;3. JaninoEventEvaluator enabled
-     ;; two definition method
-    ;; aim: show the meaning that system enables JaninoEventEvaluator extension; 
-    ;; 1. respectively define object for the two entities
-    ;(feature ?Janinoevaluator)  
-    ;(has-feature ?Logback ?Janinoevaluator)  
-    ;(feature-enabled ?Logback ?Janinoevaluator)
-    ;; 2. directly show the characteristics of application
-    (janino-evaluator-enabled ?Application ?Logback)
-    
-
-    ;4. Janino library 
-    (has-library ?Application ?JaninoLib)
-     (janino-library ?JaninoLib)
-    ;(has-dependency ?Application ?JaninoLib)
-
-    ;5. Dynamic config loading enabled
-    (dynamic-config-loading-enabled ?Application ?Logback)
-
-    ;6. User has write permission on configuration directory or env variables
-    (has-config-dir ?Application ?Directory)
-    (has-access ?User ?Directory)
-    (has-write-access ?User ?Directory)
-    
-    ;7. No Janino code execution restrictions
-    (not (has-code-execution-restriction ?Application ?Logback))
-    ; No config integrity check
-    (not (has-integrity-check ?Application ?Logback ?ConfigFile))
-    (not (has-signature-verification ?Application ?Logback ?ConfigFile))
-
-    ;8. Controllable env variables (allows specifying the configuration file path via environment variables.)
-    (has-controllable-env-vars ?Application)
-  )
-  :effect (and (exposed-attack-surface ?Application CVE_2024_12798)
-               (exploit-by CVE_2024_12798 change-to-malicious-logback-config)
-               (increase (total-cost) 53)))
-;@end vulnerability expose@;;
-
-;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38286
- :parameters (?Application - application ?Tomcat - tomcat ?TLSConnector - tls-connector)
- :precondition (and
-     ;1. system deploys Tomcat instance with TLS connector 
-     (has-tomcat ?Application ?Tomcat)
-     (tomcat-has-tls-connector ?Application ?Tomcat ?TLSConnector)
-    
-     ;2. vulnerable tomcat version 
-      (or 
-        ; Tomcat 11.0.0-M1 to M20 
-        (and 
-          (>= (version ?Tomcat) 11000000001) 
-          (<= (version ?Tomcat) 11000000020)
-        )
-        ; Tomcat 10.1.0-M1 t 10.1.24
-        (and 
-          (>= (version ?Tomcat) 10001000001) 
-          (<= (version ?Tomcat) 10001024000)
-        )
-        ; Tomcat 9.0.13 to 9.0.89
-        (and 
-          (>= (version ?Tomcat) 9000013000) 
-          (<= (version ?Tomcat) 9000089000)
-        )
-      )
-
-     ;3. system TSL supports renegotiation; TLS renegotiation is not disabled (renegotiation allowed by default)
-     (tomcat-tls-renegotiation-enabled ?Application ?Tomcat ?TLSConnector)
-     
-     ;4. system's memory is limited
-     (has-memory-limitation ?Application ?Tomcat)
-    
-    
-     ;5. No memory protection mechanisms (e.g., no OOM Killer)
-     (not (has-memory-protection-mechanisms ?Application))
-
-     ;6.  No connection rate limiting: maxConnections or firewall rules not configured
-     (not (max-connection-restriction ?Application))
-     (not (firewall-connection-restriction ?Application))
-     
-     ;7. No abnormal traffic detection (no IDS/IPS/WAF monitoring)
-     (not (IDS-monitoring ?Application))
-     (not (IPS-monitoring ?Application))
-     (not (WAF-monitoring ?Application)))  
-
-  :effect (and (exposed-attack-surface ?Application CVE_2024_38286)
-          (exploit-by CVE_2024_38286 abuse-tls-handshake)
-          (vulnerable-tomcat ?Tomcat)
-          (increase (total-cost) 29))) 
-;@end vulnerability expose@;;
-
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-12798  
+;  :parameters (?Application - application ?Logback - logback ?JaninoLib - java-library ?User - user ?Directory - path ?ConfigFile - logback-config) ;;?application: the target application
+;  :precondition (and
+;
+;    ;; ==== basic environment compositions ====
+;   ; 1. The application deploys logback
+;    ;(has-software ?Application ?Logback) 
+;    ;(logback-core ?Logback) 
+;    (has-logback ?Application ?Logback)
+;     
+;
+;    ; 2. Vulnerable Logback version (version ≤ 1.3.14 or 1.4.0 – 1.5.12)
+;    (or
+;      ;; version ≤ 1.3.14 
+;      
+;      (<= (version ?Logback) 1003014000)       ;; 1.4.0 ≤ version ≤ 1.5.12
+;      (and 
+;        (>= (version ?Logback) 1004000000)  
+;        (<= (version ?Logback) 1005012000)  
+;      )
+;    )
+;
+;    ;3. JaninoEventEvaluator enabled
+;     ;; two definition method
+;    ;; aim: show the meaning that system enables JaninoEventEvaluator extension; 
+;    ;; 1. respectively define object for the two entities
+;    ;(feature ?Janinoevaluator)  
+;    ;(has-feature ?Logback ?Janinoevaluator)  
+;    ;(feature-enabled ?Logback ?Janinoevaluator)
+;    ;; 2. directly show the characteristics of application
+;    (janino-evaluator-enabled ?Application ?Logback)
+;    
+;
+;    ;4. Janino library 
+;    (has-library ?Application ?JaninoLib)
+;     (janino-library ?JaninoLib)
+;    ;(has-dependency ?Application ?JaninoLib)
+;
+;    ;5. Dynamic config loading enabled
+;    (dynamic-config-loading-enabled ?Application ?Logback)
+;
+;    ;6. User has write permission on configuration directory or env variables
+;    (has-config-dir ?Application ?Directory)
+;    (has-access ?User ?Directory)
+;    (has-write-access ?User ?Directory)
+;    
+;    ;7. No Janino code execution restrictions
+;    (not (has-code-execution-restriction ?Application ?Logback))
+;    ; No config integrity check
+;    (not (has-integrity-check ?Application ?Logback ?ConfigFile))
+;    (not (has-signature-verification ?Application ?Logback ?ConfigFile))
+;
+;    ;8. Controllable env variables (allows specifying the configuration file path via environment variables.)
+;    (has-controllable-env-vars ?Application)
+;  )
+;  :effect (and (exposed-attack-surface ?Application CVE_2024_12798)
+;               (exploit-by CVE_2024_12798 change-to-malicious-logback-config)
+;               (increase (total-cost) 53)))
+;;@end vulnerability expose@;;
 
 ;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-22243   
-    :parameters (?Application - application ?SpringFramework - spring-framework ?Endpoint - endpoint ?Parser - url-parser)
-    :precondition (and 
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38286
+; :parameters (?Application - application ?Tomcat - tomcat ?TLSConnector - tls-connector)
+; :precondition (and
+;     ;1. system deploys Tomcat instance with TLS connector 
+;     (has-tomcat ?Application ?Tomcat)
+;     (tomcat-has-tls-connector ?Application ?Tomcat ?TLSConnector)
+;    
+;     ;2. vulnerable tomcat version 
+;      (or 
+;        ; Tomcat 11.0.0-M1 to M20 
+;        (and 
+;          (>= (version ?Tomcat) 11000000001) 
+;          (<= (version ?Tomcat) 11000000020)
+;        )
+;        ; Tomcat 10.1.0-M1 t 10.1.24
+;        (and 
+;          (>= (version ?Tomcat) 10001000001) 
+;          (<= (version ?Tomcat) 10001024000)
+;        )
+;        ; Tomcat 9.0.13 to 9.0.89
+;        (and 
+;          (>= (version ?Tomcat) 9000013000) 
+;          (<= (version ?Tomcat) 9000089000)
+;        )
+;      )
+;
+;     ;3. system TSL supports renegotiation; TLS renegotiation is not disabled (renegotiation allowed by default)
+;     (tomcat-tls-renegotiation-enabled ?Application ?Tomcat ?TLSConnector)
+;     
+;     ;4. system's memory is limited
+;     (has-memory-limitation ?Application ?Tomcat)
+;    
+;    
+;     ;5. No memory protection mechanisms (e.g., no OOM Killer)
+;     (not (has-memory-protection-mechanisms ?Application))
+;
+;     ;6.  No connection rate limiting: maxConnections or firewall rules not configured
+;     (not (max-connection-restriction ?Application))
+;     (not (firewall-connection-restriction ?Application))
+;     
+;     ;7. No abnormal traffic detection (no IDS/IPS/WAF monitoring)
+;     (not (IDS-monitoring ?Application))
+;     (not (IPS-monitoring ?Application))
+;     (not (WAF-monitoring ?Application)))  
+;
+;  :effect (and (exposed-attack-surface ?Application CVE_2024_38286)
+;          (exploit-by CVE_2024_38286 abuse-tls-handshake)
+;          (vulnerable-tomcat ?Tomcat)
+;          (increase (total-cost) 29))) 
+;;@end vulnerability expose@;;
 
-      ; 1. Application uses a vulnerable version of Spring Framework
-      (has-dependency-on-spring-framework ?Application ?SpringFramework)
-      (or 
-         ; 5.3.x before 5.3.31 (5003000000 + 31000 = 5003031000)
-         (and (>= (version ?SpringFramework) 5003000000) (< (version ?SpringFramework) 5003031000))
-         ; 6.0.x before 6.0.16 (6000000000 + 16000 = 6000016000)
-         (and (>= (version ?SpringFramework) 6000000000) (< (version ?SpringFramework) 6000016000))
-         ; 6.1.x before 6.1.13 (6001000000 + 13000 = 6001013000)
-         (and (>= (version ?SpringFramework) 6001000000) (< (version ?SpringFramework) 6001013000))
-       )
 
-      ;1. Application depends on vulnerable UriComponentsBuilder (e.g., specific versions of Spring Framework) 
-       (has-dependency-on-vulnerable-paser ?Application ?Parser)
-
-       
-      ;2. Endpoints accept external-controlled URL parameters (e.g., /redirect?url=...)
-       (has-external-settingable-endpoint ?Application ?Endpoint)
-
-      ;3. Application supports HTTP url redirects
-     (url-redirect-enabled ?Application)
-
-      ;4. No strict validation on protocol, path, or port in received URLs
-      (not (url-endpoint-setting-restriction ?Application ?Endpoint))
-     ;(not (url-endpoint-protocol-restriction ?Application ?Endpoint))
-     ;(not (url-endpoint-path-restriction ?Application ?Endpoint))
-     ;(not (url-endpoint-points-restriction ?Application ?Endpoint))
-      ;2. Application can access internal or external network resources 
-      (external-resource-accessable ?Application)
-      (internal-resource-accessable ?Application)
-
-      ;5. Host validation flaws: uses blacklist instead of whitelist; fails to handle URL encoding or special characters (e.g., @, %0d%0a); lacks canonical URL parsing
-      (vulnerable-host-validation ?Application)
-      ;(depend-blacklist-host-validation ?Application)
-      ;(not (canonicalization-parse-url ?Application))
-      
-      ;6. no anti-open redirect protections (e.g., Spring Security's RedirectValidator not enabled)
-      (not (anti-redirect-protection ?Application))
-
-     ;7. WAF/IPS does not block malicious redirect attempts
-     (not (WAF-malicious-request-bloack ?Application))
-     (not (IPS-malicious-request-bloack ?Application)) )
-    :effect (and (exposed-attack-surface ?Application CVE_2024_22243)
-                (exploit-by CVE_2024_22243 crafts-redirect-url)
-                (exploit-by CVE_2024_22243 crafts-redirect-url-to-phishing-site)
-                (exploit-by CVE_2024_22243 build-phishingsite)
-                (vulnerable-spring-framework ?SpringFramework)
-                (increase (total-cost) 21)))
-;@end vulnerability expose@;;  
+;;@start vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-22243   
+;    :parameters (?Application - application ?SpringFramework - spring-framework ?Endpoint - endpoint ?Parser - url-parser)
+;    :precondition (and 
+;
+;      ; 1. Application uses a vulnerable version of Spring Framework
+;      (has-dependency-on-spring-framework ?Application ?SpringFramework)
+;      (or 
+;         ; 5.3.x before 5.3.31 (5003000000 + 31000 = 5003031000)
+;         (and (>= (version ?SpringFramework) 5003000000) (< (version ?SpringFramework) 5003031000))
+;         ; 6.0.x before 6.0.16 (6000000000 + 16000 = 6000016000)
+;         (and (>= (version ?SpringFramework) 6000000000) (< (version ?SpringFramework) 6000016000))
+;         ; 6.1.x before 6.1.13 (6001000000 + 13000 = 6001013000)
+;         (and (>= (version ?SpringFramework) 6001000000) (< (version ?SpringFramework) 6001013000))
+;       )
+;
+;      ;1. Application depends on vulnerable UriComponentsBuilder (e.g., specific versions of Spring Framework) 
+;       (has-dependency-on-vulnerable-paser ?Application ?Parser)
+;
+;       
+;      ;2. Endpoints accept external-controlled URL parameters (e.g., /redirect?url=...)
+;       (has-external-settingable-endpoint ?Application ?Endpoint)
+;
+;      ;3. Application supports HTTP url redirects
+;     (url-redirect-enabled ?Application)
+;
+;      ;4. No strict validation on protocol, path, or port in received URLs
+;      (not (url-endpoint-setting-restriction ?Application ?Endpoint))
+;     ;(not (url-endpoint-protocol-restriction ?Application ?Endpoint))
+;     ;(not (url-endpoint-path-restriction ?Application ?Endpoint))
+;     ;(not (url-endpoint-points-restriction ?Application ?Endpoint))
+;      ;2. Application can access internal or external network resources 
+;      (external-resource-accessable ?Application)
+;      (internal-resource-accessable ?Application)
+;
+;      ;5. Host validation flaws: uses blacklist instead of whitelist; fails to handle URL encoding or special characters (e.g., @, %0d%0a); lacks canonical URL parsing
+;      (vulnerable-host-validation ?Application)
+;      ;(depend-blacklist-host-validation ?Application)
+;      ;(not (canonicalization-parse-url ?Application))
+;      
+;      ;6. no anti-open redirect protections (e.g., Spring Security's RedirectValidator not enabled)
+;      (not (anti-redirect-protection ?Application))
+;
+;     ;7. WAF/IPS does not block malicious redirect attempts
+;     (not (WAF-malicious-request-bloack ?Application))
+;     (not (IPS-malicious-request-bloack ?Application)) )
+;    :effect (and (exposed-attack-surface ?Application CVE_2024_22243)
+;                (exploit-by CVE_2024_22243 crafts-redirect-url)
+;                (exploit-by CVE_2024_22243 crafts-redirect-url-to-phishing-site)
+;                (exploit-by CVE_2024_22243 build-phishingsite)
+;                (vulnerable-spring-framework ?SpringFramework)
+;                (increase (total-cost) 21)))
+;;@end vulnerability expose@;;  
 
 
 ;;@start vulnerability expose@;;
@@ -2238,52 +2238,52 @@
 
 
 ;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-47072
- :parameters (?Application - application ?XStreamLibrary - java-library ?BinaryDriver - binary-stream-driver ?APIEndpoint - api-endpoint)
- :precondition (and
-     ;1. Application uses vulnerable XStream version (1.4.20 or earlier)
-     (has-library ?Application ?XStreamLibrary)
-     (xstream-library ?XStreamLibrary)
-     (<= (version ?XStreamLibrary) 1004020000) ; version <= 1.4.20
-     
-     ;2. Application configures XStream to use BinaryStreamDriver
-     (has-binary-stream-driver ?Application ?BinaryDriver)
-     (binary-stream-driver ?BinaryDriver)
-     (xstream-uses-driver ?XStreamLibrary ?BinaryDriver)
-    
-     ;3. Application accepts and processes attacker-controlled binary input streams
-     (has-api-endpoint ?Application ?APIEndpoint)
-     (accepts-binary-input ?Application ?APIEndpoint)
-     (processes-untrusted-input ?Application ?APIEndpoint)
-     
-     ;4. Application lacks robust input validation or integrity checks
-     (not (api-endpoint-has-input-validation ?Application ?APIEndpoint))
-     (not (api-endpoint-has-integrity-checks ?Application ?APIEndpoint))
-     
-     ;5. Application does not implement StackOverflowError exception handling
-     (not (has-stackoverflow-exception-handling ?Application))
-     
-     ;6. Application's runtime permits deeply nested structures without safeguards
-     (not (has-defense-in-depth-safeguards ?Application))
-     (not (has-recursive-structure-limits ?Application))
-     
-     ;7. Application lacks effective JVM stack size restrictions
-     (not (has-jvm-stack-size-restrictions ?Application))
-     (not (has-sufficient-stack-limits ?Application))
-     
-     ;8. Application lacks limits on input stream size or complexity
-     (not (has-input-stream-size-limits ?Application))
-     (not (has-structural-complexity-limits ?Application))
-     
-     ;9. Application lacks compensating security mechanisms
-     (not (has-sandboxing ?Application))
-     (not (has-deserialization-whitelist ?Application))
-     (not (has-waf-binary-filtering ?Application)))
- :effect (and (exposed-attack-surface ?Application CVE_2024_47072)
-              (vulnerable-xstream-binary-driver ?XStreamLibrary)
-              (exploit-by CVE_2024_47072 craft-malicious-binary-payload) 
-              (increase (total-cost) 29)))
-;@end vulnerability expose@;; 
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-47072
+; :parameters (?Application - application ?XStreamLibrary - java-library ?BinaryDriver - binary-stream-driver ?APIEndpoint - api-endpoint)
+; :precondition (and
+;     ;1. Application uses vulnerable XStream version (1.4.20 or earlier)
+;     (has-library ?Application ?XStreamLibrary)
+;     (xstream-library ?XStreamLibrary)
+;     (<= (version ?XStreamLibrary) 1004020000) ; version <= 1.4.20
+;     
+;     ;2. Application configures XStream to use BinaryStreamDriver
+;     (has-binary-stream-driver ?Application ?BinaryDriver)
+;     (binary-stream-driver ?BinaryDriver)
+;     (xstream-uses-driver ?XStreamLibrary ?BinaryDriver)
+;    
+;     ;3. Application accepts and processes attacker-controlled binary input streams
+;     (has-api-endpoint ?Application ?APIEndpoint)
+;     (accepts-binary-input ?Application ?APIEndpoint)
+;     (processes-untrusted-input ?Application ?APIEndpoint)
+;     
+;     ;4. Application lacks robust input validation or integrity checks
+;     (not (api-endpoint-has-input-validation ?Application ?APIEndpoint))
+;     (not (api-endpoint-has-integrity-checks ?Application ?APIEndpoint))
+;     
+;     ;5. Application does not implement StackOverflowError exception handling
+;     (not (has-stackoverflow-exception-handling ?Application))
+;     
+;     ;6. Application's runtime permits deeply nested structures without safeguards
+;     (not (has-defense-in-depth-safeguards ?Application))
+;     (not (has-recursive-structure-limits ?Application))
+;     
+;     ;7. Application lacks effective JVM stack size restrictions
+;     (not (has-jvm-stack-size-restrictions ?Application))
+;     (not (has-sufficient-stack-limits ?Application))
+;     
+;     ;8. Application lacks limits on input stream size or complexity
+;     (not (has-input-stream-size-limits ?Application))
+;     (not (has-structural-complexity-limits ?Application))
+;     
+;     ;9. Application lacks compensating security mechanisms
+;     (not (has-sandboxing ?Application))
+;     (not (has-deserialization-whitelist ?Application))
+;     (not (has-waf-binary-filtering ?Application)))
+; :effect (and (exposed-attack-surface ?Application CVE_2024_47072)
+;              (vulnerable-xstream-binary-driver ?XStreamLibrary)
+;              (exploit-by CVE_2024_47072 craft-malicious-binary-payload) 
+;              (increase (total-cost) 29)))
+;;@end vulnerability expose@;; 
 
 ;;@start vulnerability expose@;;
 ;(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-33202

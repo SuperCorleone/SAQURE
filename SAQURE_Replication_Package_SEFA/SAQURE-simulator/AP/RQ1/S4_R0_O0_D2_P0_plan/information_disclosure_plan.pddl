@@ -7,7 +7,6 @@ problem 'AEDI-INFORMATION_DISCLOSURE' defined
  ... done.
 
 
-translating negated cond for predicate SCRIPT-EXECUTION-PROMPT-ENABLED
 
 ff: search configuration is A*epsilon with weight 1.
 Metric is ((1.00*[RF0](TOTAL-COST)) - () + 0.00)
@@ -25,7 +24,7 @@ Advancing to goal distance:    9
                                0
 
 ff: found legal plan as follows
-step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2025-24813 SEFA TOMCAT_SEFA DEFAULT-SERVLET_SEFA SENSITIVE-FILE1_SEFA PUBLIC-DIRECTORY_SEFA SENSITIVE-DIRECTORY_SEFA
+step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2025-24813 SEFA TOMCAT_SEFA DEFAULT-SERVLET_SEFA SENSITIVE-SYSTEM-FILE_SEFA PUBLIC-DIRECTORY_SEFA SENSITIVE-DIRECTORY_SEFA
         1: ATTACKER-CRAFTS-HTTP-GET-REQUEST-WITH-INTERNAL-DOT-PATH-MANIPULATION HTTP-GET-REQUEST1 SENSITIVE-FILE2_SEFA PUBLIC-DIRECTORY_SEFA SENSITIVE-DIRECTORY_SEFA SEFA CVE_2025_24813
         2: ATTACKER-SENDS-MALICIOUS-HTTP-GET-REQUEST-TO-TOMCAT HTTP-GET-REQUEST1 SEFA TOMCAT_SEFA CVE_2025_24813
         3: APPLICATION-RECEIVES-HTTP-GET-REQUEST HTTP-GET-REQUEST1 SEFA
@@ -36,11 +35,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2025-24813 SEFA 
         8: ATTACKER-RECEIVES-SENSITIVE-INFORMATION SEFA SENSITIVE-FILE-CONTENT2 CVE_2025_24813
 plan cost: 10.000000
 
-time spent:    0.07 seconds instantiating 6796 easy, 104 hard action templates
-               0.00 seconds reachability analysis, yielding 478 facts and 1335 actions
-               0.00 seconds creating final representation with 475 relevant facts, 1 relevant fluents
+time spent:    0.00 seconds instantiating 218 easy, 3 hard action templates
+               0.00 seconds reachability analysis, yielding 23 facts and 11 actions
+               0.00 seconds creating final representation with 23 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.00 seconds searching, evaluating 176 states, to a max depth of 0
-               0.07 seconds total time
+               0.00 seconds searching, evaluating 12 states, to a max depth of 0
+               0.00 seconds total time
 

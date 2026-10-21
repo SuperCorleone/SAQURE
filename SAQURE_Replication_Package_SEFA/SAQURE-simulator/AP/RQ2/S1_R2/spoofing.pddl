@@ -7,14 +7,13 @@ problem 'AEDI-SPOOFING' defined
  ... done.
 
 
-translating negated cond for predicate SCRIPT-EXECUTION-PROMPT-ENABLED
 
 ff: search configuration is A*epsilon with weight 1.
 Metric is ((1.00*[RF0](TOTAL-COST)) - () + 0.00)
 COST MINIMIZATION DONE (WITH cost-minimizing relaxed plans).
 
-Advancing to goal distance:   12
-                              10
+Advancing to goal distance:   11
+                               9
                                8
                                7
                                6
@@ -26,8 +25,8 @@ Advancing to goal distance:   12
                                0
 
 ff: found legal plan as follows
-step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2025-22228 SEFA SPRING-SECURITY_SEFA PASSWORD_ENCODER_SEFA
-        1: USER-SETS-WEAK-PASSWORD-LONGER-THAN-72-CHARS USER1 SEFA USER1-PASSWORD-HASH_SEFA
+step    0: USER-SETS-WEAK-PASSWORD-LONGER-THAN-72-CHARS USER1 SEFA USER1-PASSWORD-HASH_SEFA
+        1: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2025-22228 SEFA SPRING-SECURITY_SEFA PASSWORD_ENCODER_SEFA
         2: APPLICATION-HASHES-AND-STORES-FIRST-72-CHARS-ONLY USER1 SEFA USER1-PASSWORD-HASH_SEFA USER1-PASSWORD-HASH_SEFA PASSWORD_ENCODER_SEFA CVE_2025_22228
         3: ATTACKER-CRAFTS-ONLINE-BRUTE-FORCE-SCRIPT ONLINE-BRUTE-FORCE-SCRIPT1 SEFA USER1-PASSWORD-HASH_SEFA CVE_2025_22228
         4: ATTACKER-SENDS-LARGE-AMOUNT-AUTOMATED-LOGIN-REQUESTS-VIA-SCRIPT ONLINE-BRUTE-FORCE-SCRIPT1 SEFA LOGIN-REQUEST1_SEFA USER1-PASSWORD-HASH_SEFA
@@ -38,11 +37,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2025-22228 SEFA 
         9: APPLICATION-AUTHENTICATES-ATTACKER-SUCCESSFULLY USER1 SEFA USER1-PASSWORD-HASH_SEFA USER1-PASSWORD-HASH_SEFA CVE_2025_22228
 plan cost: 146.000000
 
-time spent:    0.07 seconds instantiating 6765 easy, 99 hard action templates
-               0.00 seconds reachability analysis, yielding 315 facts and 567 actions
-               0.00 seconds creating final representation with 312 relevant facts, 1 relevant fluents
+time spent:    0.00 seconds instantiating 117 easy, 1 hard action templates
+               0.00 seconds reachability analysis, yielding 50 facts and 18 actions
+               0.00 seconds creating final representation with 49 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.00 seconds searching, evaluating 116 states, to a max depth of 0
-               0.07 seconds total time
+               0.00 seconds searching, evaluating 28 states, to a max depth of 0
+               0.00 seconds total time
 

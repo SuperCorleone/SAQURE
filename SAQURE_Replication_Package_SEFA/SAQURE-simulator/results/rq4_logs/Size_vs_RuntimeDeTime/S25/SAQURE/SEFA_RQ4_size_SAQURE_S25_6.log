@@ -1,4 +1,3 @@
-Picked up JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -8,41 +7,18 @@ Picked up JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::               (v2.7.17)
 
-2026-10-01 11:49:24.045  INFO 6284 --- [           main] saqure.SaqureSimulatorApplication        : Starting SaqureSimulatorApplication using Java 17.0.17 on Mac.fritz.box with PID 6284 (/Users/adukopun/Documents/CuiCui/SAQURE_MOD/SAQURE/SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/SAQURE_MOD/SAQURE/SAQURE_Replication_Package_SEFA)
-2026-10-01 11:49:24.046  INFO 6284 --- [           main] saqure.SaqureSimulatorApplication        : No active profile set, falling back to 1 default profile: "default"
-2026-10-01 11:49:24.261  INFO 6284 --- [           main] saqure.SaqureSimulatorApplication        : Started SaqureSimulatorApplication in 0.362 seconds (JVM running for 0.536)
-2026-10-01 11:49:24.262  WARN 6284 --- [           main] saqure.SaqureSimulatorApplication        : Unable to read parameter file, using default parameter 1
-2026-10-01 11:49:24.263  INFO 6284 --- [           main] saqure.utils.SizeAxisExperiment          : SEFA size axis: 25 replicas -> 100 microservices, 100 core structural states, approach SAQURE
-2026-10-01 11:49:24.531  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_1: 13.4ms
-2026-10-01 11:49:24.606  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_2: 13.1ms
-2026-10-01 11:49:24.680  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_3: 12.6ms
-2026-10-01 11:49:24.754  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_4: 12.9ms
-2026-10-01 11:49:24.828  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_5: 12.8ms
-2026-10-01 11:49:24.903  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_6: 13.0ms
-2026-10-01 11:49:24.977  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_7: 12.7ms
-2026-10-01 11:49:25.051  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_8: 12.9ms
-2026-10-01 11:49:25.125  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_9: 12.8ms
-2026-10-01 11:49:25.201  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_10: 13.0ms
-2026-10-01 11:49:25.276  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_11: 13.1ms
-2026-10-01 11:49:25.350  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_12: 13.0ms
-2026-10-01 11:49:25.424  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_13: 12.9ms
-2026-10-01 11:49:25.498  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_14: 12.6ms
-2026-10-01 11:49:25.571  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_15: 13.1ms
-2026-10-01 11:49:25.645  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_16: 12.8ms
-2026-10-01 11:49:25.719  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_17: 12.8ms
-2026-10-01 11:49:25.793  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_18: 12.9ms
-2026-10-01 11:49:25.868  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_19: 12.8ms
-2026-10-01 11:49:25.942  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_20: 12.8ms
-2026-10-01 11:49:26.016  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_21: 12.8ms
-2026-10-01 11:49:26.089  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_22: 12.7ms
-2026-10-01 11:49:26.162  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_23: 12.8ms
-2026-10-01 11:49:26.236  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_24: 12.8ms
-2026-10-01 11:49:26.309  INFO 6284 --- [           main] saqure.Analyzer.VulnAxisAPProfiler       : Risk assessment time cost for replica_25: 12.9ms
-2026-10-01 11:49:26.315  INFO 6284 --- [           main] saqure.utils.ServiceGraphUtils           : Current graph: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"AverageResponseTime":0.5,"Availability":0.999,"Vulnerability":0.1}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.5,"Availability":0.9,"Vulnerability":0.1}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"AverageResponseTime":0.5,"Availability":0.999,"Vulnerability":0.1}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.5,"Availability":0.9,"Vulnerability":0.1}},"weights":{"AverageResponseTime":0.3,"Availability":0.3,"Vulnerability":0.4}}
-2026-10-01 11:49:26.321  INFO 6284 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 6.092ms
-2026-10-01 11:49:27.095  INFO 6284 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 1.0
-2026-10-01 11:49:27.100  INFO 6284 --- [           main] saqure.utils.ServiceGraphUtils           : Graph for option Goal: Availability - Change RESTAURANT-SERVICE implementation from restaurant-1-service to restaurant-3-service. Changing implementation: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-3-service","values":{"AverageResponseTime":0.5,"Availability":0.9994999999999999,"Vulnerability":0.9}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.5,"Availability":0.9,"Vulnerability":0.1}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"AverageResponseTime":0.5,"Availability":0.999,"Vulnerability":0.1}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.5,"Availability":0.9,"Vulnerability":0.1}},"weights":{"AverageResponseTime":0.3,"Availability":0.3,"Vulnerability":0.4}}
-2026-10-01 11:49:27.102  INFO 6284 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 1.752ms
-2026-10-01 11:49:27.891  INFO 6284 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 1.4943122864901381
-2026-10-01 11:49:27.892  INFO 6284 --- [           main] saqure.utils.ServiceGraphUtils           : No better option found
-2026-10-01 11:49:27.892  INFO 6284 --- [           main] saqure.utils.SizeAxisExperiment          : Runtime decision time: 1689ms
+2026-10-07 15:42:56.234  INFO 24585 --- [           main] saqure.SaqureSimulatorApplication        : Starting SaqureSimulatorApplication using Java 17.0.17 on wlan-cl-kit-cs-172-17-16-227.scc.kit.edu with PID 24585 (/Users/adukopun/Documents/CuiCui/SAQURE_MOD/SAQURE/SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/SAQURE_MOD/SAQURE/SAQURE_Replication_Package_SEFA)
+2026-10-07 15:42:56.235  INFO 24585 --- [           main] saqure.SaqureSimulatorApplication        : No active profile set, falling back to 1 default profile: "default"
+2026-10-07 15:42:56.454  INFO 24585 --- [           main] saqure.SaqureSimulatorApplication        : Started SaqureSimulatorApplication in 0.367 seconds (JVM running for 0.534)
+2026-10-07 15:42:56.455  WARN 24585 --- [           main] saqure.SaqureSimulatorApplication        : Unable to read parameter file, using default parameter 1
+2026-10-07 15:42:56.456  INFO 24585 --- [           main] saqure.utils.SizeAxisExperiment          : SEFA size axis: 25 replicas -> 100 microservices, 100 core structural states, approach SAQURE
+2026-10-07 15:42:56.682  INFO 24585 --- [           main] saqure.utils.ServiceGraphUtils           : Current graph: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-1-service","values":{"Vulnerability":0.3152461475521616,"AverageResponseTime":0.5,"Availability":0.999}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"Vulnerability":0.3152461475521616,"AverageResponseTime":0.5,"Availability":0.9}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"Vulnerability":0.3152461475521616,"AverageResponseTime":0.5,"Availability":0.999}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"Vulnerability":0.3152461475521616,"AverageResponseTime":0.5,"Availability":0.9}},"weights":{"Vulnerability":0.4,"AverageResponseTime":0.3,"Availability":0.3}}
+2026-10-07 15:42:56.689  INFO 24585 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 6.719ms
+2026-10-07 15:42:57.445  INFO 24585 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 87.38676689840415
+2026-10-07 15:42:57.447  INFO 24585 --- [           main] saqure.Planner.PrismModelChecker         : Per-invocation cost: 1.0 (expected service invocations: 87.38676689840415)
+2026-10-07 15:42:57.451  INFO 24585 --- [           main] saqure.utils.ServiceGraphUtils           : Graph for option Goal: Availability - Change RESTAURANT-SERVICE implementation from restaurant-1-service to restaurant-3-service. Changing implementation: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-3-service","values":{"Vulnerability":0.9,"AverageResponseTime":0.5,"Availability":0.9994999999999999}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"Vulnerability":0.3152461475521616,"AverageResponseTime":0.5,"Availability":0.9}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"Vulnerability":0.3152461475521616,"AverageResponseTime":0.5,"Availability":0.999}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"Vulnerability":0.3152461475521616,"AverageResponseTime":0.5,"Availability":0.9}},"weights":{"Vulnerability":0.4,"AverageResponseTime":0.3,"Availability":0.3}}
+2026-10-07 15:42:57.453  INFO 24585 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 1.797ms
+2026-10-07 15:42:58.242  INFO 24585 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 108.40898967460426
+2026-10-07 15:42:58.243  INFO 24585 --- [           main] saqure.Planner.PrismModelChecker         : Per-invocation cost: 1.2487211423419993 (expected service invocations: 86.81601199710707)
+2026-10-07 15:42:58.243  INFO 24585 --- [           main] saqure.utils.ServiceGraphUtils           : No better option found
+2026-10-07 15:42:58.243  INFO 24585 --- [           main] saqure.utils.SizeAxisExperiment          : Runtime decision time: 1696ms

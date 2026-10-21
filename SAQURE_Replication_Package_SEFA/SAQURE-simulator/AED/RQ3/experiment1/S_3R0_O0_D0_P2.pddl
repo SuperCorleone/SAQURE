@@ -1307,56 +1307,56 @@
 ;;@end vulnerability expose@;;
 
 ;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38286
- :parameters (?Application - application ?Tomcat - tomcat ?TLSConnector - tls-connector)
- :precondition (and
-     ;1. system deploys Tomcat instance with TLS connector 
-     (has-tomcat ?Application ?Tomcat)
-     (tomcat-has-tls-connector ?Application ?Tomcat ?TLSConnector)
-    
-     ;2. vulnerable tomcat version 
-      (or 
-        ; Tomcat 11.0.0-M1 to M20 
-        (and 
-          (>= (version ?Tomcat) 11000000001) 
-          (<= (version ?Tomcat) 11000000020)
-        )
-        ; Tomcat 10.1.0-M1 t 10.1.24
-        (and 
-          (>= (version ?Tomcat) 10001000001) 
-          (<= (version ?Tomcat) 10001024000)
-        )
-        ; Tomcat 9.0.13 to 9.0.89
-        (and 
-          (>= (version ?Tomcat) 9000013000) 
-          (<= (version ?Tomcat) 9000089000)
-        )
-      )
-
-     ;3. system TSL supports renegotiation; TLS renegotiation is not disabled (renegotiation allowed by default)
-     (tomcat-tls-renegotiation-enabled ?Application ?Tomcat ?TLSConnector)
-     
-     ;4. system's memory is limited
-     (has-memory-limitation ?Application ?Tomcat)
-    
-    
-     ;5. No memory protection mechanisms (e.g., no OOM Killer)
-     (not (has-memory-protection-mechanisms ?Application))
-
-     ;6.  No connection rate limiting: maxConnections or firewall rules not configured
-     (not (max-connection-restriction ?Application))
-     (not (firewall-connection-restriction ?Application))
-     
-     ;7. No abnormal traffic detection (no IDS/IPS/WAF monitoring)
-     (not (IDS-monitoring ?Application))
-     (not (IPS-monitoring ?Application))
-     (not (WAF-monitoring ?Application)))  
-
-  :effect (and (exposed-attack-surface ?Application CVE_2024_38286)
-          (exploit-by CVE_2024_38286 abuse-tls-handshake)
-          (vulnerable-tomcat ?Tomcat)
-          (increase (total-cost) 29))) 
-;@end vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38286
+; :parameters (?Application - application ?Tomcat - tomcat ?TLSConnector - tls-connector)
+; :precondition (and
+;     ;1. system deploys Tomcat instance with TLS connector 
+;     (has-tomcat ?Application ?Tomcat)
+;     (tomcat-has-tls-connector ?Application ?Tomcat ?TLSConnector)
+;    
+;     ;2. vulnerable tomcat version 
+;      (or 
+;        ; Tomcat 11.0.0-M1 to M20 
+;        (and 
+;          (>= (version ?Tomcat) 11000000001) 
+;          (<= (version ?Tomcat) 11000000020)
+;        )
+;        ; Tomcat 10.1.0-M1 t 10.1.24
+;        (and 
+;          (>= (version ?Tomcat) 10001000001) 
+;          (<= (version ?Tomcat) 10001024000)
+;        )
+;        ; Tomcat 9.0.13 to 9.0.89
+;        (and 
+;          (>= (version ?Tomcat) 9000013000) 
+;          (<= (version ?Tomcat) 9000089000)
+;        )
+;      )
+;
+;     ;3. system TSL supports renegotiation; TLS renegotiation is not disabled (renegotiation allowed by default)
+;     (tomcat-tls-renegotiation-enabled ?Application ?Tomcat ?TLSConnector)
+;     
+;     ;4. system's memory is limited
+;     (has-memory-limitation ?Application ?Tomcat)
+;    
+;    
+;     ;5. No memory protection mechanisms (e.g., no OOM Killer)
+;     (not (has-memory-protection-mechanisms ?Application))
+;
+;     ;6.  No connection rate limiting: maxConnections or firewall rules not configured
+;     (not (max-connection-restriction ?Application))
+;     (not (firewall-connection-restriction ?Application))
+;     
+;     ;7. No abnormal traffic detection (no IDS/IPS/WAF monitoring)
+;     (not (IDS-monitoring ?Application))
+;     (not (IPS-monitoring ?Application))
+;     (not (WAF-monitoring ?Application)))  
+;
+;  :effect (and (exposed-attack-surface ?Application CVE_2024_38286)
+;          (exploit-by CVE_2024_38286 abuse-tls-handshake)
+;          (vulnerable-tomcat ?Tomcat)
+;          (increase (total-cost) 29))) 
+;;@end vulnerability expose@;;
 
 
 ;;@start vulnerability expose@;;

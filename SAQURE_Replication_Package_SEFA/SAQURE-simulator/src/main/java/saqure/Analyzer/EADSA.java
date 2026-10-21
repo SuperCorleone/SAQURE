@@ -180,6 +180,11 @@ public class EADSA {
         }
     }
 
+    /** Whether risk assessment runs in parallel; {@link ModularEADSA} follows the same setting. */
+    public static boolean isParallel() {
+        return computationStrategy instanceof ParallelComputation;
+    }
+
     public static class ParallelComputation implements ScenarioComputation{
         private final ThreadPoolExecutor executor;
         public ParallelComputation(ThreadPoolExecutor executor){this.executor = executor;}

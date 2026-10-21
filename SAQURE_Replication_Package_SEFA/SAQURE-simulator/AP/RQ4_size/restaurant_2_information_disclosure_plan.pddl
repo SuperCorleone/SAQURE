@@ -7,14 +7,13 @@ problem 'AEDI-INFORMATION_DISCLOSURE' defined
  ... done.
 
 
-translating negated cond for predicate SCRIPT-EXECUTION-PROMPT-ENABLED
 
 ff: search configuration is A*epsilon with weight 1.
 Metric is ((1.00*[RF0](TOTAL-COST)) - () + 0.00)
 COST MINIMIZATION DONE (WITH cost-minimizing relaxed plans).
 
-Advancing to goal distance:   13
-                              11
+Advancing to goal distance:   11
+                              10
                                9
                                8
                                7
@@ -40,11 +39,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2024-38816 SEFA 
        10: ATTACKER-RECEIVES-SENSITIVE-INFORMATION SEFA SENSITIVE-FILE-CONTENT1 CVE_2024_38816
 plan cost: 39.000000
 
-time spent:    0.08 seconds instantiating 6749 easy, 95 hard action templates
-               0.00 seconds reachability analysis, yielding 137 facts and 189 actions
-               0.00 seconds creating final representation with 133 relevant facts, 1 relevant fluents
+time spent:    0.00 seconds instantiating 392 easy, 1 hard action templates
+               0.00 seconds reachability analysis, yielding 27 facts and 13 actions
+               0.00 seconds creating final representation with 27 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.00 seconds searching, evaluating 143 states, to a max depth of 0
-               0.08 seconds total time
+               0.00 seconds searching, evaluating 32 states, to a max depth of 0
+               0.00 seconds total time
 

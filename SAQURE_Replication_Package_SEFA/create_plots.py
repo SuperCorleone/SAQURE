@@ -1,5 +1,5 @@
-# Frozen 2026-09-25. Reads the archived monolithic-AED EADSA logs next to this file.
-# The package's own create_plots.py reads the independent-domain re-run instead.
+# Generates the figures of the SAQURE paper from the logs in this package:
+# RQ1-RQ3 (Adaptation Gain) and RQ4 (scalability). See README.md for the options.
 import re
 import os
 from typing import Dict, List, Optional
@@ -19,12 +19,67 @@ RESULTS_BASE = "SAQURE-simulator/results"
 # The plot keys are the paper's names for the arms; run_experiments.sh writes some of them
 # to a differently named directory. Keys without an entry use their own name as the folder.
 LOG_DIR_BY_KEY = {"QoS": "RAMSES"}
-# Experiment2 (1-21 vulnerabilities) is not in the paper; RQ4.1.2 and RQ4.2.1 are served by
-# Vuln_vs_RuntimeDeTime / Vuln_vs_RiskAssessTime (1-100). run_experiments.sh rq4 still produces
-# it, so its two plots read this run's logs rather than the 2025 archive (old build, 500x scale).
-EXP2_BASE = f"{RESULTS_BASE}/rq4_logs/Experiment2"
-OLD_VS_NEW_CSV = "SAQURE-vulnerability-scalability/results/old_vs_new/old_vs_new_summary.csv"
 PLOTS_DIR = "experiments/plots"
+# The RQ1-RQ3 figures report the Adaptation Gain (G):
+# G = (C_cur - C_new) / C_cur * 100, the share of the current configuration's long-term cost
+# that the option an approach chose removes. C_new is the SAQURE-DTMC price of the chosen option
+# and C_cur is the current configuration's price on that DTMC (same scenario and phase),
+# so higher is better and a negative bar is a choice worse than not adapting.
+GAIN_PLOTS_DIR = f"{PLOTS_DIR}/adaptation_gain"
+GAIN_LABEL = 'Adaptation Gain (%)'
+# (RECT_YMIN, RECT_YLIM, major tick step) of the gain axis.
+GAIN_AXIS_RQ1 = (-2, 35, 10)
+GAIN_AXIS_RQ23 = (-3, 24, 4)
+# RQ2/RQ3 figures are 1.2:1 (width:height), height 6.7in.
+RQ23_FIGSIZE = (6.7 * 1.2, 6.7)
+# Spacing (%) of the background grid on the RQ2/RQ3 figures.
+GAIN_GRID_RQ23 = 0.5
+# Opacity of that grid; darker than the RQ1 grid (0.15) so that close bars can be compared.
+GAIN_GRID_ALPHA_RQ23 = 0.3
+# Spacing (%) of the fine background grid on the RQ1 gain figure.
+GAIN_GRID_RQ1 = 1
+# RQ4 figures' height (in); widths are set per figure.
+RQ4_FIG_HEIGHT = 4.0
+# RQ4 figures that share a row in the paper get the same canvas and the same axes box: fixed
+# margins in inches instead of tight_layout, so x axes, plot tops and image edges line up when
+# the PDFs are placed side by side at equal width. Margins fit the widest tick labels of the row.
+RQ4_ROW_LAYOUT = {
+    'decision': dict(size=(6.2, RQ4_FIG_HEIGHT), left=1.24, right=0.06, bottom=1.14, top=0.29),   # RQ4.1.1-4.1.3
+    'risk':     dict(size=(11.4, 11.4 / 2),  # width:height = 2:1
+                      left=1.55, right=0.08, bottom=0.9, top=0.35), # RQ4.2.1/4.2.2
+    # RQ4.3.2 sits next to RQ4.3.1 (made separately): same visible canvas and axes box,
+    # measured from RQ431_SEFA.pdf's crop box (11.583 x 5.562 in).
+    'config':   dict(size=(11.583, 5.562), left=0.750, right=0.028, bottom=0.792, top=0.264),
+}
+
+
+RQ4_LABEL_EDGE = 0.05  # inches between an axis title and the image edge
+
+
+def _apply_row_layout(fig, ax, row):
+    """Place `ax` in the row's fixed axes box and report any text left outside the canvas."""
+    lay = RQ4_ROW_LAYOUT[row]
+    width, height = lay['size']
+    fig.set_size_inches(width, height)
+    ax.set_position([lay['left'] / width, lay['bottom'] / height,
+                     1 - (lay['left'] + lay['right']) / width, 1 - (lay['bottom'] + lay['top']) / height])
+    # Axis titles sit at fixed distances from the image edges, so they also line up across the
+    # row whatever the width or rotation of each figure's tick labels.
+    axes_w = width - lay['left'] - lay['right']
+    axes_h = height - lay['bottom'] - lay['top']
+    ax.xaxis.set_label_coords(0.5, -(lay['bottom'] - RQ4_LABEL_EDGE) / axes_h)
+    ax.xaxis.label.set_va('bottom')
+    ax.yaxis.set_label_coords(-(lay['left'] - RQ4_LABEL_EDGE) / axes_w, 0.5)
+    # The y title is rotated with rotation_mode='anchor': its unrotated top is its left side.
+    ax.yaxis.label.set_ha('center')
+    ax.yaxis.label.set_va('top')
+    fig.canvas.draw()
+    bb = fig.get_tightbbox(fig.canvas.get_renderer())  # inches
+    slack = (bb.x0, bb.y0, width - bb.x1, height - bb.y1)
+    print(f"    layout[{row}] spare margin L/B/R/T (in): " + ' / '.join(f'{v:.2f}' for v in slack))
+    if min(slack) < -0.005:
+        print(f"    WARNING: layout[{row}] clips text; widen the margins in RQ4_ROW_LAYOUT")
+GAIN_ROWS = []  # (figure, group, arm, C_cur, C_new, G) for adaptation_gain_values.csv
 
 # ═══════════════════════════════════════════════════════════════
 # Utility functions (unchanged from create_plots.py)
@@ -221,21 +276,9 @@ def extract_cost_from_SAQURE(folder_path: str, target_service: str) -> float | N
     print("error in extract_cost_from_SAQURE func: wrong service")
     return None
 
-def extract_eadsa_time(log_content: str) -> Optional[float]:
-    """
-    Extract EADSA implementation time from log
-    """
-    m = re.search(r'Time to implement EADSA for [\w_]+:\s*([\d.]+)ms', log_content)
-    return float(m.group(1)) if m else None
-
 def extract_risk_assessment_time(log_content: str) -> Optional[float]:
-    """Risk assessment cost logged by VulnAxisAPProfiler (Vuln_vs_RiskAssessTime).
-
-    The value is the critical path: the maximum over the M domains of each domain's
-    wall clock with its 6 STRIDE calls running in parallel. Since the M x 6 calls are
-    independent, that is what the risk assessment costs when they all run at once, and
-    it does not depend on how many cores the test machine has.
-    """
+    """Runtime risk assessment time logged in Vuln_vs_RiskAssessTime: the wall clock of
+    one assessment of restaurant0 at the given number of exposed vulnerabilities."""
     m = re.search(r'Risk assessment time cost for \d+ vulnerabilities:\s*([\d.]+)ms', log_content)
     return float(m.group(1)) if m else None
 
@@ -244,21 +287,6 @@ def calculate_risk_assessment_statistics_for_folder(folder_path):
     times = [t for log in read_log_files(folder_path)
              if (t := extract_risk_assessment_time(log['content'])) is not None]
     return calculate_statistics(times) if times else {}
-
-
-def calculate_eadsa_statistics_for_folder(folder_path):
-    """Read all log files in the folder and calculate statistics for EADSA time"""
-    logs_dic = read_log_files(folder_path)
-    times = []
-
-    for log in logs_dic:
-        t = extract_eadsa_time(log['content'])
-        if t is not None:
-            times.append(t)
-
-    if times:
-        return calculate_statistics(times)
-    return {}
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -290,9 +318,10 @@ COLORS_RQ2 = {
 # Plot: RQ1 (dual-axis: cost bar + time boxplot)
 # ═══════════════════════════════════════════════════════════════
 
-def plot_rq1(time_stats_all, cost_values_all, experiment_name, save_path):
+def plot_rq1(time_stats_all, cost_values_all, experiment_name, save_path, gain_axis=GAIN_AXIS_RQ1):
     """
-    Plot all sub-scenarios of RQ1 in one figure (bar chart + boxplot)
+    Plot all sub-scenarios of RQ1 in one figure (Adaptation Gain bars + decision-time boxplots).
+    cost_values_all holds the Adaptation Gain (%) of each arm's chosen option.
     """
     FIG_SIZE = (12, 6)
     BAR_WIDTH = 0.08
@@ -307,11 +336,7 @@ def plot_rq1(time_stats_all, cost_values_all, experiment_name, save_path):
     Y_MARGIN_RATIO = 1.02
     Y_MAX_MARGIN = 5500
     Y_MIN_MARGIN = -8000
-    # Long-term cumulative cost: bars span 3.2-6.5, so 9.5 puts the tallest at 68% of the
-    # axis while the lowest boxplot point sits at 74%, so the two never overlap. Kept below 10
-    # so the forced scientific tick format needs no 1e1 offset.
-    RECT_YLIM = 9.5
-    RECT_YMIN = 0
+    RECT_YMIN, RECT_YLIM = gain_axis[0], gain_axis[1]
     DOT_HLINE_DENSITY = 5
 
     FONT_SIZE_TICK = 24
@@ -458,25 +483,26 @@ def plot_rq1(time_stats_all, cost_values_all, experiment_name, save_path):
         x_tick_labels.append(x_tick_label)
 
     ax1.set_xticklabels(x_tick_labels)
-    ax1.set_ylabel('Long-term Cost (unitless)', fontsize=FONT_SIZE_TICK)
+    ax1.set_ylabel(GAIN_LABEL, fontsize=FONT_SIZE_TICK)
     ax2.set_ylabel('Runtime Decision Time (ms)', fontsize=FONT_SIZE_TICK)
     ax1.set_ylim(RECT_YMIN, RECT_YLIM)
+    ax1.axhline(0, color='black', linewidth=0.8, zorder=3)
 
     ax1.tick_params(axis='x', labelsize=TICK_LABEL_SIZE)
     ax1.tick_params(axis='y', labelsize=TICK_LABEL_SIZE)
     ax2.tick_params(axis='y', labelsize=TICK_LABEL_SIZE)
 
-    ax1.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
     ax2.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
     ax2.locator_params(axis='y', nbins=10)
-    ax1.yaxis.set_major_locator(MultipleLocator(2))
+    ax1.yaxis.set_major_locator(MultipleLocator(gain_axis[2]))
     ax1.yaxis.set_minor_locator(AutoMinorLocator())
 
     ax1.set_xlim(-X_BLOCK_WIDTH, current_pos - GROUP_SPACING + X_BLOCK_WIDTH)
 
     # Grid lines
-    for y in np.arange(0, RECT_YLIM, DOT_HLINE_DENSITY):
-        ax1.axhline(y=y, color='gray', linestyle='--', linewidth=0.75, alpha=0.0, zorder=0)
+    # Fine background grid over the whole axis, including the negative band.
+    for y in np.arange(np.ceil(RECT_YMIN / GAIN_GRID_RQ1) * GAIN_GRID_RQ1, RECT_YLIM, GAIN_GRID_RQ1):
+        ax1.axhline(y=y, color='gray', linestyle='--', linewidth=0.75, alpha=0.15, zorder=0)
     ax1.set_axisbelow(True)
 
     fig.tight_layout()
@@ -490,11 +516,12 @@ def plot_rq1(time_stats_all, cost_values_all, experiment_name, save_path):
 
 def plot_rq2_rq3(time_stats_all, cost_values_all, config, save_path):
     """
-    Plot RQ2 or RQ3 sub-scenario (dual-axis: cost bar + time boxplot).
+    Plot RQ2 or RQ3 sub-scenario (dual-axis: Adaptation Gain bar + time boxplot).
+    cost_values_all holds the Adaptation Gain (%) of each arm's chosen option.
     config = [Y_MIN_MARGIN_RATIO, Y_MARGIN_RATIO, RECT_YMIN, RECT_YLIM,
               DOT_HLINE_DENSITY, y_settick]
     """
-    FIG_SIZE = (6.7, 6.7)
+    FIG_SIZE = RQ23_FIGSIZE
     BAR_WIDTH = 0.1
     BOX_WIDTH = 0.1
     GROUP_SPACING = 0.16
@@ -635,12 +662,12 @@ def plot_rq2_rq3(time_stats_all, cost_values_all, config, save_path):
         x_tick_label = f'{main_part}$_{num}$'
         x_tick_labels.append(x_tick_label)
     ax1.set_xticklabels(x_tick_labels)
-    ax1.set_ylabel('Long-term Cost (unitless)', fontsize=FONT_SIZE_TICK)
+    ax1.set_ylabel(GAIN_LABEL, fontsize=FONT_SIZE_TICK)
     ax2.set_ylabel('Runtime Decision Time (ms)', fontsize=FONT_SIZE_TICK)
     ax1.set_ylim(RECT_YMIN, RECT_YLIM)
+    ax1.axhline(0, color='black', linewidth=0.8, zorder=3)
 
     ax1.yaxis.set_major_locator(MultipleLocator(Y_SETTICK))
-    ax1.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
     ax2.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
 
     ax1.tick_params(axis='both', which='major', labelsize=TICK_LABEL_SIZE)
@@ -649,8 +676,10 @@ def plot_rq2_rq3(time_stats_all, cost_values_all, config, save_path):
     ax1.set_xlim(-X_BLOCK_WIDTH, current_pos - GROUP_SPACING + X_BLOCK_WIDTH)
 
     # Grid lines
-    for y in np.arange(0, RECT_YLIM, DOT_HLINE_DENSITY):
-        ax1.axhline(y=y, color='gray', linestyle='--', linewidth=0.75, alpha=0.15, zorder=0)
+    grid_start = np.ceil(RECT_YMIN / DOT_HLINE_DENSITY - 1e-9) * DOT_HLINE_DENSITY
+    for y in np.arange(grid_start, RECT_YLIM, DOT_HLINE_DENSITY):
+        ax1.axhline(y=y, color='gray', linestyle='--', linewidth=0.75,
+                    alpha=GAIN_GRID_ALPHA_RQ23, zorder=0)
     ax1.set_axisbelow(True)
 
     fig.tight_layout()
@@ -662,11 +691,11 @@ def plot_rq2_rq3(time_stats_all, cost_values_all, config, save_path):
 # Plot: RQ4_1_1 (time-only boxplot + trend, param 1-15)
 # ═══════════════════════════════════════════════════════════════
 
-def plot_rq4_1_1(time_stats_all, experiment_name, save_path):
+def plot_rq4_1_1(time_stats_all, experiment_name, save_path, layout=None):
     """
     Plot RQ4_1_1 (was RQ3.1): time boxplot only, param 1-15
     """
-    FIG_SIZE = (6.4, 6)   # 3.2:3 aspect ratio
+    FIG_SIZE = (6.4, RQ4_FIG_HEIGHT)
     BAR_WIDTH = 0.08
     BOX_WIDTH = 0.08
     GROUP_SPACING = 0.15
@@ -677,7 +706,7 @@ def plot_rq4_1_1(time_stats_all, experiment_name, save_path):
 
     POINTSIZE = 2
     Y_MARGIN_RATIO = 0.05
-    DOT_HLINE_DENSITY = 10000
+    DOT_HLINE_DENSITY = 500   # ms; fine background grid (was 10000, a single line)
 
     # Same rendered font sizes as RQ4_1_3, so the two figures match when set side by side.
     FONT_SIZE_TICK = 22.5
@@ -810,7 +839,8 @@ def plot_rq4_1_1(time_stats_all, experiment_name, save_path):
     # horizontal labels.
     ax.set_xticklabels(x_tick_labels, rotation=45, ha='right')
     ax.set_xlabel('Number of Options', fontsize=FONT_SIZE_TICK)
-    ax.set_ylabel('Runtime Decision Time (ms)', fontsize=FONT_SIZE_TICK)
+    # Two lines so the label fits the shorter RQ4 figure height.
+    ax.set_ylabel('Runtime Decision\nTime (ms)', fontsize=FONT_SIZE_TICK)
 
     ax.tick_params(axis='x', labelsize=TICK_LABEL_SIZE)
     ax.tick_params(axis='y', labelsize=TICK_LABEL_SIZE)
@@ -833,307 +863,13 @@ def plot_rq4_1_1(time_stats_all, experiment_name, save_path):
             ax.axhline(y=y, color='gray', linestyle='--', linewidth=0.75, alpha=0.15, zorder=0)
     ax.set_axisbelow(True)
 
-    fig.tight_layout()
+    if layout:
+        _apply_row_layout(fig, ax, layout)
+    else:
+        fig.tight_layout()
     plt.savefig(save_path, dpi=200)
     # A vector copy for the paper, next to the png
     plt.savefig(os.path.splitext(save_path)[0] + '.pdf')
-    plt.show()
-
-
-# ═══════════════════════════════════════════════════════════════
-# Plot: RQ4_1_2 (time-only boxplot + trend, param 1-21)
-# ═══════════════════════════════════════════════════════════════
-
-def plot_rq4_1_2(time_stats_all, experiment_name, save_path):
-    """
-    Plot RQ4_1_2 (was RQ3.2): time boxplot only, param 1-21
-    """
-    FIG_SIZE = (12, 6)
-    BAR_WIDTH = 0.08
-    BOX_WIDTH = 0.08
-    GROUP_SPACING = 0.15
-    X_BLOCK_WIDTH = 0.1
-    TREND_LING_LINEWIDTH = 1.0
-    IQR_LINEWIDTH = 0.8
-    HATCH_LINE_WIDTH = 0.5
-
-    POINTSIZE = 2
-    Y_MARGIN_RATIO = 0.3
-    Y_MIN_LIM = 1.8e3  # data 2211-2709 ms, room below for the legend; the old 5.2e4 was the 500x archive scale
-    DOT_HLINE_DENSITY = 500
-
-    FONT_SIZE_TICK = 24
-    TICK_LABEL_SIZE = 20
-    FONT_SIZE_LEGEND = 18
-    FONT_SIZE_LEGEND_TITLE = 20
-
-    colors = COLORS
-
-    baseline_colors = {
-        'AQUA': colors['cyan-blue'],
-        'QoS': colors['purple'],
-        'SAQURE_seq': colors['orange'],
-        'SAQURE_para': colors['pink_red'],
-        'SAQURE': colors['pink_red']
-    }
-    edge_colors = {
-        'AQUA': colors['dark cyan-blue'],
-        'QoS': colors['dark purple'],
-        'SAQURE_seq': colors['dark orange'],
-        'SAQURE_para': colors['red'],
-        'SAQURE': colors['red']
-    }
-    hatch_patterns = {
-        'AQUA': '///',
-        'QoS': '\\\\\\',
-        'SAQURE_seq': '---',
-        'SAQURE_para': '',
-        'SAQURE': ''
-    }
-    line_styles = {
-        'AQUA': '-',
-        'QoS': (0, (10, 5)),
-        'SAQURE_seq': '-.',
-        'SAQURE_para': '--',
-        'SAQURE': '--'
-    }
-    marker_styles = {
-        'AQUA': 'o',
-        'QoS': 's',
-        'SAQURE_seq': '^',
-        'SAQURE_para': 'D',
-        'SAQURE': 'D'
-    }
-    mapping = {
-        'QoS': 'RAMSES',
-        'SAQURE_seq': 'SAQURE$^{-}_{para}$',
-        'SAQURE_para': 'SAQURE'
-    }
-
-    # Data preparation
-    sub_scenarios = list(time_stats_all.keys())
-    baselines = list(time_stats_all[sub_scenarios[0]].keys())
-
-    x_positions = {}
-    x_ticks = []
-    current_pos = 0
-    for i, sub_scenario in enumerate(sub_scenarios):
-        scenario_positions = []
-        for j, baseline in enumerate(baselines):
-            pos = current_pos + j * (BAR_WIDTH + 0.02)
-            scenario_positions.append(pos)
-        x_positions[sub_scenario] = scenario_positions
-        x_ticks.append(np.mean(scenario_positions))
-        current_pos = max(scenario_positions) + GROUP_SPACING
-
-    fig, ax = plt.subplots(figsize=FIG_SIZE)
-
-    all_time_values = []
-    for sub_scenario in sub_scenarios:
-        for baseline in baselines:
-            if baseline in time_stats_all[sub_scenario]:
-                stats = time_stats_all[sub_scenario][baseline]
-                all_time_values.extend([stats['min'], stats['max'], stats['q1'], stats['q3'], stats['mean']])
-
-    if all_time_values:
-        y_min = min(all_time_values)
-        y_max = max(all_time_values)
-        margin = (y_max - y_min) * Y_MARGIN_RATIO
-        ax.set_ylim(Y_MIN_LIM, y_max + margin)
-
-    baseline_mean_positions = {baseline: [] for baseline in baselines}
-    for sub_scenario in sub_scenarios:
-        for j, baseline in enumerate(baselines):
-            if baseline in time_stats_all[sub_scenario]:
-                stats = time_stats_all[sub_scenario][baseline]
-                x_pos = x_positions[sub_scenario][j]
-                baseline_mean_positions[baseline].append((x_pos, stats['mean']))
-
-                rect = Rectangle(
-                    (x_pos - BOX_WIDTH / 2, stats['q1']),
-                    BOX_WIDTH, stats['q3'] - stats['q1'],
-                    facecolor=baseline_colors[baseline], edgecolor=edge_colors[baseline],
-                    linewidth=IQR_LINEWIDTH, hatch=hatch_patterns[baseline],
-                    hatch_linewidth=HATCH_LINE_WIDTH, zorder=4
-                )
-                ax.add_patch(rect)
-                ax.vlines(x_pos, stats['min'], stats['q1'], colors=edge_colors[baseline], linewidth=1, zorder=2)
-                ax.vlines(x_pos, stats['q3'], stats['max'], colors=edge_colors[baseline], linewidth=1, zorder=2)
-                ax.plot(x_pos, stats['mean'], marker=marker_styles[baseline],
-                        color=edge_colors[baseline],
-                        markersize=POINTSIZE+5 if marker_styles[baseline] else POINTSIZE,
-                        zorder=6,
-                        markeredgecolor='black' if marker_styles[baseline] else None,
-                        markeredgewidth=0.5 if marker_styles[baseline] else 0)
-                ax.hlines(stats['mean'], x_pos - BOX_WIDTH / 2, x_pos + BOX_WIDTH / 2,
-                          colors=edge_colors[baseline], linewidth=1.2, zorder=5)
-
-    # Mean trend lines
-    mean_trend_lines = []
-    for baseline in baselines:
-        if baseline_mean_positions[baseline]:
-            positions = sorted(baseline_mean_positions[baseline], key=lambda x: x[0])
-            x_coords = [pos[0] for pos in positions]
-            y_coords = [pos[1] for pos in positions]
-            line, = ax.plot(x_coords, y_coords, color=edge_colors[baseline],
-                            linestyle=line_styles[baseline], linewidth=TREND_LING_LINEWIDTH,
-                            marker=marker_styles[baseline],
-                            markersize=0 if marker_styles[baseline] else POINTSIZE,
-                            zorder=3,
-                            markeredgecolor='black' if marker_styles[baseline] else None,
-                            markeredgewidth=0.5 if marker_styles[baseline] else 0,
-                            label=f'{mapping.get(baseline, baseline)}')
-            mean_trend_lines.append(line)
-
-    # Axis settings
-    plt.rcParams['text.usetex'] = True
-    ax.set_xticks(x_ticks)
-    x_tick_labels = [f'{i}' for i in range(1, len(sub_scenarios)+1)]
-    ax.set_xticklabels(x_tick_labels)
-    ax.set_xlabel('Number of Vulnerabilities', fontsize=FONT_SIZE_TICK)
-    ax.set_ylabel('Runtime Decision Time (ms)', fontsize=FONT_SIZE_TICK)
-
-    ax.tick_params(axis='x', labelsize=TICK_LABEL_SIZE)
-    ax.tick_params(axis='y', labelsize=TICK_LABEL_SIZE)
-
-    ax.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
-    ax.yaxis.get_offset_text().set_fontsize(TICK_LABEL_SIZE)
-
-    ax.set_xlim(-X_BLOCK_WIDTH, current_pos - GROUP_SPACING + X_BLOCK_WIDTH)
-
-    ax.legend(handles=mean_trend_lines, loc='lower right', title='Methods',
-              title_fontsize=FONT_SIZE_LEGEND_TITLE, fontsize=FONT_SIZE_LEGEND, frameon=True,
-              handlelength=3, markerscale=1.5, labelspacing=0.3, handletextpad=1.5,
-              edgecolor='lightgray', framealpha=0.9)
-
-    # Grid lines
-    if all_time_values:
-        for y in np.arange(Y_MIN_LIM, Y_MIN_LIM + 50000, DOT_HLINE_DENSITY):
-            ax.axhline(y=y, color='gray', linestyle='--', linewidth=0.75, alpha=0.15, zorder=0)
-    ax.set_axisbelow(True)
-
-    fig.tight_layout()
-    plt.savefig(save_path, dpi=200)
-    plt.show()
-
-
-# ═══════════════════════════════════════════════════════════════
-# Plot: RQ4 EADSA boxplot (data from RQ4_1_2 logs)
-# ═══════════════════════════════════════════════════════════════
-
-def plot_eadsa_boxplot(eadsa_stats_all, experiment_name, save_path):
-    """
-    Plot boxplot + mean line for SAQURE baseline EADSA implementation time
-    """
-    FIG_SIZE = (12, 4.5)
-    BOX_WIDTH = 4
-    TREND_LING_LINEWIDTH = 1.0
-    IQR_LINEWIDTH = 0.8
-    GROUP_SPACING = 10.0
-    LEFT_MARGIN = 6.0
-    RIGHT_MARGIN = LEFT_MARGIN
-
-    POINTSIZE = 2
-    Y_MARGIN_RATIO = 0.505
-    Y_MIN_LIM = 100
-    DOT_HLINE_DENSITY = 20
-
-    FONT_SIZE_TICK = 24
-    TICK_LABEL_SIZE = 20
-    FONT_SIZE_LEGEND = 18
-    FONT_SIZE_LEGEND_TITLE = 20
-
-    colors = COLORS
-    eadsa_colors = {
-        'facecolor': colors['pink'],
-        'edgecolor': colors['pink_red'],
-        'linecolor': colors['red']
-    }
-
-    # Data preparation
-    sub_scenarios = list(eadsa_stats_all.keys())
-
-    x_positions = []
-    current_pos = LEFT_MARGIN
-    for i, sub_scenario in enumerate(sub_scenarios):
-        x_positions.append(current_pos)
-        current_pos += 1 + GROUP_SPACING
-
-    fig, ax = plt.subplots(figsize=FIG_SIZE)
-
-    all_time_values = []
-    for sub_scenario in sub_scenarios:
-        stats = eadsa_stats_all[sub_scenario]
-        all_time_values.extend([stats['min'], stats['max'], stats['q1'], stats['q3'], stats['mean']])
-
-    if all_time_values:
-        y_min = min(all_time_values)
-        y_max = max(all_time_values)
-        margin = (y_max - y_min) * Y_MARGIN_RATIO
-        ax.set_ylim(Y_MIN_LIM, y_max + margin)
-
-    mean_positions = []
-    for i, sub_scenario in enumerate(sub_scenarios):
-        stats = eadsa_stats_all[sub_scenario]
-        x_pos = x_positions[i]
-        mean_positions.append((x_pos, stats['mean']))
-
-        rect = Rectangle(
-            (x_pos - BOX_WIDTH / 2, stats['q1']),
-            BOX_WIDTH, stats['q3'] - stats['q1'],
-            facecolor=eadsa_colors['facecolor'], edgecolor=eadsa_colors['edgecolor'],
-            linewidth=IQR_LINEWIDTH, zorder=4
-        )
-        ax.add_patch(rect)
-        ax.vlines(x_pos, stats['min'], stats['q1'], colors=eadsa_colors['edgecolor'], linewidth=1, zorder=2)
-        ax.vlines(x_pos, stats['q3'], stats['max'], colors=eadsa_colors['edgecolor'], linewidth=1, zorder=2)
-        ax.plot(x_pos, stats['mean'], 'o', color=eadsa_colors['linecolor'], markersize=POINTSIZE+5, zorder=6)
-        ax.hlines(stats['mean'], x_pos - BOX_WIDTH / 2, x_pos + BOX_WIDTH / 2,
-                  colors=eadsa_colors['linecolor'], linewidth=1.2, zorder=5)
-
-    if mean_positions:
-        positions = sorted(mean_positions, key=lambda x: x[0])
-        x_coords = [pos[0] for pos in positions]
-        y_coords = [pos[1] for pos in positions]
-        line, = ax.plot(x_coords, y_coords, color=eadsa_colors['linecolor'],
-                        linestyle='-', linewidth=TREND_LING_LINEWIDTH, marker='o',
-                        markersize=0, zorder=3, label='Mean Runtime Risk\nAssessment Time')
-
-    # Axis settings
-    plt.rcParams['text.usetex'] = True
-    ax.set_xticks(x_positions)
-    x_tick_labels = [f'{i}' for i in range(1, len(sub_scenarios)+1)]
-    ax.set_xticklabels(x_tick_labels)
-    ax.set_xlabel('Number of Vulnerabilities', fontsize=FONT_SIZE_TICK)
-    ax.set_ylabel('Runtime Risk Assess-\nment Time (ms)', fontsize=FONT_SIZE_TICK)
-
-    ax.tick_params(axis='x', labelsize=TICK_LABEL_SIZE)
-    ax.tick_params(axis='y', labelsize=TICK_LABEL_SIZE)
-
-    if max(all_time_values) > 10000:
-        ax.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
-        ax.yaxis.get_offset_text().set_fontsize(TICK_LABEL_SIZE)
-
-    if x_positions:
-        x_min = x_positions[0] - LEFT_MARGIN
-        x_max = x_positions[-1] + RIGHT_MARGIN
-        ax.set_xlim(x_min, x_max)
-
-    ax.legend(loc='upper right',
-              title_fontsize=FONT_SIZE_LEGEND_TITLE, fontsize=FONT_SIZE_LEGEND, frameon=True,
-              handlelength=4, markerscale=3, labelspacing=0.4, handletextpad=1.0)
-
-    # Grid lines
-    if all_time_values:
-        y_max_val = max(all_time_values)
-        y_range = y_max_val - Y_MIN_LIM
-        if y_range > 0:
-            for y in np.arange(Y_MIN_LIM, y_max_val + margin, DOT_HLINE_DENSITY):
-                ax.axhline(y=y, color='gray', linestyle='--', linewidth=0.75, alpha=0.15, zorder=0)
-    ax.set_axisbelow(True)
-
-    fig.tight_layout()
-    plt.savefig(save_path, dpi=200)
     plt.show()
 
 
@@ -1143,6 +879,44 @@ def plot_eadsa_boxplot(eadsa_stats_all, experiment_name, save_path):
 
 def ensure_plots_dir():
     os.makedirs(PLOTS_DIR, exist_ok=True)
+    os.makedirs(GAIN_PLOTS_DIR, exist_ok=True)
+
+
+def current_config_cost(folder):
+    """Long-term cost of the current configuration: the first PRISM result after 'Current graph:'."""
+    for path in sorted(glob.glob(os.path.join(folder, '*.log'))):
+        lines = open(path, errors='replace').read().splitlines()
+        for i, line in enumerate(lines):
+            if 'Current graph:' in line:
+                for nxt in lines[i + 1:]:
+                    m = re.search(r'Cost Value:\s*([\d.eE+-]+)', nxt)
+                    if m:
+                        return float(m.group(1))
+    return None
+
+
+def to_gain(figure, group, costs, current):
+    """Adaptation Gain (%) of each arm's chosen option against the current configuration."""
+    gains = {}
+    for arm, cost in costs.items():
+        gains[arm] = 100.0 * (current - cost) / current
+        GAIN_ROWS.append((figure, group, arm, current, cost, gains[arm]))
+        print(f"    G {figure} {group} {arm}: {gains[arm]:.2f}% (C_cur {current:.4f}, C_new {cost:.4f})")
+    return gains
+
+
+def run_gain():
+    """RQ1-RQ3 Adaptation Gain figures, plus the values behind them."""
+    os.makedirs(GAIN_PLOTS_DIR, exist_ok=True)
+    GAIN_ROWS.clear()
+    run_rq1()
+    run_rq2()
+    run_rq3()
+    with open(f'{GAIN_PLOTS_DIR}/adaptation_gain_values.csv', 'w') as out:
+        out.write('figure,group,arm,C_cur,C_new,G_percent\n')
+        for row in GAIN_ROWS:
+            out.write('%s,%s,%s,%.6f,%.6f,%.2f\n' % row)
+    print(f"Adaptation Gain figures and values written to {GAIN_PLOTS_DIR}/")
 
 
 def run_rq1():
@@ -1198,7 +972,10 @@ def run_rq1():
                     print(f"Folder does not exist: {folder_path}")
 
         if time_stats_all and cost_values_all:
-            plot_rq1(time_stats_all, cost_values_all, experiment, f'{PLOTS_DIR}/RQ1_SEFA.png')
+            gains = {sub: to_gain('RQ1', sub, costs, current_config_cost(f"{RESULTS_BASE}/rq1_logs/{sub}/SAQURE_para"))
+                     for sub, costs in cost_values_all.items()}
+            plot_rq1(time_stats_all, gains, experiment, f'{GAIN_PLOTS_DIR}/RQ1_SEFA_gain.png',
+                     gain_axis=GAIN_AXIS_RQ1)
         else:
             print(f"== {experiment} has no valid data, skipping plot ==")
 
@@ -1211,13 +988,11 @@ def run_rq2():
         'S3': {"T1": ['AQUA', 'SAQURE'], "T2": ['AQUA', 'SAQURE']},
     }
 
-    # [Y_MIN_MARGIN_RATIO, Y_MARGIN_RATIO, RECT_YMIN, RECT_YLIM, DOT_HLINE_DENSITY, Y_SETTICK]
-    # Long-term cumulative cost; one scale for all three sub-scenarios so they compare directly.
-    # Bars peak at 4.40, i.e. 68% of the axis, under the boxplots.
+    # [Y_MIN_MARGIN_RATIO, Y_MARGIN_RATIO] of the decision-time axis.
     configs = {
-        'S1': [0.0, 1.02, 0, 6.5, 0.5, 1],
-        'S2': [0.0, 1.02, 0, 6.5, 0.5, 1],
-        'S3': [0.0, 1.02, 0, 6.5, 0.5, 1],
+        'S1': [0.0, 1.02],
+        'S2': [0.0, 1.02],
+        'S3': [0.0, 1.02],
     }
 
     for item, times in experiments_RQ2.items():
@@ -1274,8 +1049,15 @@ def run_rq2():
                 else:
                     print(f"Folder does not exist: {folder_path}")
 
+        # AQUA does not update at runtime: at T2 it keeps its T1 choice and (static) risk scores,
+        # which its T2 run reproduces. The chosen option is still priced on the SAQURE DTMC of
+        # the same phase (above), so a runtime change that degrades that option shows up as a
+        # higher T2 cost and a lower T2 Adaptation Gain.
         if time_stats_all and cost_values_all:
-            plot_rq2_rq3(time_stats_all, cost_values_all, cfg, f'{PLOTS_DIR}/RQ2_SEFA_{item}.png')
+            gains = {ph: to_gain('RQ2 ' + item, ph, costs, current_config_cost(f"{RESULTS_BASE}/rq2_logs/{item}/{ph}/SAQURE"))
+                     for ph, costs in cost_values_all.items()}
+            gcfg = [cfg[0], cfg[1], GAIN_AXIS_RQ23[0], GAIN_AXIS_RQ23[1], GAIN_GRID_RQ23, GAIN_AXIS_RQ23[2]]
+            plot_rq2_rq3(time_stats_all, gains, gcfg, f'{GAIN_PLOTS_DIR}/RQ2_SEFA_{item}_gain.png')
         else:
             print(f"== RQ2 {item} has no valid data, skipping plot ==")
 
@@ -1288,12 +1070,11 @@ def run_rq3():
         'S3': {"T1": ['SAQURE_nodyPa', 'SAQURE'], "T2": ['SAQURE_nodyPa', 'SAQURE']},
     }
 
-    # Long-term cumulative cost; one scale for all three sub-scenarios so they compare directly.
-    # Bars peak at 4.40, i.e. 68% of the axis, under the boxplots.
+    # [Y_MIN_MARGIN_RATIO, Y_MARGIN_RATIO] of the decision-time axis.
     configs = {
-        'S1': [0.0, 1.02, 0, 6.5, 0.5, 1],
-        'S2': [0.0, 1.02, 0, 6.5, 0.5, 1],
-        'S3': [0.0, 1.02, 0, 6.5, 0.5, 1],
+        'S1': [0.0, 1.02],
+        'S2': [0.0, 1.02],
+        'S3': [0.0, 1.02],
     }
 
     for item, times in experiments_RQ3.items():
@@ -1347,13 +1128,19 @@ def run_rq3():
                     print(f"Folder does not exist: {folder_path}")
 
         if time_stats_all and cost_values_all:
-            plot_rq2_rq3(time_stats_all, cost_values_all, cfg, f'{PLOTS_DIR}/RQ3_SEFA_{item}.png')
+            gains = {ph: to_gain('RQ3 ' + item, ph, costs, current_config_cost(f"{RESULTS_BASE}/rq3_logs/{item}/{ph}/SAQURE"))
+                     for ph, costs in cost_values_all.items()}
+            gcfg = [cfg[0], cfg[1], GAIN_AXIS_RQ23[0], GAIN_AXIS_RQ23[1], GAIN_GRID_RQ23, GAIN_AXIS_RQ23[2]]
+            plot_rq2_rq3(time_stats_all, gains, gcfg, f'{GAIN_PLOTS_DIR}/RQ3_SEFA_{item}_gain.png')
         else:
             print(f"== RQ3 {item} has no valid data, skipping plot ==")
 
 
 def run_rq4_1_1():
     """Load data and plot RQ4_1_1 (param 1-15)"""
+    # Other figures switch text.usetex on globally; RQ4 figures use the plain '1e3' offset
+    # notation and the sans font, so reset it here.
+    plt.rcParams['text.usetex'] = False
     sub_scenarios_def = {f'S{i}': ['AQUA', 'SAQURE'] for i in range(1, 16)}
 
     print("=== RQ4_1_1 (Option_vs_RuntimeDeTime) ===")
@@ -1380,92 +1167,28 @@ def run_rq4_1_1():
                 print(f"Folder does not exist: {folder_path}")
 
     if time_stats_all:
-        plot_rq4_1_1(time_stats_all, "Option_vs_RuntimeDeTime", f'{PLOTS_DIR}/RQ4_1_1_SEFA.png')
+        plot_rq4_1_1(time_stats_all, "Option_vs_RuntimeDeTime", f'{PLOTS_DIR}/RQ411_SEFA.png',
+                     layout='decision')
     else:
         print("== RQ4_1_1 has no valid data, skipping plot ==")
 
 
-def run_rq4_1_2():
-    """Load data and plot RQ4_1_2 (param 1-21)"""
-    sub_scenarios_def = {f'S{i}': ['AQUA', 'SAQURE'] for i in range(1, 22)}
-
-    print("=== RQ4_1_2 (Experiment2) ===")
-    time_stats_all = {}
-
-    for sub_scenario, baselines in sub_scenarios_def.items():
-        print(f"=== Sub-scenario: {sub_scenario} ===")
-        time_stats_all[sub_scenario] = {}
-
-        for baseline_name in baselines:
-            print(f"=== Baseline: {baseline_name} ===")
-            folder_path = f"{EXP2_BASE}/{sub_scenario}/{baseline_name}"
-
-            if os.path.exists(folder_path):
-                if "SAQURE-longcul" in baseline_name:
-                    statistics, best_cost, best_option = calculate_statistics_for_folder(folder_path, True)
-                else:
-                    statistics, best_cost, best_option = calculate_statistics_for_folder(folder_path, False)
-                if statistics:
-                    time_stats_all[sub_scenario][baseline_name] = statistics
-                else:
-                    print(f"Warning: {baseline_name} has no valid data")
-            else:
-                print(f"Folder does not exist: {folder_path}")
-
-    if time_stats_all:
-        plot_rq4_1_2(time_stats_all, "Experiment2", f'{PLOTS_DIR}/RQ4_superseded_Experiment2_SEFA.png')
-    else:
-        print("== RQ4_1_2 has no valid data, skipping plot ==")
-
-
-def run_rq4_eadsa():
-    """Load EADSA data from RQ4_1_2 logs and plot"""
-    sub_scenarios_def = {f'S{i}': ['SAQURE'] for i in range(1, 22)}
-
-    print("\n====== RQ4 EADSA boxplot (data from RQ4_1_2) ======")
-    eadsa_stats_all = {}
-
-    for sub_scenario, baselines in sub_scenarios_def.items():
-        print(f"--- Sub-scenario: {sub_scenario}")
-        eadsa_stats_all[sub_scenario] = {}
-
-        if "SAQURE" in baselines:
-            folder_path = f"{EXP2_BASE}/{sub_scenario}/SAQURE"
-
-            if not os.path.exists(folder_path):
-                print(f"Folder not found: {folder_path}")
-                continue
-
-            eadsa_stats = calculate_eadsa_statistics_for_folder(folder_path)
-            if eadsa_stats:
-                eadsa_stats_all[sub_scenario] = eadsa_stats
-            else:
-                print(f"No valid EADSA time detected in {folder_path}")
-
-    if eadsa_stats_all:
-        plot_eadsa_boxplot(eadsa_stats_all, "Experiment2", f'{PLOTS_DIR}/RQ4_eadsa_boxplot_SEFA.png')
-    else:
-        print("No EADSA data found, skip plotting.")
-
-
 # ═══════════════════════════════════════════════════════════════
-# RQ4 size axis: offline configuration, risk assessment and decision
-# time against the size of the managed system (1x - 500x SEFA)
+# RQ4 size axis: decision and risk assessment time against the size
+# of the managed system (1x - 500x SEFA)
 # ═══════════════════════════════════════════════════════════════
 
 SIZE_AXIS_PATTERNS = {
     # Runtime decision time is the risk assessment plus the Planner; the old
     # 'Time to extract best option RamsesV3' line covered the Planner only.
     'decision': r'Runtime decision time:\s*([\d.]+)ms',
-    # Size_vs_RuntimeDeTime used to report EADSA on the monolithic AED; since 2026-09-25
-    # it reports the independent-domain critical path, the same quantity RQ4.2 uses.
-    'risk_per_replica': r'Risk assessment time cost for replica_\d+(?:, \d+ vulnerabilities)?:\s*([\d.]+)ms',
-    'risk_total': r'Total risk assessment time for \d+ replicas:\s*([\d.]+)ms',
+    # The per-replica risk assessment (RQ4.2.2) is not in these logs; it comes from
+    # Size_vs_RiskAssessTime, read in run_rq4_size.
     'offline_config': r'Offline configuration time for \d+ vulnerabilities:\s*([\d.]+)ms',
 }
 
-# Series that occur once per replica / per implementation inside a single log and are averaged.
-SIZE_AXIS_REPEATED = ('risk_per_replica', 'offline_config')
+# Series that occur once per implementation inside a single log and are averaged.
+SIZE_AXIS_REPEATED = ('offline_config',)
 
 
 def extract_size_axis_times(log_content: str) -> Dict[str, float]:
@@ -1522,7 +1245,7 @@ def plot_size_axis(stats_all, primary, ylabel, save_path,
                    primary_label, secondary=None, secondary_ylabel=None, secondary_label=None,
                    legend_loc='upper left', legend_bbox=None, primary_ymin=None,
                    figsize=(12, 4.5), ylim=None, ymajor=None, yminor=None, yorder=None,
-                   ylabel_fontsize=None):
+                   ylabel_fontsize=None, layout=None):
     """
     Boxplot + mean trend line against the managed system size. With `secondary` a second series
     is drawn on a twin axis, which is how the two readings of the risk assessment time
@@ -1624,7 +1347,10 @@ def plot_size_axis(stats_all, primary, ylabel, save_path,
             alpha=0.10, zorder=0)
     ax.set_axisbelow(True)
 
-    fig.tight_layout()
+    if layout:
+        _apply_row_layout(fig, ax, layout)
+    else:
+        fig.tight_layout()
     plt.savefig(save_path, dpi=200)
     plt.close(fig)
 
@@ -1640,7 +1366,7 @@ SIZE_AXIS_APPROACH_STYLE = {
 
 def plot_size_axis_comparison(stats_by_approach, key, ylabel, save_path,
                               legend_loc='upper left', legend_bbox=None, figsize=(12, 4.5),
-                              xtick_rotation=0):
+                              xtick_rotation=0, layout=None):
     """
     SAQURE against AQUA on the managed system size axis: one IQR box plus a mean trend line per
     approach, both on the same y axis so the two costs are directly comparable.
@@ -1724,7 +1450,10 @@ def plot_size_axis_comparison(stats_by_approach, key, ylabel, save_path,
         ax.axhline(y=y, color='gray', linestyle='--', linewidth=0.75, alpha=0.15, zorder=0)
     ax.set_axisbelow(True)
 
-    fig.tight_layout()
+    if layout:
+        _apply_row_layout(fig, ax, layout)
+    else:
+        fig.tight_layout()
     plt.savefig(save_path, dpi=200)
     plt.close(fig)
 
@@ -1753,41 +1482,20 @@ def _linear_axis_box(ax, x_pos, stats, half_width, style, point_size, iqr_linewi
 
 
 # ═══════════════════════════════════════════════════════════════
-# Plot: monolithic AED vs 136 independent domains (1-21 CVEs)
+# Plot: RQ4 vulnerability axis (1-100 CVEs)
 # ═══════════════════════════════════════════════════════════════
 
-OLD_VS_NEW_STYLE = {
-    'old': {'facecolor': COLORS['cyan-blue'], 'edgecolor': COLORS['dark cyan-blue'],
-            'linecolor': COLORS['dark cyan-blue'], 'linestyle': '-', 'marker': 'D',
-            'label': 'Monolithic AED'},
-    'new': {'facecolor': COLORS['pink'], 'edgecolor': COLORS['pink_red'],
-            'linecolor': COLORS['red'], 'linestyle': '--', 'marker': 'o',
-            'label': 'Independent domains'},
-}
+def plot_vuln_axis(stats_by_series, save_path, ylabel, figsize=(10, 6), logy=False,
+                   style_map=None, order=('AQUA', 'SAQURE'), legend_title='Methods',
+                   legend_loc='upper left', xtick_rotation=0, ylim=None,
+                   grid_step_units=0.1, ylabel_fontsize=None, font_delta=0.0,
+                   sci_y=False, layout=None, ymajor=None):
+    """Two series against a linear vulnerability-count axis.
 
-
-def load_old_vs_new_stats(column, csv_path=OLD_VS_NEW_CSV):
-    import csv as _csv
-    samples = {}
-    with open(csv_path, newline='') as fh:
-        for row in _csv.DictReader(fh):
-            samples.setdefault(row['workflow'], {}).setdefault(
-                int(row['n_vulns']), []).append(float(row[column]))
-    return {
-        wf: {n: {'min': float(np.min(v)), 'max': float(np.max(v)),
-                 'q1': float(np.percentile(v, 25)), 'q3': float(np.percentile(v, 75)),
-                 'mean': float(np.mean(v))}
-             for n, v in by_n.items()}
-        for wf, by_n in samples.items()
-    }
-
-
-def plot_old_vs_new(stats_by_wf, save_path, ylabel, figsize=(10, 6), logy=False,
-                    style_map=None, order=('old', 'new'), legend_title='Workflow',
-                    legend_loc='upper left', xtick_rotation=0, ylim=None,
-                    grid_step_units=0.1, ylabel_fontsize=None, font_delta=0.0):
-    """Two series against a linear vulnerability-count axis."""
-    style_map = OLD_VS_NEW_STYLE if style_map is None else style_map
+    sci_y forces 1e3 tick scaling (ticks 0-4 with a "1e3" offset) on axes below 1e4,
+    which the automatic switch further down leaves in plain milliseconds.
+    """
+    style_map = VULN_DECISION_STYLE if style_map is None else style_map
     FIG_SIZE = figsize
     TREND_LING_LINEWIDTH = 1.0
     IQR_LINEWIDTH = 0.8
@@ -1799,24 +1507,24 @@ def plot_old_vs_new(stats_by_wf, save_path, ylabel, figsize=(10, 6), logy=False,
     FONT_SIZE_LEGEND = 16.875 + font_delta
     FONT_SIZE_LEGEND_TITLE = 18.75 + font_delta
 
-    workflows = [w for w in order if w in stats_by_wf]
-    scales = sorted(set().union(*[set(stats_by_wf[w]) for w in workflows]))
+    series_names = [w for w in order if w in stats_by_series]
+    scales = sorted(set().union(*[set(stats_by_series[w]) for w in series_names]))
 
     fig, ax = plt.subplots(figsize=FIG_SIZE)
     handles, all_values = [], []
     half_width = max(scales) * 0.012
     # Boxes are nudged apart in the order the series are drawn.
-    offsets = ({w: 0.0 for w in workflows} if len(workflows) == 1
-               else {w: (-half_width if i == 0 else half_width) for i, w in enumerate(workflows)})
+    offsets = ({w: 0.0 for w in series_names} if len(series_names) == 1
+               else {w: (-half_width if i == 0 else half_width) for i, w in enumerate(series_names)})
 
-    for wf in workflows:
-        style = style_map[wf]
+    for name in series_names:
+        style = style_map[name]
         means = []
         for n in scales:
-            stats = stats_by_wf[wf].get(n)
+            stats = stats_by_series[name].get(n)
             if not stats:
                 continue
-            _linear_axis_box(ax, n + offsets[wf], stats, half_width, style,
+            _linear_axis_box(ax, n + offsets[name], stats, half_width, style,
                              POINTSIZE, IQR_LINEWIDTH)
             all_values.extend([stats['min'], stats['max'], stats['mean']])
             means.append((n, stats['mean']))
@@ -1828,7 +1536,7 @@ def plot_old_vs_new(stats_by_wf, save_path, ylabel, figsize=(10, 6), logy=False,
             handles.append(line)
 
     if logy:
-        # The two workflows differ by orders of magnitude on the grounding figures.
+        # For series that differ by orders of magnitude.
         ax.set_yscale('log')
     elif ylim is not None:
         # An explicit window: two nearly coincident curves are indistinguishable on a
@@ -1836,6 +1544,8 @@ def plot_old_vs_new(stats_by_wf, save_path, ylabel, figsize=(10, 6), logy=False,
         ax.set_ylim(*ylim)
     elif all_values:
         ax.set_ylim(0.0, max(all_values) * (1 + Y_MARGIN_RATIO))
+    if ymajor is not None:
+        ax.yaxis.set_major_locator(MultipleLocator(ymajor))
     # A long label does not fit the axis height at the shared tick size.
     ax.set_ylabel(ylabel, fontsize=ylabel_fontsize or FONT_SIZE_TICK)
     ax.tick_params(axis='y', labelsize=TICK_LABEL_SIZE, colors='black')
@@ -1861,6 +1571,9 @@ def plot_old_vs_new(stats_by_wf, save_path, ylabel, figsize=(10, 6), logy=False,
     if not logy and max(ax.get_ylim()) > 10000:
         ax.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
         ax.yaxis.get_offset_text().set_fontsize(TICK_LABEL_SIZE)
+    elif not logy and sci_y:
+        ax.ticklabel_format(style='sci', axis='y', scilimits=(3, 3))
+        ax.yaxis.get_offset_text().set_fontsize(TICK_LABEL_SIZE)
 
     ax.legend(handles=handles, loc=legend_loc, title=legend_title,
               title_fontsize=FONT_SIZE_LEGEND_TITLE, fontsize=FONT_SIZE_LEGEND, frameon=True,
@@ -1879,7 +1592,10 @@ def plot_old_vs_new(stats_by_wf, save_path, ylabel, figsize=(10, 6), logy=False,
             ax.axhline(y=y, color='gray', linestyle='--', linewidth=0.75, alpha=0.15, zorder=0)
     ax.set_axisbelow(True)
 
-    fig.tight_layout()
+    if layout:
+        _apply_row_layout(fig, ax, layout)
+    else:
+        fig.tight_layout()
     _save_vector_and_raster(save_path)
     plt.close(fig)
 
@@ -1897,14 +1613,14 @@ VULN_DECISION_STYLE = {
 RISK_SERIES_LABEL = 'Mean Runtime Risk Assessment Time'
 
 VULN_SCALES = [1, 5, 10, 25, 50, 75, 100]
-VULN_DECISION_FIGSIZE = (6.2, 6)    # 3:3.1 (height:width)
-VULN_RISK_FIGSIZE = (12, 6)         # 2:1 landscape
-# The critical path sits in a narrow band, so a zero-based axis would flatten it
-# against the top; the window is cropped to 5-15 ms.
-VULN_RISK_YLIM = (5, 17)          # data 5.9-14.3 ms; top kept clear of the legend
-# Decision time varies by 1.7% over the whole axis, so the window is cropped to
-# 5-5.6e4; on a zero-based axis the two methods' curves cannot be told apart.
-VULN_DECISION_YLIM = (2000, 4000)  # data 2213-3667 ms; the old 50000-56000 was the 500x scale
+VULN_DECISION_FIGSIZE = (6.2, RQ4_FIG_HEIGHT)
+VULN_RISK_FIGSIZE = (12, RQ4_FIG_HEIGHT)
+# RQ4.2.1 is the wall clock of one EADSA assessment of restaurant0 (data ~85-492 ms);
+# zero-based 0-1e3 window in units of 1e3 ms, matching RQ4.1.2's style.
+VULN_RISK_YLIM = (0, 1000)
+# A wide 1-5.5e3 window so the curves are read against the whole decision time rather
+# than a tight crop (data 2060-3549 ms, 10-04 rerun); ticks in units of 1e3 ms.
+VULN_DECISION_YLIM = (1000, 5500)
 
 
 def run_rq4_vuln():
@@ -1913,6 +1629,9 @@ def run_rq4_vuln():
     Decision time covers SAQURE and AQUA; risk assessment is SAQURE only, because
     AQUA reads static scores instead of assessing the environment.
     """
+    # Other figures switch text.usetex on globally; RQ4 figures use the plain '1e3' offset
+    # notation and the sans font, so reset it here.
+    plt.rcParams['text.usetex'] = False
     print("\n====== RQ4 vulnerability axis (Vuln_vs_RuntimeDeTime, 1-100 CVEs) ======")
 
     decision, risk = {}, {}
@@ -1946,25 +1665,31 @@ def run_rq4_vuln():
             print(f"    {method:7s} {means}")
 
     if decision:
-        # No y-axis label: the caption carries the quantity, as in RQ4_2_2.
-        plot_old_vs_new(decision, f'{PLOTS_DIR}/RQ4_1_2_SEFA.pdf', '',
-                        figsize=VULN_DECISION_FIGSIZE, style_map=VULN_DECISION_STYLE,
-                        order=('AQUA', 'SAQURE'), legend_title='Methods',
-                        legend_loc='upper left', xtick_rotation=45,
-                        ylim=VULN_DECISION_YLIM, grid_step_units=0.02)
+        plot_vuln_axis(decision, f'{PLOTS_DIR}/RQ412_SEFA.pdf', 'Runtime Decision\nTime (ms)',
+                       figsize=VULN_DECISION_FIGSIZE, style_map=VULN_DECISION_STYLE,
+                       order=('AQUA', 'SAQURE'), legend_title='Methods',
+                       legend_loc='upper left', xtick_rotation=45,
+                       ylim=VULN_DECISION_YLIM, grid_step_units=0.2, sci_y=True,
+                       ymajor=1000, layout='decision')
     if risk:
         risk_style = {'SAQURE': {**VULN_DECISION_STYLE['SAQURE'],
                                  'label': RISK_SERIES_LABEL}}
-        plot_old_vs_new(risk, f'{PLOTS_DIR}/RQ4_2_1_SEFA.pdf',
-                        'Runtime Risk\nAssessment Time (ms)',
-                        figsize=VULN_RISK_FIGSIZE, style_map=risk_style,
-                        order=('SAQURE',), legend_title=None,
-                        legend_loc='upper left', font_delta=5,
-                        ylim=VULN_RISK_YLIM)
+        plot_vuln_axis(risk, f'{PLOTS_DIR}/RQ421_SEFA.pdf',
+                       'Runtime Risk\nAssessment Time (ms)',
+                       figsize=VULN_RISK_FIGSIZE, style_map=risk_style,
+                       order=('SAQURE',), legend_title=None,
+                       legend_loc='upper left', font_delta=5,
+                       # label one size down so the two lines fit the 4in RQ4 height
+                       ylabel_fontsize=22.5,
+                       ylim=VULN_RISK_YLIM, sci_y=True, layout='risk')
 
 
 def run_rq4_size():
-    """Load the RQ4 size axis logs (Size_vs_RuntimeDeTime) and plot the three timings"""
+    """RQ4.1.3 (decision time, Size_vs_RuntimeDeTime) and RQ4.2.2 (risk assessment time,
+    Size_vs_RiskAssessTime) against the size of the managed system."""
+    # Other figures switch text.usetex on globally; RQ4 figures use the plain '1e3' offset
+    # notation and the sans font, so reset it here.
+    plt.rcParams['text.usetex'] = False
     print("\n====== RQ4 size axis (Size_vs_RuntimeDeTime) ======")
     stats_by_approach = {}
     for approach in ('SAQURE', 'AQUA'):
@@ -1986,18 +1711,16 @@ def run_rq4_size():
         return
 
     # Figures that go into the paper: the decision figure is square, the risk one 5:3 landscape
-    DECISION_FIGSIZE = (6, 6)
-    PAPER_FIGSIZE = (11.4, 6)   # 1.9:1 aspect ratio
-    plot_size_axis_comparison(stats_by_approach, 'decision', '',
-                              f'{PLOTS_DIR}/RQ4_1_3_SEFA.pdf',
-                              figsize=DECISION_FIGSIZE, xtick_rotation=45)
+    DECISION_FIGSIZE = (6, RQ4_FIG_HEIGHT)
+    PAPER_FIGSIZE = (11.4, RQ4_FIG_HEIGHT)
+    plot_size_axis_comparison(stats_by_approach, 'decision', 'Runtime Decision\nTime (ms)',
+                              f'{PLOTS_DIR}/RQ413_SEFA.pdf',
+                              figsize=DECISION_FIGSIZE, xtick_rotation=45, layout='decision')
     if 'SAQURE' in stats_by_approach:
         # Risk assessment is SAQURE only, reported per microservice: the time each replica costs
-        # stays flat as the managed system grows, so the axis is pinned to 100-500 ms.
-        # Risk assessment now comes from Size_vs_RiskAssessTime: the same independent domains and
-        # the same critical-path definition as the vulnerability-axis figure, measured
-        # by VulnAxisAPProfiler rather than EADSA on the monolithic AED. Size_vs_RuntimeDeTime is
-        # still used for the decision and configuration figures.
+        # stays flat as the managed system grows. It comes from Size_vs_RiskAssessTime (wall
+        # clock of restaurant0's assessment, per replica); Size_vs_RuntimeDeTime is used for the
+        # decision figure.
         risk_by_scale = {}
         for scale in (1, 10, 25, 50, 100, 250, 500):
             folder = f"{RESULTS_BASE}/rq4_logs/Size_vs_RiskAssessTime/S{scale}/SAQURE"
@@ -2020,44 +1743,120 @@ def run_rq4_size():
             if per_run:
                 risk_by_scale[scale] = calculate_statistics(per_run)
         if risk_by_scale:
-            print("--- risk assessment (Size_vs_RiskAssessTime, critical path)")
+            print("--- risk assessment (Size_vs_RiskAssessTime, wall clock per replica)")
             for scale in sorted(risk_by_scale):
                 print(f"    {scale}x: {risk_by_scale[scale]['mean']:.1f}ms")
             plot_size_axis({s: {'risk_per_replica': st} for s, st in risk_by_scale.items()},
-                           'risk_per_replica', '',
-                           f'{PLOTS_DIR}/RQ4_2_2_SEFA.pdf',
+                           'risk_per_replica', 'Runtime Risk\nAssessment Time (ms)',
+                           f'{PLOTS_DIR}/RQ422_SEFA.pdf',
                            RISK_SERIES_LABEL,
                            legend_loc='upper left', figsize=PAPER_FIGSIZE,
-                           ylim=(12, 17), ymajor=1, yminor=0.2)
-        # Configuration cost in the sense AQUA's Figure 4b uses it: generating the
-        # initial model. AED_Processor's "offline configuration" is text switching over
-        # the monolithic AED and depends only on the vulnerability count, not on the
-        # managed system size, so it is not the quantity this axis is about.
-        # Two levels of aggregation, as in the risk figure: each run is reduced to its
-        # mean, and the box is built from the 10 runs.
-        model_by_scale = {}
-        for scale in (1, 10, 25, 50, 100, 250, 500):
-            folder = f"{RESULTS_BASE}/rq4_logs/Size_vs_RuntimeDeTime/S{scale}/SAQURE"
-            if not os.path.exists(folder):
-                continue
-            per_run = []
-            for log in read_log_files(folder):
-                readings = [float(v) for v in re.findall(
-                    r'Time to generate and save PRISM model:\s*([\d.]+)ms', log['content'])]
-                if readings:
-                    per_run.append(float(np.mean(readings)))
-            if per_run:
-                model_by_scale[scale] = calculate_statistics(per_run)
-        if model_by_scale:
-            print("--- initial model generation (Size_vs_RuntimeDeTime)")
-            for scale in sorted(model_by_scale):
-                print(f"    {scale}x: {model_by_scale[scale]['mean']:.2f}ms")
-            plot_size_axis({s: {'offline_config': st} for s, st in model_by_scale.items()},
-                           'offline_config', '',
-                           f'{PLOTS_DIR}/RQ4_3_2_SEFA.pdf',
-                           'Mean Initial Model Generation Time',
-                           legend_loc='upper left', figsize=PAPER_FIGSIZE,
-                           ylim=(0, 11), ymajor=2, yminor=0.5)
+                           # Wall clock per replica, ~30-41 ms.
+                           ylim=(0, 100), ymajor=20, yminor=5, yorder=2,  # ticks 0-1 in 1e2 ms
+                           ylabel_fontsize=22.5, layout='risk')
+
+
+# ═══════════════════════════════════════════════════════════════
+# RQ4(3)(i): offline configuration time against the number of vulnerabilities
+# ═══════════════════════════════════════════════════════════════
+
+# CVE2AP generation logs: one record per candidate CVE (raw_results.jsonl) and one per
+# error-feedback retry (feedback_results.jsonl).
+OFFLINE_CONFIG_DIR = "SAQURE-vulnerability-scalability/results/offline_config"
+# One sub-directory per generated CVE.
+AUTO_GENERATED_DIR = "SAQURE-vulnerability-scalability/pddl-ap-passall/post-proposs/auto-generated"
+# Generated, but not among the 100 CVEs (lowest CVSS among the candidates).
+RQ431_DROPPED = {'CVE-2023-34053', 'CVE-2023-34054'}
+# The 21 expert-specified CVEs are the starting point of the axis.
+RQ431_EXPERT_CVES = 21
+
+
+def run_rq431():
+    """RQ4(3)(i): cumulative AED/AEDI specification time from 21 to 100 vulnerabilities.
+
+    Same figure as RQ431_plot_offline_config_time.ipynb. A generated CVE costs its CVE2AP
+    generation time plus its error-feedback retry, if any; CVEs are added in ascending order
+    of that cost, starting at zero from the 21 expert-specified ones.
+    """
+    import json
+    plt.rcParams['text.usetex'] = False
+    print("\n====== RQ4(3)(i) offline configuration time (CVE2AP generation logs) ======")
+
+    selected = set(d for d in os.listdir(AUTO_GENERATED_DIR)
+                   if os.path.isdir(os.path.join(AUTO_GENERATED_DIR, d))) - RQ431_DROPPED
+    with open(os.path.join(OFFLINE_CONFIG_DIR, 'raw_results.jsonl')) as fh:
+        raw_records = [json.loads(line) for line in fh]
+    with open(os.path.join(OFFLINE_CONFIG_DIR, 'feedback_results.jsonl')) as fh:
+        fb_records = [json.loads(line) for line in fh if line.strip()]
+
+    cve_total_time = {}
+    for cve in selected:
+        raw_time = sum(r['elapsed_seconds'] for r in raw_records if r['cve_id'] == cve)
+        fb_time = sum(r['elapsed_seconds'] for r in fb_records if r['cve_id'] == cve)
+        cve_total_time[cve] = raw_time + fb_time
+
+    sorted_cves = sorted(cve_total_time.keys(), key=lambda c: cve_total_time[c])
+    cumulative_times = []
+    cum = 0.0
+    for cve in sorted_cves:
+        cum += cve_total_time[cve]
+        cumulative_times.append(cum)
+    x = np.arange(1, len(sorted_cves) + 1)
+    y = np.array(cumulative_times)
+    print(f"    {len(sorted_cves)} generated CVEs, total {y[-1]:.0f}s ({y[-1] / 60:.1f} min), "
+          f"mean {y[-1] / len(sorted_cves):.1f}s/CVE")
+
+    FIG_SIZE = (12, 6)
+    FONT_SIZE_LABEL = 26
+    TICK_LABEL_SIZE = 22
+    POINTSIZE = 7
+    TREND_LINEWIDTH = 1.0
+
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
+    # x runs from 22 to 100; the point at 21 (y = 0) is the expert-specified baseline.
+    x_plot = np.concatenate([[RQ431_EXPERT_CVES], x + RQ431_EXPERT_CVES])
+    y_plot = np.concatenate([[0], y * 1000])  # s -> ms
+    marker_x = [21, 30, 40, 50, 60, 70, 80, 90, 100]
+    marker_y = [np.interp(mx, x_plot, y_plot) for mx in marker_x]
+
+    ax.plot(x_plot, y_plot, color=COLORS['red'], linewidth=TREND_LINEWIDTH, linestyle='--', zorder=3,
+            label='Initial AED/AEDI Specification Time')
+    ax.plot(marker_x, marker_y,
+            linestyle='none', marker='o', markersize=POINTSIZE,
+            markeredgecolor=COLORS['red'], markerfacecolor=COLORS['red'],
+            markeredgewidth=0.5, zorder=4)
+
+    ax.set_xlabel('Number of Vulnerabilities', fontsize=FONT_SIZE_LABEL)
+    ax.set_ylabel('Configuration Time (ms)', fontsize=FONT_SIZE_LABEL)
+    # Y axis: 1e6 offset notation
+    ax.set_ylim(0, 8000000)
+    ax.ticklabel_format(style='sci', axis='y', scilimits=(6, 6))
+    ax.yaxis.get_offset_text().set_fontsize(TICK_LABEL_SIZE)
+    ax.set_xlim(19, 102)
+    ax.set_xticks([21, 30, 40, 50, 60, 70, 80, 90, 100])
+
+    ax.tick_params(axis='both', labelsize=TICK_LABEL_SIZE, which='both',
+                   direction='out', top=False, right=False)
+    ax.tick_params(axis='both', which='major', length=6, pad=4)
+    ax.tick_params(axis='both', which='minor', length=3)
+    ax.tick_params(axis='y', which='both', right=False)
+    for spine in ax.spines.values():
+        spine.set_linewidth(1.2)
+
+    ax.yaxis.set_minor_locator(AutoMinorLocator(5))
+    ax.grid(True, which='major', axis='y', linestyle='--', linewidth=0.75, alpha=0.15, color='gray')
+    ax.grid(True, which='minor', axis='y', linestyle='--', linewidth=0.5, alpha=0.10, color='gray')
+    ax.set_axisbelow(True)
+
+    ax.legend(loc='upper left', fontsize=23, frameon=True,
+              edgecolor='lightgray', framealpha=0.9,
+              handlelength=3, handletextpad=1.0)
+
+    fig.tight_layout(pad=1.5)
+    save_path = f'{PLOTS_DIR}/RQ431_SEFA.pdf'
+    plt.savefig(save_path, dpi=200, bbox_inches='tight')
+    plt.savefig(save_path.replace('.pdf', '.png'), dpi=200, bbox_inches='tight')
+    plt.close(fig)
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -2068,7 +1867,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate experiment plots for RQ1-RQ4")
     parser.add_argument(
         '--experiment', type=str, nargs='?', default='all',
-        choices=['RQ1', 'RQ2', 'RQ3', 'RQ4.1', 'RQ4.2', 'RQ4_eadsa', 'RQ4_size', 'RQ4_vuln', 'RQ4', 'all'],
+        choices=['RQ1', 'RQ2', 'RQ3', 'gain', 'RQ4.1', 'RQ4_vuln', 'RQ4_size', 'RQ431', 'RQ4', 'all'],
         help="Which experiment to plot (default: all)"
     )
     args = parser.parse_args()
@@ -2079,24 +1878,26 @@ if __name__ == "__main__":
         'RQ1': run_rq1,
         'RQ2': run_rq2,
         'RQ3': run_rq3,
-        'RQ4.1': run_rq4_1_1,
-        'RQ4.2': run_rq4_1_2,
-        'RQ4_eadsa': run_rq4_eadsa,
-        'RQ4_size': run_rq4_size,
-        'RQ4_vuln': run_rq4_vuln,
+        'gain': run_gain,
+        'RQ4.1': run_rq4_1_1,      # RQ411
+        'RQ4_vuln': run_rq4_vuln,  # RQ412, RQ421
+        'RQ4_size': run_rq4_size,  # RQ413, RQ422
+        'RQ431': run_rq431,        # RQ431
     }
 
     if args.experiment == 'all':
         for name, fn in dispatch.items():
+            if name in ('RQ1', 'RQ2', 'RQ3'):
+                continue  # drawn by 'gain', which also writes adaptation_gain_values.csv
             print(f"\n{'='*60}")
             print(f"  Plotting {name}")
             print(f"{'='*60}")
             fn()
     elif args.experiment == 'RQ4':
-        # RQ4 = RQ4.1 + RQ4.2 + RQ4_eadsa
+        # Every RQ4 figure of the paper: RQ411-RQ413, RQ421-RQ422, RQ431
         run_rq4_1_1()
-        run_rq4_1_2()
-        run_rq4_eadsa()
+        run_rq4_vuln()
         run_rq4_size()
+        run_rq431()
     else:
         dispatch[args.experiment]()

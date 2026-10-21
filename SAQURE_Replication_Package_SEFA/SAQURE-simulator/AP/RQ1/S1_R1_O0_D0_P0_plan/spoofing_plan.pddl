@@ -7,13 +7,12 @@ problem 'AEDI-SPOOFING' defined
  ... done.
 
 
-translating negated cond for predicate SCRIPT-EXECUTION-PROMPT-ENABLED
 
 ff: search configuration is A*epsilon with weight 1.
 Metric is ((1.00*[RF0](TOTAL-COST)) - () + 0.00)
 COST MINIMIZATION DONE (WITH cost-minimizing relaxed plans).
 
-Advancing to goal distance:   19
+Advancing to goal distance:   18
                               17
                               16
                               15
@@ -54,11 +53,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2024-34447 SEFA 
        17: ATTACKER-USES-USER-CREDENTIALS-LOGIN-TARGET-APPLICATION USER1 USER1-PASSWORD_SEFA SEFA
 plan cost: 605.000000
 
-time spent:    0.07 seconds instantiating 6778 easy, 100 hard action templates
-               0.00 seconds reachability analysis, yielding 393 facts and 971 actions
-               0.00 seconds creating final representation with 390 relevant facts, 1 relevant fluents
+time spent:    0.01 seconds instantiating 236 easy, 0 hard action templates
+               0.00 seconds reachability analysis, yielding 74 facts and 36 actions
+               0.00 seconds creating final representation with 74 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.04 seconds searching, evaluating 277 states, to a max depth of 0
-               0.11 seconds total time
+               0.00 seconds searching, evaluating 44 states, to a max depth of 0
+               0.01 seconds total time
 

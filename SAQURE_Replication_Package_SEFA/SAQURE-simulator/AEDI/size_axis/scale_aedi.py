@@ -5,10 +5,11 @@ Shared objects (attacker, user, comchannel, ...) stay single; every object whose
 mentions SEFA is replicated per replica, together with every init fact that mentions one.
 The goal stays on replica 1, so the attack target is fixed while the environment grows.
 
-Two modes, matching the two quantities reported for RQ4(2)(ii) and RQ4(3)(ii):
+Two modes, matching the two readings of RQ4(2)(ii):
 
   joint  one problem describing all N replicas at once. This is NOT how SAQURE assesses
-         risk; it is generated only to quantify the grounding blow-up such a model incurs.
+         risk; it is generated only as a contrast, to show how fast planning on such a
+         model grows with N.
   split  N problems, each describing a single replica in isolation. This mirrors how EADSA
          actually works (one Metric-FF run per service), so the risk assessment time of the
          whole managed system is the sum over the N problems.

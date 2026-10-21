@@ -7,7 +7,6 @@ problem 'AEDI-DENIAL_OF_SERVICE' defined
  ... done.
 
 
-translating negated cond for predicate SCRIPT-EXECUTION-PROMPT-ENABLED
 
 ff: search configuration is A*epsilon with weight 1.
 Metric is ((1.00*[RF0](TOTAL-COST)) - () + 0.00)
@@ -27,14 +26,14 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2024-38286 SEFA 
         2: ATTACKER-INITIATES-TLS-FLOOD SEFA TOMCAT-TLS-FLOOD-SCRIPT1 TOMCAT_SEFA TLS-CONNECTOR_SEFA CVE_2024_38286
         3: APPLICATION-KEEPS-ALLOCATE-RESOURCES-FOR-HANDSHAKES TOMCAT_SEFA TLS-CONNECTOR_SEFA TOMCAT-TLS-FLOOD-SCRIPT1
         4: APPLICATION-TRIGGERS-OUTOFMEMORY-ERROR TOMCAT_SEFA SEFA
-        5: APPLICATION-BECOMES-UNRESPONSIVE SEFA
+        5: APPLICATION-TOMCAT-CRASHES SEFA TOMCAT_SEFA
 plan cost: 34.000000
 
-time spent:    0.07 seconds instantiating 6778 easy, 99 hard action templates
-               0.00 seconds reachability analysis, yielding 334 facts and 632 actions
-               0.00 seconds creating final representation with 330 relevant facts, 1 relevant fluents
-               0.01 seconds computing LNF
+time spent:    0.00 seconds instantiating 45 easy, 1 hard action templates
+               0.00 seconds reachability analysis, yielding 13 facts and 6 actions
+               0.00 seconds creating final representation with 13 relevant facts, 1 relevant fluents
+               0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.00 seconds searching, evaluating 89 states, to a max depth of 0
-               0.08 seconds total time
+               0.00 seconds searching, evaluating 7 states, to a max depth of 0
+               0.00 seconds total time
 

@@ -1246,239 +1246,239 @@
 
 ;;;#################################### Application vulnerability exposure action ####################################;;;
 ;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-12798  
-  :parameters (?Application - application ?Logback - logback ?JaninoLib - java-library ?User - user ?Directory - path ?ConfigFile - logback-config) ;;?application: the target application
-  :precondition (and
-
-    ;; ==== basic environment compositions ====
-   ; 1. The application deploys logback
-    ;(has-software ?Application ?Logback) 
-    ;(logback-core ?Logback) 
-    (has-logback ?Application ?Logback)
-     
-
-    ; 2. Vulnerable Logback version (version ≤ 1.3.14 or 1.4.0 – 1.5.12)
-    (or
-      ;; version ≤ 1.3.14 
-      
-      (<= (version ?Logback) 1003014000)       ;; 1.4.0 ≤ version ≤ 1.5.12
-      (and 
-        (>= (version ?Logback) 1004000000)  
-        (<= (version ?Logback) 1005012000)  
-      )
-    )
-
-    ;3. JaninoEventEvaluator enabled
-     ;; two definition method
-    ;; aim: show the meaning that system enables JaninoEventEvaluator extension; 
-    ;; 1. respectively define object for the two entities
-    ;(feature ?Janinoevaluator)  
-    ;(has-feature ?Logback ?Janinoevaluator)  
-    ;(feature-enabled ?Logback ?Janinoevaluator)
-    ;; 2. directly show the characteristics of application
-    (janino-evaluator-enabled ?Application ?Logback)
-    
-
-    ;4. Janino library 
-    (has-library ?Application ?JaninoLib)
-     (janino-library ?JaninoLib)
-    ;(has-dependency ?Application ?JaninoLib)
-
-    ;5. Dynamic config loading enabled
-    (dynamic-config-loading-enabled ?Application ?Logback)
-
-    ;6. User has write permission on configuration directory or env variables
-    (has-config-dir ?Application ?Directory)
-    (has-access ?User ?Directory)
-    (has-write-access ?User ?Directory)
-    
-    ;7. No Janino code execution restrictions
-    (not (has-code-execution-restriction ?Application ?Logback))
-    ; No config integrity check
-    (not (has-integrity-check ?Application ?Logback ?ConfigFile))
-    (not (has-signature-verification ?Application ?Logback ?ConfigFile))
-
-    ;8. Controllable env variables (allows specifying the configuration file path via environment variables.)
-    (has-controllable-env-vars ?Application)
-  )
-  :effect (and (exposed-attack-surface ?Application CVE_2024_12798)
-               (exploit-by CVE_2024_12798 change-to-malicious-logback-config)
-               (increase (total-cost) 53)))
-;@end vulnerability expose@;;
-
-;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38286
- :parameters (?Application - application ?Tomcat - tomcat ?TLSConnector - tls-connector)
- :precondition (and
-     ;1. system deploys Tomcat instance with TLS connector 
-     (has-tomcat ?Application ?Tomcat)
-     (tomcat-has-tls-connector ?Application ?Tomcat ?TLSConnector)
-    
-     ;2. vulnerable tomcat version 
-      (or 
-        ; Tomcat 11.0.0-M1 to M20 
-        (and 
-          (>= (version ?Tomcat) 11000000001) 
-          (<= (version ?Tomcat) 11000000020)
-        )
-        ; Tomcat 10.1.0-M1 t 10.1.24
-        (and 
-          (>= (version ?Tomcat) 10001000001) 
-          (<= (version ?Tomcat) 10001024000)
-        )
-        ; Tomcat 9.0.13 to 9.0.89
-        (and 
-          (>= (version ?Tomcat) 9000013000) 
-          (<= (version ?Tomcat) 9000089000)
-        )
-      )
-
-     ;3. system TSL supports renegotiation; TLS renegotiation is not disabled (renegotiation allowed by default)
-     (tomcat-tls-renegotiation-enabled ?Application ?Tomcat ?TLSConnector)
-     
-     ;4. system's memory is limited
-     (has-memory-limitation ?Application ?Tomcat)
-    
-    
-     ;5. No memory protection mechanisms (e.g., no OOM Killer)
-     (not (has-memory-protection-mechanisms ?Application))
-
-     ;6.  No connection rate limiting: maxConnections or firewall rules not configured
-     (not (max-connection-restriction ?Application))
-     (not (firewall-connection-restriction ?Application))
-     
-     ;7. No abnormal traffic detection (no IDS/IPS/WAF monitoring)
-     (not (IDS-monitoring ?Application))
-     (not (IPS-monitoring ?Application))
-     (not (WAF-monitoring ?Application)))  
-
-  :effect (and (exposed-attack-surface ?Application CVE_2024_38286)
-          (exploit-by CVE_2024_38286 abuse-tls-handshake)
-          (vulnerable-tomcat ?Tomcat)
-          (increase (total-cost) 29))) 
-;@end vulnerability expose@;;
-
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-12798  
+;  :parameters (?Application - application ?Logback - logback ?JaninoLib - java-library ?User - user ?Directory - path ?ConfigFile - logback-config) ;;?application: the target application
+;  :precondition (and
+;
+;    ;; ==== basic environment compositions ====
+;   ; 1. The application deploys logback
+;    ;(has-software ?Application ?Logback) 
+;    ;(logback-core ?Logback) 
+;    (has-logback ?Application ?Logback)
+;     
+;
+;    ; 2. Vulnerable Logback version (version ≤ 1.3.14 or 1.4.0 – 1.5.12)
+;    (or
+;      ;; version ≤ 1.3.14 
+;      
+;      (<= (version ?Logback) 1003014000)       ;; 1.4.0 ≤ version ≤ 1.5.12
+;      (and 
+;        (>= (version ?Logback) 1004000000)  
+;        (<= (version ?Logback) 1005012000)  
+;      )
+;    )
+;
+;    ;3. JaninoEventEvaluator enabled
+;     ;; two definition method
+;    ;; aim: show the meaning that system enables JaninoEventEvaluator extension; 
+;    ;; 1. respectively define object for the two entities
+;    ;(feature ?Janinoevaluator)  
+;    ;(has-feature ?Logback ?Janinoevaluator)  
+;    ;(feature-enabled ?Logback ?Janinoevaluator)
+;    ;; 2. directly show the characteristics of application
+;    (janino-evaluator-enabled ?Application ?Logback)
+;    
+;
+;    ;4. Janino library 
+;    (has-library ?Application ?JaninoLib)
+;     (janino-library ?JaninoLib)
+;    ;(has-dependency ?Application ?JaninoLib)
+;
+;    ;5. Dynamic config loading enabled
+;    (dynamic-config-loading-enabled ?Application ?Logback)
+;
+;    ;6. User has write permission on configuration directory or env variables
+;    (has-config-dir ?Application ?Directory)
+;    (has-access ?User ?Directory)
+;    (has-write-access ?User ?Directory)
+;    
+;    ;7. No Janino code execution restrictions
+;    (not (has-code-execution-restriction ?Application ?Logback))
+;    ; No config integrity check
+;    (not (has-integrity-check ?Application ?Logback ?ConfigFile))
+;    (not (has-signature-verification ?Application ?Logback ?ConfigFile))
+;
+;    ;8. Controllable env variables (allows specifying the configuration file path via environment variables.)
+;    (has-controllable-env-vars ?Application)
+;  )
+;  :effect (and (exposed-attack-surface ?Application CVE_2024_12798)
+;               (exploit-by CVE_2024_12798 change-to-malicious-logback-config)
+;               (increase (total-cost) 53)))
+;;@end vulnerability expose@;;
 
 ;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-22243   
-    :parameters (?Application - application ?SpringFramework - spring-framework ?Endpoint - endpoint ?Parser - url-parser)
-    :precondition (and 
-
-      ; 1. Application uses a vulnerable version of Spring Framework
-      (has-dependency-on-spring-framework ?Application ?SpringFramework)
-      (or 
-         ; 5.3.x before 5.3.31 (5003000000 + 31000 = 5003031000)
-         (and (>= (version ?SpringFramework) 5003000000) (< (version ?SpringFramework) 5003031000))
-         ; 6.0.x before 6.0.16 (6000000000 + 16000 = 6000016000)
-         (and (>= (version ?SpringFramework) 6000000000) (< (version ?SpringFramework) 6000016000))
-         ; 6.1.x before 6.1.13 (6001000000 + 13000 = 6001013000)
-         (and (>= (version ?SpringFramework) 6001000000) (< (version ?SpringFramework) 6001013000))
-       )
-
-      ;1. Application depends on vulnerable UriComponentsBuilder (e.g., specific versions of Spring Framework) 
-       (has-dependency-on-vulnerable-paser ?Application ?Parser)
-
-       
-      ;2. Endpoints accept external-controlled URL parameters (e.g., /redirect?url=...)
-       (has-external-settingable-endpoint ?Application ?Endpoint)
-
-      ;3. Application supports HTTP url redirects
-     (url-redirect-enabled ?Application)
-
-      ;4. No strict validation on protocol, path, or port in received URLs
-      (not (url-endpoint-setting-restriction ?Application ?Endpoint))
-     ;(not (url-endpoint-protocol-restriction ?Application ?Endpoint))
-     ;(not (url-endpoint-path-restriction ?Application ?Endpoint))
-     ;(not (url-endpoint-points-restriction ?Application ?Endpoint))
-      ;2. Application can access internal or external network resources 
-      (external-resource-accessable ?Application)
-      (internal-resource-accessable ?Application)
-
-      ;5. Host validation flaws: uses blacklist instead of whitelist; fails to handle URL encoding or special characters (e.g., @, %0d%0a); lacks canonical URL parsing
-      (vulnerable-host-validation ?Application)
-      ;(depend-blacklist-host-validation ?Application)
-      ;(not (canonicalization-parse-url ?Application))
-      
-      ;6. no anti-open redirect protections (e.g., Spring Security's RedirectValidator not enabled)
-      (not (anti-redirect-protection ?Application))
-
-     ;7. WAF/IPS does not block malicious redirect attempts
-     (not (WAF-malicious-request-bloack ?Application))
-     (not (IPS-malicious-request-bloack ?Application)) )
-    :effect (and (exposed-attack-surface ?Application CVE_2024_22243)
-                (exploit-by CVE_2024_22243 crafts-redirect-url)
-                (exploit-by CVE_2024_22243 crafts-redirect-url-to-phishing-site)
-                (exploit-by CVE_2024_22243 build-phishingsite)
-                (vulnerable-spring-framework ?SpringFramework)
-                (increase (total-cost) 21)))
-;@end vulnerability expose@;;  
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38286
+; :parameters (?Application - application ?Tomcat - tomcat ?TLSConnector - tls-connector)
+; :precondition (and
+;     ;1. system deploys Tomcat instance with TLS connector 
+;     (has-tomcat ?Application ?Tomcat)
+;     (tomcat-has-tls-connector ?Application ?Tomcat ?TLSConnector)
+;    
+;     ;2. vulnerable tomcat version 
+;      (or 
+;        ; Tomcat 11.0.0-M1 to M20 
+;        (and 
+;          (>= (version ?Tomcat) 11000000001) 
+;          (<= (version ?Tomcat) 11000000020)
+;        )
+;        ; Tomcat 10.1.0-M1 t 10.1.24
+;        (and 
+;          (>= (version ?Tomcat) 10001000001) 
+;          (<= (version ?Tomcat) 10001024000)
+;        )
+;        ; Tomcat 9.0.13 to 9.0.89
+;        (and 
+;          (>= (version ?Tomcat) 9000013000) 
+;          (<= (version ?Tomcat) 9000089000)
+;        )
+;      )
+;
+;     ;3. system TSL supports renegotiation; TLS renegotiation is not disabled (renegotiation allowed by default)
+;     (tomcat-tls-renegotiation-enabled ?Application ?Tomcat ?TLSConnector)
+;     
+;     ;4. system's memory is limited
+;     (has-memory-limitation ?Application ?Tomcat)
+;    
+;    
+;     ;5. No memory protection mechanisms (e.g., no OOM Killer)
+;     (not (has-memory-protection-mechanisms ?Application))
+;
+;     ;6.  No connection rate limiting: maxConnections or firewall rules not configured
+;     (not (max-connection-restriction ?Application))
+;     (not (firewall-connection-restriction ?Application))
+;     
+;     ;7. No abnormal traffic detection (no IDS/IPS/WAF monitoring)
+;     (not (IDS-monitoring ?Application))
+;     (not (IPS-monitoring ?Application))
+;     (not (WAF-monitoring ?Application)))  
+;
+;  :effect (and (exposed-attack-surface ?Application CVE_2024_38286)
+;          (exploit-by CVE_2024_38286 abuse-tls-handshake)
+;          (vulnerable-tomcat ?Tomcat)
+;          (increase (total-cost) 29))) 
+;;@end vulnerability expose@;;
 
 
 ;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38820
-   :parameters (?Application - application ?SpringFramework - spring-framework ?Config - locale-config ?DataBinder - data-binder ?Controller - web-controller ?Pattern - disallowed-pattern)  
-   :precondition (and
-      ; 1. Application uses a vulnerable version of Spring Framework
-      (has-dependency-on-spring-framework ?Application ?SpringFramework)
-     (or 
-         ; 5.3.x before 5.3.41 (5003000000 + 41000 = 5003041000)
-         (and (>= (version ?SpringFramework) 5003000000) (< (version ?SpringFramework) 5003041000))
-         ; 6.0.x before 6.0.25 (6000000000 + 25000 = 6000025000)
-         (and (>= (version ?SpringFramework) 6000000000) (< (version ?SpringFramework) 6000025000))
-         ; 6.1.x before 6.1.14 (6001000000 + 14000 = 6001014000)
-         (and (>= (version ?SpringFramework) 6001000000) (< (version ?SpringFramework) 6001014000))
-      )
-      
-      ; 2. DataBinder component is actively used for binding HTTP request parameters
-      (has-vulnerable-databinder ?Application ?Databinder)
-      (databinder-parameter-binding-enabled ?Application ?DataBinder)
-      
-      ; 3. Application has configured disallowedFields patterns in DataBinder
-      (has-disallowed-databinder-fields-configuration ?Application)
-      
-     ; 4. Server environment runs with specific locales (Turkish, Lithuanian, etc.) Application processes requests in vulnerable locale contexts
-     (has-locale-configuration ?Application ?Config)
-      (processes-requests-in-locale-context ?Application)
-      (has-locale-specific-exceptions ?Application)
-     (locale-has-special-case-conversion ?Application)
-      (has-vulnerable-locale-transformation ?Application)
-      
-      ; 5. Web controllers accept user input through HTTP requests
-      (has-web-controller-accept-http-post-user-input ?Application ?Controller)
- 
-      ; System Permissions & Path conditions
-      ; 1. Application accepts user-controlled parameter names
-      (accepts-user-controlled-parameter-names ?Application)
-            
-      ; 2. DataBinder has write access to object properties
-      (databinder-has-write-access-to-properties ?Application ?DataBinder)
-      
-      ; 3. No additional input validation layers
-      (not (databinder-has-additional-input-validation-layer ?Application ?DataBinder))
-     
-      ; System Security Mechanisms conditions
-      ; 1. Reliance on case-insensitive disallowedFields matching as primary protection
-      (databinder-relies-on-case-insensitive-field-matching ?Application ?DataBinder)
-      
-      ; 2. Locale-dependent string processing without explicit locale specification
-      (locale-dependent-string-processing ?Application)
-      (not (explicit-locale-specification-in-lowercase ?Application))
-      
-      ; 3. No additional field access controls beyond DataBinder
-      (not (has-additional-field-access-controls ?Application))
-      
-      ; 4. No request parameter name sanitization
-      (not (has-parameter-name-sanitization ?Application))
-      
-      ; 5. No WAF rules or input filters for case manipulation detection
-      (not (has-WAF-case-manipulation-rules ?Application))
-      (not (has-input-filter-case-bypass-detection ?Application))
-   )   
-   :effect (and (exposed-attack-surface ?Application CVE_2024_38820)
-                (exploit-by CVE_2024_38820 bypass-locale-specific-capitalization)
-                (exploit-by CVE_2024_38820 acquire-user-account)
-                (increase (total-cost) 63)))
-;@end vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-22243   
+;    :parameters (?Application - application ?SpringFramework - spring-framework ?Endpoint - endpoint ?Parser - url-parser)
+;    :precondition (and 
+;
+;      ; 1. Application uses a vulnerable version of Spring Framework
+;      (has-dependency-on-spring-framework ?Application ?SpringFramework)
+;      (or 
+;         ; 5.3.x before 5.3.31 (5003000000 + 31000 = 5003031000)
+;         (and (>= (version ?SpringFramework) 5003000000) (< (version ?SpringFramework) 5003031000))
+;         ; 6.0.x before 6.0.16 (6000000000 + 16000 = 6000016000)
+;         (and (>= (version ?SpringFramework) 6000000000) (< (version ?SpringFramework) 6000016000))
+;         ; 6.1.x before 6.1.13 (6001000000 + 13000 = 6001013000)
+;         (and (>= (version ?SpringFramework) 6001000000) (< (version ?SpringFramework) 6001013000))
+;       )
+;
+;      ;1. Application depends on vulnerable UriComponentsBuilder (e.g., specific versions of Spring Framework) 
+;       (has-dependency-on-vulnerable-paser ?Application ?Parser)
+;
+;       
+;      ;2. Endpoints accept external-controlled URL parameters (e.g., /redirect?url=...)
+;       (has-external-settingable-endpoint ?Application ?Endpoint)
+;
+;      ;3. Application supports HTTP url redirects
+;     (url-redirect-enabled ?Application)
+;
+;      ;4. No strict validation on protocol, path, or port in received URLs
+;      (not (url-endpoint-setting-restriction ?Application ?Endpoint))
+;     ;(not (url-endpoint-protocol-restriction ?Application ?Endpoint))
+;     ;(not (url-endpoint-path-restriction ?Application ?Endpoint))
+;     ;(not (url-endpoint-points-restriction ?Application ?Endpoint))
+;      ;2. Application can access internal or external network resources 
+;      (external-resource-accessable ?Application)
+;      (internal-resource-accessable ?Application)
+;
+;      ;5. Host validation flaws: uses blacklist instead of whitelist; fails to handle URL encoding or special characters (e.g., @, %0d%0a); lacks canonical URL parsing
+;      (vulnerable-host-validation ?Application)
+;      ;(depend-blacklist-host-validation ?Application)
+;      ;(not (canonicalization-parse-url ?Application))
+;      
+;      ;6. no anti-open redirect protections (e.g., Spring Security's RedirectValidator not enabled)
+;      (not (anti-redirect-protection ?Application))
+;
+;     ;7. WAF/IPS does not block malicious redirect attempts
+;     (not (WAF-malicious-request-bloack ?Application))
+;     (not (IPS-malicious-request-bloack ?Application)) )
+;    :effect (and (exposed-attack-surface ?Application CVE_2024_22243)
+;                (exploit-by CVE_2024_22243 crafts-redirect-url)
+;                (exploit-by CVE_2024_22243 crafts-redirect-url-to-phishing-site)
+;                (exploit-by CVE_2024_22243 build-phishingsite)
+;                (vulnerable-spring-framework ?SpringFramework)
+;                (increase (total-cost) 21)))
+;;@end vulnerability expose@;;  
+
+
+;;@start vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38820
+;   :parameters (?Application - application ?SpringFramework - spring-framework ?Config - locale-config ?DataBinder - data-binder ?Controller - web-controller ?Pattern - disallowed-pattern)  
+;   :precondition (and
+;      ; 1. Application uses a vulnerable version of Spring Framework
+;      (has-dependency-on-spring-framework ?Application ?SpringFramework)
+;     (or 
+;         ; 5.3.x before 5.3.41 (5003000000 + 41000 = 5003041000)
+;         (and (>= (version ?SpringFramework) 5003000000) (< (version ?SpringFramework) 5003041000))
+;         ; 6.0.x before 6.0.25 (6000000000 + 25000 = 6000025000)
+;         (and (>= (version ?SpringFramework) 6000000000) (< (version ?SpringFramework) 6000025000))
+;         ; 6.1.x before 6.1.14 (6001000000 + 14000 = 6001014000)
+;         (and (>= (version ?SpringFramework) 6001000000) (< (version ?SpringFramework) 6001014000))
+;      )
+;      
+;      ; 2. DataBinder component is actively used for binding HTTP request parameters
+;      (has-vulnerable-databinder ?Application ?Databinder)
+;      (databinder-parameter-binding-enabled ?Application ?DataBinder)
+;      
+;      ; 3. Application has configured disallowedFields patterns in DataBinder
+;      (has-disallowed-databinder-fields-configuration ?Application)
+;      
+;     ; 4. Server environment runs with specific locales (Turkish, Lithuanian, etc.) Application processes requests in vulnerable locale contexts
+;     (has-locale-configuration ?Application ?Config)
+;      (processes-requests-in-locale-context ?Application)
+;      (has-locale-specific-exceptions ?Application)
+;     (locale-has-special-case-conversion ?Application)
+;      (has-vulnerable-locale-transformation ?Application)
+;      
+;      ; 5. Web controllers accept user input through HTTP requests
+;      (has-web-controller-accept-http-post-user-input ?Application ?Controller)
+; 
+;      ; System Permissions & Path conditions
+;      ; 1. Application accepts user-controlled parameter names
+;      (accepts-user-controlled-parameter-names ?Application)
+;            
+;      ; 2. DataBinder has write access to object properties
+;      (databinder-has-write-access-to-properties ?Application ?DataBinder)
+;      
+;      ; 3. No additional input validation layers
+;      (not (databinder-has-additional-input-validation-layer ?Application ?DataBinder))
+;     
+;      ; System Security Mechanisms conditions
+;      ; 1. Reliance on case-insensitive disallowedFields matching as primary protection
+;      (databinder-relies-on-case-insensitive-field-matching ?Application ?DataBinder)
+;      
+;      ; 2. Locale-dependent string processing without explicit locale specification
+;      (locale-dependent-string-processing ?Application)
+;      (not (explicit-locale-specification-in-lowercase ?Application))
+;      
+;      ; 3. No additional field access controls beyond DataBinder
+;      (not (has-additional-field-access-controls ?Application))
+;      
+;      ; 4. No request parameter name sanitization
+;      (not (has-parameter-name-sanitization ?Application))
+;      
+;      ; 5. No WAF rules or input filters for case manipulation detection
+;      (not (has-WAF-case-manipulation-rules ?Application))
+;      (not (has-input-filter-case-bypass-detection ?Application))
+;   )   
+;   :effect (and (exposed-attack-surface ?Application CVE_2024_38820)
+;                (exploit-by CVE_2024_38820 bypass-locale-specific-capitalization)
+;                (exploit-by CVE_2024_38820 acquire-user-account)
+;                (increase (total-cost) 63)))
+;;@end vulnerability expose@;;
 
 ;;@start vulnerability expose@;;
 ;(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-34055 
@@ -1543,314 +1543,314 @@
 ;;@end vulnerability expose@;;
 
 ;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-34447
- :parameters (?Application - application ?BouncyCastle - bouncy-castle ?BCJSSE - bcjsse)
- :precondition (and
-     ;1. Application uses vulnerable Bouncy Castle Java Cryptography APIs (versions before BC 1.78) with BCJSSE enabled
-     (has-bouncy-castle ?Application ?BouncyCastle)
-     (< (version ?BouncyCastle) 1078000000) ; version before 1.78
-     (bcjsse-enabled ?Application ?BouncyCastle ?BCJSSE)
-     
-     ;2. Endpoint identification is enabled in the BCJSSE configuration
-     (endpoint-identification-enabled ?Application ?BCJSSE)
-     
-     ;3. Application creates SSL sockets without explicit hostname specification
-     (ssl-socket-without-explicit-hostname ?Application)
-     
-     ;4. Application performs HTTPS connections that trigger DNS resolution during hostname verification
-    (https-connections-trigger-dns-resolution ?Application)
-     
-     ;5. No additional certificate validation mechanisms beyond BCJSSE hostname verification
-     (not (additional-certificate-validation ?Application))
-     
-     ;6. Network infrastructure allows DNS traffic interception or modification
-     (dns-traffic-interception-allowed ?Application))
-     
-  :effect (and (exposed-attack-surface ?Application CVE_2024_34447)
-          (exploit-by CVE_2024_34447 perform-dns-poisoning)
-          (exploit-by CVE_2024_34447 sets-up-malicious-server)
-          (vulnerable-bcjsse ?Application ?BCJSSE)
-          (increase (total-cost) 29)))
-;@end vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-34447
+; :parameters (?Application - application ?BouncyCastle - bouncy-castle ?BCJSSE - bcjsse)
+; :precondition (and
+;     ;1. Application uses vulnerable Bouncy Castle Java Cryptography APIs (versions before BC 1.78) with BCJSSE enabled
+;     (has-bouncy-castle ?Application ?BouncyCastle)
+;     (< (version ?BouncyCastle) 1078000000) ; version before 1.78
+;     (bcjsse-enabled ?Application ?BouncyCastle ?BCJSSE)
+;     
+;     ;2. Endpoint identification is enabled in the BCJSSE configuration
+;     (endpoint-identification-enabled ?Application ?BCJSSE)
+;     
+;     ;3. Application creates SSL sockets without explicit hostname specification
+;     (ssl-socket-without-explicit-hostname ?Application)
+;     
+;     ;4. Application performs HTTPS connections that trigger DNS resolution during hostname verification
+;    (https-connections-trigger-dns-resolution ?Application)
+;     
+;     ;5. No additional certificate validation mechanisms beyond BCJSSE hostname verification
+;     (not (additional-certificate-validation ?Application))
+;     
+;     ;6. Network infrastructure allows DNS traffic interception or modification
+;     (dns-traffic-interception-allowed ?Application))
+;     
+;  :effect (and (exposed-attack-surface ?Application CVE_2024_34447)
+;          (exploit-by CVE_2024_34447 perform-dns-poisoning)
+;          (exploit-by CVE_2024_34447 sets-up-malicious-server)
+;          (vulnerable-bcjsse ?Application ?BCJSSE)
+;          (increase (total-cost) 29)))
+;;@end vulnerability expose@;;
 
 
 ;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2022-40150
- :parameters (?Application - application ?JettisionLibrary - java-library ?APIEndpoint - api-endpoint ?SOAPEndpoint - soap-endpoint)
- :precondition (and
-     ;1. Application uses a vulnerable version of Jettison library (org.codehaus.jettison:jettison < 1.5.2)
-     ;(uses-library ?Application ?JettisionLibrary)
-     (has-library ?Application ?JettisionLibrary)
-     (jettison-library ?JettisionLibrary)
-     (< (version ?JettisionLibrary) 1005002000) ; version < 1.5.2
-     
-     ;2. Application accepts user-supplied XML or JSON input through exposed endpoints
-     (has-api-endpoint ?Application ?APIEndpoint)
-     (has-soap-endpoint ?Application ?SOAPEndpoint)
-     (accepts-json-input ?Application ?APIEndpoint)
-    
-     ;3. User input is directly passed to Jettison parser without input validation or size/complexity limits
-     (not (api-endpoint-has-input-validation ?Application ?APIEndpoint))
-     (not (api-endpoint-has-input-size-limits ?Application ?APIEndpoint))
-     (not (api-endpoint-has-complexity-limits ?Application ?APIEndpoint))
-     
-     ;4. No input sanitization or preprocessing to detect malicious payloads
-     (not (api-endpoint-has-input-sanitization ?Application ?APIEndpoint))
-     (not (api-endpoint-has-preprocessing-detection ?Application ?APIEndpoint))
-
-
-     ;5. Application lacks memory consumption limits or monitoring for heap memory usage during parsing operations;
-     (not (has-heap-memory-consumption-limits ?Application ))
-     (not (has-heap-memory-monitoring ?Application))
-     ;(not (has-memory-consumption-limits ?Application))
-     ;(not (has-memory-monitoring ?Application))
-     
-     ;6. Application server/container lacks sufficient heap memory isolation or resource quotas
-     (not (has-memory-protection-mechanisms ?Application))
-     (not (has-heap-memory-isolation ?Application))
-     (not (has-heap-memory-quotas ?Application))
-     
-     ;7. No rate limiting or throttling mechanisms exist
-     (not (has-rate-limiting ?Application ?APIEndpoint))
-     (not (has-throttling-mechanisms ?Application ?APIEndpoint))
-     
-     ;8. Absence of Web Application Firewall (WAF) rules (application layer firewall)
-     (not (has-waf-protection ?Application))
-     (not (has-waf-json-payload-detection ?Application)))
-
-  :effect (and (exposed-attack-surface ?Application CVE_2022_40150)
-          (vulnerable-jettison-parser ?JettisionLibrary)
-          (exploit-by CVE_2022_40150 craft-malicious-json-payload ) 
-          (exploit-by CVE_2022_40150 craft-malicious-xml-payload)
-          (increase (total-cost) 29)))
-;@end vulnerability expose@;;
-
-;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2022-40149
- :parameters (?Application - application ?JettisionLibrary - java-library ?APIEndpoint - api-endpoint ?SOAPEndpoint - soap-endpoint)
- :precondition (and
-     ;1. Application uses a vulnerable version of Jettison library (org.codehaus.jettison:jettison < 1.5.2)
-     ;(uses-library ?Application ?JettisionLibrary)
-     (has-library ?Application ?JettisionLibrary)
-     (jettison-library ?JettisionLibrary)
-     (< (version ?JettisionLibrary) 1005002000) ; version < 1.5.2
-     
-     ;2. Application accepts user-supplied XML or JSON input through exposed endpoints
-     (has-api-endpoint ?Application ?APIEndpoint)
-    (has-soap-endpoint ?Application ?SOAPEndpoint)
-     (accepts-json-input ?Application ?APIEndpoint)
-     
-     ;3. User input is directly passed to Jettison parser without input validation or size/complexity limits
-     (not (api-endpoint-has-input-validation ?Application ?APIEndpoint))
-     (not (api-endpoint-has-input-size-limits ?Application ?APIEndpoint))
-     (not (api-endpoint-has-complexity-limits ?Application ?APIEndpoint))
-     
-     ;4. No input sanitization or preprocessing to detect malicious payloads
-     (not (api-endpoint-has-input-sanitization ?Application ?APIEndpoint))
-     (not (api-endpoint-has-preprocessing-detection ?Application ?APIEndpoint))
-
-
-     ;5. Application lacks memory consumption limits or monitoring for heap memory usage during parsing operations;
-     (not (has-stack-memory-consumption-limits ?Application ))
-     (not (has-stack-memory-monitoring ?Application))
-     ;(not (has-memory-consumption-limits ?Application))
-     ;(not (has-memory-monitoring ?Application))
-     
-     ;6. Application server/container lacks sufficient heap memory isolation or resource quotas
-     (not (has-memory-protection-mechanisms ?Application))
-     (not (has-stack-memory-isolation ?Application))
-     (not (has-stack-memory-quotas ?Application))
-     
-     ;7. No rate limiting or throttling mechanisms exist
-
-     (not (has-rate-limiting ?Application ?APIEndpoint))
-     (not (has-throttling-mechanisms ?Application ?APIEndpoint))
-     
-     ;8. Absence of Web Application Firewall (WAF) rules (application layer firewall)
-     (not (has-waf-protection ?Application))
-     (not (has-waf-json-payload-detection ?Application)))
-
-  :effect (and (exposed-attack-surface ?Application CVE_2022_40149)
-          (exploit-by CVE_2022_40149 craft-malicious-xml-payload)
-          (exploit-by CVE_2022_40149 craft-malicious-json-payload)
-          (vulnerable-jettison-parser ?JettisionLibrary)
-          (increase (total-cost) 29)))
-;@end vulnerability expose@;;
-
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2022-40150
+; :parameters (?Application - application ?JettisionLibrary - java-library ?APIEndpoint - api-endpoint ?SOAPEndpoint - soap-endpoint)
+; :precondition (and
+;     ;1. Application uses a vulnerable version of Jettison library (org.codehaus.jettison:jettison < 1.5.2)
+;     ;(uses-library ?Application ?JettisionLibrary)
+;     (has-library ?Application ?JettisionLibrary)
+;     (jettison-library ?JettisionLibrary)
+;     (< (version ?JettisionLibrary) 1005002000) ; version < 1.5.2
+;     
+;     ;2. Application accepts user-supplied XML or JSON input through exposed endpoints
+;     (has-api-endpoint ?Application ?APIEndpoint)
+;     (has-soap-endpoint ?Application ?SOAPEndpoint)
+;     (accepts-json-input ?Application ?APIEndpoint)
+;    
+;     ;3. User input is directly passed to Jettison parser without input validation or size/complexity limits
+;     (not (api-endpoint-has-input-validation ?Application ?APIEndpoint))
+;     (not (api-endpoint-has-input-size-limits ?Application ?APIEndpoint))
+;     (not (api-endpoint-has-complexity-limits ?Application ?APIEndpoint))
+;     
+;     ;4. No input sanitization or preprocessing to detect malicious payloads
+;     (not (api-endpoint-has-input-sanitization ?Application ?APIEndpoint))
+;     (not (api-endpoint-has-preprocessing-detection ?Application ?APIEndpoint))
+;
+;
+;     ;5. Application lacks memory consumption limits or monitoring for heap memory usage during parsing operations;
+;     (not (has-heap-memory-consumption-limits ?Application ))
+;     (not (has-heap-memory-monitoring ?Application))
+;     ;(not (has-memory-consumption-limits ?Application))
+;     ;(not (has-memory-monitoring ?Application))
+;     
+;     ;6. Application server/container lacks sufficient heap memory isolation or resource quotas
+;     (not (has-memory-protection-mechanisms ?Application))
+;     (not (has-heap-memory-isolation ?Application))
+;     (not (has-heap-memory-quotas ?Application))
+;     
+;     ;7. No rate limiting or throttling mechanisms exist
+;     (not (has-rate-limiting ?Application ?APIEndpoint))
+;     (not (has-throttling-mechanisms ?Application ?APIEndpoint))
+;     
+;     ;8. Absence of Web Application Firewall (WAF) rules (application layer firewall)
+;     (not (has-waf-protection ?Application))
+;     (not (has-waf-json-payload-detection ?Application)))
+;
+;  :effect (and (exposed-attack-surface ?Application CVE_2022_40150)
+;          (vulnerable-jettison-parser ?JettisionLibrary)
+;          (exploit-by CVE_2022_40150 craft-malicious-json-payload ) 
+;          (exploit-by CVE_2022_40150 craft-malicious-xml-payload)
+;          (increase (total-cost) 29)))
+;;@end vulnerability expose@;;
 
 ;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-6378
- :parameters (?Application - application ?LogbackLibrary - java-library ?ReceiverComponent - logback-receiver ?TCPEndpoint - tcp-endpoint)
- :precondition (and
-
-     ;1. Application uses vulnerable logback version 1.4.11 with receiver component deployed
-     (has-library ?Application ?LogbackLibrary)
-     (logback-library ?LogbackLibrary)
-     (= (version ?LogbackLibrary) 1004011000) ; version = 1.4.11
-     (has-receiver-component ?Application ?ReceiverComponent)
-     
-     ;2. Logback receiver component is actively deployed and configured
-     (logback-receiver-deployed ?ReceiverComponent)
-     (logback-receiver-configured ?ReceiverComponent)
-     
-     ;3. Logback Receiver is configured to listen on network ports (TCP/IP)
-     (logback-receiver-has-tcp-endpoint ?Application ?TCPEndpoint)
-     (logback-receiver-listens-on-port ?ReceiverComponent ?TCPEndpoint)
-
-     ;4. Network connectivity allows external access to Logback Receiver  listening ports
-     (tcp-endpoint-external-access-allowed ?TCPEndpoint)
-     (tcp-endpoint-firewall-permits-inbound ?TCPEndpoint)
-    
-     ;5. Application deserializes untrusted data without sufficient validation
-     (not (has-deserialization-validation ?Application))
-     
-     ;6. No input sanitization or deserialization filtering mechanisms
-     (not (has-input-sanitization ?Application))
-     (not (has-deserialization-filtering ?Application))
-     
-     ;7. Logback Receiver accepts connections from unauthenticated sources
-     (not (logback-receiver-requires-authentication ?ReceiverComponent))
-     
-     ;8. Logback Receiver is configured in logback.xml to accept remote logging events
-     (logback-receiver-accepts-remote-events ?ReceiverComponent)
-     (logback-receiver-configured-in-logback-xml ?ReceiverComponent)
-     
-     ;9. No network-level protections exist
-     (not (has-waf-protection ?Application))
-     (not (has-ips-protection ?Application))
-     (not (has-serialized-payload-detection ?Application))
-     
-     ;10. Application lacks proper exception handling for deserialization failures
-     (not (has-proper-exception-handling ?Application)))
-
-  :effect (and (exposed-attack-surface ?Application CVE_2023_6378)
-          (exploit-by CVE_2023_6378 craft-malicious-serialized-payload)
-          (vulnerable-logback-receiver ?ReceiverComponent)
-          (vulnerable-receiver ?ReceiverComponent)
-          (increase (total-cost) 29)))
-;@end vulnerability expose@;;
-
-;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-44487
- :parameters (?Application - application ?Server - http2-server ?HTTPInterface - network-interface ?HTTP2Implementation - http2-library)
- :precondition (and
-     ;1. Application Server implements HTTP/2 protocol with stream multiplexing capability
-     (has-http2-implementation ?Application ?Server ?HTTP2Implementation)
-     (http2-stream-multiplexing-enabled ?Application ?Server)
-     
-     ;2. Application Server accepts HTTP/2 connections on public-facing interfaces (ports 80/443)
-     (http2-server-has-network-interface ?Application ?Server ?HTTPInterface)
-     (http2-server-public-facing-interface ?Application ?HTTPInterface)
-     (or (= (port ?HTTPInterface) 80) 
-         (= (port ?HTTPInterface) 443)
-     )
-     (http2-connections-accepted ?Application ?HTTPInterface)
-     
-     ;3. Application HTTP/2 server processes HEADERS and RST_STREAM frames without proper rate limiting
-     (http2-server-processes-headers-frames ?Server)
-     (http2-server-processes-rst-stream-frame ?Server)
-     (not (http2-server-has-frame-rate-limiting ?Server))
-     
-      ;4. Application Server allocates resources for each stream
-     (http2-server-allocates-stream-resources ?Application ?Server)
-     (http2-server-allocates-header-parsing-resources ?Application ?Server)
-     (http2-server-allocates-url-mapping-resources ?Application ?Server)
-     
-     ;5. Application Server allows RST_STREAM frames immediately after request frames
-     (http2-server-allows-immediate-rst-stream ?Application ?Server)
-     (not (http2-server-requires-stream-coordination ?Application ?Server))
-     
-     ;6. Application Server does not enforce limits on canceled requests per connection
-     (not (http2-server-enforces-canceled-request-limits ?Application ?Server))
-     (http2-server-canceled-requests-not-counted-toward-limits ?Application ?Server)
-     
-     ;7. Application Server lacks connection-level tracking of rapid patterns
-     (not (http2-server-has-connection-level-pattern-tracking ?Application ?Server))
-     (not (http2-server-detects-rapid-creation-cancellation-patterns ?Application ?Server))
-     
-     ;8. Application Server maintains HTTP/2 connections open after stream cancellations
-     (http2-server-maintains-connections-after-cancellation ?Application ?Server)
-     (http2-server-allows-indefinite-stream-creation ?Application ?Server)
-     
-     ;9. Application Absence of GOAWAY frame implementation for abuse detection
-     (not (http2-server-implements-goaway-frame-abuse-detection ?Application ?Server))
-     (not (http2-server-has-immediate-connection-termination ?Application ?Server))
-     
-     ;10. Application Server runs vulnerable HTTP/2 implementation
-     (or (and (http2-server-nodejs-implementation ?HTTP2Implementation) 
-              (or (= (version ?HTTP2Implementation) 18000000000) 
-                  (= (version ?HTTP2Implementation) 20000000000)))
-         (and (http2-server-nghttp2-implementation ?HTTP2Implementation) 
-              (<= (version ?HTTP2Implementation) 1057000000))
-         (and (http2-server-netty-implementation ?HTTP2Implementation) 
-              (<= (version ?HTTP2Implementation) 4001100000))
-         (http2-server-envoy-implementation ?HTTP2Implementation)
-         (http2-server-eclipse-jetty-implementation ?HTTP2Implementation)
-         (and (http2-server-caddy-implementation ?HTTP2Implementation) 
-              (<= (version ?HTTP2Implementation) 2007005000)))      
-     
-     ;11. No DDoS protection mechanisms for HTTP/2 rapid reset patterns
-     (not (http2-server-has-rapid-reset-ddos-protection ?Application ?Server))
-     (not (http2-server-has-rapid-reset-pattern-detection ?Application ?Server))
-     
-     ;12. Server resource limits insufficient for amplified consumption
-     (insufficient-resource-limits ?Application ?Server)
-     (not (http2-server-can-handle-rapid-allocation-cancellation-cycles ?Application ?Server)))
-
-  :effect (and (exposed-attack-surface ?Application CVE_2023_44487)
-               (exploit-by CVE_2023_44487 reset-http2-streams)
-               (vulnerable-http2-server ?Server)
-               (http2-server-rapid-reset-attack-possible ?Server)
-               (rapid-reset-attack-possible ?Server)
-               (increase (total-cost) 29)))
-;@end vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2022-40149
+; :parameters (?Application - application ?JettisionLibrary - java-library ?APIEndpoint - api-endpoint ?SOAPEndpoint - soap-endpoint)
+; :precondition (and
+;     ;1. Application uses a vulnerable version of Jettison library (org.codehaus.jettison:jettison < 1.5.2)
+;     ;(uses-library ?Application ?JettisionLibrary)
+;     (has-library ?Application ?JettisionLibrary)
+;     (jettison-library ?JettisionLibrary)
+;     (< (version ?JettisionLibrary) 1005002000) ; version < 1.5.2
+;     
+;     ;2. Application accepts user-supplied XML or JSON input through exposed endpoints
+;     (has-api-endpoint ?Application ?APIEndpoint)
+;    (has-soap-endpoint ?Application ?SOAPEndpoint)
+;     (accepts-json-input ?Application ?APIEndpoint)
+;     
+;     ;3. User input is directly passed to Jettison parser without input validation or size/complexity limits
+;     (not (api-endpoint-has-input-validation ?Application ?APIEndpoint))
+;     (not (api-endpoint-has-input-size-limits ?Application ?APIEndpoint))
+;     (not (api-endpoint-has-complexity-limits ?Application ?APIEndpoint))
+;     
+;     ;4. No input sanitization or preprocessing to detect malicious payloads
+;     (not (api-endpoint-has-input-sanitization ?Application ?APIEndpoint))
+;     (not (api-endpoint-has-preprocessing-detection ?Application ?APIEndpoint))
+;
+;
+;     ;5. Application lacks memory consumption limits or monitoring for heap memory usage during parsing operations;
+;     (not (has-stack-memory-consumption-limits ?Application ))
+;     (not (has-stack-memory-monitoring ?Application))
+;     ;(not (has-memory-consumption-limits ?Application))
+;     ;(not (has-memory-monitoring ?Application))
+;     
+;     ;6. Application server/container lacks sufficient heap memory isolation or resource quotas
+;     (not (has-memory-protection-mechanisms ?Application))
+;     (not (has-stack-memory-isolation ?Application))
+;     (not (has-stack-memory-quotas ?Application))
+;     
+;     ;7. No rate limiting or throttling mechanisms exist
+;
+;     (not (has-rate-limiting ?Application ?APIEndpoint))
+;     (not (has-throttling-mechanisms ?Application ?APIEndpoint))
+;     
+;     ;8. Absence of Web Application Firewall (WAF) rules (application layer firewall)
+;     (not (has-waf-protection ?Application))
+;     (not (has-waf-json-payload-detection ?Application)))
+;
+;  :effect (and (exposed-attack-surface ?Application CVE_2022_40149)
+;          (exploit-by CVE_2022_40149 craft-malicious-xml-payload)
+;          (exploit-by CVE_2022_40149 craft-malicious-json-payload)
+;          (vulnerable-jettison-parser ?JettisionLibrary)
+;          (increase (total-cost) 29)))
+;;@end vulnerability expose@;;
 
 
 ;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2025-22228
-  :parameters (?Application - application ?SpringSecurity - spring-security ?PasswordEncoder - password-encoder)
-  :precondition (and
-    ; 1. Application uses vulnerable versions of Spring Security
-    (has-dependency-on-spring-security ?Application ?SpringSecurity)
-    (or
-      ; 5.7.0-5.7.15 (5007000000 to 5007015000)
-      (and (>= (version ?SpringSecurity) 5007000000) (<= (version ?SpringSecurity) 5007015000))
-      ; 5.8.0-5.8.17 (5008000000 to 5008017000)
-      (and (>= (version ?SpringSecurity) 5008000000) (<= (version ?SpringSecurity) 5008017000))
-      ; 6.0.0-6.0.15 (6000000000 to 6000015000)
-      (and (>= (version ?SpringSecurity) 6000000000) (<= (version ?SpringSecurity) 6000015000))
-      ; 6.1.0-6.1.13 (6001000000 to 6001013000)
-      (and (>= (version ?SpringSecurity) 6001000000) (<= (version ?SpringSecurity) 6001013000))
-      ; 6.2.0-6.2.9 (6002000000 to 6002009000)
-      (and (>= (version ?SpringSecurity) 6002000000) (<= (version ?SpringSecurity) 6002009000))
-      ; 6.3.0-6.3.7 (6003000000 to 6003007000)
-      (and (>= (version ?SpringSecurity) 6003000000) (<= (version ?SpringSecurity) 6003007000))
-      ; 6.4.0-6.4.3 (6004000000 to 6004003000)
-      (and (>= (version ?SpringSecurity) 6004000000) (<= (version ?SpringSecurity) 6004003000))
-    )
-    ; 2. Authentication mechanism uses BCryptPasswordEncoder for password verification
-    (use-bcrypt-password-encoder ?Application ?PasswordEncoder)
-    ; 3. System allows or accepts user passwords longer than 72 characters
-    (allows-long-passwords ?Application)
-    (not (password-length-validation ?Application))
-    ; 5. No additional authentication factors are required (no MFA/2FA enforcement)
-    (not (multi-fator-auth-enabled ?Application))
-    (not (two-factor-auth-enabled ?Application))
-    ; 6. No password length validation or truncation warnings are implemented
-    (not (password-truncation-warning ?Application))
-    ; 7. No compensating controls
-    (not (account-lockout-policy ?Application))
-    (not (rate-limiting-enabled ?Application))
-    (not (anomaly-detection-enabled ?Application))
-    ; 8. Application does not implement pre-hashing mechanisms
-    (not (pre-hashing-implemented ?Application))
-    (not (sha256-pre-hash-enabled ?Application))
-  )
-  :effect (and (exposed-attack-surface ?Application CVE_2025_22228)
-         (vulnerable-password-validation ?Application)
-         (exploit-by CVE_2025_22228 online-brute-force)
-         (increase (total-cost) 30)))
-;@end vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-6378
+; :parameters (?Application - application ?LogbackLibrary - java-library ?ReceiverComponent - logback-receiver ?TCPEndpoint - tcp-endpoint)
+; :precondition (and
+;
+;     ;1. Application uses vulnerable logback version 1.4.11 with receiver component deployed
+;     (has-library ?Application ?LogbackLibrary)
+;     (logback-library ?LogbackLibrary)
+;     (= (version ?LogbackLibrary) 1004011000) ; version = 1.4.11
+;     (has-receiver-component ?Application ?ReceiverComponent)
+;     
+;     ;2. Logback receiver component is actively deployed and configured
+;     (logback-receiver-deployed ?ReceiverComponent)
+;     (logback-receiver-configured ?ReceiverComponent)
+;     
+;     ;3. Logback Receiver is configured to listen on network ports (TCP/IP)
+;     (logback-receiver-has-tcp-endpoint ?Application ?TCPEndpoint)
+;     (logback-receiver-listens-on-port ?ReceiverComponent ?TCPEndpoint)
+;
+;     ;4. Network connectivity allows external access to Logback Receiver  listening ports
+;     (tcp-endpoint-external-access-allowed ?TCPEndpoint)
+;     (tcp-endpoint-firewall-permits-inbound ?TCPEndpoint)
+;    
+;     ;5. Application deserializes untrusted data without sufficient validation
+;     (not (has-deserialization-validation ?Application))
+;     
+;     ;6. No input sanitization or deserialization filtering mechanisms
+;     (not (has-input-sanitization ?Application))
+;     (not (has-deserialization-filtering ?Application))
+;     
+;     ;7. Logback Receiver accepts connections from unauthenticated sources
+;     (not (logback-receiver-requires-authentication ?ReceiverComponent))
+;     
+;     ;8. Logback Receiver is configured in logback.xml to accept remote logging events
+;     (logback-receiver-accepts-remote-events ?ReceiverComponent)
+;     (logback-receiver-configured-in-logback-xml ?ReceiverComponent)
+;     
+;     ;9. No network-level protections exist
+;     (not (has-waf-protection ?Application))
+;     (not (has-ips-protection ?Application))
+;     (not (has-serialized-payload-detection ?Application))
+;     
+;     ;10. Application lacks proper exception handling for deserialization failures
+;     (not (has-proper-exception-handling ?Application)))
+;
+;  :effect (and (exposed-attack-surface ?Application CVE_2023_6378)
+;          (exploit-by CVE_2023_6378 craft-malicious-serialized-payload)
+;          (vulnerable-logback-receiver ?ReceiverComponent)
+;          (vulnerable-receiver ?ReceiverComponent)
+;          (increase (total-cost) 29)))
+;;@end vulnerability expose@;;
+
+;;@start vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-44487
+; :parameters (?Application - application ?Server - http2-server ?HTTPInterface - network-interface ?HTTP2Implementation - http2-library)
+; :precondition (and
+;     ;1. Application Server implements HTTP/2 protocol with stream multiplexing capability
+;     (has-http2-implementation ?Application ?Server ?HTTP2Implementation)
+;     (http2-stream-multiplexing-enabled ?Application ?Server)
+;     
+;     ;2. Application Server accepts HTTP/2 connections on public-facing interfaces (ports 80/443)
+;     (http2-server-has-network-interface ?Application ?Server ?HTTPInterface)
+;     (http2-server-public-facing-interface ?Application ?HTTPInterface)
+;     (or (= (port ?HTTPInterface) 80) 
+;         (= (port ?HTTPInterface) 443)
+;     )
+;     (http2-connections-accepted ?Application ?HTTPInterface)
+;     
+;     ;3. Application HTTP/2 server processes HEADERS and RST_STREAM frames without proper rate limiting
+;     (http2-server-processes-headers-frames ?Server)
+;     (http2-server-processes-rst-stream-frame ?Server)
+;     (not (http2-server-has-frame-rate-limiting ?Server))
+;     
+;      ;4. Application Server allocates resources for each stream
+;     (http2-server-allocates-stream-resources ?Application ?Server)
+;     (http2-server-allocates-header-parsing-resources ?Application ?Server)
+;     (http2-server-allocates-url-mapping-resources ?Application ?Server)
+;     
+;     ;5. Application Server allows RST_STREAM frames immediately after request frames
+;     (http2-server-allows-immediate-rst-stream ?Application ?Server)
+;     (not (http2-server-requires-stream-coordination ?Application ?Server))
+;     
+;     ;6. Application Server does not enforce limits on canceled requests per connection
+;     (not (http2-server-enforces-canceled-request-limits ?Application ?Server))
+;     (http2-server-canceled-requests-not-counted-toward-limits ?Application ?Server)
+;     
+;     ;7. Application Server lacks connection-level tracking of rapid patterns
+;     (not (http2-server-has-connection-level-pattern-tracking ?Application ?Server))
+;     (not (http2-server-detects-rapid-creation-cancellation-patterns ?Application ?Server))
+;     
+;     ;8. Application Server maintains HTTP/2 connections open after stream cancellations
+;     (http2-server-maintains-connections-after-cancellation ?Application ?Server)
+;     (http2-server-allows-indefinite-stream-creation ?Application ?Server)
+;     
+;     ;9. Application Absence of GOAWAY frame implementation for abuse detection
+;     (not (http2-server-implements-goaway-frame-abuse-detection ?Application ?Server))
+;     (not (http2-server-has-immediate-connection-termination ?Application ?Server))
+;     
+;     ;10. Application Server runs vulnerable HTTP/2 implementation
+;     (or (and (http2-server-nodejs-implementation ?HTTP2Implementation) 
+;              (or (= (version ?HTTP2Implementation) 18000000000) 
+;                  (= (version ?HTTP2Implementation) 20000000000)))
+;         (and (http2-server-nghttp2-implementation ?HTTP2Implementation) 
+;              (<= (version ?HTTP2Implementation) 1057000000))
+;         (and (http2-server-netty-implementation ?HTTP2Implementation) 
+;              (<= (version ?HTTP2Implementation) 4001100000))
+;         (http2-server-envoy-implementation ?HTTP2Implementation)
+;         (http2-server-eclipse-jetty-implementation ?HTTP2Implementation)
+;         (and (http2-server-caddy-implementation ?HTTP2Implementation) 
+;              (<= (version ?HTTP2Implementation) 2007005000)))      
+;     
+;     ;11. No DDoS protection mechanisms for HTTP/2 rapid reset patterns
+;     (not (http2-server-has-rapid-reset-ddos-protection ?Application ?Server))
+;     (not (http2-server-has-rapid-reset-pattern-detection ?Application ?Server))
+;     
+;     ;12. Server resource limits insufficient for amplified consumption
+;     (insufficient-resource-limits ?Application ?Server)
+;     (not (http2-server-can-handle-rapid-allocation-cancellation-cycles ?Application ?Server)))
+;
+;  :effect (and (exposed-attack-surface ?Application CVE_2023_44487)
+;               (exploit-by CVE_2023_44487 reset-http2-streams)
+;               (vulnerable-http2-server ?Server)
+;               (http2-server-rapid-reset-attack-possible ?Server)
+;               (rapid-reset-attack-possible ?Server)
+;               (increase (total-cost) 29)))
+;;@end vulnerability expose@;;
+
+
+;;@start vulnerability expose@;;
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2025-22228
+;  :parameters (?Application - application ?SpringSecurity - spring-security ?PasswordEncoder - password-encoder)
+;  :precondition (and
+;    ; 1. Application uses vulnerable versions of Spring Security
+;    (has-dependency-on-spring-security ?Application ?SpringSecurity)
+;    (or
+;      ; 5.7.0-5.7.15 (5007000000 to 5007015000)
+;      (and (>= (version ?SpringSecurity) 5007000000) (<= (version ?SpringSecurity) 5007015000))
+;      ; 5.8.0-5.8.17 (5008000000 to 5008017000)
+;      (and (>= (version ?SpringSecurity) 5008000000) (<= (version ?SpringSecurity) 5008017000))
+;      ; 6.0.0-6.0.15 (6000000000 to 6000015000)
+;      (and (>= (version ?SpringSecurity) 6000000000) (<= (version ?SpringSecurity) 6000015000))
+;      ; 6.1.0-6.1.13 (6001000000 to 6001013000)
+;      (and (>= (version ?SpringSecurity) 6001000000) (<= (version ?SpringSecurity) 6001013000))
+;      ; 6.2.0-6.2.9 (6002000000 to 6002009000)
+;      (and (>= (version ?SpringSecurity) 6002000000) (<= (version ?SpringSecurity) 6002009000))
+;      ; 6.3.0-6.3.7 (6003000000 to 6003007000)
+;      (and (>= (version ?SpringSecurity) 6003000000) (<= (version ?SpringSecurity) 6003007000))
+;      ; 6.4.0-6.4.3 (6004000000 to 6004003000)
+;      (and (>= (version ?SpringSecurity) 6004000000) (<= (version ?SpringSecurity) 6004003000))
+;    )
+;    ; 2. Authentication mechanism uses BCryptPasswordEncoder for password verification
+;    (use-bcrypt-password-encoder ?Application ?PasswordEncoder)
+;    ; 3. System allows or accepts user passwords longer than 72 characters
+;    (allows-long-passwords ?Application)
+;    (not (password-length-validation ?Application))
+;    ; 5. No additional authentication factors are required (no MFA/2FA enforcement)
+;    (not (multi-fator-auth-enabled ?Application))
+;    (not (two-factor-auth-enabled ?Application))
+;    ; 6. No password length validation or truncation warnings are implemented
+;    (not (password-truncation-warning ?Application))
+;    ; 7. No compensating controls
+;    (not (account-lockout-policy ?Application))
+;    (not (rate-limiting-enabled ?Application))
+;    (not (anomaly-detection-enabled ?Application))
+;    ; 8. Application does not implement pre-hashing mechanisms
+;    (not (pre-hashing-implemented ?Application))
+;    (not (sha256-pre-hash-enabled ?Application))
+;  )
+;  :effect (and (exposed-attack-surface ?Application CVE_2025_22228)
+;         (vulnerable-password-validation ?Application)
+;         (exploit-by CVE_2025_22228 online-brute-force)
+;         (increase (total-cost) 30)))
+;;@end vulnerability expose@;;
 
 
 ;;@start vulnerability expose@;;
@@ -2238,52 +2238,52 @@
 
 
 ;;@start vulnerability expose@;;
-(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-47072
- :parameters (?Application - application ?XStreamLibrary - java-library ?BinaryDriver - binary-stream-driver ?APIEndpoint - api-endpoint)
- :precondition (and
-     ;1. Application uses vulnerable XStream version (1.4.20 or earlier)
-     (has-library ?Application ?XStreamLibrary)
-     (xstream-library ?XStreamLibrary)
-     (<= (version ?XStreamLibrary) 1004020000) ; version <= 1.4.20
-     
-     ;2. Application configures XStream to use BinaryStreamDriver
-     (has-binary-stream-driver ?Application ?BinaryDriver)
-     (binary-stream-driver ?BinaryDriver)
-     (xstream-uses-driver ?XStreamLibrary ?BinaryDriver)
-    
-     ;3. Application accepts and processes attacker-controlled binary input streams
-     (has-api-endpoint ?Application ?APIEndpoint)
-     (accepts-binary-input ?Application ?APIEndpoint)
-     (processes-untrusted-input ?Application ?APIEndpoint)
-     
-     ;4. Application lacks robust input validation or integrity checks
-     (not (api-endpoint-has-input-validation ?Application ?APIEndpoint))
-     (not (api-endpoint-has-integrity-checks ?Application ?APIEndpoint))
-     
-     ;5. Application does not implement StackOverflowError exception handling
-     (not (has-stackoverflow-exception-handling ?Application))
-     
-     ;6. Application's runtime permits deeply nested structures without safeguards
-     (not (has-defense-in-depth-safeguards ?Application))
-     (not (has-recursive-structure-limits ?Application))
-     
-     ;7. Application lacks effective JVM stack size restrictions
-     (not (has-jvm-stack-size-restrictions ?Application))
-     (not (has-sufficient-stack-limits ?Application))
-     
-     ;8. Application lacks limits on input stream size or complexity
-     (not (has-input-stream-size-limits ?Application))
-     (not (has-structural-complexity-limits ?Application))
-     
-     ;9. Application lacks compensating security mechanisms
-     (not (has-sandboxing ?Application))
-     (not (has-deserialization-whitelist ?Application))
-     (not (has-waf-binary-filtering ?Application)))
- :effect (and (exposed-attack-surface ?Application CVE_2024_47072)
-              (vulnerable-xstream-binary-driver ?XStreamLibrary)
-              (exploit-by CVE_2024_47072 craft-malicious-binary-payload) 
-              (increase (total-cost) 29)))
-;@end vulnerability expose@;; 
+;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-47072
+; :parameters (?Application - application ?XStreamLibrary - java-library ?BinaryDriver - binary-stream-driver ?APIEndpoint - api-endpoint)
+; :precondition (and
+;     ;1. Application uses vulnerable XStream version (1.4.20 or earlier)
+;     (has-library ?Application ?XStreamLibrary)
+;     (xstream-library ?XStreamLibrary)
+;     (<= (version ?XStreamLibrary) 1004020000) ; version <= 1.4.20
+;     
+;     ;2. Application configures XStream to use BinaryStreamDriver
+;     (has-binary-stream-driver ?Application ?BinaryDriver)
+;     (binary-stream-driver ?BinaryDriver)
+;     (xstream-uses-driver ?XStreamLibrary ?BinaryDriver)
+;    
+;     ;3. Application accepts and processes attacker-controlled binary input streams
+;     (has-api-endpoint ?Application ?APIEndpoint)
+;     (accepts-binary-input ?Application ?APIEndpoint)
+;     (processes-untrusted-input ?Application ?APIEndpoint)
+;     
+;     ;4. Application lacks robust input validation or integrity checks
+;     (not (api-endpoint-has-input-validation ?Application ?APIEndpoint))
+;     (not (api-endpoint-has-integrity-checks ?Application ?APIEndpoint))
+;     
+;     ;5. Application does not implement StackOverflowError exception handling
+;     (not (has-stackoverflow-exception-handling ?Application))
+;     
+;     ;6. Application's runtime permits deeply nested structures without safeguards
+;     (not (has-defense-in-depth-safeguards ?Application))
+;     (not (has-recursive-structure-limits ?Application))
+;     
+;     ;7. Application lacks effective JVM stack size restrictions
+;     (not (has-jvm-stack-size-restrictions ?Application))
+;     (not (has-sufficient-stack-limits ?Application))
+;     
+;     ;8. Application lacks limits on input stream size or complexity
+;     (not (has-input-stream-size-limits ?Application))
+;     (not (has-structural-complexity-limits ?Application))
+;     
+;     ;9. Application lacks compensating security mechanisms
+;     (not (has-sandboxing ?Application))
+;     (not (has-deserialization-whitelist ?Application))
+;     (not (has-waf-binary-filtering ?Application)))
+; :effect (and (exposed-attack-surface ?Application CVE_2024_47072)
+;              (vulnerable-xstream-binary-driver ?XStreamLibrary)
+;              (exploit-by CVE_2024_47072 craft-malicious-binary-payload) 
+;              (increase (total-cost) 29)))
+;;@end vulnerability expose@;; 
 
 ;;@start vulnerability expose@;;
 ;(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-33202

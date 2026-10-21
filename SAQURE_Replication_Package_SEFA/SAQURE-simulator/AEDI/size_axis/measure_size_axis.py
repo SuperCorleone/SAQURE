@@ -7,7 +7,7 @@ two readings of RQ4(2)(ii):
   split  EADSA as implemented: one Metric-FF run per replica per STRIDE category. The
          per-replica time is invariant in N; the whole-system time is the sum over replicas.
   joint  one Metric-FF run over a single problem describing all N replicas. Reported only as
-         a contrast: the grounding cross-product makes it intractable well before 500x.
+         a contrast: its planning cost grows quickly with N and is intractable well before 500x.
 
 Usage:
   python3 measure_size_axis.py --domain <AED.pddl> --aedi-dir <dir> \

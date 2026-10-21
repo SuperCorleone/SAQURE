@@ -27,8 +27,8 @@ import java.util.stream.Stream;
  * thing to do but makes the measured wall clock depend on how many cores the test
  * machine happens to have.
  *
- * <p>This copy measures the quantity the paper reports instead. Step 4 of the workflow
- * states that the M x 6 calls are independent, so with enough workers the risk
+ * <p>This copy measures the critical path instead. The M x 6 calls do not depend on
+ * each other, so with enough workers the risk
  * assessment finishes when its slowest call finishes -- the cost is the critical path,
  * not the sum. To measure that without letting the calls compete for CPU, the 6 STRIDE
  * calls of one domain run together on a pool of exactly 6 threads (6 is far below the

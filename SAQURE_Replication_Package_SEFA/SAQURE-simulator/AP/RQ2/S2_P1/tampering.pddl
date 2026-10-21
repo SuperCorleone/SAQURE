@@ -7,7 +7,6 @@ problem 'AEDI-TAMPERING' defined
  ... done.
 
 
-translating negated cond for predicate SCRIPT-EXECUTION-PROMPT-ENABLED
 
 ff: search configuration is A*epsilon with weight 1.
 Metric is ((1.00*[RF0](TOTAL-COST)) - () + 0.00)
@@ -36,11 +35,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2024-38820 SEFA 
         8: APPLICATION-SERVER-SETS-ADMIN-FIELD-FOR-ATTACKER SEFA ATTACKER-ACCOUNT_SEFA TRANSFORMED-PARAM1
 plan cost: 71.000000
 
-time spent:    0.07 seconds instantiating 6738 easy, 97 hard action templates
-               0.00 seconds reachability analysis, yielding 214 facts and 304 actions
-               0.00 seconds creating final representation with 211 relevant facts, 1 relevant fluents
+time spent:    0.00 seconds instantiating 69 easy, 1 hard action templates
+               0.00 seconds reachability analysis, yielding 31 facts and 9 actions
+               0.00 seconds creating final representation with 31 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.00 seconds searching, evaluating 83 states, to a max depth of 0
-               0.07 seconds total time
+               0.00 seconds searching, evaluating 10 states, to a max depth of 0
+               0.00 seconds total time
 

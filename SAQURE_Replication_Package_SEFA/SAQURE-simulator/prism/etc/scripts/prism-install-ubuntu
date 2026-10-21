@@ -2,8 +2,13 @@
 
 # Script for installation of PRISM on a clean install of Ubuntu
 
-set -e # Abort if one of the commands fail
+set -e # Abort if one of the commands fails
 set -x # Print commands as they are executed
+
+# Avoid interruptions during install
+if [ -e "/etc/needrestart/needrestart.conf" ]; then
+  sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
+fi
 
 # Install dependencies: make/gcc/Java/git
 sudo apt-get -y update
@@ -15,6 +20,8 @@ sudo apt -y install python3
 # Download the latest development version from GitHub
 git clone https://github.com/prismmodelchecker/prism.git
 
-# Compile PRISM and run a single test
+# Compile PRISM and run a single test (unless --nobuild passed)
 # (should ultimately display: "Testing result: PASS")
-(cd prism/prism && make && make test)
+if [ "$*" = "${*/--nobuild}" ]; then
+  (cd prism/prism && make && make test)
+fi

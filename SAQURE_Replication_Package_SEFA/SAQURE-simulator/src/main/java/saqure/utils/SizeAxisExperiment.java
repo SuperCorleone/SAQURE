@@ -2,9 +2,9 @@ package saqure.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import saqure.Analyzer.EADSA;
+import saqure.Analyzer.ModularEADSA;
 import saqure.Analyzer.RiskTiming;
 import saqure.Analyzer.VulnAxisAP;
-import saqure.Analyzer.VulnAxisAPProfiler;
 import saqure.utils.infrastructure.adaptation.options.AdaptationOption;
 import saqure.utils.infrastructure.adaptation.options.ChangeImplementationOption;
 import saqure.utils.infrastructure.adaptation.specifications.Availability;
@@ -30,14 +30,14 @@ import static saqure.utils.SimulationsUtils.createServiceMap;
  * RQ4 size axis: one MAPE-K cycle over a managed system built from {@code scale} stacked SEFA
  * replicas, i.e. 4 * scale core structural states and 4 * scale microservices.
  * <p>
- * A single run produces all three timings the size axis needs:
+ * A single run produces the size-axis timings that come from one decision:
  * <ul>
- *   <li>offline configuration time, once per implementation ({@link AED_Processor});</li>
- *   <li>runtime risk assessment time, once per replica. EADSA assesses one microservice at a
- *       time, so the whole managed system costs the sum over its replicas while the per-replica
- *       time stays constant;</li>
- *   <li>runtime decision time, from the DTMC of the whole stack.</li>
+ *   <li>runtime decision time, i.e. the risk assessment of every implementation plus the
+ *       Planner on the DTMC of the whole stack;</li>
+ *   <li>initial model generation time, logged by the Planner for each PRISM model.</li>
  * </ul>
+ * The per-replica runtime risk assessment time (RQ4.2.2) is measured by its own case,
+ * {@code RQ4_size_risk_wall_SAQURE}, and is not logged here.
  */
 @Slf4j
 public class SizeAxisExperiment {
@@ -90,7 +90,7 @@ public class SizeAxisExperiment {
         RiskTiming.reset();
 
         double[] riskPerImplementation = (approach == Approach.SAQURE)
-                ? saqureRiskAssessmentIndependentDomains(scale)
+                ? saqureRiskAssessmentModules()
                 : aquaRiskAssessment(scale);
 
         // ---- runtime decision: DTMC of the whole stack ----
@@ -113,36 +113,80 @@ public class SizeAxisExperiment {
     }
 
     /**
-     * SAQURE on the independent per-CVE domains. The risk of each implementation comes from
-     * {@link VulnAxisAP}, and the per-replica cost is the critical path reported by
-     * {@link VulnAxisAPProfiler} -- the max over each domain's six parallel STRIDE calls, with
-     * one untimed warm-up pass first. This is the same quantity, on the same three CVEs and the
-     * same implementation, that the RQ4.2 figures report, so the size axis and the vulnerability
-     * axis now answer the question the same way.
-     *
-     * <p>Replaces {@link #saqureRiskAssessment(int)}, which measured EADSA over the monolithic
-     * AED (263 live actions vs 14) and reported ~249ms where this reports ~13ms. That method is
-     * kept below for reference and is no longer called.
+     * SAQURE with ModularEADSA, as in RQ1-RQ3: each implementation's
+     * CVEs are assessed against the default (SEFA) AEDI, and the assessment's wall
+     * clock is added to the runtime decision time by RiskTiming.
      */
-    private static double[] saqureRiskAssessmentIndependentDomains(int scale) {
-        // Risk of every implementation, needed to build the adaptation options. Not timed: it
-        // does not depend on the managed system size.
+    private static double[] saqureRiskAssessmentModules() {
+        double[] risk = new double[VULNERABILITIES_PER_IMPLEMENTATION.length];
+        for (int i = 0; i < VULNERABILITIES_PER_IMPLEMENTATION.length; i++) {
+            risk[i] = ModularEADSA.computeScenario(VULNERABILITIES_PER_IMPLEMENTATION[i], FilePathConstants.AEDI_path, attackGoals(i));
+        }
+        return normalise(risk);
+    }
+
+    /**
+     * RQ4.2.2 with ModularEADSA: wall clock of restaurant_0's assessment,
+     * once per replica, after one untimed warm-up pass. No DTMC is built and PRISM is never called.
+     */
+    public static void riskWallClockModules(int scale) {
+        createDirectories();
+        RiskTiming.pause();
+        ModularEADSA.computeScenario(VULNERABILITIES_PER_IMPLEMENTATION[0], FilePathConstants.AEDI_path, attackGoals(0));
+        RiskTiming.resume();
+        log.info("Risk assessment wall clock per replica (restaurant0; independent modules, {} replicas)", scale);
+        for (int replica = 1; replica <= scale; replica++) {
+            RiskTiming.reset();
+            ModularEADSA.computeScenario(VULNERABILITIES_PER_IMPLEMENTATION[0], FilePathConstants.AEDI_path, attackGoals(0));
+            long nanos = RiskTiming.samples().stream().mapToLong(Duration::toNanos).sum();
+            log.info("Risk assessment time cost for replica_{}: {}ms", replica, String.format("%.1f", nanos / 1e6));
+        }
+    }
+
+    // Superseded by saqureRiskAssessmentModules; kept for reference.
+    /**
+     * SAQURE with EADSA: one AED domain per
+     * implementation, then EADSA's wall clock is added to the runtime decision time by RiskTiming.
+     */
+    private static double[] saqureRiskAssessmentSystemAED() {
+        double[] risk = new double[VULNERABILITIES_PER_IMPLEMENTATION.length];
+        for (int i = 0; i < VULNERABILITIES_PER_IMPLEMENTATION.length; i++) {
+            String domainFile = AED_process(AED_OUTPUT_DIR + "restaurant_" + i + ".pddl",
+                    VULNERABILITIES_PER_IMPLEMENTATION[i]);
+            risk[i] = EADSA.computeScenario(domainFile, attackGoals(i));
+        }
+        return normalise(risk);
+    }
+
+    // Superseded by riskWallClockModules; kept for reference.
+    /**
+     * RQ4.2.2 with EADSA: wall clock of restaurant_0's assessment, once per
+     * replica, after one untimed warm-up pass. No DTMC is built and PRISM is never called.
+     */
+    public static void riskWallClockSystemAED(int scale) {
+        createDirectories();
+        String domainFile = AED_process(AED_OUTPUT_DIR + "restaurant_0.pddl", VULNERABILITIES_PER_IMPLEMENTATION[0]);
+        RiskTiming.pause();
+        EADSA.computeScenario(domainFile, attackGoals(0));
+        RiskTiming.resume();
+        log.info("Risk assessment wall clock per replica (restaurant0; system-level AED, {} replicas)", scale);
+        for (int replica = 1; replica <= scale; replica++) {
+            RiskTiming.reset();
+            EADSA.computeScenario(domainFile, attackGoals(0));
+            long nanos = RiskTiming.samples().stream().mapToLong(Duration::toNanos).sum();
+            log.info("Risk assessment time cost for replica_{}: {}ms", replica, String.format("%.1f", nanos / 1e6));
+        }
+    }
+
+    /**
+     * Superseded by {@link #saqureRiskAssessmentSystemAED()}; kept for reference. SAQURE with
+     * {@link VulnAxisAP}, which gives the risk of each implementation.
+     */
+    private static double[] saqureRiskAssessmentIndependentDomains() {
         double[] risk = new double[VULNERABILITIES_PER_IMPLEMENTATION.length];
         for (int i = 0; i < VULNERABILITIES_PER_IMPLEMENTATION.length; i++) {
             risk[i] = VulnAxisAP.computeScenario(VULNERABILITIES_PER_IMPLEMENTATION[i]);
         }
-
-        // ---- runtime risk assessment: restaurant_0's critical path, once per replica ----
-        // Profiling only: it repeats one assessment `scale` times to draw the risk assessment
-        // curve, which is not work a single MAPE-K pass does. Kept out of the decision time.
-        RiskTiming.pause();
-        Instant assessmentStart = Instant.now();
-        for (int replica = 1; replica <= scale; replica++) {
-            VulnAxisAPProfiler.profileReplica(replica, VULNERABILITIES_PER_IMPLEMENTATION[0]);
-        }
-        log.debug("Total risk assessment time for {} replicas: {}ms", scale,
-                Duration.between(assessmentStart, Instant.now()).toMillis());
-        RiskTiming.resume();
         return normalise(risk);
     }
 

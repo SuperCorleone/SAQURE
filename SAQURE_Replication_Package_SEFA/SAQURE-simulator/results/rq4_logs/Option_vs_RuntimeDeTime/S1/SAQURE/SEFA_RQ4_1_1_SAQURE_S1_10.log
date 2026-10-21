@@ -1,4 +1,3 @@
-Picked up JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -8,12 +7,13 @@ Picked up JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::               (v2.7.17)
 
-2026-10-01 10:48:45.546  INFO 32046 --- [           main] saqure.SaqureSimulatorApplication        : Starting SaqureSimulatorApplication using Java 17.0.17 on Mac.fritz.box with PID 32046 (/Users/adukopun/Documents/CuiCui/SAQURE_MOD/SAQURE/SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/SAQURE_MOD/SAQURE/SAQURE_Replication_Package_SEFA)
-2026-10-01 10:48:45.548  INFO 32046 --- [           main] saqure.SaqureSimulatorApplication        : No active profile set, falling back to 1 default profile: "default"
-2026-10-01 10:48:45.762  INFO 32046 --- [           main] saqure.SaqureSimulatorApplication        : Started SaqureSimulatorApplication in 0.362 seconds (JVM running for 0.538)
-2026-10-01 10:48:46.267  INFO 32046 --- [           main] saqure.SaqureSimulatorApplication        : SEFA DTMC scale: 1x -> 4 x 1 = 4 core structural states, plus START, success and failure = 7 reachable states
-2026-10-01 10:48:46.268  INFO 32046 --- [           main] saqure.utils.ServiceGraphUtils           : Current graph: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-service","values":{"Vulnerability":0.5,"Availability":0.1,"AverageResponseTime":0.9}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"Vulnerability":0.5,"Availability":0.6333333333333335,"AverageResponseTime":0.1}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"Vulnerability":0.5,"Availability":0.9,"AverageResponseTime":0.5923076923076923}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"Vulnerability":0.5,"Availability":0.1,"AverageResponseTime":0.9}},"weights":{"Vulnerability":0.4,"Availability":0.3,"AverageResponseTime":0.3}}
-2026-10-01 10:48:46.274  INFO 32046 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 5.314ms
-2026-10-01 10:48:47.016  INFO 32046 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 1.0
-2026-10-01 10:48:47.018  INFO 32046 --- [           main] saqure.utils.ServiceGraphUtils           : No better option found
-2026-10-01 10:48:47.018  INFO 32046 --- [           main] saqure.SaqureSimulatorApplication        : Runtime decision time: 878ms
+2026-10-07 15:29:11.492  INFO 69187 --- [           main] saqure.SaqureSimulatorApplication        : Starting SaqureSimulatorApplication using Java 17.0.17 on wlan-cl-kit-cs-172-17-16-227.scc.kit.edu with PID 69187 (/Users/adukopun/Documents/CuiCui/SAQURE_MOD/SAQURE/SAQURE_Replication_Package_SEFA/SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar started by adukopun in /Users/adukopun/Documents/CuiCui/SAQURE_MOD/SAQURE/SAQURE_Replication_Package_SEFA)
+2026-10-07 15:29:11.493  INFO 69187 --- [           main] saqure.SaqureSimulatorApplication        : No active profile set, falling back to 1 default profile: "default"
+2026-10-07 15:29:11.710  INFO 69187 --- [           main] saqure.SaqureSimulatorApplication        : Started SaqureSimulatorApplication in 0.37 seconds (JVM running for 0.543)
+2026-10-07 15:29:12.116  INFO 69187 --- [           main] saqure.SaqureSimulatorApplication        : SEFA DTMC scale: 1x -> 4 x 1 = 4 core structural states, plus START, success and failure = 7 reachable states
+2026-10-07 15:29:12.117  INFO 69187 --- [           main] saqure.utils.ServiceGraphUtils           : Current graph: {"RESTAURANT-SERVICE":{"currentImplementationId":"restaurant-service","values":{"AverageResponseTime":0.9,"Availability":0.1,"Vulnerability":0.5}},"DELIVERY-PROXY-SERVICE":{"currentImplementationId":"delivery-proxy-1-service","values":{"AverageResponseTime":0.1,"Availability":0.6333333333333335,"Vulnerability":0.5}},"ORDERING-SERVICE":{"currentImplementationId":"ordering-service","values":{"AverageResponseTime":0.5923076923076923,"Availability":0.9,"Vulnerability":0.5}},"PAYMENT-PROXY-SERVICE":{"currentImplementationId":"payment-proxy-1-service","values":{"AverageResponseTime":0.9,"Availability":0.1,"Vulnerability":0.5}},"weights":{"AverageResponseTime":0.3,"Availability":0.3,"Vulnerability":0.4}}
+2026-10-07 15:29:12.122  INFO 69187 --- [           main] saqure.Planner.PrismModelChecker         : Time to generate and save PRISM model: 4.916ms
+2026-10-07 15:29:12.868  INFO 69187 --- [           main] saqure.Planner.PrismModelChecker         : Cost Value: 54.69714198952527
+2026-10-07 15:29:12.870  INFO 69187 --- [           main] saqure.Planner.PrismModelChecker         : Per-invocation cost: 1.0 (expected service invocations: 54.69714198952527)
+2026-10-07 15:29:12.872  INFO 69187 --- [           main] saqure.utils.ServiceGraphUtils           : No better option found
+2026-10-07 15:29:12.872  INFO 69187 --- [           main] saqure.SaqureSimulatorApplication        : Runtime decision time: 797ms

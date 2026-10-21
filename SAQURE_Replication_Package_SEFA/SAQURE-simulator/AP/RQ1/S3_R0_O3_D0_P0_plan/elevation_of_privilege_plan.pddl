@@ -7,7 +7,6 @@ problem 'AEDI-ELEVATION_OF_PRIVILEGE' defined
  ... done.
 
 
-translating negated cond for predicate SCRIPT-EXECUTION-PROMPT-ENABLED
 
 ff: search configuration is A*epsilon with weight 1.
 Metric is ((1.00*[RF0](TOTAL-COST)) - () + 0.00)
@@ -37,7 +36,7 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2022-1471 SEFA S
         4: ATTACKER-GENERATES-JNDI-ENDPOINT-WITH-LDAP-OR-RMI SEFA JNDI-ENDPOINT1 MALICIOUS-JAVA-CLASS1 LDAP-SERVICE1 RMI-SERVICE1 CVE_2022_1471
         5: ATTACKER-CRAFTS-MALICIOUS-YAML-PAYLOAD SEFA YAML-PAYLOAD1 JAVA-GADGET-CLASS_SEFA JNDI-ENDPOINT1 MALICIOUS-JAVA-CLASS1 CVE_2022_1471
         6: ATTACKER-SENDS-MALICIOUS-YAML-VIA-HTTP-POST HTTP-POST-REQUEST1 SEFA YAML-PAYLOAD1 YAML-ENDPOINT_SEFA CVE_2022_1471
-        7: APPLICATION-RECEIVES-HTTP-POST-REQUEST-WITH-MALICIOUS-PAYLOAD SEFA HTTP-POST-REQUEST1 YAML-PAYLOAD1 SOAP-ENDPOINT_SEFA
+        7: APPLICATION-RECEIVES-HTTP-POST-REQUEST-WITH-MALICIOUS-PAYLOAD SEFA HTTP-POST-REQUEST1 YAML-PAYLOAD1 API-ENDPOINT_SEFA
         8: APPLICATION-PASSES-YAML-TO-SNAKEYAML-LOADER HTTP-POST-REQUEST1 YAML-PAYLOAD1 SEFA SNAKEYAML-LIBRARY_SEFA
         9: APPLICATION-STARTS-YAML-DESERIALIZATION-WITH-CONSTRUCTOR YAML-PAYLOAD1 SNAKEYAML-LIBRARY_SEFA YAML-CONSTRUCTOR_SEFA SEFA
        10: APPLICATION-INSTANTIATES-DANGEROUS-JAVA-GADGET-CLASS SEFA YAML-CONSTRUCTOR_SEFA JAVA-GADGET-CLASS_SEFA YAML-PAYLOAD1 CVE_2022_1471
@@ -46,11 +45,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2022-1471 SEFA S
        13: APPLICATION-EXECUTES-ATTACKER-COMMAND-WITH-PRIVILEGES SEFA MALICIOUS-JAVA-CLASS1 COMMAND-EXECUTION-LOGIC1 CVE_2022_1471
 plan cost: 15.000000
 
-time spent:    0.07 seconds instantiating 6759 easy, 102 hard action templates
-               0.00 seconds reachability analysis, yielding 431 facts and 1031 actions
-               0.00 seconds creating final representation with 428 relevant facts, 1 relevant fluents
+time spent:    0.00 seconds instantiating 362 easy, 85 hard action templates
+               0.00 seconds reachability analysis, yielding 44 facts and 26 actions
+               0.00 seconds creating final representation with 44 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.00 seconds searching, evaluating 242 states, to a max depth of 0
-               0.07 seconds total time
+               0.00 seconds searching, evaluating 31 states, to a max depth of 0
+               0.00 seconds total time
 

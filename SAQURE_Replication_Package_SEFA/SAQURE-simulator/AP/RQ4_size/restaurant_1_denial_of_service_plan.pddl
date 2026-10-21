@@ -7,13 +7,12 @@ problem 'AEDI-DENIAL_OF_SERVICE' defined
  ... done.
 
 
-translating negated cond for predicate SCRIPT-EXECUTION-PROMPT-ENABLED
 
 ff: search configuration is A*epsilon with weight 1.
 Metric is ((1.00*[RF0](TOTAL-COST)) - () + 0.00)
 COST MINIMIZATION DONE (WITH cost-minimizing relaxed plans).
 
-Advancing to goal distance:    9
+Advancing to goal distance:    8
                                7
                                6
                                5
@@ -34,11 +33,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2023-6378 SEFA L
         7: APPLICATION-DESERIALIZATION-TRIGGERS-RESOURCE-EXHAUSTION SEFA LOGBACK-RECEIVER_SEFA CVE_2023_6378
 plan cost: 36.000000
 
-time spent:    0.08 seconds instantiating 6762 easy, 94 hard action templates
-               0.00 seconds reachability analysis, yielding 194 facts and 176 actions
-               0.00 seconds creating final representation with 190 relevant facts, 1 relevant fluents
+time spent:    0.00 seconds instantiating 69 easy, 0 hard action templates
+               0.00 seconds reachability analysis, yielding 21 facts and 8 actions
+               0.00 seconds creating final representation with 21 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.00 seconds searching, evaluating 80 states, to a max depth of 0
-               0.08 seconds total time
+               0.00 seconds searching, evaluating 10 states, to a max depth of 0
+               0.00 seconds total time
 

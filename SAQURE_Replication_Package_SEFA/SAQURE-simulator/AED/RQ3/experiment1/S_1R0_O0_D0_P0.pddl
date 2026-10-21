@@ -2131,52 +2131,52 @@
 
 
 ;;@start vulnerability expose@;;
-;(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-2976
-;    :parameters (?Application - application ?Guava - java-library ?Host - host-os)
-;    :precondition (and 
-;        ; 1. The application's classpath includes Google Guava version 1.0 through 31.1
-;        (has-library ?Application ?Guava)
-;        (guava-library ?Guava)
-;        (and (>= (version ?Guava) 1000000000) (<= (version ?Guava) 31001000000)) ; version 1.0 to 31.1
-;        
-;        ; 2. The application's code invokes FileBackedOutputStream(int) or FileBackedOutputStream(int, boolean)
-;        (uses-filebackedoutputstream ?Application)
-;        
-;        ; 3. The invoked FileBackedOutputStream calls File.createTempFile without a controlled parent directory
-;        (uses-uncontrolled-createtempfile ?Application)
-;        
-;        ; 4. The application's runtime java.io.tmpdir is set to a world-writable directory
-;        (java-tmpdir-set-to-world-writable ?Application)
-;        
-;        ; 5. The application's host OS umask and /tmp permissions allow other local users to access files
-;        (has-os ?Application ?Host)
-;        (world-readable-tempdir-permissions ?Host)
-;        (world-writable-tempdir-permissions ?Host)
-;        
-;        ; 6. The application is not isolated by container or OS sandbox
-;        (not (container-isolated ?Application))
-;        (not (os-sandbox-isolated ?Application))
-;        
-;        ; 7. The application does not override temp-file creation to per-user directory
-;        (not (uses-per-user-temp-directory ?Application))
-;        
-;        ; 8. The application's host filesystem has no ACLs or mount options restricting access
-;        (not (temp-directory-acl-protected ?Application))
-;        (not (temp-directory-mount-restricted ?Application))
-;        
-;        ; 9. The application's use of File.createTempFile yields default, guessable filenames
-;        (uses-predictable-temp-filenames ?Application)
-;        
-;        ; 10. The application writes sensitive data into FileBackedOutputStream temporary files
-;        (writes-sensitive-data-to-temp ?Application)
-;    )
-;    :effect (and 
-;        (exposed-attack-surface ?Application CVE_2023_2976)
-;        (exploit-by CVE_2023_2976 temp-file-prediction)
-;        (exploit-by CVE_2023_2976 temp-file-access)
-;        (vulnerable-java-library ?Guava)
-;        (increase (total-cost) 34)))
-;;@end vulnerability expose@;; 
+(:action application-exposes-attack-surfaces-to-attackers-CVE-2023-2976
+    :parameters (?Application - application ?Guava - java-library ?Host - host-os)
+    :precondition (and 
+        ; 1. The application's classpath includes Google Guava version 1.0 through 31.1
+        (has-library ?Application ?Guava)
+        (guava-library ?Guava)
+        (and (>= (version ?Guava) 1000000000) (<= (version ?Guava) 31001000000)) ; version 1.0 to 31.1
+        
+        ; 2. The application's code invokes FileBackedOutputStream(int) or FileBackedOutputStream(int, boolean)
+        (uses-filebackedoutputstream ?Application)
+        
+        ; 3. The invoked FileBackedOutputStream calls File.createTempFile without a controlled parent directory
+        (uses-uncontrolled-createtempfile ?Application)
+        
+        ; 4. The application's runtime java.io.tmpdir is set to a world-writable directory
+        (java-tmpdir-set-to-world-writable ?Application)
+        
+        ; 5. The application's host OS umask and /tmp permissions allow other local users to access files
+        (has-os ?Application ?Host)
+        (world-readable-tempdir-permissions ?Host)
+        (world-writable-tempdir-permissions ?Host)
+        
+        ; 6. The application is not isolated by container or OS sandbox
+        (not (container-isolated ?Application))
+        (not (os-sandbox-isolated ?Application))
+        
+        ; 7. The application does not override temp-file creation to per-user directory
+        (not (uses-per-user-temp-directory ?Application))
+        
+        ; 8. The application's host filesystem has no ACLs or mount options restricting access
+        (not (temp-directory-acl-protected ?Application))
+        (not (temp-directory-mount-restricted ?Application))
+        
+        ; 9. The application's use of File.createTempFile yields default, guessable filenames
+        (uses-predictable-temp-filenames ?Application)
+        
+        ; 10. The application writes sensitive data into FileBackedOutputStream temporary files
+        (writes-sensitive-data-to-temp ?Application)
+    )
+    :effect (and 
+        (exposed-attack-surface ?Application CVE_2023_2976)
+        (exploit-by CVE_2023_2976 temp-file-prediction)
+        (exploit-by CVE_2023_2976 temp-file-access)
+        (vulnerable-java-library ?Guava)
+        (increase (total-cost) 34)))
+;@end vulnerability expose@;; 
 
 ;;@start vulnerability expose@;;
 ;(:action application-exposes-attack-surfaces-to-attackers-CVE-2024-38809

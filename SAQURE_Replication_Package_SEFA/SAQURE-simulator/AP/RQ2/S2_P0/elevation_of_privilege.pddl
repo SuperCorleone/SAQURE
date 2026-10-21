@@ -7,7 +7,6 @@ problem 'AEDI-ELEVATION_OF_PRIVILEGE' defined
  ... done.
 
 
-translating negated cond for predicate SCRIPT-EXECUTION-PROMPT-ENABLED
 
 ff: search configuration is A*epsilon with weight 1.
 Metric is ((1.00*[RF0](TOTAL-COST)) - () + 0.00)
@@ -46,11 +45,11 @@ step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2022-1471 SEFA S
        13: APPLICATION-EXECUTES-ATTACKER-COMMAND-WITH-PRIVILEGES SEFA MALICIOUS-JAVA-CLASS1 COMMAND-EXECUTION-LOGIC1 CVE_2022_1471
 plan cost: 15.000000
 
-time spent:    0.07 seconds instantiating 6764 easy, 97 hard action templates
-               0.00 seconds reachability analysis, yielding 302 facts and 546 actions
-               0.00 seconds creating final representation with 299 relevant facts, 1 relevant fluents
-               0.01 seconds computing LNF
+time spent:    0.00 seconds instantiating 362 easy, 85 hard action templates
+               0.00 seconds reachability analysis, yielding 44 facts and 26 actions
+               0.00 seconds creating final representation with 44 relevant facts, 1 relevant fluents
+               0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.00 seconds searching, evaluating 172 states, to a max depth of 0
-               0.08 seconds total time
+               0.00 seconds searching, evaluating 31 states, to a max depth of 0
+               0.00 seconds total time
 

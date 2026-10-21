@@ -14,6 +14,8 @@ build/
 .springBeans
 .sts4-cache
 bin/
+# The bundled PRISM launcher lives in prism/bin and must be tracked
+!prism/bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 

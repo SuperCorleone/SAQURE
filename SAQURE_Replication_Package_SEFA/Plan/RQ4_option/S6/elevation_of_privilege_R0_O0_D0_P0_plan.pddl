@@ -1,0 +1,57 @@
+
+ff: parsing domain file
+domain 'AED' defined
+ ... done.
+ff: parsing problem file
+problem 'AEDI-ELEVATION_OF_PRIVILEGE' defined
+ ... done.
+
+
+
+ff: search configuration is A*epsilon with weight 1.
+Metric is ((1.00*[RF0](TOTAL-COST)) - () + 0.00)
+COST MINIMIZATION DONE (WITH cost-minimizing relaxed plans).
+
+Advancing to goal distance:   15
+                              14
+                              13
+                              12
+                              11
+                              10
+                               9
+                               8
+                               7
+                               6
+                               5
+                               4
+                               3
+                               2
+                               1
+                               0
+
+ff: found legal plan as follows
+step    0: APPLICATION-EXPOSES-ATTACK-SURFACES-TO-ATTACKERS-CVE-2025-24813 SEFA TOMCAT_SEFA DEFAULT-SERVLET_SEFA SENSITIVE-FILE1_SEFA PUBLIC-DIRECTORY_SEFA SENSITIVE-DIRECTORY_SEFA
+        1: ATTACKER-CRAFTS-MALICIOUS-WEB-SHELL-SCRIPT SEFA WEB-SHELL-SCRIPT1 CVE_2025_24813
+        2: ATTACKER-SETS-SERVER-SIDE-EXECUTION-EXTENSION WEB-SHELL-SCRIPT1 FILE-EXTENSION1 SEFA CVE_2025_24813
+        3: ATTACKER-CRAFTS-HTTP-PUT-REQUEST-FOR-WEB-SHELL-UPLOAD HTTP-PUT-REQUEST1 WEB-SHELL-SCRIPT1 PUBLIC-DIRECTORY_SEFA SENSITIVE-DIRECTORY_SEFA SEFA CVE_2025_24813 FILE-EXTENSION1
+        4: ATTACKER-SENDS-WEB-SHELL-UPLOAD-VIA-HTTP-PUT-REQUEST HTTP-PUT-REQUEST1 SEFA TOMCAT_SEFA WEB-SHELL-SCRIPT1 CVE_2025_24813
+        5: APPLICATION-RECEIVES-HTTP-PUT-REQUEST HTTP-PUT-REQUEST1 SEFA
+        6: APPLICATION-TOMCAT-DEFAULT-SERVLET-PROCESSES-REQUEST-WITHOUT-PROPER-VALIDATION HTTP-PUT-REQUEST1 SEFA DEFAULT-SERVLET_SEFA TOMCAT_SEFA
+        7: APPLICATION-TOMCAT-DEFAULT-SERVLET-INCORRECTLY-NORMALIZES-PATH HTTP-PUT-REQUEST1 DEFAULT-SERVLET_SEFA TOMCAT_SEFA SEFA
+        8: APPLICATION-TOMCAT-DEFAULT-SERVLET-ACCESSES-WEB-DIRECTORY SEFA HTTP-PUT-REQUEST1 DEFAULT-SERVLET_SEFA SENSITIVE-DIRECTORY_SEFA
+        9: APPLICATION-TOMCAT-DEFAULT-SERVLET-WRITES-WEB-SHELL-TO-DIRECTORY SEFA HTTP-PUT-REQUEST1 DEFAULT-SERVLET_SEFA WEB-SHELL-SCRIPT1 SENSITIVE-DIRECTORY_SEFA CVE_2025_24813
+       10: ATTACKER-SENDS-HTTP-GET-REQUEST-TO-WEB-SHELL HTTP-GET-REQUEST1 WEB-SHELL-SCRIPT1 SEFA CVE_2025_24813
+       11: APPLICATION-RECEIVES-HTTP-GET-REQUEST HTTP-GET-REQUEST1 SEFA
+       12: APPLICATION-TOMCAT-JSP-ENGINE-PROCESSES-WEB-SHELL HTTP-GET-REQUEST1 SEFA TOMCAT_SEFA JSP-ENGINE_SEFA WEB-SHELL-SCRIPT1
+       13: APPLICATION-TOMCAT-JSP-ENGINE-EXECUTES-WEB-SHELL SEFA JSP-ENGINE_SEFA WEB-SHELL-SCRIPT1 TOMCAT-PROCESS_SEFA
+       14: ATTACKER-EXECUTES-ARBITRARY-COMMANDS-VIA-WEB-SHELL WEB-SHELL-SCRIPT1 TOMCAT-PROCESS_SEFA SEFA
+plan cost: 16.000000
+
+time spent:    0.00 seconds instantiating 146 easy, 3 hard action templates
+               0.00 seconds reachability analysis, yielding 39 facts and 17 actions
+               0.00 seconds creating final representation with 39 relevant facts, 1 relevant fluents
+               0.00 seconds computing LNF
+               0.00 seconds building connectivity graph
+               0.00 seconds searching, evaluating 18 states, to a max depth of 0
+               0.00 seconds total time
+
