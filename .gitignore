@@ -1,4 +1,17 @@
+# OS and editors
 .DS_Store
+.idea/
+.vscode/
+
+# Python and Jupyter
 __pycache__/
 *.pyc
+.ipynb_checkpoints/
+.venv/
+
+# Local tool state and internal notes
+.claude/
+CC-Session-Logs/
+
+# Local archives
 _archive_results/

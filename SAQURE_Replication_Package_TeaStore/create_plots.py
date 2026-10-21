@@ -14,6 +14,25 @@ import argparse
 
 RESULTS_BASE = "SAQURE-simulator/results"
 PLOTS_DIR = "experiments/plots"
+# The RQ1-RQ3 figures report the Adaptation Gain (G):
+# G = (C_cur - C_new) / C_cur * 100, the share of the current configuration's long-term cost
+# that the option an approach chose removes. C_new is the SAQURE-DTMC price of the chosen option
+# and C_cur is the current configuration's price on that DTMC (same scenario and phase),
+# so higher is better and a negative bar is a choice worse than not adapting.
+GAIN_PLOTS_DIR = f"{PLOTS_DIR}/adaptation_gain"
+GAIN_LABEL = 'Adaptation Gain (%)'
+# (RECT_YMIN, RECT_YLIM, major tick step) of the gain axis.
+GAIN_AXIS_RQ1 = (-3, 35, 10)
+GAIN_AXIS_RQ23 = (-6, 24, 4)
+# RQ2/RQ3 figures are 1.2:1 (width:height), height 6.7in.
+RQ23_FIGSIZE = (6.7 * 1.2, 6.7)
+# Spacing (%) of the background grid on the RQ2/RQ3 figures.
+GAIN_GRID_RQ23 = 0.5
+# Opacity of that grid; darker than the RQ1 grid (0.15) so that close bars can be compared.
+GAIN_GRID_ALPHA_RQ23 = 0.3
+# Spacing (%) of the fine background grid on the RQ1 gain figure.
+GAIN_GRID_RQ1 = 1
+GAIN_ROWS = []  # (figure, group, arm, C_cur, C_new, G) for adaptation_gain_values.csv
 
 # run_experiments.sh writes the RAMSES arm to rq1_logs/<S>/RAMSES, while the plot configs
 # below key it as "QoS". Without this the RAMSES series is silently missing from every RQ1 plot.
@@ -265,9 +284,10 @@ COLORS_RQ2 = {
 # Plot: RQ1 (dual-axis: cost bar + time boxplot)
 # ═══════════════════════════════════════════════════════════════
 
-def plot_rq1(time_stats_all, cost_values_all, experiment_name, save_path):
+def plot_rq1(time_stats_all, cost_values_all, experiment_name, save_path, gain_axis=GAIN_AXIS_RQ1):
     """
-    Plot all sub-scenarios of RQ1 in one figure (bar chart + boxplot)
+    Plot all sub-scenarios of RQ1 in one figure (Adaptation Gain bars + decision-time boxplots).
+    cost_values_all holds the Adaptation Gain (%) of each arm's chosen option.
     """
     FIG_SIZE = (12, 6)
     BAR_WIDTH = 0.08
@@ -280,14 +300,10 @@ def plot_rq1(time_stats_all, cost_values_all, experiment_name, save_path):
 
     POINTSIZE = 2
     Y_MARGIN_RATIO = 1.02
-    # Retuned for the 4-state DTMC and the long-term cumulative cost: decision time is
-    # 2.2-4.7 s (was 45-60 s) and bars span 3.9-6.9. 9.5 puts the tallest bar at 73% of the
-    # axis while the lowest boxplot point sits at 79%; below 10 the scientific tick format needs
-    # no 1e1 offset.
+    # Retuned for the 4-state DTMC: decision time is 2.2-4.7 s (was 45-60 s).
     Y_MAX_MARGIN = 5000
     Y_MIN_MARGIN = -8000
-    RECT_YLIM = 9.5
-    RECT_YMIN = 0
+    RECT_YMIN, RECT_YLIM = gain_axis[0], gain_axis[1]
     DOT_HLINE_DENSITY = 1
 
     FONT_SIZE_TICK = 24
@@ -434,25 +450,26 @@ def plot_rq1(time_stats_all, cost_values_all, experiment_name, save_path):
         x_tick_labels.append(x_tick_label)
 
     ax1.set_xticklabels(x_tick_labels)
-    ax1.set_ylabel('Long-term Cost (unitless)', fontsize=FONT_SIZE_TICK)
+    ax1.set_ylabel(GAIN_LABEL, fontsize=FONT_SIZE_TICK)
     ax2.set_ylabel('Runtime Decision Time (ms)', fontsize=FONT_SIZE_TICK)
     ax1.set_ylim(RECT_YMIN, RECT_YLIM)
+    ax1.axhline(0, color='black', linewidth=0.8, zorder=3)
 
     ax1.tick_params(axis='x', labelsize=TICK_LABEL_SIZE)
     ax1.tick_params(axis='y', labelsize=TICK_LABEL_SIZE)
     ax2.tick_params(axis='y', labelsize=TICK_LABEL_SIZE)
 
-    ax1.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
     ax2.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
     ax2.locator_params(axis='y', nbins=10)
-    ax1.yaxis.set_major_locator(MultipleLocator(2))
+    ax1.yaxis.set_major_locator(MultipleLocator(gain_axis[2]))
     ax1.yaxis.set_minor_locator(AutoMinorLocator())
 
     ax1.set_xlim(-X_BLOCK_WIDTH, current_pos - GROUP_SPACING + X_BLOCK_WIDTH)
 
     # Grid lines
-    for y in np.arange(0, RECT_YLIM, DOT_HLINE_DENSITY):
-        ax1.axhline(y=y, color='gray', linestyle='--', linewidth=0.75, alpha=0.0, zorder=0)
+    # Fine background grid over the whole axis, including the negative band.
+    for y in np.arange(np.ceil(RECT_YMIN / GAIN_GRID_RQ1) * GAIN_GRID_RQ1, RECT_YLIM, GAIN_GRID_RQ1):
+        ax1.axhline(y=y, color='gray', linestyle='--', linewidth=0.75, alpha=0.15, zorder=0)
     ax1.set_axisbelow(True)
 
     fig.tight_layout()
@@ -466,11 +483,12 @@ def plot_rq1(time_stats_all, cost_values_all, experiment_name, save_path):
 
 def plot_rq2_rq3(time_stats_all, cost_values_all, config, save_path):
     """
-    Plot RQ2 or RQ3 sub-scenario (dual-axis: cost bar + time boxplot).
+    Plot RQ2 or RQ3 sub-scenario (dual-axis: Adaptation Gain bar + time boxplot).
+    cost_values_all holds the Adaptation Gain (%) of each arm's chosen option.
     config = [Y_MIN_MARGIN_RATIO, Y_MARGIN_RATIO, RECT_YMIN, RECT_YLIM,
               DOT_HLINE_DENSITY, y_settick]
     """
-    FIG_SIZE = (6.7, 6.7)
+    FIG_SIZE = RQ23_FIGSIZE
     BAR_WIDTH = 0.1
     BOX_WIDTH = 0.1
     GROUP_SPACING = 0.16
@@ -611,12 +629,12 @@ def plot_rq2_rq3(time_stats_all, cost_values_all, config, save_path):
         x_tick_label = f'{main_part}$_{num}$'
         x_tick_labels.append(x_tick_label)
     ax1.set_xticklabels(x_tick_labels)
-    ax1.set_ylabel('Long-term Cost (unitless)', fontsize=FONT_SIZE_TICK)
+    ax1.set_ylabel(GAIN_LABEL, fontsize=FONT_SIZE_TICK)
     ax2.set_ylabel('Runtime Decision Time (ms)', fontsize=FONT_SIZE_TICK)
     ax1.set_ylim(RECT_YMIN, RECT_YLIM)
+    ax1.axhline(0, color='black', linewidth=0.8, zorder=3)
 
     ax1.yaxis.set_major_locator(MultipleLocator(Y_SETTICK))
-    ax1.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
     ax2.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
 
     ax1.tick_params(axis='both', which='major', labelsize=TICK_LABEL_SIZE)
@@ -625,8 +643,10 @@ def plot_rq2_rq3(time_stats_all, cost_values_all, config, save_path):
     ax1.set_xlim(-X_BLOCK_WIDTH, current_pos - GROUP_SPACING + X_BLOCK_WIDTH)
 
     # Grid lines
-    for y in np.arange(0, RECT_YLIM, DOT_HLINE_DENSITY):
-        ax1.axhline(y=y, color='gray', linestyle='--', linewidth=0.75, alpha=0.15, zorder=0)
+    grid_start = np.ceil(RECT_YMIN / DOT_HLINE_DENSITY - 1e-9) * DOT_HLINE_DENSITY
+    for y in np.arange(grid_start, RECT_YLIM, DOT_HLINE_DENSITY):
+        ax1.axhline(y=y, color='gray', linestyle='--', linewidth=0.75,
+                    alpha=GAIN_GRID_ALPHA_RQ23, zorder=0)
     ax1.set_axisbelow(True)
 
     fig.tight_layout()
@@ -639,6 +659,44 @@ def plot_rq2_rq3(time_stats_all, cost_values_all, config, save_path):
 
 def ensure_plots_dir():
     os.makedirs(PLOTS_DIR, exist_ok=True)
+    os.makedirs(GAIN_PLOTS_DIR, exist_ok=True)
+
+
+def current_config_cost(folder):
+    """Long-term cost of the current configuration: the first PRISM result after 'Current graph:'."""
+    for path in sorted(glob.glob(os.path.join(folder, '*.log'))):
+        lines = open(path, errors='replace').read().splitlines()
+        for i, line in enumerate(lines):
+            if 'Current graph:' in line:
+                for nxt in lines[i + 1:]:
+                    m = re.search(r'Cost Value:\s*([\d.eE+-]+)', nxt)
+                    if m:
+                        return float(m.group(1))
+    return None
+
+
+def to_gain(figure, group, costs, current):
+    """Adaptation Gain (%) of each arm's chosen option against the current configuration."""
+    gains = {}
+    for arm, cost in costs.items():
+        gains[arm] = 100.0 * (current - cost) / current
+        GAIN_ROWS.append((figure, group, arm, current, cost, gains[arm]))
+        print(f"    G {figure} {group} {arm}: {gains[arm]:.2f}% (C_cur {current:.4f}, C_new {cost:.4f})")
+    return gains
+
+
+def run_gain():
+    """RQ1-RQ3 Adaptation Gain figures, plus the values behind them."""
+    os.makedirs(GAIN_PLOTS_DIR, exist_ok=True)
+    GAIN_ROWS.clear()
+    run_rq1()
+    run_rq2()
+    run_rq3()
+    with open(f'{GAIN_PLOTS_DIR}/adaptation_gain_values.csv', 'w') as out:
+        out.write('figure,group,arm,C_cur,C_new,G_percent\n')
+        for row in GAIN_ROWS:
+            out.write('%s,%s,%s,%.6f,%.6f,%.2f\n' % row)
+    print(f"Adaptation Gain figures and values written to {GAIN_PLOTS_DIR}/")
 
 
 def run_rq1():
@@ -694,7 +752,10 @@ def run_rq1():
                     print(f"Folder does not exist: {folder_path}")
 
         if time_stats_all and cost_values_all:
-            plot_rq1(time_stats_all, cost_values_all, experiment, f'{PLOTS_DIR}/RQ1_TeaStore.png')
+            gains = {sub: to_gain('RQ1', sub, costs, current_config_cost(f"{RESULTS_BASE}/rq1_logs/{sub}/SAQURE_para"))
+                     for sub, costs in cost_values_all.items()}
+            plot_rq1(time_stats_all, gains, experiment, f'{GAIN_PLOTS_DIR}/RQ1_TeaStore_gain.png',
+                     gain_axis=GAIN_AXIS_RQ1)
         else:
             print(f"== {experiment} has no valid data, skipping plot ==")
 
@@ -707,12 +768,11 @@ def run_rq2():
         'S3': {"T1": ['AQUA', 'SAQURE'], "T2": ['AQUA', 'SAQURE']},
     }
 
-    # Long-term cumulative cost; one scale for all three sub-scenarios so they compare directly.
-    # Bars peak at 4.86, i.e. 69% of the axis, under the boxplots.
+    # [Y_MIN_MARGIN_RATIO, Y_MARGIN_RATIO] of the decision-time axis.
     configs = {
-        'S1': [0.0, 1.02, 0, 7, 0.5, 1],
-        'S2': [0.0, 1.02, 0, 7, 0.5, 1],
-        'S3': [0.0, 1.02, 0, 7, 0.5, 1],
+        'S1': [0.0, 1.02],
+        'S2': [0.0, 1.02],
+        'S3': [0.0, 1.02],
     }
 
     for item, times in experiments_RQ2.items():
@@ -769,8 +829,15 @@ def run_rq2():
                 else:
                     print(f"Folder does not exist: {folder_path}")
 
+        # AQUA does not update at runtime: at T2 it keeps its T1 choice and (static) risk scores,
+        # which its T2 run reproduces. The chosen option is still priced on the SAQURE DTMC of
+        # the same phase (above), so a runtime change that degrades that option shows up as a
+        # higher T2 cost and a lower T2 Adaptation Gain.
         if time_stats_all and cost_values_all:
-            plot_rq2_rq3(time_stats_all, cost_values_all, cfg, f'{PLOTS_DIR}/RQ2_TeaStore_{item}.png')
+            gains = {ph: to_gain('RQ2 ' + item, ph, costs, current_config_cost(f"{RESULTS_BASE}/rq2_logs/{item}/{ph}/SAQURE"))
+                     for ph, costs in cost_values_all.items()}
+            gcfg = [cfg[0], cfg[1], GAIN_AXIS_RQ23[0], GAIN_AXIS_RQ23[1], GAIN_GRID_RQ23, GAIN_AXIS_RQ23[2]]
+            plot_rq2_rq3(time_stats_all, gains, gcfg, f'{GAIN_PLOTS_DIR}/RQ2_TeaStore_{item}_gain.png')
         else:
             print(f"== RQ2 {item} has no valid data, skipping plot ==")
 
@@ -783,12 +850,11 @@ def run_rq3():
         'S3': {"T1": ['SAQURE_nodyPa', 'SAQURE'], "T2": ['SAQURE_nodyPa', 'SAQURE']},
     }
 
-    # Long-term cumulative cost; one scale for all three sub-scenarios so they compare directly.
-    # Bars peak at 4.86, i.e. 69% of the axis, under the boxplots.
+    # [Y_MIN_MARGIN_RATIO, Y_MARGIN_RATIO] of the decision-time axis.
     configs = {
-        'S1': [0.0, 1.02, 0, 7, 0.5, 1],
-        'S2': [0.0, 1.02, 0, 7, 0.5, 1],
-        'S3': [0.0, 1.02, 0, 7, 0.5, 1],
+        'S1': [0.0, 1.02],
+        'S2': [0.0, 1.02],
+        'S3': [0.0, 1.02],
     }
 
     for item, times in experiments_RQ3.items():
@@ -838,7 +904,10 @@ def run_rq3():
                     print(f"Folder does not exist: {folder_path}")
 
         if time_stats_all and cost_values_all:
-            plot_rq2_rq3(time_stats_all, cost_values_all, cfg, f'{PLOTS_DIR}/RQ3_TeaStore_{item}.png')
+            gains = {ph: to_gain('RQ3 ' + item, ph, costs, current_config_cost(f"{RESULTS_BASE}/rq3_logs/{item}/{ph}/SAQURE"))
+                     for ph, costs in cost_values_all.items()}
+            gcfg = [cfg[0], cfg[1], GAIN_AXIS_RQ23[0], GAIN_AXIS_RQ23[1], GAIN_GRID_RQ23, GAIN_AXIS_RQ23[2]]
+            plot_rq2_rq3(time_stats_all, gains, gcfg, f'{GAIN_PLOTS_DIR}/RQ3_TeaStore_{item}_gain.png')
         else:
             print(f"== RQ3 {item} has no valid data, skipping plot ==")
 
@@ -850,7 +919,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate experiment plots for RQ1-RQ3")
     parser.add_argument(
         '--experiment', type=str, nargs='?', default='all',
-        choices=['RQ1', 'RQ2', 'RQ3', 'all'],
+        choices=['RQ1', 'RQ2', 'RQ3', 'gain', 'all'],
         help="Which experiment to plot (default: all)"
     )
     args = parser.parse_args()
@@ -860,11 +929,14 @@ if __name__ == "__main__":
     dispatch = {
         'RQ1': run_rq1,
         'RQ2': run_rq2,
-        'RQ3': run_rq3
+        'RQ3': run_rq3,
+        'gain': run_gain,
     }
 
     if args.experiment == 'all':
         for name, fn in dispatch.items():
+            if name in ('RQ1', 'RQ2', 'RQ3'):
+                continue  # drawn by 'gain', which also writes adaptation_gain_values.csv
             print(f"\n{'='*60}")
             print(f"  Plotting {name}")
             print(f"{'='*60}")

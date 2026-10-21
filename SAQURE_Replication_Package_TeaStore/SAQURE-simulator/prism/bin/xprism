@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Startup script for PRISM GUI (Linux/Solaris)
+
+# PRISM home directory: the parent of the directory that holds this script
+PRISM_DIR="$(CDPATH= cd "$(dirname "$0")/.." && pwd -P)"
+
+# Launch using main PRISM script
+PRISM_MAINCLASS=userinterface.GUIPrism
+PRISM_HEADLESS=false
+export PRISM_MAINCLASS PRISM_HEADLESS
+"$PRISM_DIR"/bin/prism "$@"
