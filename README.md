@@ -29,7 +29,6 @@ This replication package contains the implementation of `SAQURE` (Java sources),
     - `vulnerabilities_100.md`: the complete list of the 100 vulnerabilities of the AED (CVSS, affected component, and whether a vulnerability was specified by experts or generated with CVE2AP). Table 2 of the paper lists five of them.
     - `AED.pddl`: the AED of the 21 expert-specified vulnerabilities, covering attacker, application, user, and infrastructure behaviors.
     - `AEDIs/`: exemplar AEDIs of SEFA, one problem file per STRIDE threat category.
-    - The PDDL action specifications of all 100 vulnerabilities, 1,333 actions in total, are in the SEFA package: [`SAQURE_Replication_Package_SEFA/SAQURE-vulnerability-scalability/pddl-ap-passall/post-proposs/`](https://github.com/SuperCorleone/SAQURE/tree/SEFA/SAQURE_Replication_Package_SEFA/SAQURE-vulnerability-scalability/pddl-ap-passall/post-proposs).
 - `Supplementary Experimental Configuration for RQ1, RQ2, and RQ3.pdf`: Supplementary configuration tables for RQ1, RQ2, and RQ3.
 
 ### Requirements
