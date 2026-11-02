@@ -2,7 +2,7 @@
 
 This package contains the raw data as well as scripts used to replicate the results presented in the following research paper:
 
-"SAQURE: AI Planning-Driven Self-Adaptation for Runtime Security and QoS of Microservice Applications", Anonymous Author(s)
+"SAQURE: AI Planning-Driven Self-Adaptation for Runtime Security and QoS of Microservice Applications"
 
 This branch (`SEFA`) holds the SEFA package; the TeaStore package is on the [`TeaStore`](https://github.com/SuperCorleone/SAQURE/tree/TeaStore) branch.
 
@@ -14,7 +14,6 @@ This replication package contains the implementation of `SAQURE` (Java sources),
     - `AED.pddl`: the AED of the 21 expert-specified vulnerabilities, covering attacker, application, user, and infrastructure behaviors.
     - `AEDIs/`: exemplar AEDIs of SEFA, one problem file per STRIDE threat category.
     - `readme.md`: how to generate an attack path from `AED.pddl` and an AEDI with Metric-FF.
-    - The PDDL action specifications of all 100 vulnerabilities, 1,333 actions in total, are in `SAQURE_Replication_Package_SEFA/SAQURE-vulnerability-scalability/pddl-ap-passall/post-proposs/` (see below).
 - `SAQURE_Replication_Package_SEFA/`:
     - `SAQURE-simulator/`: Gradle project of `SAQURE`, including the implementation of the MAPE-K (Monitor, Analyzer, Planner) modules for SEFA.
         - `prism/`: the `PRISM` 4.8.1 model checker, used by the Planner module to compute long-term cumulative costs for adaptation option selection.
@@ -96,8 +95,6 @@ To run a single experiment case manually:
 java -jar SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar -c <case> [options]
 ```
 
-**DTMC size and the `500x` scale factor.** The base SEFA business process is modelled as **4 core structural states** (ordering, payment + delivery, delivery retry, restaurant), which is the `1x` model. The Planner replicates this block `n` times and chains the replicas (the restaurant state of replica `i` leads to the ordering state of replica `i+1`), so an `n x` model has `4 * n` core structural states, each carrying its own PRISM reward. All experiments except the RQ4 size axis use `500x`, i.e. `4 * 500 = 2000` core structural states, and rely on the default; only the size axis varies `-x`. Counting the three auxiliary states — `START` (`s=0`), `success` (`s=2001`) and `failure` (`s=2002`) — the `500x` model has **2003 reachable states**. Use `-x` to reproduce the model at other scales, e.g. `-x 1` (4 core states) or `-x 25` (100 core states).
-
 **Available experiment cases:**
 
 | RQ | Cases | Options |
@@ -110,13 +107,6 @@ java -jar SAQURE-simulator/build/libs/SAQURE-simulator-0.0.1-SNAPSHOT.jar -c <ca
 | RQ4(2)(i) | `RQ4_vuln_risk_wall_SAQURE` | `-d <N>` |
 | RQ4(1)(iii) | `RQ4_size_SAQURE`, `RQ4_size_AQUA` | `-x <scale>` |
 | RQ4(2)(ii) | `RQ4_size_risk_wall_SAQURE` | `-x <scale>` |
-
-The application also accepts a few cases that none of the experiments above uses (`RQ4_1_1_*`, `RQ4_1_2_*`, `RQ4_vuln_risk_SAQURE`, `RQ4_size_risk_SAQURE`).
-
-On the size axis, `RQ4_size_SAQURE` and `RQ4_size_AQUA` measure the runtime decision time of a system built from `-x` stacked SEFA replicas, and `RQ4_size_risk_wall_SAQURE` measures the wall clock of restaurant0's risk assessment in every replica. Two remarks on these cases:
-
-- `RQ4_size_AQUA` keeps the DTMC and the PRISM call identical and only replaces the runtime risk assessment: AQUA reads the risk scores instead of assessing the environment, exactly as its other configurations in this package do.
-- The availability of the two microservices that carry a failure edge in the DTMC is set to `0.999` instead of going through `DynamicNormalize`, which clamps every value into `[0.1, 0.9]`. At `0.9` a 500x stack is traversed with probability of the order of `0.81^500`, the cumulative reward stops converging, and PRISM reports whatever its relative convergence test stalls on. See `SizeAxisExperiment` for details.
 
 Logs are saved under `SAQURE-simulator/results/` with the following directory structure:
 
@@ -162,37 +152,3 @@ All plots are generated under the `experiments/plots/` directory; the RQ4 files 
 figures report the Adaptation Gain and are written to `experiments/plots/adaptation_gain/` as `.png`, next to the `.pdf` versions used in the paper;
 `python3 create_plots.py` (or `--experiment gain`) also writes `adaptation_gain_values.csv` there,
 with the long-term costs behind each gain.
-
-### RQ4(3)(i): offline configuration time
-
-The AED starts from the 21 expert-specified vulnerabilities; the other 79 were generated with CVE2AP (GPT-5.5, two-shot prompting with an output template and automated error feedback) and verified with S3Eval. `SAQURE-vulnerability-scalability/results/offline_config/` holds the generation logs:
-
-- `raw_results.jsonl`: one record per candidate CVE (152 candidates);
-- `feedback_results.jsonl`: one record per error-feedback retry (16 records; 8 of them belong to the 79 selected CVEs, one retry each).
-
-Each record holds `cve_id`, `model`, `shot_mode`, `attempt`, `elapsed_seconds`, `input_tokens`, `output_tokens`, `total_tokens`, `syntax_ok`, `solvable`, `plan_length`, `n_actions`, `ff_error`, `llm_response` and `domain_pddl`. The figure charges every selected CVE its generation time plus its retry, if any, and adds the CVEs in ascending order of that time, starting at zero from the 21 expert-specified ones: 7,359 s in total (482 s of it in retries), i.e. 93.2 s per CVE on average and about 2 h overall.
-
-```bash
-cd SAQURE_Replication_Package_SEFA
-python3 create_plots.py --experiment RQ431
-# or open RQ431_plot_offline_config_time.ipynb in this directory and run all cells
-```
-
-### RQ4 vulnerability axis (1–100 CVEs)
-
-RQ4(1)(ii) and RQ4(2)(i) vary the number of vulnerabilities of restaurant0 and its two alternatives from 1 to 100. Their attack paths are generated from the vulnerability specifications in `SAQURE-vulnerability-scalability/pddl-ap-passall/post-proposs/`, instantiated with the six STRIDE AEDIs in `merged_AEDIs/`. `experiments/experiment_config/Configuration_RQ4_vuln.xlsx` assigns the vulnerabilities to the implementations; sub-scenarios 1–21 use the expert-specified ones.
-
-All derived inputs are included, so `./run_experiments.sh rq4_vuln` runs as is. Two scripts in `SAQURE-vulnerability-scalability/scripts/` derive them and reproduce the included files exactly:
-
-```bash
-cd SAQURE_Replication_Package_SEFA/SAQURE-vulnerability-scalability
-
-# Extend the risk lookup table to every action (Sv_Pa_lookupfile_extended.json)
-python3 scripts/build_lookup.py
-# Problem files for every attack path and STRIDE goal (prepared/)
-python3 scripts/prepare_all.py
-```
-
-Risk parameters are not stored separately: each attack-path specification encodes them in its action costs as `c = round(-100 * ln(p))`, so `CVSS = 10*exp(-c/100)` for an entry action and `Ppre*Puc = exp(-c/100)` for every other step (`c = 1` encodes `p = 1`). `build_lookup.py` inverts that to extend `Sv_Pa_lookupfile.json` to every action, keeping the entries of the 21 expert-specified vulnerabilities at their hand-curated values. The original file is left untouched.
-
-`scripts/vuln_scalability.py` is a stand-alone timing sweep of attack-path generation over the same vulnerability counts, with its logs in `results/vuln_axis/`; the figures of the paper use the runs of `run_experiments.sh` above.
